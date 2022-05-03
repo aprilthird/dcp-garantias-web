@@ -1,0 +1,25 @@
+.logo {
+  &.dcp {
+
+  }
+  &.kmmp {
+    width: 130px;
+  }
+}
+
+.white{
+  background-color: white;
+}
+
+.bg-image {
+  background-image: url('/assets/images/fondo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 1280px) {
+  .white{
+    padding-right: 0 !important;
+  }
+}
+

@@ -1,0 +1,21 @@
+.button-avatar {
+  background-color: white !important;
+}
+.user{
+  display: flex;
+  flex-direction: row;
+  color: #718096;
+}
+.name{
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+.rol{
+  text-align: end;
+  font-weight: 300;
+}
+.welcome{
+  font-weight: 700;
+  text-align: center;
+}

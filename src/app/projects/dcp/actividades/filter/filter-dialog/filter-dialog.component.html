@@ -1,0 +1,80 @@
+<form [formGroup]="form">
+  <div mat-dialog-title class="flex justify-between items-center">
+    <h4>Filtrar</h4>
+    <button mat-icon-button type="button" (click)="matdialigRef.close()">
+      <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+  </div>
+  <div class="inset-x-0 bottom-0 w-full mb-3" *ngIf="loading">
+    <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+  </div>
+
+  <div mat-dialog-content class="pb-6">
+    <div class="flex flex-col w-full">
+      <!-- Nombre -->
+
+      <mat-form-field floatLabel="always" class="w-100-p">
+        <mat-label class="font-bold">CeCo</mat-label>
+        <mat-select formControlName="codCeco" placeholder="Seleccione un ceco">
+          <mat-option *ngFor="let ceco of cecos" [value]="ceco.codigo">{{
+            ceco.nombre
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always" class="w-100-p">
+        <mat-label class="font-bold">CE</mat-label>
+        <mat-select formControlName="codCe" placeholder="Seleccione un ce">
+          <mat-option *ngFor="let ce of ces" [value]="ce.codigo">{{
+            ce.nombre
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always" class="w-100-p">
+        <mat-label class="font-bold">GP</mat-label>
+        <mat-select formControlName="codGp" placeholder="Ingrese una actividad">
+          <mat-option *ngFor="let gp of gps" [value]="gp.codigo">{{
+            gp.nombre
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!--<mat-form-field floatLabel="always" class="w-100-p">
+        <mat-label class="font-bold">Tipo servicios</mat-label>
+        <mat-select formControlName="idTipo" placeholder="Seleccione un gp">
+          <mat-option *ngFor="let service of services" [value]="service.id">{{
+            service.nombre
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>-->
+
+      <a class="underline cursor-pointer" (click)="wipeFilters()">
+        <span class="font-semibold">Eliminar filtros</span>
+      </a>
+    </div>
+  </div>
+  <div mat-dialog-actions class="flex justify-end px-6 bg-gray-100">
+    <button
+      (click)="matdialigRef.close()"
+      mat-button
+      class="
+        ml-4
+        bg-gray-50
+        border-solid border border-accent-300
+        text-gray-700
+        shadow-none
+      "
+    >
+      Cancelar
+    </button>
+    <button
+      mat-raised-button
+      [color]="'primary'"
+      class="w-32"
+      (click)="applyFilters()"
+    >
+      <span> Aplicar filtros </span>
+    </button>
+  </div>
+</form>

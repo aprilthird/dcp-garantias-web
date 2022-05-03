@@ -1,0 +1,106 @@
+<form [formGroup]="form">
+  <div mat-dialog-title class="flex justify-between items-center">
+    <h4>Nuevo servicio</h4>
+    <button mat-icon-button type="button" (click)="dialogRef.close()">
+      <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="pb-6">
+    <div *ngIf="data?.type === 'format'" class="flex flex-col w-full">
+      <!-- Nombre -->
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">CeCo</mat-label>
+        <mat-select formControlName="codCeco">
+          <mat-option *ngFor="let ceco of cecoData" [value]="ceco.codigo">{{
+            ceco.nombre
+          }}</mat-option>
+        </mat-select>
+        <mat-error> {{ getErrorMessage("codCeco") }} </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">GP</mat-label>
+        <mat-select formControlName="codGp">
+          <mat-option *ngFor="let gp of gpData" [value]="gp.codigo">{{
+            gp.nombre
+          }}</mat-option>
+        </mat-select>
+        <mat-error> {{ getErrorMessage("codGp") }} </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">CE</mat-label>
+        <mat-select formControlName="codCe">
+          <mat-option *ngFor="let ce of ceData" [value]="ce.codigo">{{
+            ce.nombre
+          }}</mat-option>
+        </mat-select>
+        <mat-error> {{ getErrorMessage("codCe") }} </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">Tipo de servicio</mat-label>
+        <mat-select formControlName="idTipoServicio">
+          <mat-option
+            *ngFor="let service_type of services_type"
+            [value]="service_type.id"
+            >{{ service_type.nombre }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">Título</mat-label>
+        <input maxlength="100" matInput formControlName="nombre" />
+        <mat-error> {{ getErrorMessage("nombre") }} </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">Documento</mat-label>
+        <input maxlength="100" matInput formControlName="documento" />
+        <mat-error> {{ getErrorMessage("documento") }} </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="data?.type === 'acta'" class="flex flex-col w-full">
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">Título</mat-label>
+        <input maxlength="100" matInput formControlName="nombre" />
+        <mat-error> {{ getErrorMessage("nombre") }} </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label class="font-bold">Tipo de servicio</mat-label>
+        <mat-select formControlName="idTipoServicio">
+          <mat-option
+            *ngFor="let service_type of services_type"
+            [value]="service_type.id"
+            >{{ service_type.nombre }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="flex justify-end px-6 bg-gray-100">
+    <button
+      mat-button
+      class="ml-4 bg-gray-50 border-solid border border-accent-300 text-gray-700 shadow-none"
+      (click)="dialogRef.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-raised-button
+      [color]="'primary'"
+      class="w-24"
+      (click)="onSubmit()"
+      [disabled]="form.invalid"
+    >
+      <span *ngIf="!data?.data"> Crear </span>
+      <span *ngIf="data?.data"> Editar </span>
+      <mat-progress-spinner
+        *ngIf="loading"
+        [diameter]="24"
+        [mode]="'indeterminate'"
+      ></mat-progress-spinner>
+    </button>
+  </div>
+</form>

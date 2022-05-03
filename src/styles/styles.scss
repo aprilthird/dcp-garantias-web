@@ -1,0 +1,82 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+@import './bootstrap/bootstrap.min.css';
+
+.mat-dialog-actions {
+  width: calc(100%);
+  margin-left: -24px;
+}
+
+.font-w-700{ font-weight:700; }
+.font-w-500{ font-weight: 500;}
+.container{
+  max-width: 100%;
+  margin-top: 20px;
+}
+table{
+  width: 100%;
+  th{
+    background: #64748B;
+    color: white !important;
+    font-weight: 700;
+  }
+}
+mat-form-field{
+  width: 100%;
+}
+.text-red{
+  color: #C41C1C;
+}
+.pointer{
+  cursor: pointer;
+}
+.flex-align-center{
+  display: flex;
+  align-items: center;
+}
+.card-bg-gray{
+  background-color: #f9f9f9 !important;
+}
+.input-bg-gray{
+  background-color: #E0E0E0 !important;
+}
+.mat-radio-button {
+  margin-left: 16px;
+}
+.flex-xy-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-col-center{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.font-sz-16{
+  font-size: 16px;
+}
+.font-sz-18{
+  font-size: 18px;
+}
+.margin-b-15{
+  margin-bottom: 15px;
+}
+.notification-green{
+  background-color: #B4F1D9;
+  color: #1E293B;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  .mat-icon{
+    color: #0BEF94;
+  }
+}
+.text--center{
+  text-align: center !important;
+}

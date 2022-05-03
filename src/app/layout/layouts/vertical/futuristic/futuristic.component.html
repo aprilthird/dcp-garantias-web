@@ -1,0 +1,78 @@
+<!-- Navigation -->
+<fuse-vertical-navigation class="dark bg-white text-black print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [name]="'mainNavigation'"
+    [navigation]="navigation.horizontal"
+    [opened]="!isScreenSmall">
+    <!-- Navigation header hook -->
+    <ng-container fuseVerticalNavigationHeader>
+        <!-- Logo -->
+        <div class="flex items-center h-20 p-6">
+            <img [ngClass]="{'w-10': environment.project === 'dcp', 'w-50': environment.project === 'kmmp'}"
+            src="assets/images/logo/logo-{{ environment.project }}.svg"
+            alt="Logo image"
+          />
+        </div>
+    </ng-container>
+    <!-- Navigation footer hook -->
+    <ng-container fuseVerticalNavigationFooter>
+        <!-- User -->
+        <div class="flex items-center w-full px-6 py-8 border-t">
+            <!-- <user></user> -->
+            <div class="flex flex-row w-full ml-4 overflow-hidden" style="cursor: pointer;" (click)="signOut()">
+                <mat-icon class="icon-logout" aria-hidden="false" aria-label="Example home icon" style="margin-right: 10px;">exit_to_app</mat-icon>
+                <div class="w-full mt-0.5 whitespace-nowrap text-sm overflow-ellipsis overflow-hidden leading-normal text-current opacity-50">Salir</div>
+                <!-- <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden leading-normal text-current opacity-80">
+                    {{user.nombres}}
+                </div> -->
+                <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+                <div class="w-full mt-0.5 whitespace-nowrap text-sm overflow-ellipsis overflow-hidden leading-normal text-current opacity-50">
+                    Salir
+                </div> -->
+            </div>
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+
+    <!-- Header -->
+    <div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+        <!-- Navigation toggle button -->
+        <button
+            class="mr-2"
+            mat-icon-button
+            (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button>
+        <!-- Components -->
+        <div class="flex items-center pl-2 ml-auto space-x-1 sm:space-x-2">
+            <!-- <languages></languages> -->
+            <!-- <fuse-fullscreen class="hidden md:block"></fuse-fullscreen> -->
+            <!-- <search [appearance]="'bar'"></search> -->
+            <!-- <shortcuts></shortcuts> -->
+            <!-- <messages></messages> -->
+            <span class="flex flex-col leading-none">
+                <span style="font-weight: 700;">¡Bienvenido {{user.nombres.split(' ')[0]}}!</span>
+                <span class="mt-1.5 text-md font-medium text-center">Usuario de Servicio</span>
+            </span>
+            <div>
+                <mat-icon aria-hidden="false">account_circle</mat-icon>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        <router-outlet *ngIf="true"></router-outlet>
+    </div>
+
+    <!-- Footer -->
+    <div class="relative flex flex-0 items-center justify-start w-full h-14 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden">
+        <span class="font-medium text-secondary">Fuse &copy; {{currentYear}}</span>
+    </div>
+
+</div>

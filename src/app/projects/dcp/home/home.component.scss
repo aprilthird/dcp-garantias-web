@@ -1,0 +1,24 @@
+.background{
+    width: 100%;
+    background-image: url('./../../../../assets/images/fondo_home.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+}
+mat-card-title{
+    font-size: 18px;
+}
+mat-card{
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+.document{
+    display: flex;
+    align-items: center;
+    a{
+        margin-left: 0.625rem;
+    }
+}

@@ -1,0 +1,39 @@
+.flex-end{
+    display: flex;
+    justify-content: end;
+    span{
+        display: flex;
+        align-items: center;
+    }
+}
+.btn-register{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.selectors{
+    margin-top: 20px;
+    .search{
+        display: flex;
+        align-items: flex-end;
+    }
+}
+table{
+    button{
+        width: 50%;
+    }
+}
+.bgr-gray{
+    background-color: #E2E8F0 !important;
+    font-style: italic;
+}
+.observed{
+    color: red !important;
+}
+
+.state0{ border-color: #E2E8F0;}
+.state1{ border-color: #263238;}
+.state2{ border-color: #FD9C00;}
+.state3{ border-color: #5BC500;}
+.state4{ border-color: #64748B;}
+.state5{ border-color: #000000;}
+.state6{ border-color: #FFD600;}

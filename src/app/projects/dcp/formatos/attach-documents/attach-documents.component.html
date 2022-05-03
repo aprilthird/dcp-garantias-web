@@ -1,0 +1,154 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <div
+    class="
+      flex flex-col
+      sm:flex-row
+      flex-0
+      sm:items-center sm:justify-between
+      p-6
+      sm:py-8 sm:px-10
+      border-b
+      bg-card
+      dark:bg-transparent
+    "
+  >
+    <div class="flex-1 min-w-0">
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a
+            class="whitespace-nowrap text-primary-500 cursor-pointer"
+            routerLink="/admin/informes/list"
+            >Informes</a
+          >
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon
+            class="icon-size-5 text-secondary"
+            [svgIcon]="'heroicons_solid:chevron-right'"
+          ></mat-icon>
+          <a class="ml-1 text-primary-500">Gestión de documentos</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon
+            class="icon-size-5 text-secondary"
+            [svgIcon]="'heroicons_solid:chevron-right'"
+          ></mat-icon>
+          <span class="ml-1 text-secondary"> {{ id }} </span>
+        </div>
+      </div>
+      <div class="mt-2 flex justify-between w-full">
+        <h2
+          class="
+            text-3xl
+            md:text-4xl
+            font-extrabold
+            tracking-tight
+            leading-7
+            sm:leading-10
+            truncate
+          "
+        >
+          Documentos
+        </h2>
+
+        <button mat-raised-button [color]="'primary'" (click)="file.click()">
+          <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+          <span class="ml-2 mr-1">Agregar documento</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-progress-bar [mode]="'indeterminate'" *ngIf="!loaded"></mat-progress-bar>
+  <mat-drawer-container class="flex-auto h-full min-h-70">
+    <!-- Drawer -->
+
+    <!-- Drawer content -->
+    <mat-drawer-content class="flex flex-col settings-users" fuseScrollReset>
+      <!-- Main -->
+
+      <router-outlet></router-outlet>
+
+      <div
+        class="
+          sm:inset-0
+          flex flex-col flex-auto
+          min-w-0
+          sm:overflow-hidden
+          bg-card
+          dark:bg-transparent
+        "
+      >
+        <!-- Header -->
+
+        <!-- Main -->
+
+        <div class="flex flex-wrap gap-5 p-10">
+          <div class="w-full h-0">
+            <label style="visibility: hidden" class="file">
+              <span>Seleccione archivo</span>
+              <input (change)="onChageFile($event)" #file type="file" />
+            </label>
+          </div>
+          <ng-container *ngFor="let document of documents; let i = index">
+            <div
+              *ngIf="document.activo && document.tipo === 1"
+              class="bg-gray-100 rounded-sm w-64"
+            >
+              <div class="bg-gray-100 rounded-sm max-w-sm">
+                <div class="flex justify-between items-center">
+                  <div class="flex p-2 gap-2 overflow-hidden">
+                    <button
+                      mat-icon-button=""
+                      class="
+                        mat-focus-indicator mat-menu-trigger
+                        bg-gray-300
+                        text-black
+                        mat-icon-button mat-button-base
+                      "
+                    >
+                      <span class="mat-button-wrapper"
+                        ><span class="relative">
+                          {{ document?.nombre[0] | uppercase }}
+                        </span></span
+                      >
+                    </button>
+                    <div>
+                      <span
+                        [matTooltip]="document?.nombre"
+                        class="font-bold truncate"
+                        >{{ document?.nombre }}</span
+                      >
+                      <div>{{ document?.fechaReg | date: "dd/MM/yyyy" }}</div>
+                    </div>
+                  </div>
+                  <button
+                    class=""
+                    [matMenuTriggerFor]="actionsMenu"
+                    mat-icon-button
+                  >
+                    <mat-icon
+                      [svgIcon]="'heroicons_outline:dots-vertical'"
+                    ></mat-icon>
+
+                    <mat-menu #actionsMenu="matMenu">
+                      <button
+                        mat-menu-item
+                        (click)="clickOpenFile(document?.ruta)"
+                      >
+                        <span>Descargar</span>
+                      </button>
+                      <button mat-menu-item (click)="delete(document)">
+                        <span>Eliminar</span>
+                      </button>
+                    </mat-menu>
+                  </button>
+                </div>
+                <div class="p-2">{{ document?.descripcion }}</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

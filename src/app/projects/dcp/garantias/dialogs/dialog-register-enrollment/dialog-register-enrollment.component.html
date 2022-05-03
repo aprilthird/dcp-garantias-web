@@ -1,0 +1,134 @@
+<h3 matDialogTitle>Registrar matrícula</h3>
+<div matDialogContent>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 margin-b-15">
+                    <span class="font-sz-18 font-w-500">Datos del cliente</span>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Cliente:</mat-label>
+                        <mat-select>
+                            <mat-option>
+                                1
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-9">
+                    <mat-form-field>
+                        <mat-label>Dirección:</mat-label>
+                        <input matInput [disabled]="true" type="text">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <hr width="100%" color="#E2E8F0">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 margin-b-15">
+                    <span class="font-sz-18 font-w-500">Datos del {{data.name}}</span>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>ESN</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Modelo del {{data.name}}</mat-label>
+                        <mat-select placeholder="Placeholder">
+                            <mat-option>
+                                1
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>     
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Aplicacion del {{data.name}}</mat-label>
+                        <mat-select placeholder="Placeholder">
+                            <mat-option>
+                                1
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>     
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>CPL</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>     
+                </div>
+                <div class="col-md-4 flex-xy-center">
+                    <mat-checkbox color="primary">Tiene BIS</mat-checkbox>
+                </div>                                  
+                <div class="col-md-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Fecha de inicio de garantía</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <hr width="100%" color="#E2E8F0">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 margin-b-15">
+                    <span class="font-sz-18 font-w-500">Datos opcionales</span>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Potencia(HP)</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Lugar operación</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4 flex-xy-center">
+                    <mat-radio-group aria-label="Select an option" color="primary">
+                        <mat-radio-button value="1">DDEM</mat-radio-button>
+                        <mat-radio-button value="2">CUMMINS PERU</mat-radio-button>
+                      </mat-radio-group>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Cliente final</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Equipo</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Alt de trabajo (msnm)</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>ETO / PTO</mat-label>
+                        <input matInput type="text">
+                    </mat-form-field>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button>Salir</button>
+    <button mat-raised-button color="primary">Guardar</button>
+</div>

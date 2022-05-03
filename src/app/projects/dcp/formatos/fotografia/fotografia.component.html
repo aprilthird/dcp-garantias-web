@@ -1,0 +1,141 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent"
+  >
+    <div class="flex-1 min-w-0">
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a
+            class="whitespace-nowrap text-primary-500 cursor-pointer"
+            routerLink="/admin/informes/list"
+            >Informes</a
+          >
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon
+            class="icon-size-5 text-secondary"
+            [svgIcon]="'heroicons_solid:chevron-right'"
+          ></mat-icon>
+          <a class="ml-1 text-primary-500">Ver informe</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon
+            class="icon-size-5 text-secondary"
+            [svgIcon]="'heroicons_solid:chevron-right'"
+          ></mat-icon>
+          <span class="ml-1 text-secondary">{{ idFormatActivity }}</span>
+        </div>
+      </div>
+      <div class="mt-2 flex justify-between w-full">
+        <h2
+          class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate"
+        >
+          Galería
+        </h2>
+
+        <button mat-raised-button [color]="'primary'" (click)="preview()">
+          <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+          <span class="ml-2 mr-1">Agregar foto</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-progress-bar [mode]="'indeterminate'" *ngIf="!loaded"></mat-progress-bar>
+  <mat-drawer-container class="flex-auto h-full min-h-70">
+    <!-- Drawer -->
+
+    <!-- Drawer content -->
+    <mat-drawer-content class="flex flex-col settings-users" fuseScrollReset>
+      <!-- Main -->
+
+      <router-outlet></router-outlet>
+
+      <div
+        class="sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+      >
+        <!-- Header -->
+
+        <!-- Main -->
+
+        <div class="flex flex-wrap gap-5 p-10">
+          <ng-container *ngFor="let image of gallery; let i = index">
+            <div
+              *ngIf="image.activo && image.tipo === 0"
+              class="bg-gray-100 rounded-sm max-w-sm"
+            >
+              <div class="flex justify-between items-center">
+                <div class="flex p-2 gap-2 overflow-hidden">
+                  <button
+                    mat-icon-button=""
+                    class="mat-focus-indicator mat-menu-trigger bg-gray-300 text-black mat-icon-button mat-button-base"
+                  >
+                    <span class="mat-button-wrapper"
+                      ><span class="relative">
+                        {{ image?.nombre[0] | uppercase }}
+                      </span></span
+                    >
+                  </button>
+                  <div>
+                    <span
+                      [matTooltip]="image?.nombre"
+                      class="font-bold truncate"
+                      >{{ image?.nombre }}</span
+                    >
+                    <div>{{ image?.fechaReg | date: "dd/MM/yyyy" }}</div>
+                  </div>
+                </div>
+                <button
+                  class=""
+                  [matMenuTriggerFor]="actionsMenu"
+                  mat-icon-button
+                >
+                  <mat-icon
+                    [svgIcon]="'heroicons_outline:dots-vertical'"
+                  ></mat-icon>
+
+                  <mat-menu #actionsMenu="matMenu">
+                    <!-- <button
+                      mat-menu-item
+                      (click)="preview(image?.id, image?.ruta)"
+                    >
+                      <span>Editar</span>
+                    </button> -->
+                    <!-- <button mat-menu-item (click)="editImage(image)">
+                      <span>Editar</span>
+                    </button> -->
+                    <button mat-menu-item>
+                      <a [href]="setImage(image?.ruta)" target="_blank">
+                        <span>Descargar</span>
+                      </a>
+                    </button>
+                    <button mat-menu-item (click)="delete(image)">
+                      <span>Eliminar</span>
+                    </button>
+                  </mat-menu>
+                </button>
+              </div>
+              <img class="max-w-max" [src]="setImage(image.ruta)" />
+              <!--<img [src]="setImage(image?.ruta)" />-->
+              <!--<img src="https://picsum.photos/200/300?random=1" />-->
+              <div class="p-2">{{ image?.descripcion }}</div>
+            </div>
+          </ng-container>
+        </div>
+
+        <!--<input type="file" (change)="fileChangeEvent($event)" />-->
+        <!--<div>
+          <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="4 / 3"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded($event)"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+        </div>-->
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
