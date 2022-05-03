@@ -24,6 +24,8 @@ import { DialogDraftSavedSuccessfullyComponent } from './dialogs/dialog-draft-sa
 import { MassiveBasicRegistrationComponent } from './massive-basic-registration/massive-basic-registration.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogMassiveRegistrationSuccessfullyComponent } from './dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
+import { HistoriaESNComponent } from './dialogs/historia-esn/historia-esn.component';
+import { DialogHistoriaESNComponent } from './dialogs/dialog-historia-esn/dialog-historia-esn.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { DialogMassiveRegistrationSuccessfullyComponent } from './dialogs/dialog
     DialogRegisterEnrollmentComponent,
     DialogDraftSavedSuccessfullyComponent,
     MassiveBasicRegistrationComponent,
-    DialogMassiveRegistrationSuccessfullyComponent
+    DialogMassiveRegistrationSuccessfullyComponent,
+    HistoriaESNComponent,
+    DialogHistoriaESNComponent
   ],
   imports: [
     CommonModule,

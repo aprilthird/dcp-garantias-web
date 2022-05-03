@@ -3,8 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogRegisterEnrollmentComponent } from '../../dialogs/dialog-register-enrollment/dialog-register-enrollment.component';
 import { Router } from '@angular/router';
 import { DialogDraftSavedSuccessfullyComponent } from './../../dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
-
-
+import { DialogHistoriaESNComponent } from '../../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -37,5 +36,12 @@ export class EngineComponent implements OnInit {
 
   onSaveDraft():void{
     this.onOpenDialogSaveDraft();
+  }
+
+  onOpenDialogHistoriaEsn():void{
+    const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
+      data:{type:'engine', name: 'motor'},
+      width: '900px'
+    });
   }
 }

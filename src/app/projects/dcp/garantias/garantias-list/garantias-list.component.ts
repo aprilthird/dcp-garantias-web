@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DialogQuestionNewRecordComponent } from './../dialogs/dialog-question-new-record/dialog-question-new-record.component';
 import { Router } from '@angular/router';
+import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 
 interface Option {
   value: string;
@@ -113,6 +114,13 @@ export class GarantiasListComponent implements OnInit,AfterViewInit {
 
   onMassiveRegistrationBasic():void{
     this.router.navigate(['/garantias/massive-basic-registration']);
+  }
+
+  onOpenDialogHistoriaEsn():void{
+    const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
+      data:{type:'all', name: 'todo'},
+      width: '900px'
+    });
   }
 
 }
