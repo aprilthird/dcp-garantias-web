@@ -1,31 +1,87 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-12 margin-b-15">
+        <div class="col-md-8 margin-b-15">
             <h4 class="font-w-700 margin-b-15">Crear registro básico del motor</h4>
+        </div>
+        <div class="col-md-4 margin-b-15" style="padding: 0 40px">
+            <div matRipple class="notification-red">
+                <mat-icon svgIcon="heroicons_solid:exclamation-circle"></mat-icon> | Ha ocurrido un error en la carga de la plantilla
+            </div>
+        </div>
+        <div class="col-md-12 margin-b-15">
             <span class="pointer" (click)="onGarantias()">Garantías</span> > <span class="text-red pointer">Crear registro</span>
         </div>
         <div class="col-md-12">
             <mat-card>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 margin-b-15">
                         <div class="row">
                             <div class="col-md-12">
-                                <span>Descargar plantilla</span>
+                                <p><span class="font-w-500 font-sz-16">Descargar plantilla</span></p>
                             </div>
-                            <div class="col-md-12">
-                                <div>
+                            <div class="col-md-12 flex-row">
+                                <div class="flex-align-center">
                                     <mat-icon  class="icon-size-16" svgIcon="heroicons_outline:document-text"></mat-icon>
                                 </div>
-                                <div>
-                                    <p><span>Descarga el formato de la plantilla y completa los datos de registro,</span><span> luego sube el archivo para ingresar todos los reclamos del documento.</span></p>
-                                    <p><mat-icon svgIcon="heroicons_outline:download"></mat-icon><span>Descargar formato</span></p>
+                                <div class="p-t-5">
+                                    <p ><span>Descarga el formato de la plantilla y completa los datos de registro,</span><span class="font-w-700"> luego sube el archivo para ingresar todos los reclamos del documento.</span></p>
+                                    <p class="flex-align-center text-red font-w-700 pointer"><span>Descargar formato</span><mat-icon svgIcon="heroicons_outline:download" color="primary"></mat-icon></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12"></div>
+                    <div class="col-md-12 margin-b-15">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><span class="font-w-500 font-sz-16">Subir plantilla</span></p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="file-upload-doc pointer">
+                                    <span>Soltar la plantilla aquí</span><span class="font-w-700"> o buscar en el ordenador</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 flex-justify-center">
+                        <mat-spinner color="primary"></mat-spinner>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 margin-b-15">
+                                <div class="col-md-12 flex-row">
+                                    <div class="flex-align-center">
+                                        <mat-icon  class="icon-size-16" svgIcon="heroicons_outline:clipboard-check"></mat-icon>
+                                    </div>
+                                    <div class="p-t-5">
+                                        <p ><span class="font-w-700">Plantilla se subió correctamente</span></p>
+                                        <p class="flex-align-center"><span class="font-w-700 font-sz-18">130</span> | <span>registros ingresados</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 margin-b-15">
+                                <div class="row" style="border: 2px solid black; border-radius: 5px; width: 100%; padding: 10px 0;">
+                                    <div class="col-md-6 flex-end">
+                                        <span>
+                                            <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
+                                            Plantilla registro de motor.xls
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6 text--end">
+                                        <button mat-raised-button color="accent">
+                                            <mat-icon>sync</mat-icon>
+                                            Actualizar plantilla
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text--end">
+                                <button mat-raised-button color="primary" (click)="onMassiveRegistration()">Ingresar resgistros</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </mat-card>
         </div>
+
     </div>
 </div>

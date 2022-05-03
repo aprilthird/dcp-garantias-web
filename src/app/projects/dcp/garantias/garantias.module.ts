@@ -22,6 +22,8 @@ import { DialogRegisterEnrollmentComponent } from './dialogs/dialog-register-enr
 import {MatRippleModule} from '@angular/material/core';
 import { DialogDraftSavedSuccessfullyComponent } from './dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
 import { MassiveBasicRegistrationComponent } from './massive-basic-registration/massive-basic-registration.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DialogMassiveRegistrationSuccessfullyComponent } from './dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { MassiveBasicRegistrationComponent } from './massive-basic-registration/
     GeneratorComponent,
     DialogRegisterEnrollmentComponent,
     DialogDraftSavedSuccessfullyComponent,
-    MassiveBasicRegistrationComponent
+    MassiveBasicRegistrationComponent,
+    DialogMassiveRegistrationSuccessfullyComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +52,8 @@ import { MassiveBasicRegistrationComponent } from './massive-basic-registration/
     MatCardModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatRippleModule
+    MatRippleModule,
+    MatProgressSpinnerModule
   ]
 })
 export class GarantiasModule { }
