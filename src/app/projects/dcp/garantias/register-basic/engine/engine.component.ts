@@ -4,6 +4,7 @@ import { DialogRegisterEnrollmentComponent } from '../../dialogs/dialog-register
 import { Router } from '@angular/router';
 import { DialogDraftSavedSuccessfullyComponent } from './../../dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
 import { DialogHistoriaESNComponent } from '../../dialogs/dialog-historia-esn/dialog-historia-esn.component';
+import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -11,10 +12,15 @@ import { DialogHistoriaESNComponent } from '../../dialogs/dialog-historia-esn/di
 })
 export class EngineComponent implements OnInit {
 
-  constructor(private readonly matDialog: MatDialog, private readonly router: Router) { }
+  constructor(private readonly matDialog: MatDialog, private readonly router: Router,
+              private readonly garantiasService: GarantiasService) { }
 
   ngOnInit(): void {
+    this.garantiasService.getListaTipoDeGarantias().subscribe(resp =>{
+      console.log(resp);
+    });
   }
+
 
   onOpenDialogRegisterEnrollment():void{
     const dialog = this.matDialog.open(DialogRegisterEnrollmentComponent,{

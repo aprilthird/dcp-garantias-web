@@ -80,4 +80,19 @@ export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestr
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
+
+    getIcon(title){
+        if(title=='Home'){
+            return 'heroicons_solid:home';
+        }
+        if(title=='Garantias'){
+            return 'heroicons_solid:ticket';
+        }
+        if(title=='Gestión de fallas'){
+            return 'heroicons_solid:paper-airplane';
+        }
+        if(title=='Herramientas digitales'){
+            return 'heroicons_solid:briefcase';
+        }
+    }
 }
