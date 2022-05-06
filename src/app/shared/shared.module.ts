@@ -13,6 +13,7 @@ import { MatInputModule } from "@angular/material/input";
 import { UiDialogsComponent } from "./ui/ui-dialogs/ui-dialogs.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { GroupPositionPipe } from "./pipes/group-position.pipe";
+import { DialogOperationSuccessfullyComponent } from './dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { GroupPositionPipe } from "./pipes/group-position.pipe";
     TextFilterPipe,
     UiDialogsComponent,
     GroupPositionPipe,
+    DialogOperationSuccessfullyComponent,
   ],
   providers: [ExportExcelService],
 })

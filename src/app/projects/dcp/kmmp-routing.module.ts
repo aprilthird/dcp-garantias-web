@@ -19,6 +19,14 @@ const routes: Routes = [
           import("./garantias/garantias.module").then((m) => m.GarantiasModule),
       },
       {
+        path: "configuration-and-maintenance",
+        loadChildren: () =>
+          import("./configuration-and-maintenance/configuration-and-maintenance.module").then((m) => m.ConfigurationAndMaintenanceModule),
+      },
+
+
+
+      {
         path: "formatos",
         loadChildren: () =>
           import("./formatos/formatos.module").then((m) => m.FormatosModule),

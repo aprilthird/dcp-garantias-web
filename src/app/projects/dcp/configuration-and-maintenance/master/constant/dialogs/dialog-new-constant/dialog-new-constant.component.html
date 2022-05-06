@@ -1,0 +1,46 @@
+<div matDialogTitle>
+    <span>{{data.option=='new' ? 'Nueva': 'Editar'}} constante</span>
+</div>
+<div matDialogContent>
+    <form *ngIf="formNewConstant" [formGroup]="formNewConstant" >
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Código</mat-label>
+                    <input type="text" matInput formControlName="codigo" placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>LaborRate</mat-label>
+                    <input type="number" matInput formControlName="laborRate" placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>KmRate</mat-label>
+                    <input type="number" matInput formControlName="kmRate" placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>BFCMarkUp</mat-label>
+                    <input type="number" matInput formControlName="bfcMarkup" placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>SiteLabor</mat-label>
+                    <input type="number" matInput formControlName="siteLabor" placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4 flex-xy-center">
+                <mat-slide-toggle color="primary" formControlName="activo" >Activo</mat-slide-toggle>
+            </div>
+        </div>
+    </form>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button>Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSaveNewConstant()">{{data.option=='new' ? 'Crear': 'Editar'}}</button>
+</div>
