@@ -27,12 +27,12 @@ export class ConfigurationAndMaintenanceService {
   }
 
   listConstants():Observable<any>{
-    const request = {
-      filter : {
-        fechaIni: "2022-05-06T20:49:53.868Z",
-        fechaFin: "2022-05-06T20:49:53.868Z",
-      }
-    }
+    const request = {filter : {fechaFin: "2022-05-09T17:56:50"}};
     return this.httpClient.post(this.urlTrayConstants, request, {headers:this.header});
+  }
+
+  deleteConstant(_request:any):Observable<any>{
+    console.log(_request);
+    return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
 }

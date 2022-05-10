@@ -44,10 +44,10 @@ export class AzureAuthService {
       // if (this.userDoesNot) {
         //   await this.openDialog(this.userDoesNot, "err");
         // } else {
-      console.log('login azure service ok');
+      // console.log('login azure service ok');
       await this.redirecting().then(async (res: any) => {
-        console.log(res.account.username);
-        console.log(res);
+        // console.log(res.account.username);
+        // console.log(res);
         await this._authService.signInAD(res.account.username).toPromise().then(async () => {
           await this._navigationService.get().toPromise();
           // .then(() => {
@@ -104,13 +104,13 @@ export class AzureAuthService {
   private redirecting() {
     return new Promise<void>(async (res) => {
       const login = await this.loginPopUp();
-      console.log(login);      
+      // console.log(login);      
       res(login);
     });
   }
 
   private loginPopUp() {
-    console.log('azure auth service - function login pop up - ok')
+    // console.log('azure auth service - function login pop up - ok');
     return new Promise<any>((res) => { this.authService.loginPopup().subscribe(
         async (resp) => res(resp),
         (err) => { this._router.navigate(["sign-out"]) }

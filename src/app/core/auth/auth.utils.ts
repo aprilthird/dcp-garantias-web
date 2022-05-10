@@ -153,9 +153,7 @@ export class AuthUtils
      */
     static _decodeToken(token: string): any
     {
-        // Return if there is no token
-        console.log('decode token ok');
-        
+        // Return if there is no token    
         if ( !token )
         {
             return null;

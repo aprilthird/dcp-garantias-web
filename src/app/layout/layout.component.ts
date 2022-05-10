@@ -52,7 +52,7 @@ export class LayoutComponent implements OnInit, OnDestroy
         // Get the themes
         this._fuseTailwindConfigService.tailwindConfig$.subscribe((config) => {
             this.themes = Object.entries(config.themes);
-            console.log(this.themes);
+            // console.log(this.themes);
         });
 
         // Set the theme and scheme based on the configuration
@@ -79,8 +79,8 @@ export class LayoutComponent implements OnInit, OnDestroy
             // Store the options
             this.scheme = options.scheme;
             this.theme = options.theme;
-            console.log(this.scheme);
-            console.log(this.theme);
+            // console.log(this.scheme);
+            // console.log(this.theme);
 
             // Update the scheme and theme
             this._updateScheme();
@@ -94,7 +94,7 @@ export class LayoutComponent implements OnInit, OnDestroy
 
                 // Store the config
                 this.config = config;
-                console.log(this.config);
+                // console.log(this.config);
 
                 // Update the layout
                 this._updateLayout();
@@ -186,7 +186,7 @@ export class LayoutComponent implements OnInit, OnDestroy
 
         // 1. Set the layout from the config
         this.layout = this.config.layout;
-        console.log(this.layout);
+        // console.log(this.layout);
         // 2. Get the query parameter from the current route and
         // set the layout and save the layout to the config
         const layoutFromQueryParam = (route.snapshot.queryParamMap.get('layout') as Layout);

@@ -5,7 +5,8 @@ import { DialogNewConstantComponent } from './dialogs/dialog-new-constant/dialog
 import { MatDialog } from '@angular/material/dialog';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
-
+import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { MatSnackBar,MatSnackBarHorizontalPosition,MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -43,40 +44,95 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ConstantComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['code', 'laborRate', 'kmRate', 'bcfMarkup', 'siteLabor', 'state', 'actions'];
+  listConstants: any[];
+  totalConstants: number;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource : any[];
+
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor( private readonly matDialog: MatDialog,
-              private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
+              private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService,
+              private _snackBar: MatSnackBar) { }
   
   ngOnInit(): void {
-    this.configurationAndMaintenanceService.listConstants().subscribe(resp=>{
-      console.log(resp);
-    });
+    this.getListConstant();
   }
   
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   onDialogNewConstant():void{
-    const dialog = this.matDialog.open(DialogNewConstantComponent,{
+    const dialogNewConstant = this.matDialog.open(DialogNewConstantComponent,{
       data: {option:'new'}
     });
-    dialog.afterClosed().subscribe(resp => {
+    dialogNewConstant.afterClosed().subscribe(resp => {
       if(resp){
-        this.openDialogOperationSuccessfully();
+        this.openDialogOperationSuccessfully('Constante creada con éxito');
+        this.getListConstant();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  openDialogOperationSuccessfully():void{
+  onDialogEditConstant(_constant:any):void{
+    const dialogEditConstant = this.matDialog.open(DialogNewConstantComponent,{
+      data: {option:'edit', constant:_constant}
+    });
+    dialogEditConstant.afterClosed().subscribe(resp => {
+      if(resp){
+        this.openDialogOperationSuccessfully('Constante editada con éxito');
+        this.getListConstant();
+      }else{
+        console.log('operacion cancelada');        
+      }
+    });
+  }
+
+  onDialogDeleteConstant(_constant:any):void{
+    const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
+      data:{text:'¿Está seguro de eliminar esta constante?'}
+    });
+    dialogDelete.afterClosed().subscribe(resp=>{
+      this.deleteConstant(resp,_constant);
+    });
+  }
+
+  openDialogOperationSuccessfully(textDialog:string):void{
     const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
-      data:{text:'Constante creada con éxito'}
+      data:{text:textDialog}
+    });
+    dialogOperationSuccessfully.afterClosed().subscribe();
+  }
+
+  deleteConstant(option:any, _constant:any):void{
+    const request = {id:_constant.id, active:false};
+    if(option){
+      this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
+        if(resp.success){
+          this.getListConstant();
+          this.openSnackBar('La constante fue eliminada');
+        }
+      });
+    }else{
+      console.log('operacion cancelada');      
+    }
+  }
+
+  getListConstant():void{
+    this.configurationAndMaintenanceService.listConstants().subscribe(resp=>{
+      this.dataSource = resp.data;
+      this.totalConstants = resp.totalRecords;
+    });
+  }
+
+  openSnackBar(message:string):void{
+    this._snackBar.open(message,'Entendido',{
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['mat-toolbar', 'mat-primary','button-color']
     })
   }
 

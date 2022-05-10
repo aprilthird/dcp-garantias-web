@@ -41,6 +41,6 @@
     </form>
 </div>
 <div matDialogActions align="end">
-    <button mat-raised-button>Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSaveNewConstant()">{{data.option=='new' ? 'Crear': 'Editar'}}</button>
+    <button mat-raised-button (click)="onClose()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSaveConstant()">{{data.option=='new' ? 'Crear': 'Editar'}}</button>
 </div>

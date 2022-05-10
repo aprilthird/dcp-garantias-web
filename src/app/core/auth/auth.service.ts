@@ -94,8 +94,8 @@ export class AuthService {
 
   signInAD(emailAD: string): Observable<Response> {
             // Throw error, if the user is already logged in
-      console.log(emailAD);
-      console.log('funcion que trae el token');
+      // console.log(emailAD);
+      // console.log('funcion que trae el token');
 
       if (this._authenticated) {
         return throwError("User is already logged in.");
@@ -103,8 +103,8 @@ export class AuthService {
       return this._httpClient.get(environment.apiUrl + `/Seguridad/ActiveDirectory?req=${emailAD}`)
         .pipe(
           switchMap((response: any) => {
-          tap(x => console.log(x));
-          console.log(response);
+          // tap(x => console.log(x));
+          // console.log(response);
           this.NavigationService.get();
           // Store the access token in the local storage
           this.accessToken = response.body;
@@ -115,7 +115,7 @@ export class AuthService {
             AuthUtils._decodeToken(response.body).data
           );
           // Return a new observable with the response
-          console.log(response);
+          // console.log(response);
           return of(response);
         })
       );

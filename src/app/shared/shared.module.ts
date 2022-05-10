@@ -14,6 +14,7 @@ import { UiDialogsComponent } from "./ui/ui-dialogs/ui-dialogs.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { GroupPositionPipe } from "./pipes/group-position.pipe";
 import { DialogOperationSuccessfullyComponent } from './dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { DialogDeleteComponent } from './dialogs/dialog-delete/dialog-delete.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { DialogOperationSuccessfullyComponent } from './dialogs/dialog-operation
     UiDialogsComponent,
     GroupPositionPipe,
     DialogOperationSuccessfullyComponent,
+    DialogDeleteComponent,
   ],
   providers: [ExportExcelService],
 })

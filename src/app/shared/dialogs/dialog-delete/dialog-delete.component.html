@@ -1,0 +1,14 @@
+<div matDialogContent>
+    <div class="row">
+        <div class="col-md-12 flex-col-center margin-b-15">
+            <span class="icon-question font-w-700 icon"></span>
+        </div>
+        <div class="col-md-12 text--center">
+            <span>{{data.text}}</span>
+        </div>
+    </div>
+</div>
+<div matDialogActions align="center">
+    <button mat-raised-button (click)="onClose(false)">NO</button>
+    <button mat-raised-button color="primary" (click)="onClose(true)">SI</button>
+</div>

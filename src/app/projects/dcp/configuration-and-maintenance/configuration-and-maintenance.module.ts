@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SrtComponent } from './master/srt/srt.component';
 import { DialogNewSrtComponent } from './master/srt/dialogs/dialog-new-srt/dialog-new-srt.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { DialogNewSrtComponent } from './master/srt/dialogs/dialog-new-srt/dialo
     MatPaginatorModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule,
+    MatSnackBarModule
   ]
 })
 export class ConfigurationAndMaintenanceModule { }
