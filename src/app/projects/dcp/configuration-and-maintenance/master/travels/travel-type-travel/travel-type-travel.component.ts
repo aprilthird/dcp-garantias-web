@@ -1,27 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import { DialogNewSrtComponent } from './dialogs/dialog-new-srt/dialog-new-srt.component';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
-import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { DialogMaintenanceTravelTypeTravelComponent } from '../dialogs/dialog-maintenance-travel-type-travel/dialog-maintenance-travel-type-travel.component';
 
 @Component({
-  selector: 'app-srt',
-  templateUrl: './srt.component.html',
-  styleUrls: ['./srt.component.scss']
+  selector: 'app-travel-type-travel',
+  templateUrl: './travel-type-travel.component.html',
+  styleUrls: ['./travel-type-travel.component.scss']
 })
-export class SrtComponent implements OnInit {
+export class TravelTypeTravelComponent implements OnInit {
 
-
-  displayedColumns: string[] = ['codigo', 'grupoSRT', 'procedimiento', 'paso', 'descripcion', 'tipo', 'dondeSeReparo','fabricaSRT', 'estado','acciones'];
+  displayedColumns: string[] = ['codigo', 'descripcion', 'estado','acciones'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
 
   constructor(private readonly matDialog: MatDialog,
               private _snackBar: MatSnackBar) { }
@@ -29,43 +27,42 @@ export class SrtComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  onDialogNewSrt():void{
-    const dialogNewSrt = this.matDialog.open(DialogNewSrtComponent,{
-      data: {option:'new'}
+  onDialogNewTravelType():void{
+    const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceTravelTypeTravelComponent,{
+      data: {option:'new'},
+      width:'900px'
     });
-    dialogNewSrt.afterClosed().subscribe(resp=>{
+    dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
-        this.openDialogOperationSuccessfully('SRT creada con éxito');
+        this.openDialogOperationSuccessfully('Tipo de viaje creada con éxito');
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditSRT(_constant:any):void{
-    const dialogEditConstant = this.matDialog.open(DialogNewSrtComponent,{
-      data: {option:'edit', constant:_constant}
+  onDialogDeleteTravelType(_constant:any):void{
+    const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
+      data:{text:'¿Está seguro de eliminar este tipo de viaje?'}
     });
-    dialogEditConstant.afterClosed().subscribe(resp => {
+    dialogDelete.afterClosed().subscribe(resp=>{
+      this.deleteConstant(resp,_constant);
+    });
+  }
+
+  onDialogEditTravelType(_constant:any):void{
+    const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceTravelTypeTravelComponent,{
+      data: {option:'edit', constant:_constant},
+      width:'900px'
+
+    });
+    dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
-        this.openDialogOperationSuccessfully('Constante editada con éxito');
+        this.openDialogOperationSuccessfully('Tipo de viaje editada con éxito');
         // this.getListConstant();
       }else{
         console.log('operacion cancelada');        
       }
-    });
-  }
-
-  onDialogDeleteSrt(_constant:any):void{
-    const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
-      data:{text:'¿Está seguro de eliminar esta SRT?'}
-    });
-    dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
     });
   }
 
@@ -82,7 +79,7 @@ export class SrtComponent implements OnInit {
       // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
         // if(resp.success){
           // this.getListConstant();
-          this.openSnackBar('La SRT fue eliminada');
+          this.openSnackBar('Tipo de viaje eliminada');
         // }
       // });
     }else{
@@ -99,11 +96,7 @@ export class SrtComponent implements OnInit {
     })
   }
 
-  onUpdateSrt():void{
-    this.openSnackBar('SRT actualizadas');
-  }
 }
-
 
 export interface PeriodicElement {
   name: string;
@@ -134,3 +127,4 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
   {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
 ];
+

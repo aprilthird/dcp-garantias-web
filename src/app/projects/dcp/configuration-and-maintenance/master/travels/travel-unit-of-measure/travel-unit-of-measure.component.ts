@@ -1,58 +1,53 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import { DialogNewSrtComponent } from './dialogs/dialog-new-srt/dialog-new-srt.component';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
-import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { DialogMaintenanceTravelUnitOfMeasureComponent } from '../dialogs/dialog-maintenance-travel-unit-of-measure/dialog-maintenance-travel-unit-of-measure.component';
 
 @Component({
-  selector: 'app-srt',
-  templateUrl: './srt.component.html',
-  styleUrls: ['./srt.component.scss']
+  selector: 'app-travel-unit-of-measure',
+  templateUrl: './travel-unit-of-measure.component.html',
+  styleUrls: ['./travel-unit-of-measure.component.scss']
 })
-export class SrtComponent implements OnInit {
+export class TravelUnitOfMeasureComponent implements OnInit {
 
-
-  displayedColumns: string[] = ['codigo', 'grupoSRT', 'procedimiento', 'paso', 'descripcion', 'tipo', 'dondeSeReparo','fabricaSRT', 'estado','acciones'];
+  displayedColumns: string[] = ['codigo', 'descripcion', 'estado','acciones'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
   constructor(private readonly matDialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+               private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  onDialogNewSrt():void{
-    const dialogNewSrt = this.matDialog.open(DialogNewSrtComponent,{
-      data: {option:'new'}
+  onDialogNewTravelUnitOfMeasure():void{
+    const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceTravelUnitOfMeasureComponent,{
+      data: {option:'new'},
+      width:'900px'
     });
-    dialogNewSrt.afterClosed().subscribe(resp=>{
+    dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
-        this.openDialogOperationSuccessfully('SRT creada con éxito');
+        this.openDialogOperationSuccessfully('Unidad de medida creada con éxito');
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditSRT(_constant:any):void{
-    const dialogEditConstant = this.matDialog.open(DialogNewSrtComponent,{
-      data: {option:'edit', constant:_constant}
+  onDialogEditTravelUnitOfMeasure(_constant:any):void{
+    const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceTravelUnitOfMeasureComponent,{
+      data: {option:'edit', constant:_constant},
+      width:'900px'
+
     });
-    dialogEditConstant.afterClosed().subscribe(resp => {
+    dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
-        this.openDialogOperationSuccessfully('Constante editada con éxito');
+        this.openDialogOperationSuccessfully('Unidad de medida editada con éxito');
         // this.getListConstant();
       }else{
         console.log('operacion cancelada');        
@@ -60,13 +55,28 @@ export class SrtComponent implements OnInit {
     });
   }
 
-  onDialogDeleteSrt(_constant:any):void{
+  onDialogDeleteTravelUnitOfMeasure(_constant:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
-      data:{text:'¿Está seguro de eliminar esta SRT?'}
+      data:{text:'¿Está seguro de eliminar este Unidad de medida?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
       this.deleteConstant(resp,_constant);
     });
+  }
+
+  
+  deleteConstant(option:any, _constant:any):void{
+    // const request = {id:_constant.id, active:false};
+    if(option){
+      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
+        // if(resp.success){
+          // this.getListConstant();
+          this.openSnackBar('Unidad de medida eliminada');
+        // }
+      // });
+    }else{
+      console.log('operacion cancelada');      
+    }
   }
 
   openDialogOperationSuccessfully(textDialog:string):void{
@@ -74,20 +84,6 @@ export class SrtComponent implements OnInit {
       data:{text:textDialog}
     });
     dialogOperationSuccessfully.afterClosed().subscribe();
-  }
-
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
-    if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
-          this.openSnackBar('La SRT fue eliminada');
-        // }
-      // });
-    }else{
-      console.log('operacion cancelada');      
-    }
   }
 
   openSnackBar(message:string):void{
@@ -99,11 +95,8 @@ export class SrtComponent implements OnInit {
     })
   }
 
-  onUpdateSrt():void{
-    this.openSnackBar('SRT actualizadas');
-  }
-}
 
+}
 
 export interface PeriodicElement {
   name: string;

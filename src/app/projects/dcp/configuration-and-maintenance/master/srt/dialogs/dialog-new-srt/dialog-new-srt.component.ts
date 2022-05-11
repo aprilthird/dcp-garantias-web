@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-new-srt',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogNewSrtComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly dialogRef: MatDialogRef<DialogNewSrtComponent>) { }
 
   ngOnInit(): void {
   }
 
+  onSaveSrt():void{
+    this.dialogRef.close(true);
+  }
+  onClose():void{
+    this.dialogRef.close(false);
+  }
 }

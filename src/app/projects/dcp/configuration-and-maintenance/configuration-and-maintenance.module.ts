@@ -15,13 +15,58 @@ import { SrtComponent } from './master/srt/srt.component';
 import { DialogNewSrtComponent } from './master/srt/dialogs/dialog-new-srt/dialog-new-srt.component';
 import { MatIconModule } from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { TravelDetailsComponent } from './master/travels/travel-details/travel-details.component';
+import { TravelUnitOfMeasureComponent } from './master/travels/travel-unit-of-measure/travel-unit-of-measure.component';
+import { TravelTypeTravelComponent } from './master/travels/travel-type-travel/travel-type-travel.component';
+import { DialogMaintenanceDetailesTravelComponent } from './master/travels/dialogs/dialog-maintenance-detailes-travel/dialog-maintenance-detailes-travel.component';
+import { DialogMaintenanceTravelTypeTravelComponent } from './master/travels/dialogs/dialog-maintenance-travel-type-travel/dialog-maintenance-travel-type-travel.component';
+import { DialogMaintenanceTravelUnitOfMeasureComponent } from './master/travels/dialogs/dialog-maintenance-travel-unit-of-measure/dialog-maintenance-travel-unit-of-measure.component';
+import { OtherClaimsComponent } from './master/other-claims/other-claims.component';
+import { DialogMaintenanceOthersClaimsComponent } from './master/other-claims/dialog-maintenance-others-claims/dialog-maintenance-others-claims.component';
+import { PartsComponent } from './master/parts/parts.component';
+import { DialogMaintenancePartsComponent } from './master/parts/dialog-maintenance-parts/dialog-maintenance-parts.component';
+import { FailuresComponent } from './master/failures/failures.component';
+import { DialogMaintenanceFailuresComponent } from './master/failures/dialog-maintenance-failures/dialog-maintenance-failures.component';
+import { MatSelectModule } from '@angular/material/select';
+import { EngineApplicationComponent } from './master/engine/engine-application/engine-application.component';
+import { EngineBrandComponent } from './master/engine/engine-brand/engine-brand.component';
+import { EngineModelComponent } from './master/engine/engine-model/engine-model.component';
+import { DialogMaintenanceEngineApplicationComponent } from './master/engine/engine-application/dialog-maintenance-engine-application/dialog-maintenance-engine-application.component';
+import { DialogMaintenanceEngineBrandComponent } from './master/engine/engine-brand/dialog-maintenance-engine-brand/dialog-maintenance-engine-brand.component';
+import { DialogMaintenanceEngineModelComponent } from './master/engine/engine-model/dialog-maintenance-engine-model/dialog-maintenance-engine-model.component';
+import { AccountCodeComponent } from './master/other-codes/account-code/account-code.component';
+import { PayCodeComponent } from './master/other-codes/pay-code/pay-code.component';
+import { MaintenanceAccountCodeComponent } from './master/other-codes/account-code/maintenance-account-code/maintenance-account-code.component';
+import { MaintenancePayCodeComponent } from './master/other-codes/pay-code/maintenance-pay-code/maintenance-pay-code.component';
 
 @NgModule({
   declarations: [
     ConstantComponent,
     DialogNewConstantComponent,
     SrtComponent,
-    DialogNewSrtComponent
+    DialogNewSrtComponent,
+    TravelDetailsComponent,
+    TravelUnitOfMeasureComponent,
+    TravelTypeTravelComponent,
+    DialogMaintenanceDetailesTravelComponent,
+    DialogMaintenanceTravelTypeTravelComponent,
+    DialogMaintenanceTravelUnitOfMeasureComponent,
+    OtherClaimsComponent,
+    DialogMaintenanceOthersClaimsComponent,
+    PartsComponent,
+    DialogMaintenancePartsComponent,
+    FailuresComponent,
+    DialogMaintenanceFailuresComponent,
+    EngineApplicationComponent,
+    EngineBrandComponent,
+    EngineModelComponent,
+    DialogMaintenanceEngineApplicationComponent,
+    DialogMaintenanceEngineBrandComponent,
+    DialogMaintenanceEngineModelComponent,
+    AccountCodeComponent,
+    PayCodeComponent,
+    MaintenanceAccountCodeComponent,
+    MaintenancePayCodeComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +80,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     ReactiveFormsModule,
     MatSlideToggleModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule
   ]
 })
 export class ConfigurationAndMaintenanceModule { }

@@ -1,0 +1,71 @@
+<div matDialogTitle>
+    <span>Nuevo/Editar Falla</span>
+</div>
+<div matDialogContent>
+    <form>
+        <div class="row">
+
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>TIpo</mat-label>
+                    <mat-select placeholder="Placeholder">
+                        <mat-option>
+                            1
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12">
+                
+            </div>
+
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Grupo mayor</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+                <mat-form-field>
+                    <mat-label>Descripcion</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Parte Fallada del Sistema</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+                <mat-form-field>
+                    <mat-label>Descripcion</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Tipo de Falla</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+                <mat-form-field>
+                    <mat-label>Descripcion</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3 flex-xy-center">
+                <mat-slide-toggle color="primary" >Activo</mat-slide-toggle>
+            </div>
+        </div>
+    </form>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button (click)="onClose()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSaveFailure()">Crear/Guardar</button>
+</div>
+
