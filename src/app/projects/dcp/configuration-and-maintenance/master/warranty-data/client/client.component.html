@@ -1,0 +1,97 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <span><h4 class="font-w-700">Cliente</h4></span>
+        </div>
+        <div class="col-md-4 text--end">
+            <button mat-raised-button color="primary" (click)="onDialogNewClient()">Agregar nuevo Cliente</button>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field>
+                <mat-label>Buscar por código</mat-label>
+                <input type="text" matInput placeholder="label">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+              
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="codigo">
+                    <th mat-header-cell *matHeaderCellDef> Codigo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="razonSocial">
+                    <th mat-header-cell *matHeaderCellDef> Razon Social</th>
+                    <td mat-cell *matCellDef="let element"> {{element.razonSocial}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="direccion">
+                    <th mat-header-cell *matHeaderCellDef> direccion </th>
+                    <td mat-cell *matCellDef="let element"> {{element.direccion}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ciudad">
+                    <th mat-header-cell *matHeaderCellDef> ciudad </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ciudad}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="telefono">
+                    <th mat-header-cell *matHeaderCellDef> telefono </th>
+                    <td mat-cell *matCellDef="let element"> {{element.telefono}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="RUC">
+                    <th mat-header-cell *matHeaderCellDef> RUC </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ruc}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="contacto1">
+                    <th mat-header-cell *matHeaderCellDef> contacto 1 </th>
+                    <td mat-cell *matCellDef="let element"> {{element.contacto1}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cargoContacto1">
+                    <th mat-header-cell *matHeaderCellDef> cargo contacto 1 </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cargoContacto1}} </td>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="telefono1">
+                    <th mat-header-cell *matHeaderCellDef> telefono 1 </th>
+                    <td mat-cell *matCellDef="let element"> {{element.telefono1}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="email1">
+                    <th mat-header-cell *matHeaderCellDef> email 1</th>
+                    <td mat-cell *matCellDef="let element"> {{element.email1}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="onDialogEditClient(element)">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="onDialogDeleteClient(element)">delete_forever</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                               showFirstLastButtons 
+                               aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+              
+        </div>
+    </div>
+</div>
+

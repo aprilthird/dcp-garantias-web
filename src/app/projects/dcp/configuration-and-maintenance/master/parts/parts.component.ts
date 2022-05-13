@@ -5,7 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
-
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-parts',
@@ -21,9 +21,13 @@ export class PartsComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(private readonly matDialog: MatDialog,
-            private _snackBar: MatSnackBar) { }
+            private _snackBar: MatSnackBar,
+            private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.configurationAndMaintenanceService.listParts().subscribe(resp=>{
+      console.log(resp);
+    });
   }
 
   onDialogNewPart():void{
@@ -40,9 +44,9 @@ export class PartsComponent implements OnInit {
     });
   }
 
-  onDialogEditPart(_constant:any):void{
+  onDialogEditPart(_part:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenancePartsComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', part:_part},
       width:'900px'
 
     });

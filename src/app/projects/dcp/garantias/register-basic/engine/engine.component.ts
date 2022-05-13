@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { DialogDraftSavedSuccessfullyComponent } from './../../dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
 import { DialogHistoriaESNComponent } from '../../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
+import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -12,22 +16,60 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 })
 export class EngineComponent implements OnInit {
 
+  enrollment:any;
+  formRegisterEngine:FormGroup;
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,
-              private readonly garantiasService: GarantiasService) { }
+              private readonly garantiasService: GarantiasService,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService ) { }
 
   ngOnInit(): void {
-    this.garantiasService.getListaTipoDeGarantias().subscribe(resp =>{
+    this.configurationAndMaintenanceService.listWarrantyTypes().subscribe(resp=>{
       console.log(resp);
     });
+    this.configurationAndMaintenanceService.listEnrollment().subscribe(resp=>{
+      console.log(resp);
+    });
+    this.loadFormRegisterEngine();
+  }
+
+  loadFormRegisterEngine():void{
+    this.formRegisterEngine = new FormGroup({
+      esn: new FormControl('',[Validators.required]),
+      os: new FormControl('',[Validators.required]),
+      tipoGarantia: new FormControl([Validators.required]),
+      idQueja1: new FormControl([Validators.required]),
+      idQueja2: new FormControl([Validators.required]),
+      idQueja3: new FormControl([Validators.required]),
+      idQueja4: new FormControl([Validators.required]),
+    })
+  }
+
+  getEsn():void{
+    console.log('ok');
   }
 
 
   onOpenDialogRegisterEnrollment():void{
-    const dialog = this.matDialog.open(DialogRegisterEnrollmentComponent,{
+    const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
           width: '990px',
-          data: {type:'engine', name:'motor'}
+          data: {option:'new',type:'engine', name:'motor'},
+          disableClose:true
         }
       );
+    dialogNewEnrollment.afterClosed().subscribe(resp=>{
+      if(resp){
+        this.openDialogOperationSuccessfully('Matricula creada con éxito');
+      }else{
+        console.log('operacion cancelada');        
+      }
+    });
+  }
+
+  openDialogOperationSuccessfully(textDialog:string):void{
+    const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+      data:{text:textDialog}
+    });
+    dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
   onGarantias():void{

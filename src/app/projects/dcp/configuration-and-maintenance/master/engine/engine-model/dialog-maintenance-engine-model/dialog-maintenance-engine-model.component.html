@@ -1,30 +1,30 @@
 <div matDialogTitle>
-    <span>Nuevo/Editar modelo de motor</span>
+    <span>{{data.option=='new'?'Nuevo':'Editar'}} modelo de motor</span>
 </div>
 <div matDialogContent>
-    <form>
+    <form *ngIf="formEngineModel" [formGroup]="formEngineModel">
         <div class="row">
             <div class="col-md-3">
                 <mat-form-field>
                     <mat-label>Código</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigo">
                 </mat-form-field>
             </div>
 
             <div class="col-md-6">
                 <mat-form-field>
                     <mat-label>Descripcion</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="descripcion" >
                 </mat-form-field>
             </div>
             <div class="col-md-3 flex-xy-center">
-                <mat-slide-toggle color="primary" >Activo</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="estado">Activo</mat-slide-toggle>
             </div>
         </div>
     </form>
 </div>
 <div matDialogActions align="end">
     <button mat-raised-button (click)="onClose()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSaveEngineModel()">Crear/Guardar</button>
+    <button mat-raised-button color="primary" (click)="onSaveEngineModel()">{{data.option=='new'?'Crear':'Guardar'}}</button>
 </div>
 

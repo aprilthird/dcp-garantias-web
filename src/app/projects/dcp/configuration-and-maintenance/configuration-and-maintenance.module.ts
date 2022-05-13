@@ -38,6 +38,14 @@ import { AccountCodeComponent } from './master/other-codes/account-code/account-
 import { PayCodeComponent } from './master/other-codes/pay-code/pay-code.component';
 import { MaintenanceAccountCodeComponent } from './master/other-codes/account-code/maintenance-account-code/maintenance-account-code.component';
 import { MaintenancePayCodeComponent } from './master/other-codes/pay-code/maintenance-pay-code/maintenance-pay-code.component';
+import { ClientComponent } from './master/warranty-data/client/client.component';
+import { ComplaintsComponent } from './master/warranty-data/complaints/complaints.component';
+import { ServiceAreaComponent } from './master/warranty-data/service-area/service-area.component';
+import { TypeOfWarrantyComponent } from './master/warranty-data/type-of-warranty/type-of-warranty.component';
+import { DialogMaintenanceClientComponent } from './master/warranty-data/client/dialog-maintenance-client/dialog-maintenance-client.component';
+import { DialogMaintenanceComplaintsComponent } from './master/warranty-data/complaints/dialog-maintenance-complaints/dialog-maintenance-complaints.component';
+import { DialogMaintenanceServiceAreaComponent } from './master/warranty-data/service-area/dialog-maintenance-service-area/dialog-maintenance-service-area.component';
+import { DialogMaintenanceTypeOfWarrantyComponent } from './master/warranty-data/type-of-warranty/dialog-maintenance-type-of-warranty/dialog-maintenance-type-of-warranty.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +74,15 @@ import { MaintenancePayCodeComponent } from './master/other-codes/pay-code/maint
     AccountCodeComponent,
     PayCodeComponent,
     MaintenanceAccountCodeComponent,
-    MaintenancePayCodeComponent
+    MaintenancePayCodeComponent,
+    ClientComponent,
+    ComplaintsComponent,
+    ServiceAreaComponent,
+    TypeOfWarrantyComponent,
+    DialogMaintenanceClientComponent,
+    DialogMaintenanceComplaintsComponent,
+    DialogMaintenanceServiceAreaComponent,
+    DialogMaintenanceTypeOfWarrantyComponent
   ],
   imports: [
     CommonModule,

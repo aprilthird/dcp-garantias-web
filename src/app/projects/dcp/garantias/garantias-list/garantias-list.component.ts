@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DialogQuestionNewRecordComponent } from './../dialogs/dialog-question-new-record/dialog-question-new-record.component';
 import { Router } from '@angular/router';
+import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 
 interface Option {
@@ -68,11 +69,15 @@ export class GarantiasListComponent implements OnInit,AfterViewInit {
 
 
   constructor(private readonly matDialog: MatDialog,
-              private readonly router: Router) {
+              private readonly router: Router,
+              private readonly garantiasService: GarantiasService) {
 
   }
 
   ngOnInit(): void {
+    this.garantiasService.listWarranties().subscribe(resp=>{
+      console.log(resp);
+    })
   }
 
   ngAfterViewInit() {

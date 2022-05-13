@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 @Component({
   selector: 'app-dialog-maintenance-engine-model',
   templateUrl: './dialog-maintenance-engine-model.component.html',
@@ -8,13 +9,57 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogMaintenanceEngineModelComponent implements OnInit {
 
-  constructor(private readonly dialogRef: MatDialogRef<DialogMaintenanceEngineModelComponent>) { }
+  formEngineModel:FormGroup;
+
+  constructor(private readonly dialogRef: MatDialogRef<DialogMaintenanceEngineModelComponent>,
+              @Inject(MAT_DIALOG_DATA) public data,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.loadFormEngineModel();
   }
 
+  loadFormEngineModel():void{
+    if(this.data.option=='new'){
+      this.formEngineModel = new FormGroup({
+        codigo: new FormControl('',[Validators.required]),
+        descripcion: new FormControl('',[Validators.required]),
+        estado: new FormControl(true,[Validators.required])
+      })
+    }else{
+      const estate = this.data.model.estado==1? true:false;
+      this.formEngineModel = new FormGroup({
+        codigo: new FormControl(this.data.model.codigo,[Validators.required]),
+        descripcion: new FormControl(this.data.model.descripcion,[Validators.required]),
+        estado: new FormControl(estate,[Validators.required])
+      })
+    }
+  }
+  
   onSaveEngineModel():void{
-    this.dialogRef.close(true);
+    if(this.formEngineModel.valid){
+      this.formEngineModel.value.estado==true? this.formEngineModel.value.estado=1:this.formEngineModel.value.estado=0;
+      if(this.data.option=='new'){
+        const request = { id:0 , activo:true , ...this.formEngineModel.value };
+        this.configurationAndMaintenanceService.maintenanceEngineModels(request).subscribe(resp=>{
+          if(resp.success){
+            this.dialogRef.close(true);
+          }else{
+            console.log('error en la creacion del modelo de motor')
+          }
+        });
+      }else{
+        const request = { id:this.data.model.id , activo:true , ...this.formEngineModel.value };
+        this.configurationAndMaintenanceService.maintenanceEngineModels(request).subscribe(resp=>{
+          console.log(resp);
+          if(resp.success){
+            this.dialogRef.close(true);
+          }else{
+            console.log('error en la edicion del modelo de motor')
+          }
+        })
+      }
+    }
   }
   onClose():void{
     this.dialogRef.close(false);

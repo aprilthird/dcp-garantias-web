@@ -13,17 +13,23 @@ import { EngineBrandComponent } from './master/engine/engine-brand/engine-brand.
 import { EngineModelComponent } from './master/engine/engine-model/engine-model.component';
 import { AccountCodeComponent } from './master/other-codes/account-code/account-code.component';
 import { PayCodeComponent } from './master/other-codes/pay-code/pay-code.component';
+import { ClientComponent } from './master/warranty-data/client/client.component';
+import { ComplaintsComponent } from './master/warranty-data/complaints/complaints.component';
+import { ServiceAreaComponent } from './master/warranty-data/service-area/service-area.component';
+import { TypeOfWarrantyComponent } from './master/warranty-data/type-of-warranty/type-of-warranty.component';
 
 const routes: Routes = [
+  // Constantes
   {
     path: 'master/constant',
     component: ConstantComponent
   },
+  // SRT
   {
     path: 'master/srt',
     component: SrtComponent
   },
-
+  // Viajes
   {
     path: 'master/travel/details',
     component: TravelDetailsComponent
@@ -36,7 +42,7 @@ const routes: Routes = [
     path: 'master/travel/type-travel',
     component: TravelTypeTravelComponent
   },
-
+  // Otros reclamables
   {
     path: 'master/other-claims',
     component: OtherClaimsComponent
@@ -49,7 +55,7 @@ const routes: Routes = [
     path: 'master/failures',
     component: FailuresComponent
   },
-  
+  // Motor
   {
     path: 'master/engine/application',
     component: EngineApplicationComponent
@@ -62,7 +68,7 @@ const routes: Routes = [
     path: 'master/engine/model',
     component: EngineModelComponent
   },
-
+  // Otros codigos
   {
     path: 'master/other-codes/account-code',
     component: AccountCodeComponent
@@ -71,18 +77,22 @@ const routes: Routes = [
     path: 'master/other-codes/pay-code',
     component: PayCodeComponent
   },
-  // {
-  //   path: 'register-engine-basic',
-  //   component: EngineComponent
-  // },
-  // {
-  //   path: 'register-generator-basic',
-  //   component: GeneratorComponent
-  // },
-  // {
-  //   path: 'massive-basic-registration',
-  //   component: MassiveBasicRegistrationComponent
-  // }
+  // Datos Garantia
+  {
+    path: 'master/warranty-data/client',
+    component: ClientComponent
+  },
+  {
+    path: 'master/warranty-data/complaints',
+    component: ComplaintsComponent
+  },  {
+    path: 'master/warranty-data/service-area',
+    component: ServiceAreaComponent
+  },
+  {
+    path: 'master/warranty-data/type-of-warranty',
+    component: TypeOfWarrantyComponent
+  },
 ];
 
 @NgModule({

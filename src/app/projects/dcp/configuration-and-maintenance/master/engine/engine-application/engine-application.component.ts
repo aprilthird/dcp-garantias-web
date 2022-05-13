@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-engine-application',
@@ -14,14 +15,22 @@ import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-d
 export class EngineApplicationComponent implements OnInit {
 
   displayedColumns: string[] = ['codigo', 'descripcion', 'estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource: any[] = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   constructor(private readonly matDialog: MatDialog,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listEngineApplications();
+  }
+
+  listEngineApplications():void{
+    this.configurationAndMaintenanceService.listEngineApplications().subscribe(resp=>{
+        this.dataSource = resp.data;
+    })
   }
 
   onDialogNewEngineApplication():void{
@@ -32,34 +41,35 @@ export class EngineApplicationComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Aplicacion de motor creada con éxito');
+        this.listEngineApplications();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditEngineApplication(_constant:any):void{
+  onDialogEditEngineApplication(_application:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceEngineApplicationComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', application:_application},
       width:'900px'
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Aplicacion de motor editada con éxito');
-        // this.getListConstant();
+        this.listEngineApplications();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteEngineApplication(_constant:any):void{
+  onDialogDeleteEngineApplication(application:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar esta Aplicacion de motor?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,application);
     });
   }
 
@@ -70,15 +80,15 @@ export class EngineApplicationComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, application:any):void{
+    const request = {id:application.id, activo:false};
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.deleteEngineApplication(request).subscribe(resp=>{
+        if(resp.success){
+          this.listEngineApplications();
           this.openSnackBar('Aplicacion de motor eliminada');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }
@@ -94,18 +104,3 @@ export class EngineApplicationComponent implements OnInit {
   }
 
 }
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'}
-];

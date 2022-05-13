@@ -1,0 +1,114 @@
+<div matDialogTitle>
+    <span>{{data.option=='new'?'Nuevo':'Editar'}} Cliente</span>
+</div>
+<div matDialogContent>
+    <form *ngIf="formClient" [formGroup]="formClient">
+        <div class="row">
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Codigo</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigo">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Razon Social</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="razonSocial">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Direccion</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="direccion">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Ciudad</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="ciudad">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Telefono</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="telefono">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>RUC</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="ruc">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <hr width="100%" color="#E2E8F0">
+
+        <div class="row">
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Contacto 1</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="contacto1">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Cargo Contacto 1</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="cargoContacto1">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Telefono 1</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="telefono1">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Email 1</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="email1">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Contacto 2</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="contacto2">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Cargo Contacto 2</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="cargoContacto2">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Telefono 2</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="telefono2">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4 flex-xy-center">
+                <mat-slide-toggle color="primary" formControlName="estado" >Activo</mat-slide-toggle>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button (click)="onClose()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSaveClient()">{{data.option=='new'?'Crear':'Guardar'}}</button>
+</div>
+

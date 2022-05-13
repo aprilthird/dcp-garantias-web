@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  title: "DCP",
   project: "dcp",
-  // apiUrl: "https://development-dcp.ws.solera.pe/api",
+  title: "DCP",
   apiUrl: "https://appsrvsgpapi.azurewebsites.net",
   azureAccountName: "appinformes",
   azureContaineName: "dcp",

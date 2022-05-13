@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-srt',
@@ -15,8 +16,9 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 export class SrtComponent implements OnInit {
 
 
+  totalRecords:any;
   displayedColumns: string[] = ['codigo', 'grupoSRT', 'procedimiento', 'paso', 'descripcion', 'tipo', 'dondeSeReparo','fabricaSRT', 'estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -24,15 +26,24 @@ export class SrtComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private readonly matDialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listSrt();
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+
   }
 
+  listSrt():void{
+    this.configurationAndMaintenanceService.listSrt().subscribe(resp=>{      
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      console.log(this.dataSource);
+    });
+  }
   onDialogNewSrt():void{
     const dialogNewSrt = this.matDialog.open(DialogNewSrtComponent,{
       data: {option:'new'}
@@ -40,20 +51,21 @@ export class SrtComponent implements OnInit {
     dialogNewSrt.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('SRT creada con éxito');
+        this.listSrt();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditSRT(_constant:any):void{
+  onDialogEditSRT(_srt:any):void{
     const dialogEditConstant = this.matDialog.open(DialogNewSrtComponent,{
-      data: {option:'edit', constant:_constant}
+      data: {option:'edit', srt:_srt}
     });
     dialogEditConstant.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Constante editada con éxito');
-        // this.getListConstant();
+        this.listSrt();
       }else{
         console.log('operacion cancelada');        
       }

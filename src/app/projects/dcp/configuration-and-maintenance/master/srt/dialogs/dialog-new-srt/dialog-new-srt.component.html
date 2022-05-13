@@ -1,46 +1,67 @@
 <div matDialogTitle>
-    <span>Nuevo/Editar SRT</span>
+    <span>{{data.option=='new'? 'Nuevo': 'Editar'}} SRT</span>
 </div>
 <div matDialogContent>
-    <form>
+    <form *ngIf="formSrt" [formGroup]="formSrt">
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                    <mat-label>Donde se reparó</mat-label>
+                    <mat-select placeholder="Placeholder" formControlName="lugar">
+                        <mat-option [value]="1">Taller</mat-option>
+                        <mat-option [value]="2">Campo</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Tipo</mat-label>
+                    <mat-select placeholder="Placeholder" formControlName="tipo" >
+                        <mat-option [value]="1">Motor</mat-option>
+                        <mat-option [value]="2">Generador</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <mat-form-field>
-                    <mat-label>Código</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <mat-label>Grupo SRT</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="grupoSrt">
                 </mat-form-field>
             </div>
             <div class="col-md-4">
                 <mat-form-field>
-                    <mat-label>LaborRate</mat-label>
-                    <input type="number" matInput  placeholder="Ingresar">
+                    <mat-label>Procedimiento</mat-label>
+                    <input type="number" matInput  placeholder="Ingresar" formControlName="procedimiento">
                 </mat-form-field>
             </div>
             <div class="col-md-4">
                 <mat-form-field>
-                    <mat-label>KmRate</mat-label>
-                    <input type="number" matInput placeholder="Ingresar">
+                    <mat-label>Paso</mat-label>
+                    <input type="text" matInput placeholder="Ingresar" formControlName="paso">
                 </mat-form-field>
             </div>
             <div class="col-md-4">
                 <mat-form-field>
-                    <mat-label>BFCMarkUp</mat-label>
-                    <input type="number" matInput placeholder="Ingresar">
+                    <mat-label>Descripcion</mat-label>
+                    <input type="text" matInput placeholder="Ingresar" formControlName="descripcion">
                 </mat-form-field>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <mat-form-field>
-                    <mat-label>SiteLabor</mat-label>
-                    <input type="number" matInput  placeholder="Ingresar">
+                    <mat-label>SRT Fabrica</mat-label>
+                    <input type="number" matInput  placeholder="Ingresar" formControlName="srtFabrica">
                 </mat-form-field>
             </div>
             <div class="col-md-4 flex-xy-center">
-                <mat-slide-toggle color="primary" >Activo</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="estado" >Activo</mat-slide-toggle>
             </div>
         </div>
     </form>
 </div>
 <div matDialogActions align="end">
     <button mat-raised-button (click)="onClose()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSaveSrt()">Crear/Guardar</button>
+    <button mat-raised-button color="primary" (click)="onSaveSrt()">{{data.option=='new'? 'Crear': 'Guardar'}}</button>
 </div>
