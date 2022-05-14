@@ -33,4 +33,4 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-#camio 1
+#camio 2
