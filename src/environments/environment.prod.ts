@@ -10,8 +10,8 @@ export const environment = {
     "sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2027-02-02T01:49:24Z&st=2022-03-14T17:49:24Z&spr=https&sig=P09pDRYwsgAd%2B%2BbAf3PiOdmQM8S%2F7UUn99iugWCKPtM%3D",
 
   officeTenant: {
-    clientIdAzure: "df3c881e-0c3f-457e-a355-8d8d0d61ea1c",
-    //objectIdAzure: "ad5d0da5-a703-4e32-973e-e9358533a4a8",
+    clientIdAzure: "47da4b03-1750-4f10-a60e-a8ccd55b3746",
+    objectIdAzure: "27349a51-6e36-49b9-9ab1-ed553c1f8535",
     redirectUrl: "https://appsrvsgpwebdock.azurewebsites.net/",
     postLogoutRedirectUri: "https://appsrvsgpwebdock.azurewebsites.net/",
     tenantId: "807307b4-6a4c-4b3d-97fd-7c78330bba23",
