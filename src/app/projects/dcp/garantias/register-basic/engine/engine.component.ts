@@ -8,6 +8,7 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-engine',
@@ -16,17 +17,51 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class EngineComponent implements OnInit {
 
-  enrollment:any;
+  enrollmentByEsn = {
+    cliente:'',
+    direccion:'',
+    aplicacion:'',
+    modelo:'',
+    cpl:'',
+    etoPto:'',
+    fechaInicioGarantia:'',
+    bis:false
+  };
+  osObject={
+    claseActividad:'',
+    codAreaServicios:'',
+    fechaLib:'',
+    os:''
+  }
+  warrantyTypes ={
+    1: "ProductoNuevo",
+    2: "MotorRecon",
+    3: "RepuestoNuevo",
+    4: "RepuestoDefectuoso",
+    5: "Cap",
+    6: "ExtendidaMayor",
+    7: "Cdc",
+    8: "Trp",
+    9: "Atc",
+    10: "Memo",
+  }
   formRegisterEngine:FormGroup;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,
               private readonly garantiasService: GarantiasService,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService ) { }
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.configurationAndMaintenanceService.listWarrantyTypes().subscribe(resp=>{
       console.log(resp);
     });
     this.configurationAndMaintenanceService.listEnrollment().subscribe(resp=>{
+      console.log(resp);
+    });
+    this.configurationAndMaintenanceService.getEnum('02').subscribe(resp=>{
       console.log(resp);
     });
     this.loadFormRegisterEngine();
@@ -45,7 +80,33 @@ export class EngineComponent implements OnInit {
   }
 
   getEsn():void{
-    console.log('ok');
+    const esn = this.formRegisterEngine.value.esn;
+    if(esn!=''){
+      this.garantiasService.findEsn(esn).subscribe(resp=>{
+        if(resp.body){
+          this.enrollmentByEsn = resp.body;
+        }else{
+          this.openSnackBar('No existe matricula con tal ESN');
+        }
+      })
+    }else{
+      this.openSnackBar('Ingrese el ESN');
+    }
+  }
+
+  getOs():void{
+    const os = this.formRegisterEngine.value.os;
+    if(os!=''){
+      this.garantiasService.findOs(os).subscribe(resp=>{
+        if(resp.body){
+          this.osObject = resp.body;
+        }else{
+          this.openSnackBar('No existe tal OS');
+        }
+      })
+    }else{
+      this.openSnackBar('Ingrese el OS');
+    }
   }
 
 
@@ -92,4 +153,15 @@ export class EngineComponent implements OnInit {
       width: '900px'
     });
   }
+
+  openSnackBar(message:string):void{
+    this._snackBar.open(message,'Entendido',{
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['mat-toolbar', 'mat-primary','button-color']
+    })
+  }
+  
+
 }

@@ -14,7 +14,10 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">ESN</mat-label>
-                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="esn" (keyup.enter)="getEsn()">
+                                        <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
+                                        <button mat-icon-button matSuffix (click)="getEsn()">
+                                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                                        </button>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2 flex-align-center">
@@ -38,47 +41,47 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Cliente</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.cliente">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Direccion</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.direccion">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Aplicacion de motor</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.aplicacion">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Modelo de motor</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.modelo">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">CPL</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.cpl">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">ETO/PTO</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.etoPto">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha inicio de garantía</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.fechaInicioGarantia">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 flex-align-center">
-                                        <mat-checkbox color="primary">BIS</mat-checkbox>
+                                        <mat-checkbox color="primary" [value]="enrollmentByEsn.bis" [disabled]="true">BIS</mat-checkbox>
                                     </div>
                                 </div>
                             </mat-card>
@@ -88,13 +91,16 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">Orden de servicio</mat-label>
-                                        <input matInput type="text" placeholder="Buscar N° OS">
+                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
+                                        <button mat-icon-button matSuffix (click)="getOs()">
+                                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                                        </button>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">BU</mat-label>
-                                        <input matInput type="text" placeholder="Buscar N° OS">
+                                        <input matInput type="text" placeholder="" [disabled]="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3"></div>
@@ -110,23 +116,19 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Clase de actividad</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.claseActividad">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha de liberacion</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.fechaLib">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Area de servicios</mat-label>
-                                            <mat-select [disabled]="true">
-                                                <mat-option>
-                                                    1
-                                                </mat-option>
-                                            </mat-select>
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.codAreaServicios">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -139,10 +141,17 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">Tipo de garantía</mat-label>
-                                        <mat-select placeholder="Placeholder">
-                                            <mat-option>
-                                                1
-                                            </mat-option>
+                                        <mat-select placeholder="Placeholder" formControlName="tipoGarantia">
+                                            <mat-option value="1">ProductoNuevo</mat-option>
+                                            <mat-option value="2">MotorRecon</mat-option>
+                                            <mat-option value="3">RepuestoNuevo</mat-option>
+                                            <mat-option value="4">RepuestoDefectuoso</mat-option>
+                                            <mat-option value="5">Cap</mat-option>
+                                            <mat-option value="6">ExtendidaMayor</mat-option>
+                                            <mat-option value="7">Cdc</mat-option>
+                                            <mat-option value="8">Trp</mat-option>
+                                            <mat-option value="9">Atc</mat-option>
+                                            <mat-option value="10">Memo</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

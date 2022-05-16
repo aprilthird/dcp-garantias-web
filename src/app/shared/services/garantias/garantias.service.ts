@@ -20,6 +20,8 @@ export class GarantiasService {
   private urlTrayWarranties  = this.baseApiURl + '/Mantenimiento/BandejaGarantias';
   //buscar esn
   private urlFindEsn = this.baseApiURl + '/Mantenimiento/BuscarEsn';
+  //buscar OS
+  private urlFindOs = this.baseApiURl + '/Mantenimiento/BuscarOs';
 
 
   constructor(private readonly httpClient: HttpClient,
@@ -39,9 +41,14 @@ export class GarantiasService {
     return this.httpClient.post(this.urlMaintenanceWarranties,_request,{headers:this.header});
   }
   //buscar ESN
-  findEsn(esn:any):Observable<any>{
-    const _params = new HttpParams().set('esn',esn);
+  findEsn(esn:string):Observable<any>{
+    const _params = new HttpParams().set('req',esn);
     return this.httpClient.get(this.urlFindEsn, {params:_params,headers:this.header});
+  }
+  //buscar OS
+  findOs(os:string):Observable<any>{
+    const _params = new HttpParams().set('req',os);
+    return this.httpClient.get(this.urlFindOs, {params:_params,headers:this.header});
   }
 
   getListaTipoDeGarantias():Observable<any>{

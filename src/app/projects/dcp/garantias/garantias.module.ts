@@ -27,6 +27,7 @@ import { DialogMassiveRegistrationSuccessfullyComponent } from './dialogs/dialog
 import { HistoriaESNComponent } from './dialogs/historia-esn/historia-esn.component';
 import { DialogHistoriaESNComponent } from './dialogs/dialog-historia-esn/dialog-historia-esn.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatRadioModule,
     MatRippleModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ]
 })
 export class GarantiasModule { }

@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   project: "dcp",
   title: "DCP",
-  apiUrl: "https://appsrvsgpapi.azurewebsites.netZ",
+  apiUrl: "https://appsrvsgpapi.azurewebsites.net",
   azureAccountName: "appinformes",
   azureContaineName: "dcp",
   azureSas:
