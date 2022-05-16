@@ -10,6 +10,8 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { AuthService } from 'app/core/auth/auth.service';
+import { AzureAuthService } from 'app/core/azure/azure-auth.service';
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -70,7 +72,9 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _router: Router,
         private _scrollStrategyOptions: ScrollStrategyOptions,
         private _fuseNavigationService: FuseNavigationService,
-        private _fuseUtilsService: FuseUtilsService
+        private _fuseUtilsService: FuseUtilsService,
+        private _authService: AuthService,
+        private _azureAuthService: AzureAuthService,
     )
     {
         this._handleAsideOverlayClick = (): void => {
@@ -743,4 +747,16 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         // Execute the observable
         this.openedChanged.next(open);
     }
+
+    signOut(): void {
+        this._authService.signOut().subscribe(
+          () => {
+            this._azureAuthService.logOut();
+            setTimeout(() => {
+              this._router.navigateByUrl("/");
+            }, 1000);
+          },
+          (response) => {}
+        );
+      }
 }
