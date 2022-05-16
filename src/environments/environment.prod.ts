@@ -12,8 +12,8 @@ export const environment = {
   officeTenant: {
     clientIdAzure: "258d57fc-347b-4b30-8c99-4e8a0abd3ccb",
     //objectIdAzure: "ad5d0da5-a703-4e32-973e-e9358533a4a8",
-    redirectUrl: "https://appsrvsgpweb.azurewebsites.net/",
-    postLogoutRedirectUri: "https://appsrvsgpweb.azurewebsites.net/",
+    redirectUrl: "https://appsrvsgpwebdock.azurewebsites.net/",
+    postLogoutRedirectUri: "https://appsrvsgpwebdock.azurewebsites.net/",
     tenantId: "807307b4-6a4c-4b3d-97fd-7c78330bba23",
     microsoftUri: "https://login.microsoftonline.com",
   },
