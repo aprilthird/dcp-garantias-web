@@ -47,7 +47,7 @@ export class AzureAuthService {
       // console.log('login azure service ok');
       await this.redirecting().then(async (res: any) => {
         // console.log(res.account.username);
-        // console.log(res);
+        console.log(res);
         await this._authService.signInAD(res.account.username).toPromise().then(async () => {
           await this._navigationService.get().toPromise();
           // .then(() => {

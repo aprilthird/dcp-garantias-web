@@ -28,6 +28,14 @@ import { HistoriaESNComponent } from './dialogs/historia-esn/historia-esn.compon
 import { DialogHistoriaESNComponent } from './dialogs/dialog-historia-esn/dialog-historia-esn.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ProductoNuevoGarantiaReconComponent } from './type-warranties/producto-nuevo-garantia-recon/producto-nuevo-garantia-recon.component';
+import { RepuestoNuevoRespuestoDefectuosoComponent } from './type-warranties/repuesto-nuevo-respuesto-defectuoso/repuesto-nuevo-respuesto-defectuoso.component';
+import { ExtendidaCapComponent } from './type-warranties/extendida-cap/extendida-cap.component';
+import { ExtendidaComponenteMayorComponent } from './type-warranties/extendida-componente-mayor/extendida-componente-mayor.component';
+import { CdcComponent } from './type-warranties/cdc/cdc.component';
+import { TrpComponent } from './type-warranties/trp/trp.component';
+import { AtcComponent } from './type-warranties/atc/atc.component';
+import { MemoComponent } from './type-warranties/memo/memo.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +48,15 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MassiveBasicRegistrationComponent,
     DialogMassiveRegistrationSuccessfullyComponent,
     HistoriaESNComponent,
-    DialogHistoriaESNComponent
+    DialogHistoriaESNComponent,
+    ProductoNuevoGarantiaReconComponent,
+    RepuestoNuevoRespuestoDefectuosoComponent,
+    ExtendidaCapComponent,
+    ExtendidaComponenteMayorComponent,
+    CdcComponent,
+    TrpComponent,
+    AtcComponent,
+    MemoComponent
   ],
   imports: [
     CommonModule,

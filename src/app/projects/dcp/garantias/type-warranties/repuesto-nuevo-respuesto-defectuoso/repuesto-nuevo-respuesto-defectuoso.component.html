@@ -1,0 +1,44 @@
+<form *ngIf="form" [formGroup]="form">
+    <div class="row">
+        <div class="col-md-3">
+            <mat-form-field appearance="fill">
+                <mat-label for="">Numero de parte del repuesto</mat-label>
+                <input matInput type="text" placeholder="Ingresar" formControlName="numParteRepuesto">
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field appearance="fill">
+                <mat-label for="">Punto de falla</mat-label>
+                <input matInput type="text" placeholder="Ingresar" formControlName="puntoFalla">
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 flex-xy-center">
+            <mat-radio-group aria-label="Select an option" color="primary" formControlName="medida">
+                <mat-radio-button value="1">H</mat-radio-button>
+                <mat-radio-button value="2">KM</mat-radio-button>
+                <mat-radio-button value="2">MI</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field appearance="fill">
+                <mat-label>Fecha de inicio de garantia del repuesto</mat-label>
+                <input matInput [matDatepicker]="pickerA" formControlName="fechaInicioGarantia">
+                <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
+                <mat-datepicker #pickerA></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+                <mat-form-field appearance="fill">
+                <mat-label>Fecha de falla del repuesto</mat-label>
+                <input matInput [matDatepicker]="pickerB" formControlName="fechaFalla">
+                <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matSuffix [for]="pickerB"></mat-datepicker-toggle>
+                <mat-datepicker #pickerB></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-1 flex-xy-center">
+            <button mat-icon-button color="primary" (click)="onGetForm()"><mat-icon>check</mat-icon></button>
+        </div>   
+    </div>
+</form>

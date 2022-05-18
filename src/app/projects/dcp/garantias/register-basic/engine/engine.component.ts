@@ -17,6 +17,8 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 })
 export class EngineComponent implements OnInit {
 
+  request:any;
+  typeWarranty:any;
   enrollmentByEsn = {
     cliente:'',
     direccion:'',
@@ -45,6 +47,19 @@ export class EngineComponent implements OnInit {
     9: "Atc",
     10: "Memo",
   }
+  viewsTypesWarranty = {
+    a:false,
+    b:false,
+    c:false,
+    d:false,
+    e:false,
+    f:false,
+    g:false,
+    h:false,
+    i:false,
+    j:false,
+  }
+  complaints:any[];
   formRegisterEngine:FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -55,16 +70,20 @@ export class EngineComponent implements OnInit {
               private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.configurationAndMaintenanceService.listWarrantyTypes().subscribe(resp=>{
-      console.log(resp);
-    });
-    this.configurationAndMaintenanceService.listEnrollment().subscribe(resp=>{
-      console.log(resp);
-    });
     this.configurationAndMaintenanceService.getEnum('02').subscribe(resp=>{
       console.log(resp);
     });
+    this.configurationAndMaintenanceService.listEnrollmentByEsn('100').subscribe(resp=>{
+      console.log(resp);
+    });
+    this.loadComplaints();
     this.loadFormRegisterEngine();
+  }
+
+  loadComplaints():void{
+    this.configurationAndMaintenanceService.listComplaints().subscribe(resp=>{
+      this.complaints = resp.data;
+    });
   }
 
   loadFormRegisterEngine():void{
@@ -76,6 +95,8 @@ export class EngineComponent implements OnInit {
       idQueja2: new FormControl([Validators.required]),
       idQueja3: new FormControl([Validators.required]),
       idQueja4: new FormControl([Validators.required]),
+      comentarios: new FormControl('',[Validators.required]),
+      idUsuarioEvaluador: new FormControl([Validators.required])
     })
   }
 
@@ -109,7 +130,6 @@ export class EngineComponent implements OnInit {
     }
   }
 
-
   onOpenDialogRegisterEnrollment():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
           width: '990px',
@@ -125,16 +145,16 @@ export class EngineComponent implements OnInit {
       }
     });
   }
+  
+  onGarantias():void{
+    this.router.navigate(['/garantias']);
+  }
 
   openDialogOperationSuccessfully(textDialog:string):void{
     const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
       data:{text:textDialog}
     });
     dialogOperationSuccessfully.afterClosed().subscribe();
-  }
-
-  onGarantias():void{
-    this.router.navigate(['/garantias']);
   }
 
   onOpenDialogSaveDraft():void{
@@ -147,7 +167,7 @@ export class EngineComponent implements OnInit {
     this.onOpenDialogSaveDraft();
   }
 
-  onOpenDialogHistoriaEsn():void{
+  onOpenDialogHistoryEsn():void{
     const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
       data:{type:'engine', name: 'motor'},
       width: '900px'
@@ -163,5 +183,150 @@ export class EngineComponent implements OnInit {
     })
   }
   
+  selectTypeWarranty(){
+    const type = this.formRegisterEngine.value.tipoGarantia;
+    console.log(this.formRegisterEngine.value.tipoGarantia);
+    switch (type) {
+      case '1':
+        this.viewsTypesWarranty.a = true;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '2':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = true;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '3':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = true;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '4':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = true;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '5':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = true;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '6':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = true;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '7':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = true;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '8':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = true;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '9':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = true;
+        this.viewsTypesWarranty.j = false;
+        break;
+      case '10':
+        this.viewsTypesWarranty.a = false;
+        this.viewsTypesWarranty.b = false;
+        this.viewsTypesWarranty.c = false;
+        this.viewsTypesWarranty.d = false;
+        this.viewsTypesWarranty.e = false;
+        this.viewsTypesWarranty.f = false;
+        this.viewsTypesWarranty.g = false;
+        this.viewsTypesWarranty.h = false;
+        this.viewsTypesWarranty.i = false;
+        this.viewsTypesWarranty.j = true;
+       break;    
+      default:
+        break;
+    }
+  }
 
+  onGetForm(data:any):void{
+    console.log(data);
+    if(data.success){
+      this.typeWarranty = {...data.form}
+    }else{
+      console.log('ingresar los campos del tipo de garantía')
+    }
+  }
+
+  sendRegister():void{
+    console.log(this.formRegisterEngine.value);
+    this.request = {id:0,estado:0,...this.typeWarranty,...this.formRegisterEngine.value};
+    console.log(this.request);
+    this.garantiasService.saveWarranty(this.request).subscribe(resp=>{
+      console.log(resp);
+    });
+  }
 }

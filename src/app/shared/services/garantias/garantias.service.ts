@@ -16,10 +16,12 @@ export class GarantiasService {
   private baseApiURl = environment.apiUrl;
   private urlListaTipoDeGarantias = this.baseApiURl + '/Administracion/BandejaTipoGarantia' ;
   //garantias
-  private urlMaintenanceWarranties = this.baseApiURl + '/Mantenimiento/MantenimientoGarantias';
+  private urlMaintenanceWarranties = this.baseApiURl + '/Mantenimiento/MantenimientoGarantia';
   private urlTrayWarranties  = this.baseApiURl + '/Mantenimiento/BandejaGarantias';
   //buscar esn
   private urlFindEsn = this.baseApiURl + '/Mantenimiento/BuscarEsn';
+  //buscar historial esn
+  private urlFindHistoryEsn = this.baseApiURl + '/Administracion/BandejaMatricula';
   //buscar OS
   private urlFindOs = this.baseApiURl + '/Mantenimiento/BuscarOs';
 
@@ -44,6 +46,10 @@ export class GarantiasService {
   findEsn(esn:string):Observable<any>{
     const _params = new HttpParams().set('req',esn);
     return this.httpClient.get(this.urlFindEsn, {params:_params,headers:this.header});
+  }
+  //historial ESN
+  findHistoryEsn(request):Observable<any>{
+    return this.httpClient.post(this.urlFindHistoryEsn, request, {headers:this.header});
   }
   //buscar OS
   findOs(os:string):Observable<any>{

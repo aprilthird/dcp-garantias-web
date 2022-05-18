@@ -134,7 +134,7 @@ export class ConfigurationAndMaintenanceService {
 
   //quejas
   listComplaints():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T16:23:11.942Z',fechaIni: '2022-05-12T16:23:11.942Z'}};
+    const request = {filter : {fechaFin: '2022-05-17T18:09:08.252Z',fechaIni: '2022-05-01T18:09:08.252Z'}};
     return this.httpClient.post(this.urlTrayComplaints, request, {headers:this.header});
   }
   maintenanceComplaints(_request:MasterConstantRequest):Observable<any>{          
@@ -147,7 +147,7 @@ export class ConfigurationAndMaintenanceService {
 
   //matriculas
   listEnrollment():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-13T15:59:21.335Z'}};
+    const request = {filter : {fechaFin: '2022-05-17T18:09:08.252Z'}};
     return this.httpClient.post(this.urlTrayEnrollment, request, {headers:this.header});
   }
   listEnrollmentByEsn(_esn:string):Observable<any>{
