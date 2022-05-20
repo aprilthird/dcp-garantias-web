@@ -1,46 +1,62 @@
 <div matDialogTitle>
-    <span>Nueva/Editar Area de Servicio</span>
+    <span>{{data.option=='new'?'Nuevo':'Editar'}} Area de Servicio</span>
 </div>
 <div matDialogContent>
-    <form>
+    <form *ngIf="formServiceArea" [formGroup]="formServiceArea">
         <div class="row">
-
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Codigo</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigo">
                 </mat-form-field>
             </div>
             <div class="col-md-8">
                 <mat-form-field>
                     <mat-label>Descripcion</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="descripcion">
                 </mat-form-field>
             </div>
 
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Código de Servicio SAP</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigoServicioSap">
                 </mat-form-field>
             </div>
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Código de Constante</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigoConstante">
                 </mat-form-field>
             </div>
-
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Bu</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="bu">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Sub BU</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="busub">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Lugar</mat-label>
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="lugar">
+                </mat-form-field>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-4 flex-xy-center">
-                <mat-slide-toggle color="primary" >Activo</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="estado">Activo</mat-slide-toggle>
             </div>
         </div>
     </form>
 </div>
 <div matDialogActions align="end">
     <button mat-raised-button (click)="onClose()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSaveServiceArea()">Crear/Guardar</button>
+    <button mat-raised-button color="primary" (click)="onSaveServiceArea()"> {{data.option=='new'?'Crear':'Guardar'}} </button>
 </div>
 

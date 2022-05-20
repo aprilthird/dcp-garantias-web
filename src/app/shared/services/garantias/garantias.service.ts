@@ -12,6 +12,7 @@ export class GarantiasService {
   header = new HttpHeaders({
     'Authorization': this.authService.accessToken
   });
+  dateCurrent = new Date();
 
   private baseApiURl = environment.apiUrl;
   private urlListaTipoDeGarantias = this.baseApiURl + '/Administracion/BandejaTipoGarantia' ;
@@ -35,7 +36,7 @@ export class GarantiasService {
     return this.httpClient.post(this.urlMaintenanceWarranties,_request,{headers:this.header});
   }
   listWarranties():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T09:47:38.423',fechaIni: '2022-05-12T09:47:38.423'}};
+    const request = {filter : {fechaFin:this.dateCurrent}};
     return this.httpClient.post(this.urlTrayWarranties, request, {headers:this.header});
   }
   deleteWarranty(_request:any):Observable<any>{

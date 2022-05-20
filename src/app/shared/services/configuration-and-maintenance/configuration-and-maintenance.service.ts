@@ -15,7 +15,8 @@ export class ConfigurationAndMaintenanceService {
   header = new HttpHeaders({
     'Authorization': this.authService.accessToken
   });
-  date = Date();
+  dateCurrent = new Date();
+  dateLast = this.dateCurrent.getFullYear()+'-'+this.dateCurrent.getMonth()+'-'+this.dateCurrent.getDay()+'T11:59:59Z';
 
   private baseApiURl = environment.apiUrl;
 
@@ -55,6 +56,10 @@ export class ConfigurationAndMaintenanceService {
   private urlMaintenanceComplaints = this.baseApiURl + '/Administracion/MantenimientoQuejas';
   private urlTrayComplaints  = this.baseApiURl + '/Administracion/BandejaQuejas';
 
+  //area de servicio
+  private urlMaintenanceServiceArea = this.baseApiURl + '/Administracion/MantenimientoAreaServicio';
+  private urlTrayServiceArea = this.baseApiURl + '/Administracion/BandejaAreaServicio';
+
   constructor(private readonly httpClient: HttpClient,
               private readonly authService: AuthService) { }
 
@@ -68,7 +73,8 @@ export class ConfigurationAndMaintenanceService {
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   listConstants():Observable<any>{
-    const request = {filter : {fechaFin: "2022-05-09T17:56:50"}};
+    console.log(this.dateLast);
+    const request = {filter : {fechaFin:this.dateCurrent}};
     return this.httpClient.post(this.urlTrayConstants, request, {headers:this.header});
   }
   deleteConstant(_request:any):Observable<any>{
@@ -77,7 +83,7 @@ export class ConfigurationAndMaintenanceService {
   }
   // srt
   listSrt():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T09:47:38.423'}};
+    const request = {filter : {fechaFin: '2022-05-12'}};
     return this.httpClient.post(this.urlTraySrt, request, {headers:this.header});
   }
   maintenanceSrt(_request:MasterConstantRequest):Observable<any>{          
@@ -134,7 +140,7 @@ export class ConfigurationAndMaintenanceService {
 
   //quejas
   listComplaints():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-17T18:09:08.252Z',fechaIni: '2022-05-01T18:09:08.252Z'}};
+    const request = {filter : {fechaFin:this.dateCurrent}};
     return this.httpClient.post(this.urlTrayComplaints, request, {headers:this.header});
   }
   maintenanceComplaints(_request:MasterConstantRequest):Observable<any>{          
@@ -173,5 +179,18 @@ export class ConfigurationAndMaintenanceService {
   deleteWarrantyTypes(_request:any):Observable<any>{
     console.log(_request);
     return this.httpClient.post(this.urlMaintenanceWarrantyTypes,_request,{headers:this.header});
+  }
+
+  //area de servicio
+  listServiceArea():Observable<any>{
+    const request = {filter : {fechaFin: this.dateCurrent}};
+    return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
+  }
+  maintenanceServiceArea(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
+  }
+  deleteServiceArea(_request:any):Observable<any>{
+    console.log(_request);
+    return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
   }
 }

@@ -29,10 +29,10 @@ export class ExtendidaComponenteMayorComponent implements OnInit {
 
   onGetForm():void{
     if(this.form.valid){
-      const momentDate = new Date(this.form.value.fechaFalla);
-      const formattedDate = moment(momentDate).format("YYYY/MM/DD");
-      this.form.value.fechaFalla = formattedDate;
-      console.log(formattedDate);
+      // const momentDate = new Date(this.form.value.fechaFalla);
+      // const formattedDate = moment(momentDate).format("YYYY/MM/DD");
+      // this.form.value.fechaFalla = formattedDate;
+      // console.log(formattedDate);
       const form = {success:true, form: {...this.form.value}};
       this.valueEventGetForm.emit(form);
     }else{

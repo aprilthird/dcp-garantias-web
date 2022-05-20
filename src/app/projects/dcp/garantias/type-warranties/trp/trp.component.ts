@@ -29,9 +29,9 @@ export class TrpComponent implements OnInit {
 
   onGetForm():void{
     if(this.form.valid){
-      const momentDate = new Date(this.form.value.fechaAdicional);
-      const formattedDate = moment(momentDate).format("YYYY/MM/DD");
-      this.form.value.fechaAdicional = formattedDate;
+      // const momentDate = new Date(this.form.value.fechaAdicional);
+      // const formattedDate = moment(momentDate).format("YYYY/MM/DD");
+      // this.form.value.fechaAdicional = formattedDate;
       const form = {success:true, form: {...this.form.value}};
       this.valueEventGetForm.emit(form);
     }else{

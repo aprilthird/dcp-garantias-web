@@ -6,6 +6,7 @@ import { DialogQuestionNewRecordComponent } from './../dialogs/dialog-question-n
 import { Router } from '@angular/router';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dialog-historia-esn.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 interface Option {
   value: string;
@@ -53,7 +54,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './garantias-list.component.html',
   styleUrls: ['./garantias-list.component.scss']
 })
-export class GarantiasListComponent implements OnInit,AfterViewInit {
+export class GarantiasListComponent implements OnInit {
 
   options: Option[] = [
     {value:'opt1', name:'opcion 1'},
@@ -61,12 +62,16 @@ export class GarantiasListComponent implements OnInit,AfterViewInit {
     {value:'opt3', name:'opcion 3'},
     {value:'opt4', name:'opcion 4'},
   ];
-
-  displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  formFilter:FormGroup;
+  seeNotificationCreateWarrantySuccessfully=false;
+  displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state','actions'];
+  dataSource = [];
+  totalCategories:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
 
   constructor(private readonly matDialog: MatDialog,
               private readonly router: Router,
@@ -75,13 +80,46 @@ export class GarantiasListComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('success')){
+      this.loadMessage();
+    };
+    this.listWarranties();
+  }
+
+  listWarranties():void{
     this.garantiasService.listWarranties().subscribe(resp=>{
       console.log(resp);
+      this.totalCategories = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      if(this.numberOfPages==1){
+        this.disabledButtonLess = true,
+        this.disabledButtonMore = true;
+      }
     })
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result + 1 );
+    }
+    return Math.trunc(result);
+  }
+
+
+  loadFormFilter():void{
+    this.formFilter = new FormGroup({
+      esn: new FormControl(''),
+      os: new FormControl(''),
+      area: new FormControl(''),
+      fechaIni: new FormControl(''),
+      fechaFin: new FormControl(''),
+      bandeja: new FormControl(''),
+      antiguedad: new FormControl('')
+    });
   }
 
   getColorAge(days):string{
@@ -128,4 +166,20 @@ export class GarantiasListComponent implements OnInit,AfterViewInit {
     });
   }
 
+  loadMessage():void{
+    this.seeNotificationCreateWarrantySuccessfully = true;
+    setTimeout(()=>{
+      this.seeNotificationCreateWarrantySuccessfully = false;
+    },5000);
+    localStorage.removeItem('success');
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+    }
+  }
 }

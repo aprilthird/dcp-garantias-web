@@ -30,13 +30,13 @@ export class ExtendidaCapComponent implements OnInit {
   onGetForm():void{
     if(this.form.valid){
 
-      const momentDateA = new Date(this.form.value.fechaInicioGarantia);
-      const formattedDateA = moment(momentDateA).format("YYYY/MM/DD");
-      this.form.value.fechaInicioGarantia = formattedDateA;
+      // const momentDateA = new Date(this.form.value.fechaInicioGarantia);
+      // const formattedDateA = moment(momentDateA).format("YYYY/MM/DD");
+      // this.form.value.fechaInicioGarantia = formattedDateA;
 
-      const momentDateB = new Date(this.form.value.fechaFalla);
-      const formattedDateB = moment(momentDateB).format("YYYY/MM/DD");
-      this.form.value.fechaFalla = formattedDateB;
+      // const momentDateB = new Date(this.form.value.fechaFalla);
+      // const formattedDateB = moment(momentDateB).format("YYYY/MM/DD");
+      // this.form.value.fechaFalla = formattedDateB;
 
       const form = {success:true, form: {...this.form.value}};
       this.valueEventGetForm.emit(form);

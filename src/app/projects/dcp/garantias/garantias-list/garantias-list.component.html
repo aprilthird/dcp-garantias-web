@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-3">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="row">
@@ -6,7 +6,7 @@
                     <span><h4 class="font-w-700">Garantías</h4></span>
                 </div>
                 <div class="col-md-2">
-                    <div matRipple class="notification-green">
+                    <div matRipple class="notification-green" *ngIf="seeNotificationCreateWarrantySuccessfully">
                       <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>  Se creó correctamente
                     </div>
                 </div>
@@ -98,61 +98,70 @@
                   <!-- Position Column -->
                   <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef> N° OS </th>
-                    <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.os}} </td>
                   </ng-container>
               
                   <!-- Name Column -->
                   <ng-container matColumnDef="serie">
                     <th mat-header-cell *matHeaderCellDef> Serie </th>
-                    <td mat-cell *matCellDef="let element"> {{element.serie}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.esn}} </td>
                   </ng-container>
               
                   <!-- Weight Column -->
                   <ng-container matColumnDef="area">
                     <th mat-header-cell *matHeaderCellDef> Area </th>
-                    <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
                   </ng-container>
               
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.agrupacion}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="failureDate">
                     <th mat-header-cell *matHeaderCellDef> Fecha de falla </th>
-                    <td mat-cell *matCellDef="let element"> {{element.failureDate}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaFalla}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="amount">
                     <th mat-header-cell *matHeaderCellDef> Monto ($) </th>
                     <!-- {{element.amount | currency: 's/.': 'symbol':''}}  cuando es en soles -->
-                    <td mat-cell *matCellDef="let element"> {{element.amount | currency:'symbol':''}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.monto?0:element.monto | currency:'symbol':''}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="user">
                     <th mat-header-cell *matHeaderCellDef> Usuario </th>
-                    <td mat-cell *matCellDef="let element"> {{element.user}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="age">
                     <th mat-header-cell *matHeaderCellDef> Antiguedad </th>
                     <td mat-cell *matCellDef="let element">
-                      <mat-icon [ngStyle]="{'color':getColorAge(element.age)}">fiber_manual_record</mat-icon> {{element.age}} días 
+                      <mat-icon [ngStyle]="{'color':getColorAge(element.antiguedad)}">fiber_manual_record</mat-icon> {{element.antiguedad}} días 
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="inbox">
                     <th mat-header-cell *matHeaderCellDef> Bandeja </th>
                     <td mat-cell *matCellDef="let element">
-                      <button [ngClass]="{'bgr-gray':element.inbox==0}" mat-stroked-button>{{getWordInbox(element.inbox)}}</button>
+                      <button [ngClass]="{'bgr-gray':element.bandeja==0}" mat-stroked-button>{{getWordInbox(element.bandeja)}}</button>
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="state">
                     <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.state=='observado'}">
-                      <mat-icon [ngClass]="{'observed':element.state=='observado'}" [class]="'state'+element.state" *ngIf="element.state=='observado'" svgIcon="heroicons_outline:exclamation"></mat-icon> {{element.state}}
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.nombreEstado=='observado'}">
+                      <mat-icon [ngClass]="{'observed':element.nombreEstado=='observado'}" [class]="'state'+element.nombreEstado" *ngIf="element.nombreEstado=='observado'" svgIcon="heroicons_outline:exclamation"></mat-icon><span>{{element.nombreEstado}}</span>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Accion </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="onDialogEditConstant(element)">edit</mat-icon>
+                      </button>
                     </td>
                   </ng-container>
               
@@ -160,10 +169,17 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
               
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                               showFirstLastButtons 
-                               aria-label="Select page of periodic elements">
-                </mat-paginator>
+                <div class="flex-xy-center mt-3">
+                  <span>Total de garantías registradas: </span><span class="font-w-500"> {{totalCategories}}</span>
+                  <span>--</span>
+                  <span> Pagina: </span><span class="font-w-500">{{pageCurrent}} de {{numberOfPages}}</span>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
               </div>
               
         </div>

@@ -142,16 +142,7 @@
                                 <mat-form-field appearance="fill">
                                     <mat-label for="">Tipo de garantía</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="tipoGarantia" (ngModelChange)="selectTypeWarranty()">
-                                        <mat-option value="1">Producto Nuevo</mat-option>
-                                        <mat-option value="2">Motor Recon</mat-option>
-                                        <mat-option value="3">Repuesto Nuevo</mat-option>
-                                        <mat-option value="4">Repuesto Defectuoso</mat-option>
-                                        <mat-option value="5">Cap</mat-option>
-                                        <mat-option value="6">Extendida Mayor</mat-option>
-                                        <mat-option value="7">Cdc</mat-option>
-                                        <mat-option value="8">Trp</mat-option>
-                                        <mat-option value="9">Atc</mat-option>
-                                        <mat-option value="10">Memo</mat-option>
+                                        <mat-option *ngFor="let warrantyType of warrantyTypes" [value]="warrantyType.value">{{warrantyType.name}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -212,9 +203,7 @@
                                 <mat-form-field appearance="fill">
                                     <mat-label for="">Usuario registrador</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="idUsuarioEvaluador">
-                                        <mat-option [value]="1">Abel Nalvate Ramirez</mat-option>
-                                        <mat-option [value]="2">Alexander Flores Cisneros</mat-option>
-                                        <mat-option [value]="3">Alejandro Gonzales Sánchez</mat-option>
+                                        <mat-option *ngFor="let user of users" [value]="user.value">{{user.name}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>

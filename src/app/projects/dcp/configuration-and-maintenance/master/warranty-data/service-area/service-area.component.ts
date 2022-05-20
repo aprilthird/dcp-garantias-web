@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 @Component({
   selector: 'app-service-area',
   templateUrl: './service-area.component.html',
@@ -12,18 +13,25 @@ import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-d
 })
 export class ServiceAreaComponent implements OnInit {
 
-  displayedColumns: string[] = ['codigo','descripcion', 'codigoServicioSap','codigoConstante','estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['codigo','descripcion', 'codigoServicioSap','codigoConstante','estado','bu','subBU','lugar','acciones'];
+  dataSource = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(private readonly matDialog: MatDialog,
-    private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listServiceAreas();
   }
 
+  listServiceAreas():void{
+    this.configurationAndMaintenanceService.listServiceArea().subscribe(resp=>{
+      this.dataSource = resp.data;
+    });
+  }
   onDialogNewServiceArea():void{
     const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceServiceAreaComponent,{
       data: {option:'new'},
@@ -38,28 +46,28 @@ export class ServiceAreaComponent implements OnInit {
     });
   }
 
-  onDialogEditServiceArea(_constant:any):void{
+  onDialogEditServiceArea(_serviceArea:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceServiceAreaComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', serviceArea:_serviceArea},
       width:'900px'
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Area de Servicio editada con éxito');
-        // this.getListConstant();
+        this.listServiceAreas();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteServiceArea(_constant:any):void{
+  onDialogDeleteServiceArea(serviceArea:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar esta Area de Servicio?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,serviceArea);
     });
   }
 
@@ -70,15 +78,15 @@ export class ServiceAreaComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, serviceArea:any):void{
+    const request = {id:serviceArea.id, active:false};
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.deleteServiceArea(request).subscribe(resp=>{
+        if(resp.success){
+          this.listServiceAreas();
           this.openSnackBar('Area de Servicio eliminado');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

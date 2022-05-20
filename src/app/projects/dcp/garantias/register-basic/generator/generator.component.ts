@@ -35,18 +35,17 @@ export class GeneratorComponent implements OnInit {
     fechaLib:'',
     os:''
   }
-  warrantyTypes ={
-    1: "ProductoNuevo",
-    2: "MotorRecon",
-    3: "RepuestoNuevo",
-    4: "RepuestoDefectuoso",
-    5: "Cap",
-    6: "ExtendidaMayor",
-    7: "Cdc",
-    8: "Trp",
-    9: "Atc",
-    10: "Memo",
-  }
+  warrantyTypes = [ {value: 1, name: "ProductoNuevo"},
+                    {value: 2, name: "MotorRecon"},
+                    {value: 3, name: "RepuestoNuevo"},
+                    {value: 4, name: "RepuestoDefectuoso"},
+                    {value: 5, name: "Cap"},
+                    {value: 6, name: "ExtendidaMayor"},
+                    {value: 7, name: "Cdc"},
+                    {value: 8, name: "Trp"},
+                    {value: 9, name: "Atc"},
+                    {value: 10, name: "Memo"},];
+
   viewsTypesWarranty = {
     a:false,
     b:false,
@@ -63,6 +62,11 @@ export class GeneratorComponent implements OnInit {
   formRegisterEngine:FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
+  users=[{value:1,name:'Abel Nalvate Ramirez'},
+        {value:2,name:'Alexander Flores Cisneros'},
+        {value:3,name:'Alejandro Gonzales Sánchez'},];
+  idMatricula:any;
+  codeAreaServicios:any;
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,
               private readonly garantiasService: GarantiasService,
@@ -106,6 +110,7 @@ export class GeneratorComponent implements OnInit {
       this.garantiasService.findEsn(esn).subscribe(resp=>{
         if(resp.body){
           this.enrollmentByEsn = resp.body;
+          this.idMatricula = 5;
         }else{
           this.openSnackBar('No existe matricula con tal ESN');
         }
@@ -121,6 +126,7 @@ export class GeneratorComponent implements OnInit {
       this.garantiasService.findOs(os).subscribe(resp=>{
         if(resp.body){
           this.osObject = resp.body;
+          this.codeAreaServicios = resp.body.codAreaServicios;
         }else{
           this.openSnackBar('No existe tal OS');
         }
@@ -163,10 +169,6 @@ export class GeneratorComponent implements OnInit {
     });
   }
 
-  onSaveDraft():void{
-    this.onOpenDialogSaveDraft();
-  }
-
   onOpenDialogHistoriaEsn():void{
     const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
       data:{type:'generator', name: 'generador'},
@@ -187,7 +189,7 @@ export class GeneratorComponent implements OnInit {
     const type = this.formRegisterEngine.value.tipoGarantia;
     console.log(this.formRegisterEngine.value.tipoGarantia);
     switch (type) {
-      case '1':
+      case 1:
         this.viewsTypesWarranty.a = true;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -199,7 +201,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '2':
+      case 2:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = true;
         this.viewsTypesWarranty.c = false;
@@ -211,7 +213,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '3':
+      case 3:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = true;
@@ -223,7 +225,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '4':
+      case 4:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -235,7 +237,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '5':
+      case 5:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -247,7 +249,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '6':
+      case 6:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -259,7 +261,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '7':
+      case 7:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -271,7 +273,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '8':
+      case 8:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -283,7 +285,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = false;
         this.viewsTypesWarranty.j = false;
         break;
-      case '9':
+      case 9:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -295,7 +297,7 @@ export class GeneratorComponent implements OnInit {
         this.viewsTypesWarranty.i = true;
         this.viewsTypesWarranty.j = false;
         break;
-      case '10':
+      case 10:
         this.viewsTypesWarranty.a = false;
         this.viewsTypesWarranty.b = false;
         this.viewsTypesWarranty.c = false;
@@ -322,11 +324,22 @@ export class GeneratorComponent implements OnInit {
   }
 
   sendRegister():void{
-    console.log(this.formRegisterEngine.value);
-    this.request = {id:0,idTipo:1,...this.typeWarranty,...this.formRegisterEngine.value};
+    this.request = {id:0,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
+    this.garantiasService.saveWarranty(this.request).subscribe(resp=>{
+      if(resp.success){
+        localStorage.setItem('success','true');
+        this.router.navigate(['/garantias']);
+      }
+    });
+  }
+
+  onSaveDraft():void{
+    this.request = {id:0,estado:1,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
     console.log(this.request);
     this.garantiasService.saveWarranty(this.request).subscribe(resp=>{
-      console.log(resp);
+      if(resp.success){
+        this.onOpenDialogSaveDraft();
+      }
     });
   }
 }

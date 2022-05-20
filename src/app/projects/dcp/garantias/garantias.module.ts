@@ -77,7 +77,8 @@ import { MemoComponent } from './type-warranties/memo/memo.component';
     MatRippleModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ReactiveFormsModule
   ]
 })
 export class GarantiasModule { }

@@ -30,13 +30,13 @@ export class RepuestoNuevoRespuestoDefectuosoComponent implements OnInit {
 
   onGetForm():void{
     if(this.form.valid){
-      const momentDateA = new Date(this.form.value.fechaInicioGarantia);
-      const formattedDateA = moment(momentDateA).format("YYYY/MM/DD");
-      this.form.value.fechaInicioGarantia = formattedDateA;
-      const momentDate = new Date(this.form.value.fechaFalla);
-      const formattedDate = moment(momentDate).format("YYYY/MM/DD");
-      this.form.value.fechaFalla = formattedDate;
-      console.log(formattedDate);
+      // const momentDateA = new Date(this.form.value.fechaInicioGarantia);
+      // const formattedDateA = moment(momentDateA).format("YYYY/MM/DD");
+      // this.form.value.fechaInicioGarantia = formattedDateA;
+      // const momentDate = new Date(this.form.value.fechaFalla);
+      // const formattedDate = moment(momentDate).format("YYYY/MM/DD");
+      // this.form.value.fechaFalla = formattedDate;
+      // console.log(formattedDate);
       const form = {success:true, form: {...this.form.value}};
       this.valueEventGetForm.emit(form);
     }else{

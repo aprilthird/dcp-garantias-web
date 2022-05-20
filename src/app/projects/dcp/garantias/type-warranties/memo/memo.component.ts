@@ -29,10 +29,10 @@ export class MemoComponent implements OnInit {
 
   onGetForm():void{
     if(this.form.valid){
-      const momentDate = new Date(this.form.value.fechaAdicional);
-      const formattedDate = moment(momentDate).format("YYYY/MM/DD");
-      this.form.value.fechaAdicional = formattedDate;
-      console.log(formattedDate);
+      // const momentDate = new Date(this.form.value.fechaAdicional);
+      // const formattedDate = moment(momentDate).format("YYYY/MM/DD");
+      // this.form.value.fechaAdicional = formattedDate;
+      // console.log(formattedDate);
       const form = {success:true, form: {...this.form.value}};
       this.valueEventGetForm.emit(form);
     }else{
