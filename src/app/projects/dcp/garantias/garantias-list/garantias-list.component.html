@@ -93,69 +93,54 @@
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource">
-              
-                  <!-- Position Column -->
+                <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
                   <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef> N° OS </th>
                     <td mat-cell *matCellDef="let element"> {{element.os}} </td>
                   </ng-container>
-              
-                  <!-- Name Column -->
                   <ng-container matColumnDef="serie">
                     <th mat-header-cell *matHeaderCellDef> Serie </th>
                     <td mat-cell *matCellDef="let element"> {{element.esn}} </td>
                   </ng-container>
-              
-                  <!-- Weight Column -->
                   <ng-container matColumnDef="area">
                     <th mat-header-cell *matHeaderCellDef> Area </th>
                     <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
                   </ng-container>
-              
-                  <!-- Symbol Column -->
                   <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef> Tipo </th>
                     <td mat-cell *matCellDef="let element"> {{element.agrupacion}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="failureDate">
                     <th mat-header-cell *matHeaderCellDef> Fecha de falla </th>
                     <td mat-cell *matCellDef="let element"> {{element.fechaFalla}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="amount">
                     <th mat-header-cell *matHeaderCellDef> Monto ($) </th>
                     <!-- {{element.amount | currency: 's/.': 'symbol':''}}  cuando es en soles -->
                     <td mat-cell *matCellDef="let element"> {{element.monto?0:element.monto | currency:'symbol':''}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="user">
                     <th mat-header-cell *matHeaderCellDef> Usuario </th>
                     <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="age">
                     <th mat-header-cell *matHeaderCellDef> Antiguedad </th>
                     <td mat-cell *matCellDef="let element">
                       <mat-icon [ngStyle]="{'color':getColorAge(element.antiguedad)}">fiber_manual_record</mat-icon> {{element.antiguedad}} días 
                     </td>
                   </ng-container>
-
                   <ng-container matColumnDef="inbox">
                     <th mat-header-cell *matHeaderCellDef> Bandeja </th>
                     <td mat-cell *matCellDef="let element">
                       <button [ngClass]="{'bgr-gray':element.bandeja==0}" mat-stroked-button>{{getWordInbox(element.bandeja)}}</button>
                     </td>
                   </ng-container>
-
                   <ng-container matColumnDef="state">
                     <th mat-header-cell *matHeaderCellDef> Estado </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.nombreEstado=='observado'}">
                       <mat-icon [ngClass]="{'observed':element.nombreEstado=='observado'}" [class]="'state'+element.nombreEstado" *ngIf="element.nombreEstado=='observado'" svgIcon="heroicons_outline:exclamation"></mat-icon><span>{{element.nombreEstado}}</span>
                     </td>
                   </ng-container>
-
                   <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef> Accion </th>
                     <td mat-cell *matCellDef="let element">
@@ -164,9 +149,75 @@
                       </button>
                     </td>
                   </ng-container>
+
+                  <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                          <div class="row">
+                            <div class="col-md-5">
+                              <div class="row">
+                                <div class="col-md-12"><span class="font-w-900">Detalles</span></div>
+                                <div class="col-md-12"><span class="font-w-700">Fechas</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Dias en servicio</span><span>112 D</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Dias en PSG</span><span>112 D</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Dias de Fabrica</span><span>112 D</span></div>
+                                <div class="col-md-12"><span class="font-w-700">Informe</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Fecha de aprobacion</span><span>12/11/21</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Monto del informe</span><span>$3400</span></div>
+                                <div class="col-md-12"><span class="font-w-700">RapidServe</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Fecha de ingreso</span><span>12/11/21</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Monto total</span><span>$3400</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Claim#</span><span>12345</span></div>
+                                <div class="col-md-12"><span class="font-w-700">Final de Pago</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Fecha de pago</span><span>12/11/21</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Monto final</span><span>$3400</span></div>
+                                <div class="col-md-4 flex-column"><span class="font-w-500">Rentabilidad</span><span>14.60</span></div>
+                              </div>
+                            </div>
+                            <div class="col-md-7">
+                              <p class="font-w-900">Bitacora</p>
+                              <div class="scroll-vertical table-bitacora">
+                                <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
+                                  <ng-container matColumnDef="fecha">
+                                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.failureDate}} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="evaluador">
+                                    <th mat-header-cell *matHeaderCellDef> Evaluador </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.area}} </td>
+                                  </ng-container>                            
+                                  <ng-container matColumnDef="comentario">
+                                    <th mat-header-cell *matHeaderCellDef> Comentario </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.type}} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="estado">
+                                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.state}} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="monto">
+                                    <th mat-header-cell *matHeaderCellDef> Monto </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.amount}} </td>
+                                  </ng-container>
+                                  <ng-container matColumnDef="bandejaActual">
+                                    <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
+                                    <td mat-cell *matCellDef="let item"> {{item.inbox}} </td>
+                                  </ng-container>                            
+                                  <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>
+                                  <tr mat-row *matRowDef="let row; columns: displayedColumnsBitacora;"></tr>
+                                </table>      
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </td>
+                  </ng-container>
               
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                      [class.example-expanded-row]="expandedElement === element"
+                      (click)="seeBitacora(element)"></tr>
+                  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                  
                 </table>
               
                 <div class="flex-xy-center mt-3">

@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import {animate, state, style, transition, trigger} from '@angular/animations';
 interface Option {
   value: string;
   name: string;
@@ -35,24 +35,20 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {number: 6, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 368, inbox: 5, state: 'observado'},
   {number: 7, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 361, inbox: 6, state: 'servicios'},
   {number: 8, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 0, state: 'rechazado'},
-  {number: 9, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'observado'},
-  {number: 10, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'servicios'},
-  {number: 11, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 6, state: 'rechazado'},
-  {number: 12, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 3, state: 'observado'},
-  {number: 13, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 2, state: 'servicios'},
-  {number: 14, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 5, state: 'rechazado'},
-  {number: 15, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'observado'},
-  {number: 16, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 3, state: 'servicios'},
-  {number: 17, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 2, state: 'rechazado'},
-  {number: 18, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 3, state: 'observado'},
-  {number: 19, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 3, state: 'servicios' },
-  {number: 20, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'rechazado'},
+  {number: 9, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'observado'}
 ];
 
 @Component({
   selector: 'app-garantias-list',
   templateUrl: './garantias-list.component.html',
-  styleUrls: ['./garantias-list.component.scss']
+  styleUrls: ['./garantias-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class GarantiasListComponent implements OnInit {
 
@@ -65,7 +61,10 @@ export class GarantiasListComponent implements OnInit {
   formFilter:FormGroup;
   seeNotificationCreateWarrantySuccessfully=false;
   displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state','actions'];
+  displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'monto', 'bandejaActual'];
   dataSource = [];
+  dataSourceBitacora = ELEMENT_DATA;
+  expandedElement: any;
   totalCategories:any;
   totalRows:any;
   numberOfPages:any;
@@ -181,5 +180,10 @@ export class GarantiasListComponent implements OnInit {
     if(type=='less'){
       this.pageCurrent = this.pageCurrent - 1 ;
     }
+  }
+
+  seeBitacora(element):void{
+    console.log(element.id);
+    this.expandedElement = this.expandedElement === element ? null : element
   }
 }
