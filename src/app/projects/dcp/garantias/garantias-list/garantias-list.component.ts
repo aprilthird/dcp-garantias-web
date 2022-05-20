@@ -71,7 +71,7 @@ export class GarantiasListComponent implements OnInit {
   pageCurrent:number=1;
   disabledButtonMore:boolean=false;
   disabledButtonLess:boolean=false;
-
+  dataBitacora:any;
   constructor(private readonly matDialog: MatDialog,
               private readonly router: Router,
               private readonly garantiasService: GarantiasService) {
@@ -184,6 +184,11 @@ export class GarantiasListComponent implements OnInit {
 
   seeBitacora(element):void{
     console.log(element.id);
-    this.expandedElement = this.expandedElement === element ? null : element
+    this.expandedElement = this.expandedElement === element ? null : element;
+    this.garantiasService.logWarranty(element.id).subscribe(resp=>{
+      console.log(resp);
+      this.dataBitacora = resp.body;
+      this.dataSourceBitacora = resp.body;
+    });
   }
 }

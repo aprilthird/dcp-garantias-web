@@ -25,6 +25,8 @@ export class GarantiasService {
   private urlFindHistoryEsn = this.baseApiURl + '/Administracion/BandejaMatricula';
   //buscar OS
   private urlFindOs = this.baseApiURl + '/Mantenimiento/BuscarOs';
+  //traer bitacora
+  private urlLogWarranty = this.baseApiURl + '/Core/ObtenerBitacora';
 
 
   constructor(private readonly httpClient: HttpClient,
@@ -60,5 +62,10 @@ export class GarantiasService {
 
   getListaTipoDeGarantias():Observable<any>{
     return this.httpClient.post(this.urlListaTipoDeGarantias, {});
+  }
+
+  //traer bitacora
+  logWarranty(id):Observable<any>{
+    return this.httpClient.get(this.urlLogWarranty+'/'+id,{headers:this.header});
   }
 }

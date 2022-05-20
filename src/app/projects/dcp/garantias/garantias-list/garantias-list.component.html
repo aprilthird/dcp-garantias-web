@@ -179,28 +179,28 @@
                               <div class="scroll-vertical table-bitacora">
                                 <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
                                   <ng-container matColumnDef="fecha">
-                                    <th mat-header-cell *matHeaderCellDef> No. </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.failureDate}} </td>
+                                    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                                    <td mat-cell *matCellDef="let item"> {{item.fechaReg}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="evaluador">
                                     <th mat-header-cell *matHeaderCellDef> Evaluador </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.area}} </td>
+                                    <td mat-cell *matCellDef="let item"> {{item.evaluador==null?'-':item.evaluador}} </td>
                                   </ng-container>                            
                                   <ng-container matColumnDef="comentario">
                                     <th mat-header-cell *matHeaderCellDef> Comentario </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.type}} </td>
+                                    <td mat-cell *matCellDef="let item"> {{item.comentario==null?'-':item.comentario}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="estado">
                                     <th mat-header-cell *matHeaderCellDef> Estado </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.state}} </td>
+                                    <td mat-cell *matCellDef="let item"> {{item.estado}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="monto">
                                     <th mat-header-cell *matHeaderCellDef> Monto </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.amount}} </td>
+                                    <td mat-cell *matCellDef="let item"> {{item.amount==null?'0':item.amount}} </td>
                                   </ng-container>
                                   <ng-container matColumnDef="bandejaActual">
                                     <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
-                                    <td mat-cell *matCellDef="let item"> {{item.inbox}} </td>
+                                    <td mat-cell *matCellDef="let item"> {{item.bandejaActual==null?'0':item.bandejaActual}} </td>
                                   </ng-container>                            
                                   <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>
                                   <tr mat-row *matRowDef="let row; columns: displayedColumnsBitacora;"></tr>
