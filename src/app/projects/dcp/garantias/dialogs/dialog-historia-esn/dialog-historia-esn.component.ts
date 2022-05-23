@@ -46,6 +46,7 @@ export class DialogHistoriaESNComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFormEsn();
+    console.log(this.data);
   }
 
   onClose():void{
@@ -60,8 +61,8 @@ export class DialogHistoriaESNComponent implements OnInit {
 
   getHistoryEsn():void{
     if(this.esnForm.valid){
-      const request = {filter : {esn: this.esnForm.value.esn,fechaFin: '2022-05-12T09:47:38.423',fechaIni: '2022-05-12T09:47:38.423'}};
-      this.garantiasService.findHistoryEsn(request).subscribe(resp=>{
+      // const request = {filter : {esn: this.esnForm.value.esn,fechaFin: '2022-05-12T09:47:38.423',fechaIni: '2022-05-12T09:47:38.423'}};
+      this.garantiasService.findHistoryEsn(this.esnForm.value.esn).subscribe(resp=>{
         console.log(resp);
         this.dataSource = resp.data;
         if(this.dataSource.length>0){

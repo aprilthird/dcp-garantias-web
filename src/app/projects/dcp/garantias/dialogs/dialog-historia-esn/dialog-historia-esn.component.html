@@ -9,7 +9,7 @@
         <div class="col-md-4">
             <form *ngIf="esnForm" [formGroup]="esnForm">
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="Buscar" [(ngModel)]="esn">
+                    <input matInput type="text" placeholder="Buscar" formControlName="esn">
                     <button mat-icon-button matSuffix (click)="getHistoryEsn()">
                         <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                     </button>

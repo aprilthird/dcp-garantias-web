@@ -58,20 +58,28 @@ export class GarantiasListComponent implements OnInit {
     {value:'opt3', name:'opcion 3'},
     {value:'opt4', name:'opcion 4'},
   ];
+  //formulario para el filtro de las garantias
   formFilter:FormGroup;
+  //variable para mostrar o no el mensaje de que se creó la garantía con exito
   seeNotificationCreateWarrantySuccessfully=false;
+  //tabla garantias
   displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state','actions'];
+  //tabla bitacora
   displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'monto', 'bandejaActual'];
   dataSource = [];
   dataSourceBitacora = ELEMENT_DATA;
   expandedElement: any;
-  totalCategories:any;
+  //datos del paginado
+  totalWarranties:any;
   totalRows:any;
   numberOfPages:any;
   pageCurrent:number=1;
+  //botones del paginado
   disabledButtonMore:boolean=false;
   disabledButtonLess:boolean=false;
+  //info para la bitacora
   dataBitacora:any;
+
   constructor(private readonly matDialog: MatDialog,
               private readonly router: Router,
               private readonly garantiasService: GarantiasService) {
@@ -86,16 +94,13 @@ export class GarantiasListComponent implements OnInit {
   }
 
   listWarranties():void{
-    this.garantiasService.listWarranties().subscribe(resp=>{
+    this.garantiasService.listWarranties(this.pageCurrent).subscribe(resp=>{
       console.log(resp);
-      this.totalCategories = resp.totalRecords;
+      this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
       this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
       this.dataSource = resp.data;
-      if(this.numberOfPages==1){
-        this.disabledButtonLess = true,
-        this.disabledButtonMore = true;
-      }
+      this.disabledButtonsPagination();
     })
   }
 
@@ -173,15 +178,6 @@ export class GarantiasListComponent implements OnInit {
     localStorage.removeItem('success');
   }
 
-  changePage(type:string){
-    if(type=='more'){
-      this.pageCurrent = this.pageCurrent + 1 ;
-    }
-    if(type=='less'){
-      this.pageCurrent = this.pageCurrent - 1 ;
-    }
-  }
-
   seeBitacora(element):void{
     console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
@@ -190,5 +186,35 @@ export class GarantiasListComponent implements OnInit {
       this.dataBitacora = resp.body;
       this.dataSourceBitacora = resp.body;
     });
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listWarranties();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listWarranties();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 }

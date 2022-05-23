@@ -12,6 +12,7 @@ export class GarantiasService {
   header = new HttpHeaders({
     'Authorization': this.authService.accessToken
   });
+
   dateCurrent = new Date();
 
   private baseApiURl = environment.apiUrl;
@@ -37,8 +38,8 @@ export class GarantiasService {
   saveWarranty(_request:any):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceWarranties,_request,{headers:this.header});
   }
-  listWarranties():Observable<any>{
-    const request = {filter : {fechaFin:this.dateCurrent}};
+  listWarranties(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:_page};
     return this.httpClient.post(this.urlTrayWarranties, request, {headers:this.header});
   }
   deleteWarranty(_request:any):Observable<any>{
@@ -51,7 +52,8 @@ export class GarantiasService {
     return this.httpClient.get(this.urlFindEsn, {params:_params,headers:this.header});
   }
   //historial ESN
-  findHistoryEsn(request):Observable<any>{
+  findHistoryEsn(_esn):Observable<any>{
+    const request = { filter : { esn: _esn , fechaFin:this.dateCurrent } };
     return this.httpClient.post(this.urlFindHistoryEsn, request, {headers:this.header});
   }
   //buscar OS
