@@ -192,10 +192,12 @@ export class GarantiasListComponent implements OnInit {
     if(type=='more'){
       this.pageCurrent = this.pageCurrent + 1 ;
       this.listWarranties();
+      this.disabledButtonsPagination();
     }
     if(type=='less'){
       this.pageCurrent = this.pageCurrent - 1 ;
       this.listWarranties();
+      this.disabledButtonsPagination();
     }
   }
 
