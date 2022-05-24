@@ -324,7 +324,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   sendRegister():void{
-    this.request = {id:0,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
+    this.request = {id:0,bandeja:1,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
     this.garantiasService.saveWarranty(this.request).subscribe(resp=>{
       if(resp.success){
         localStorage.setItem('success','true');
@@ -334,7 +334,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   onSaveDraft():void{
-    this.request = {id:0,estado:1,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
+    this.request = {id:0,bandeja:0,idMatricula:this.idMatricula,codAreaServicios:this.codeAreaServicios,...this.typeWarranty,...this.formRegisterEngine.value};
     console.log(this.request);
     this.garantiasService.saveWarranty(this.request).subscribe(resp=>{
       if(resp.success){
