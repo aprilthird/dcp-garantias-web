@@ -22,4 +22,18 @@
     padding-right: 0 !important;
   }
 }
-
+.container{
+  margin: 0;
+  height: 100vh;
+}
+.box,.box-image{
+  padding: 0;
+}
+.box-image{
+  width: 100%;
+  max-width: 100%;
+  img{
+    max-width: 45%;
+    height: 100vh;
+  }
+}
