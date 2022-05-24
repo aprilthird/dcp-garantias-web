@@ -136,14 +136,17 @@ export class FuturisticLayoutComponent implements OnInit, OnDestroy
     
 
     signOut(): void {
-        this._authService.signOut().subscribe(
-          () => {
-            this._azureAuthService.logOut();
-            setTimeout(() => {
-              this._router.navigateByUrl("/");
-            }, 1000);
-          },
-          (response) => {}
-        );
+        localStorage.clear();
+        window.location.reload();
+        // this._router.navigate(['/sign-in']);
+        // this._authService.signOut().subscribe(
+        //   () => {
+        //     this._azureAuthService.logOut();
+        //     setTimeout(() => {
+        //       this._router.navigateByUrl("/");
+        //     }, 1000);
+        //   },
+        //   (response) => {}
+        // );
       }
 }

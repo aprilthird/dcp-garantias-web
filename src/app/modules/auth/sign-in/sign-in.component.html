@@ -5,11 +5,11 @@
     </div>
     <div style="width: 100% !important;height: 65vh;flex-direction: column;display: flex;align-items: center;justify-content: center;">
       <!-- Title -->
-      <div class="mt-8 text-4xl font-bold tracking-tight leading-tight text-center"> Iniciar Sesión </div>
+      <div class="mt-8 text-4xl font-bold tracking-tight leading-tight text-center" style="font-size: 36px !important;"> Iniciar Sesión </div>
       <!-- Alert -->
       <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type" [@shake]="alert.type === 'error'" > {{ alert.message }} </fuse-alert>
       <!-- Sign in form -->
-      <form class="mt-8" style="width: 200px;">
+      <form class="mt-8" style="width: 220px;">
         <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'" (click)="signIn()" >
           <span> Ingresar </span>
           <mat-icon svgIcon="iconsmind:windows_microsoft" class="ml-5"></mat-icon>
