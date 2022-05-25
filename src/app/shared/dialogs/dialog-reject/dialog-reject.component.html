@@ -1,0 +1,18 @@
+<div matDialogContent>
+    <div class="row">
+        <div class="col-md-12 flex-col-center margin-b-15">
+            <span class="icon-question font-w-700 icon"></span>
+            <span class="font-w-700 color-red">Rechazar</span>
+        </div>
+        <div class="col-md-12 text--center">
+            <span class="font-w-700">{{data.text}}</span>
+        </div>
+        <div class="col-md-12 text--center">
+            <span>{{data.description}}</span>
+        </div>
+    </div>
+</div>
+<div matDialogActions align="center">
+    <button mat-raised-button (click)="onClose(false)">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onClose(true)">Si, rechazar</button>
+</div>

@@ -273,8 +273,13 @@
                     </form>
                 </mat-card-content>
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
-                    <button mat-raised-button (click)="onSaveDraft()">Guardar borrador</button>
-                    <button mat-raised-button color="primary" (click)="sendRegister()">Enviar registro</button>
+                    <button mat-raised-button (click)="onsaveRegister()">Guardar</button>
+                    <button mat-raised-button (click)="onReject()">Rechazar</button>
+                    <button mat-raised-button (click)="true">Observar</button>
+                    <button mat-raised-button color="primary" (click)="true">Transformar</button>
+
+                    <button mat-raised-button (click)="onSendDraft()">Guardar borrador</button>
+                    <button mat-raised-button color="primary" (click)="onSendRegister()">Enviar registro</button>                    
                 </mat-card-actions>
             </mat-card>
         </div>

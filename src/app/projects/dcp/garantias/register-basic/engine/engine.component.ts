@@ -10,6 +10,7 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -18,6 +19,8 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 export class EngineComponent implements OnInit {
 
   type:any;
+  action:any;
+  warranty:any;
   enrollmentByEsn = {
     cliente:'',
     direccion:'',
@@ -73,6 +76,7 @@ export class EngineComponent implements OnInit {
 
   ngOnInit(): void {
     this.type = localStorage.getItem('text');
+    this.action = localStorage.getItem('action');
     this.configurationAndMaintenanceService.getEnum('02').subscribe(resp=>{
       console.log(resp);
     });
@@ -90,28 +94,55 @@ export class EngineComponent implements OnInit {
   }
 
   loadFormRegisterEngine():void{
-    this.formRegisterEngine = new FormGroup({
-      esn: new FormControl('',[Validators.required]),
-      os: new FormControl('',[Validators.required]),
-      //
-      tipoGarantia: new FormControl([Validators.required]),
-      puntoFalla: new FormControl(''),
-      medida: new FormControl(),
-      fechaFalla: new FormControl(),
-      fechaInicioGarantia: new FormControl(),
-      numParteRepuesto: new FormControl(''),
-      numParteFallo: new FormControl(''),
-      codigoAdicional: new FormControl(''),
-      fechaAdicional: new FormControl(),
-      ejecucionAdicional: new FormControl(''),
-      //
-      idQueja1: new FormControl([Validators.required]),
-      idQueja2: new FormControl(),
-      idQueja3: new FormControl(),
-      idQueja4: new FormControl(),
-      comentarios: new FormControl('',[Validators.required]),
-      idUsuarioEvaluador: new FormControl([Validators.required]),
-    })
+    if(this.action=='new'){
+      this.formRegisterEngine = new FormGroup({
+        esn: new FormControl('',[Validators.required]),
+        os: new FormControl('',[Validators.required]),
+        //
+        tipoGarantia: new FormControl([Validators.required]),
+        puntoFalla: new FormControl(''),
+        medida: new FormControl(),
+        fechaFalla: new FormControl(),
+        fechaInicioGarantia: new FormControl(),
+        numParteRepuesto: new FormControl(''),
+        numParteFallo: new FormControl(''),
+        codigoAdicional: new FormControl(''),
+        fechaAdicional: new FormControl(),
+        ejecucionAdicional: new FormControl(''),
+        //
+        idQueja1: new FormControl([Validators.required]),
+        idQueja2: new FormControl(),
+        idQueja3: new FormControl(),
+        idQueja4: new FormControl(),
+        comentarios: new FormControl('',[Validators.required]),
+        idUsuarioEvaluador: new FormControl([Validators.required]),
+      })
+    }else{
+      this.warranty = JSON.parse(localStorage.getItem('garantia')); //usar esta variable para llenar la data de la garantia a gestionar en el formulario
+      console.log(this.warranty);
+      this.formRegisterEngine = new FormGroup({
+        esn: new FormControl('',[Validators.required]),
+        os: new FormControl('',[Validators.required]),
+        //
+        tipoGarantia: new FormControl([Validators.required]),
+        puntoFalla: new FormControl(''),
+        medida: new FormControl(),
+        fechaFalla: new FormControl(),
+        fechaInicioGarantia: new FormControl(),
+        numParteRepuesto: new FormControl(''),
+        numParteFallo: new FormControl(''),
+        codigoAdicional: new FormControl(''),
+        fechaAdicional: new FormControl(),
+        ejecucionAdicional: new FormControl(''),
+        //
+        idQueja1: new FormControl([Validators.required]),
+        idQueja2: new FormControl(),
+        idQueja3: new FormControl(),
+        idQueja4: new FormControl(),
+        comentarios: new FormControl('',[Validators.required]),
+        idUsuarioEvaluador: new FormControl([Validators.required]),
+      })
+    }
   }
 
   getEsn():void{
@@ -176,8 +207,14 @@ export class EngineComponent implements OnInit {
 
   onOpenDialogSaveDraft():void{
     const dialogSaveDraft = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-      disableClose:true
+      disableClose:true,
+      data: {text:'Se guardo el borrador extosamente'}
     });
+    dialogSaveDraft.afterClosed().subscribe(resp=>{
+      if(resp){
+        this.router.navigate(['/garantias']);
+      }
+    })
   }
 
   onOpenDialogHistoryEsn():void{
@@ -324,7 +361,7 @@ export class EngineComponent implements OnInit {
   //   }
   // }
 
-  sendRegister():void{
+  onSendRegister():void{
     if(this.formRegisterEngine.valid){
       const request = {
                       id:0,
@@ -346,7 +383,7 @@ export class EngineComponent implements OnInit {
     }
   }
 
-  onSaveDraft():void{
+  onSendDraft():void{
     if(this.formRegisterEngine.valid){
       const request = {
                       id:0,
@@ -365,5 +402,29 @@ export class EngineComponent implements OnInit {
         data:{text:'Llene todos los campos necesarios'}
       })     
     }
+  }
+
+  onsaveRegister():void{
+    const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+      disableClose:true,
+      data:{text:'Se guardó con éxito'}
+    });
+    dialogSaveRegister.afterClosed().subscribe(resp=>{
+      if(resp){
+        this.router.navigate(['/garantias']);
+      }
+    })
+  }
+
+  onReject():void{
+    const dialogReject = this.matDialog.open(DialogRejectComponent,{
+      disableClose:true,
+      width:'380px',
+      data: {text:'¿Estás seguro de rechazar este registro?',
+            description:'Al hacerlo el registro ingresará a una bandeja negra'}
+    });
+    dialogReject.afterClosed().subscribe(resp=>{
+      console.log(resp);
+    });
   }
 }

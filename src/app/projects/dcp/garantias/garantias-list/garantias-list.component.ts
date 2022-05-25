@@ -219,4 +219,10 @@ export class GarantiasListComponent implements OnInit {
       this.disabledButtonMore = true;
     }
   }
+
+  editWarranty(warranty):void{
+    localStorage.setItem('action','edit');
+    this.router.navigate(['garantias/register-engine-basic']);
+    localStorage.setItem('garantia',JSON.stringify(warranty));
+  }
 }

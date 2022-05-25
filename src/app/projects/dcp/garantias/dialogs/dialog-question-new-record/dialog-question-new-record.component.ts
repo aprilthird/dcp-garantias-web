@@ -17,6 +17,7 @@ export class DialogQuestionNewRecordComponent implements OnInit {
 
   onRegisterBasic(type):void{
     localStorage.setItem('text',type);
+    localStorage.setItem('action','new');
     this.matDialogRef.close();
     this.router.navigate(['garantias/register-engine-basic']);
   }
