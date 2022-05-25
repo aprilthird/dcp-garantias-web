@@ -15,6 +15,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { GroupPositionPipe } from "./pipes/group-position.pipe";
 import { DialogOperationSuccessfullyComponent } from './dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogDeleteComponent } from './dialogs/dialog-delete/dialog-delete.component';
+import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dialog-error-message.component';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { DialogDeleteComponent } from './dialogs/dialog-delete/dialog-delete.com
     GroupPositionPipe,
     DialogOperationSuccessfullyComponent,
     DialogDeleteComponent,
+    DialogErrorMessageComponent,
   ],
   providers: [ExportExcelService],
 })
