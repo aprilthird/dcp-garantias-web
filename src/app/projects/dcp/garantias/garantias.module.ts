@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogQuestionNewRecordComponent } from './dialogs/dialog-question-new-record/dialog-question-new-record.component';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -36,6 +36,9 @@ import { CdcComponent } from './type-warranties/cdc/cdc.component';
 import { TrpComponent } from './type-warranties/trp/trp.component';
 import { AtcComponent } from './type-warranties/atc/atc.component';
 import { MemoComponent } from './type-warranties/memo/memo.component';
+import { DialogTransformRecordToOrangeComponent } from './dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
+import { ChangeTrayComponent } from './change-tray/change-tray.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,9 @@ import { MemoComponent } from './type-warranties/memo/memo.component';
     CdcComponent,
     TrpComponent,
     AtcComponent,
-    MemoComponent
+    MemoComponent,
+    DialogTransformRecordToOrangeComponent,
+    ChangeTrayComponent
   ],
   imports: [
     CommonModule,
@@ -78,7 +83,8 @@ import { MemoComponent } from './type-warranties/memo/memo.component';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatExpansionModule
   ]
 })
 export class GarantiasModule { }

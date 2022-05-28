@@ -1,7 +1,14 @@
+<div matDialogTitle class="text--end">
+    <mat-icon class="pointer" svgIcon="close" (click)="onClose(false)"></mat-icon>
+</div>
 <div matDialogContent>
     <div class="row">
+        <div class="col-md-12 flex-col-center margin-b-15">
+            <span class="icon-cross font-w-700 icon color-red"></span>
+            <span class="font-w-700 color-red">¡Error!</span>
+        </div>
         <div class="col-md-12 text--center">
-            <span>{{data.text}}</span>
+            <span class="font-w-700" style="font-size: large;">{{data.text}}</span>
         </div>
     </div>
 </div>

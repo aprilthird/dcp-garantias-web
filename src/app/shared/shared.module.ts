@@ -17,6 +17,7 @@ import { DialogOperationSuccessfullyComponent } from './dialogs/dialog-operation
 import { DialogDeleteComponent } from './dialogs/dialog-delete/dialog-delete.component';
 import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogRejectComponent } from './dialogs/dialog-reject/dialog-reject.component';
+import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-observation.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { DialogRejectComponent } from './dialogs/dialog-reject/dialog-reject.com
     DialogDeleteComponent,
     DialogErrorMessageComponent,
     DialogRejectComponent,
+    DialogObservationComponent,
   ],
   providers: [ExportExcelService],
 })

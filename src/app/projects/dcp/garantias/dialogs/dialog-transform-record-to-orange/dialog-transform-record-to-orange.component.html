@@ -1,0 +1,44 @@
+<div matDialogTitle>
+    <div class="row">
+        <div class="col-md-11">
+            <span>Evaluación del Registro Básico</span>
+        </div>
+        <div class="col-md-1 text--end">
+            <mat-icon class="pointer" svgIcon="close" (click)="onClose(false)"></mat-icon>
+        </div>
+    </div>
+</div>
+<div matDialogContent>
+    <form *ngIf="formGroup" [formGroup]="formGroup">
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Usuario elaborador de Informe</mat-label>
+                    <mat-select placeholder="Seleccione" formControlName="user">
+                        <mat-option>Usuario 1</mat-option>
+                        <mat-option>Usuario 2</mat-option>
+                        <mat-option>Usuario 3</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="font-w-700">Criterios</span>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-checkbox class="example-margin" formControlName="datosOk" color="primary">Datos digitados correctamente</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="coherenciaOk" color="primary">Coherencia de unidades</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-checkbox class="example-margin" formControlName="garantiaOk" color="primary">Garantía válida</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="esnOk" color="primary">ESN registrado en el SQL</mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button color="primary">Enviar</button>
+</div>

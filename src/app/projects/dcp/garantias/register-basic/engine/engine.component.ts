@@ -11,6 +11,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
+import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
+import { DialogTransformRecordToOrangeComponent } from '../../dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -18,70 +20,37 @@ import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-r
 })
 export class EngineComponent implements OnInit {
 
-  type:any;
+  //variable para guardar el tipo de garantia ( de un motor o un generador) que se va a crear o editar
+  typeWarrantyText:any;
+  //variable para la acción que se va a realizar, si es crear o editar  
   action:any;
   warranty:any;
-  enrollmentByEsn = {
-    cliente:'',
-    direccion:'',
-    aplicacion:'',
-    modelo:'',
-    cpl:'',
-    etoPto:'',
-    fechaInicioGarantia:'',
-    bis:false
-  };
-  osObject={
-    claseActividad:'',
-    codAreaServicios:'',
-    fechaLib:'',
-    os:''
-  }
-  warrantyTypes = [ {value: 1, name: "ProductoNuevo"},
-                    {value: 2, name: "MotorRecon"},
-                    {value: 3, name: "RepuestoNuevo"},
-                    {value: 4, name: "RepuestoDefectuoso"},
-                    {value: 5, name: "Cap"},
-                    {value: 6, name: "ExtendidaMayor"},
-                    {value: 7, name: "Cdc"},
-                    {value: 8, name: "Trp"},
-                    {value: 9, name: "Atc"},
-                    {value: 10, name: "Memo"},]
-
-  viewsTypesWarranty = {
-    a:false,
-    b:false,
-    c:false,
-    d:false,
-    e:false,
-    f:false,
-    g:false,
-    h:false,
-    i:false,
-  }
+  //para usarlo como data inicial del esn y donde se va a cargar el esn que se va a usar en la garantía
+  esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
+  //para usarlo como data inicial del os y donde se va a cargar el os que se va a usar en la garantía
+  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'}
+  //tipo de garantia juntos a sus campos
+  warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
+  //quejas
+  viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,}
   complaints:any[];
   formRegisterEngine:FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   codeAreaServicios:any;
-  users=[{value:1,name:'Abel Nalvate Ramirez'},
-        {value:2,name:'Alexander Flores Cisneros'},
-        {value:3,name:'Alejandro Gonzales Sánchez'},];
-  idMatricula:any;
+  users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
 
-  constructor(private readonly matDialog: MatDialog, private readonly router: Router,
-              private readonly garantiasService: GarantiasService,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
-              private _snackBar: MatSnackBar) { }
+  constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.type = localStorage.getItem('text');
-    this.action = localStorage.getItem('action');
+    this.typeWarrantyText = localStorage.getItem('text'); //trae de localstorge el tipo de garantia a crear (motor o generador)
+    this.action = localStorage.getItem('action'); //trae de localStorage el tipo de acción que se hará (crear e editar)
     this.configurationAndMaintenanceService.getEnum('02').subscribe(resp=>{
-      console.log(resp);
+      // console.log(resp);
     });
     this.configurationAndMaintenanceService.listEnrollmentByEsn('100').subscribe(resp=>{
-      console.log(resp);
+      // console.log(resp);
     });
     this.loadComplaints();
     this.loadFormRegisterEngine();
@@ -96,10 +65,10 @@ export class EngineComponent implements OnInit {
   loadFormRegisterEngine():void{
     if(this.action=='new'){
       this.formRegisterEngine = new FormGroup({
-        esn: new FormControl('',[Validators.required]),
-        os: new FormControl('',[Validators.required]),
+        esn: new FormControl(''),
+        os: new FormControl(''),
         //
-        tipoGarantia: new FormControl([Validators.required]),
+        tipoGarantia: new FormControl(null),
         puntoFalla: new FormControl(''),
         medida: new FormControl(),
         fechaFalla: new FormControl(),
@@ -110,12 +79,12 @@ export class EngineComponent implements OnInit {
         fechaAdicional: new FormControl(),
         ejecucionAdicional: new FormControl(''),
         //
-        idQueja1: new FormControl([Validators.required]),
-        idQueja2: new FormControl(),
-        idQueja3: new FormControl(),
-        idQueja4: new FormControl(),
-        comentarios: new FormControl('',[Validators.required]),
-        idUsuarioEvaluador: new FormControl([Validators.required]),
+        idQueja1: new FormControl(null),
+        idQueja2: new FormControl(null),
+        idQueja3: new FormControl(null),
+        idQueja4: new FormControl(null),
+        idUsuarioEvaluador: new FormControl(null),
+        comentarios: new FormControl('')
       })
     }else{
       this.warranty = JSON.parse(localStorage.getItem('garantia')); //usar esta variable para llenar la data de la garantia a gestionar en el formulario
@@ -136,11 +105,11 @@ export class EngineComponent implements OnInit {
         ejecucionAdicional: new FormControl(''),
         //
         idQueja1: new FormControl([Validators.required]),
-        idQueja2: new FormControl(),
-        idQueja3: new FormControl(),
-        idQueja4: new FormControl(),
-        comentarios: new FormControl('',[Validators.required]),
+        idQueja2: new FormControl([Validators.required]),
+        idQueja3: new FormControl([Validators.required]),
+        idQueja4: new FormControl([Validators.required]),
         idUsuarioEvaluador: new FormControl([Validators.required]),
+        comentarios: new FormControl('',[Validators.required])
       })
     }
   }
@@ -150,14 +119,29 @@ export class EngineComponent implements OnInit {
     if(esn!=''){
       this.garantiasService.findEsn(esn).subscribe(resp=>{
         if(resp.body){
-          this.enrollmentByEsn = resp.body;
-          this.idMatricula = 5;
+          this.esn = resp.body;
         }else{
           this.openSnackBar('No existe matricula con tal ESN');
+          this.esn.id = '-';
+          this.esn.cliente = '-';
+          this.esn.direccion = '-';
+          this.esn.aplicacion = '-';
+          this.esn.modelo = '-';
+          this.esn.etoPto = '-';
+          this.esn.fechaInicioGarantia = '-';
+          this.esn.bis = false;
         }
       })
     }else{
       this.openSnackBar('Ingrese el ESN');
+      this.esn.id = '-';
+      this.esn.cliente = '-';
+      this.esn.direccion = '-';
+      this.esn.aplicacion = '-';
+      this.esn.modelo = '-';
+      this.esn.etoPto = '-';
+      this.esn.fechaInicioGarantia = '-';
+      this.esn.bis = false;
     }
   }
 
@@ -166,15 +150,23 @@ export class EngineComponent implements OnInit {
     if(os!=''){
       this.garantiasService.findOs(os).subscribe(resp=>{
         if(resp.body){
-          this.osObject = resp.body;
-          this.codeAreaServicios = resp.body.codAreaServicios;
-          console.log(this.codeAreaServicios);
+          this.os = resp.body;
         }else{
-          this.openSnackBar('No existe tal OS');
+          this.openSnackBar('No existe el OS ingresado, pruebe con otro');
+          this.os.claseActividad = '-';
+          this.os.codAreaServicios = '-';
+          this.os.fechaLib = '-';
+          this.os.os = '-';
+          this.os.bu = '-';
         }
       })
     }else{
       this.openSnackBar('Ingrese el OS');
+      this.os.claseActividad = '-';
+      this.os.codAreaServicios = '-';
+      this.os.fechaLib = '-';
+      this.os.os = '-';
+      this.os.bu = '-';
     }
   }
 
@@ -198,25 +190,6 @@ export class EngineComponent implements OnInit {
     this.router.navigate(['/garantias']);
   }
 
-  openDialogOperationSuccessfully(textDialog:string):void{
-    const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
-      data:{text:textDialog}
-    });
-    dialogOperationSuccessfully.afterClosed().subscribe();
-  }
-
-  onOpenDialogSaveDraft():void{
-    const dialogSaveDraft = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-      disableClose:true,
-      data: {text:'Se guardo el borrador extosamente'}
-    });
-    dialogSaveDraft.afterClosed().subscribe(resp=>{
-      if(resp){
-        this.router.navigate(['/garantias']);
-      }
-    })
-  }
-
   onOpenDialogHistoryEsn():void{
     const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
       data:{type:'engine', name: 'motor'},
@@ -224,19 +197,9 @@ export class EngineComponent implements OnInit {
     });
   }
 
-  openSnackBar(message:string):void{
-    this._snackBar.open(message,'Entendido',{
-      duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      panelClass: ['mat-toolbar', 'mat-primary','button-color']
-    })
-  }
-  
+
   selectTypeWarranty(){
-    const type = this.formRegisterEngine.value.tipoGarantia;
-    console.log(this.formRegisterEngine.value.tipoGarantia);
-    switch (type) {
+    switch (this.formRegisterEngine.value.tipoGarantia) {
       case 1:
         this.viewsTypesWarranty.a = true;
         this.viewsTypesWarranty.b = true;
@@ -352,55 +315,76 @@ export class EngineComponent implements OnInit {
     }
   }
 
-  // onGetForm(data:any):void{
-  //   console.log(data);
-  //   if(data.success){
-  //     this.typeWarranty = {...data.form}
-  //   }else{
-  //     console.log('ingresar los campos del tipo de garantía')
-  //   }
-  // }
 
-  onSendRegister():void{
-    if(this.formRegisterEngine.valid){
-      const request = {
-                      id:0,
-                      bandeja:1,
-                      idMatricula:this.idMatricula,
-                      estado:0,
-                      codAreaServicios:this.codeAreaServicios,
-                      ...this.formRegisterEngine.value};
-      this.garantiasService.saveWarranty(request).subscribe(resp=>{
-        if(resp.success){
-          localStorage.setItem('success','true');
-          this.router.navigate(['/garantias']);
-        }
-      });
+  onSendRegister(action):void{
+    if(this.esn.id=='-'){
+      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un ESN válido!'},disableClose:true});
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Llene todos los campos necesarios'}
-      })     
-    }
-  }
-
-  onSendDraft():void{
-    if(this.formRegisterEngine.valid){
-      const request = {
-                      id:0,
-                      bandeja:0,
-                      idMatricula:this.idMatricula,
-                      estado:0,
-                      codAreaServicios:this.codeAreaServicios,
-                      ...this.formRegisterEngine.value};
-      this.garantiasService.saveWarranty(request).subscribe(resp=>{
-        if(resp.success){
-          this.onOpenDialogSaveDraft();
+      if(this.os.codAreaServicios=='-'){
+        const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un OS válido!'},disableClose:true});
+      }else{
+        if(this.formRegisterEngine.value.tipoGarantia==null){
+          const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un tipo de garantía!'},disableClose:true});
+        }else{
+          if(this.formRegisterEngine.value.idQueja1==null){
+            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la primera queja!'},disableClose:true});
+          }else{
+            if(this.formRegisterEngine.value.idQueja2==null){
+              const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la segunda queja!'},disableClose:true});
+            }else{
+              if(this.formRegisterEngine.value.idQueja3==null){
+                const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la tercera queja!'},disableClose:true});
+              }else{
+                if(this.formRegisterEngine.value.idQueja4==null){
+                  const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la cuarta queja!'},disableClose:true});
+                }else{
+                  if(this.formRegisterEngine.value.idUsuarioEvaluador==null){
+                    const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un usuario registrador!'},disableClose:true});
+                  }else{
+                    if(this.formRegisterEngine.value.comentarios==''){
+                      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
+                    }else{
+                      const data = {
+                        id:0,
+                        idMatricula:this.esn.id,
+                        codAreaServicios:this.os.codAreaServicios,
+                        ...this.formRegisterEngine.value
+                      }
+                      switch(action){
+                        case 'borrador':
+                          const requestBorrador = {...data,bandeja:0};
+                          console.log(requestBorrador);
+                          this.garantiasService.saveWarranty(requestBorrador).subscribe(resp=>{
+                            if(resp.success){
+                              this.onOpenDialogSaveDraft();
+                            }
+                          });
+                          break;
+                        case 'blanca':
+                          const requestBlanca = {...data,bandeja:1};
+                          console.log(requestBlanca);
+                          this.garantiasService.saveWarranty(requestBlanca).subscribe(resp=>{
+                            if(resp.success){
+                              localStorage.setItem('success','true');
+                              this.router.navigate(['/garantias']);
+                            }
+                          });
+                          break;
+                        case 'naranja':
+                          const requestNaranja = {...data,bandeja:2}  
+                          console.log(requestNaranja);                                                  
+                          break;
+                        default:
+                          break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
-      });
-    }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Llene todos los campos necesarios'}
-      })     
+      }
     }
   }
 
@@ -427,4 +411,51 @@ export class EngineComponent implements OnInit {
       console.log(resp);
     });
   }
+
+  onObservedRecord():void{
+    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
+      disableClose:true,
+      width:'380px',
+      data: {text:'¿Estás seguro de que deseas observar este registro?'}
+    });
+    dialogObservedRecord.afterClosed().subscribe(resp=>{
+      console.log(resp);
+    });
+  }
+
+  onTransfornRecordToOrange():void{
+    const dialogTransforRecordToOrange = this.matDialog.open(DialogTransformRecordToOrangeComponent,{
+      disableClose:true,
+      width:'936px'
+    });
+  }
+
+  openDialogOperationSuccessfully(textDialog:string):void{
+    const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+      data:{text:textDialog}
+    });
+    dialogOperationSuccessfully.afterClosed().subscribe();
+  }
+
+  onOpenDialogSaveDraft():void{
+    const dialogSaveDraft = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+      disableClose:true,
+      data: {text:'Se guardo el borrador extosamente'}
+    });
+    dialogSaveDraft.afterClosed().subscribe(resp=>{
+      if(resp){
+        this.router.navigate(['/garantias']);
+      }
+    })
+  }
+  
+  openSnackBar(message:string):void{
+    this._snackBar.open(message,'x',{
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['mat-toolbar', 'mat-primary','button-color']
+    })
+  }
+  
 }

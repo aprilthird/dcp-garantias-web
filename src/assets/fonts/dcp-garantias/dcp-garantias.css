@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'IcoMoon';
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot');
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.ttf') format('truetype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.woff') format('woff'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.svg#icomoon') format('svg');
+  font-family: 'icomoon';
+  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?fzv4qr');
+  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?fzv4qr#iefix') format('embedded-opentype'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.ttf?fzv4qr') format('truetype'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.woff?fzv4qr') format('woff'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.svg?fzv4qr#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -39,6 +39,12 @@
 }
 .icon-electric-generator:before {
   content: "\e901";
+}
+.icon-info:before {
+  content: "\ea0c";
+}
+.icon-cross:before {
+  content: "\ea0f";
 }
 .icon-checkbox-checked:before {
   content: "\ea52";

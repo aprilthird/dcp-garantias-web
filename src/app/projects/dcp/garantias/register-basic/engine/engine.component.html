@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 margin-b-15">
-            <h4 class="font-w-700 margin-b-15">Crear registro básico del {{type}}</h4>
+            <h4 class="font-w-700 margin-b-15">Crear registro básico del {{typeWarrantyText}}</h4>
             <span class="pointer" (click)="onGarantias()">Garantías</span> > <span class="text-red pointer">Crear registro</span>
         </div>
         <div class="col-md-12">
@@ -14,7 +14,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">ESN</mat-label>
-                                        <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
+                                        <input matInput type="text" placeholder="Buscar ESN" formControlName="esn" (ngModelChange)="getEsn()">
                                         <button mat-icon-button matSuffix (click)="getEsn()">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
@@ -23,7 +23,7 @@
                                 <div class="col-md-2 flex-align-center">
                                     <span class="flex-align-center pointer" (click)="onOpenDialogHistoryEsn()">
                                         <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
-                                        Historial de ESN
+                                        Historial de {{typeWarrantyText=='motor'?'ESN':'GSN'}}
                                     </span>
                                 </div>
                                 <div class="col-md-3 flex-align-center">
@@ -41,47 +41,47 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Cliente</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.cliente">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.cliente">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Direccion</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.direccion">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.direccion">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
-                                            <mat-label for="">Aplicacion del {{type}}</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.aplicacion">
+                                            <mat-label for="">Aplicacion del {{typeWarrantyText}}</mat-label>
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.aplicacion">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
-                                            <mat-label for="">Modelo del {{type}}</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.modelo">
+                                            <mat-label for="">Modelo del {{typeWarrantyText}}</mat-label>
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.modelo">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">CPL</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.cpl">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.cpl">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">ETO/PTO</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.etoPto">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.etoPto">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha inicio de garantía</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="enrollmentByEsn.fechaInicioGarantia">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicioGarantia">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 flex-align-center">
-                                        <mat-checkbox color="primary" [value]="enrollmentByEsn.bis" [disabled]="true">BIS</mat-checkbox>
+                                        <mat-checkbox color="primary" [value]="esn.bis" [disabled]="true">BIS</mat-checkbox>
                                     </div>
                                 </div>
                             </mat-card>
@@ -91,7 +91,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">Orden de servicio</mat-label>
-                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
+                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os" (ngModelChange)="getOs()">
                                         <button mat-icon-button matSuffix (click)="getOs()">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
@@ -100,7 +100,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">BU</mat-label>
-                                        <input matInput type="text" placeholder="" [disabled]="true">
+                                        <input matInput type="text" placeholder="" [disabled]="true" [value]="os.bu">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3"></div>
@@ -116,19 +116,19 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Clase de actividad</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.claseActividad">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.claseActividad">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha de liberacion</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.fechaLib">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.fechaLib">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Area de servicios</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="osObject.codAreaServicios">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.codAreaServicios">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -275,11 +275,11 @@
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
                     <button mat-raised-button (click)="onsaveRegister()">Guardar</button>
                     <button mat-raised-button (click)="onReject()">Rechazar</button>
-                    <button mat-raised-button (click)="true">Observar</button>
-                    <button mat-raised-button color="primary" (click)="true">Transformar</button>
+                    <button mat-raised-button (click)="onObservedRecord()">Observar</button>
+                    <button mat-raised-button color="primary" (click)="onTransfornRecordToOrange()">Transformar</button>
 
-                    <button mat-raised-button (click)="onSendDraft()">Guardar borrador</button>
-                    <button mat-raised-button color="primary" (click)="onSendRegister()">Enviar registro</button>                    
+                    <button mat-raised-button (click)="onSendRegister('borrador')">Guardar borrador</button>
+                    <button mat-raised-button color="primary" (click)="onSendRegister('blanca')">Enviar registro</button>                    
                 </mat-card-actions>
             </mat-card>
         </div>

@@ -2,16 +2,16 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-dialog-reject',
-  templateUrl: './dialog-reject.component.html',
-  styleUrls: ['./dialog-reject.component.scss']
+  selector: 'app-dialog-observation',
+  templateUrl: './dialog-observation.component.html',
+  styleUrls: ['./dialog-observation.component.scss']
 })
-export class DialogRejectComponent implements OnInit {
+export class DialogObservationComponent implements OnInit {
 
   comentario : string = '';
-  
-  constructor(private readonly matDialogRef: MatDialogRef<DialogRejectComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) { }
+
+  constructor(private readonly matDialogRef: MatDialogRef<DialogObservationComponent>,
+    @Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit(): void {
   }

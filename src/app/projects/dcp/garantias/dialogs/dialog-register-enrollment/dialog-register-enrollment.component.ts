@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-register-enrollment',
@@ -13,12 +15,13 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   engineModels=[];
   engineApplications=[];
   clients = [];
-  directionClient:any;
+  directionClient:string='';
   formEnrollment:FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private readonly dialogRef: MatDialogRef<DialogRegisterEnrollmentComponent>,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) {
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
+              private readonly matDialog: MatDialog) {
    }
 
   ngOnInit(): void {
@@ -83,7 +86,10 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
           if(resp.success){
             this.dialogRef.close(true);
           }else{
-            console.log('error en la creacion de la matricula')
+            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+              data:{text:'Error del servicio en la creacion de la matricula'},
+              disableClose:true
+            });
           }
         });
       }else{
@@ -93,12 +99,18 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
           if(resp.success){
             this.dialogRef.close(true);
           }else{
-            console.log('error en la edicion de la matricula')
+            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+              data:{text:'Error del servicio en la edicion de la matricula'},
+              disableClose:true
+            });
           }
         })
       }
     }else{
-      console.log('Ingrese todos los datos');
+      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+        data:{text:'Ingrese todos los campos necesarios'},
+        disableClose:true
+      });
     }
   }
 

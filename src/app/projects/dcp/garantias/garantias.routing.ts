@@ -4,6 +4,7 @@ import { GarantiasListComponent } from "./garantias-list/garantias-list.componen
 import { EngineComponent } from "./register-basic/engine/engine.component";
 import { GeneratorComponent } from "./register-basic/generator/generator.component";
 import { MassiveBasicRegistrationComponent } from "./massive-basic-registration/massive-basic-registration.component";
+import { ChangeTrayComponent } from './change-tray/change-tray.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'massive-basic-registration',
     component: MassiveBasicRegistrationComponent
+  },
+  {
+    path: 'change-tray',
+    component: ChangeTrayComponent
   }
 ];
 
