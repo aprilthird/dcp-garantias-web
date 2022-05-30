@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>Cliente:</mat-label>
+                            <mat-label>Cliente <span class="color-red">*</span></mat-label>
                             <mat-select placeholder="seleccionar" formControlName="idCliente" (ngModelChange)="setDirectionClient()">
                                 <mat-option *ngFor="let item of clients" [value]="item.id">
                                     {{item.razonSocial}}
@@ -33,13 +33,13 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>ESN</mat-label>
+                            <mat-label>ESN <span class="color-red">*</span></mat-label>
                             <input matInput type="text" formControlName="esn">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>Modelo del {{data.name}}</mat-label>
+                            <mat-label>Modelo del {{data.name}} <span class="color-red">*</span></mat-label>
                             <mat-select placeholder="seleccionar" formControlName="idModelo">
                                 <mat-option *ngFor="let item of engineModels" [value]="item.id">
                                     {{item.codigo}}
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>Aplicacion del {{data.name}}</mat-label>
+                            <mat-label>Aplicacion del {{data.name}} <span class="color-red">*</span></mat-label>
                             <mat-select placeholder="Placeholder" formControlName="idAplicacion">
                                 <mat-option *ngFor="let item of engineApplications" [value]="item.id">
                                     {{item.codigo}}
@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>CPL</mat-label>
+                            <mat-label>CPL <span class="color-red">*</span></mat-label>
                             <input matInput type="text" formControlName="cpl">
                         </mat-form-field>     
                     </div>
@@ -68,7 +68,7 @@
                     </div>                                  
                     <div class="col-md-4">
                         <mat-form-field appearance="fill">
-                            <mat-label>Fecha de inicio de garantía</mat-label>
+                            <mat-label>Fecha de inicio de garantía <span class="color-red">*</span></mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="fechaInicioGarantia">
                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field>
-                            <mat-label>ETO / PTO</mat-label>
+                            <mat-label>PTO</mat-label>
                             <input matInput type="text" formControlName="etoPto">
                         </mat-form-field>                    
                     </div>

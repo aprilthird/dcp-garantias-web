@@ -31,13 +31,16 @@ export class EngineComponent implements OnInit {
   os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'}
   //tipo de garantia juntos a sus campos
   warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
-  //quejas
+  //para controlar la vista de cada tipo de garantia
   viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,}
+  //listado de las quejas
   complaints:any[];
+  //formulario
   formRegisterEngine:FormGroup;
+  //configuraciones para el snackbar
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  codeAreaServicios:any;
+  //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
@@ -192,7 +195,7 @@ export class EngineComponent implements OnInit {
 
   onOpenDialogHistoryEsn():void{
     const dialogHistoriaEsn = this.matDialog.open(DialogHistoriaESNComponent,{
-      data:{type:'engine', name: 'motor'},
+      data:{type:this.typeWarrantyText},
       width: '900px'
     });
   }

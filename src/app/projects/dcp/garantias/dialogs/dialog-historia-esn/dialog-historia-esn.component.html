@@ -1,7 +1,7 @@
 <div matDialogTitle>
     <div  class="row">
         <div class="col-md-11 margin-b-15">
-            <span>Historial ESN</span>
+            <span>Historial {{data.type=='motor'?'ESN':'GSN'}}</span>
         </div>
         <div class="col-md-1 text--end margin-b-15">
             <mat-icon class="pointer" svgIcon="close" (click)="onClose()"></mat-icon>
@@ -19,46 +19,32 @@
     </div>
 </div>
 <div matDialogContent class="row">
-    <div class="col-md-12" *ngIf="seeTable">
+    <div class="col-md-12" *ngIf="seeTable" style="margin-bottom: 10px;">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
-          
-            <!-- Position Column -->
             <ng-container matColumnDef="pgbuClaim">
-              <th mat-header-cell *matHeaderCellDef> PGBU Claim# </th>
-              <td mat-cell *matCellDef="let element"> {{element.pgbuClaim}} </td>
+              <th mat-header-cell *matHeaderCellDef width="17%">{{data.type=='motor'?'Claim':'PGBU Claim'}}</th>
+              <td mat-cell *matCellDef="let element">{{element.pgbuClaim}}</td>
             </ng-container>
-          
-            <!-- Name Column -->
             <ng-container matColumnDef="numberOs">
-              <th mat-header-cell *matHeaderCellDef> N° OS </th>
-              <td mat-cell *matCellDef="let element"> {{element.numeroOs}} </td>
+              <th mat-header-cell *matHeaderCellDef width="17%">OS</th>
+              <td mat-cell *matCellDef="let element">OS2000{{element.numeroOs}}</td>
             </ng-container>
-          
-            <!-- Weight Column -->
             <ng-container matColumnDef="serviceArea">
-              <th mat-header-cell *matHeaderCellDef> Area de Servicio </th>
+              <th mat-header-cell *matHeaderCellDef width="17%">Area</th>
               <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
             </ng-container>
-          
-            <!-- Symbol Column -->
             <ng-container matColumnDef="invoiceNumber">
-              <th mat-header-cell *matHeaderCellDef> Invoice Number</th>
+              <th mat-header-cell *matHeaderCellDef width="17%">{{data.type=='motor'?'Statement':'Invoice'}} Number<span title="descargar" class="pointer font-w-700">#</span></th>
               <td mat-cell *matCellDef="let element"> {{element.invoiceNumber}} </td>
             </ng-container>
-
             <ng-container matColumnDef="montoFinal">
-                <th mat-header-cell *matHeaderCellDef> Monto Final </th>
+                <th mat-header-cell *matHeaderCellDef width="17%"> Monto Final </th>
                 <td mat-cell *matCellDef="let element"> {{element.montoFinal}} </td>
             </ng-container>
-
             <ng-container matColumnDef="fechaCartaCredito">
-                <th mat-header-cell *matHeaderCellDef> Fecha de Carta de Credito </th>
+                <th mat-header-cell *matHeaderCellDef width="15%"> Fecha de Carta de Credito </th>
                 <td mat-cell *matCellDef="let element"> {{element.fechaCartaCredito}} </td>
-            </ng-container>              
-          
+            </ng-container>                        
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>

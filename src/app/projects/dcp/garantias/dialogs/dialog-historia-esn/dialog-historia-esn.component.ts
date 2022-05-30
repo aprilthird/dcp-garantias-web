@@ -37,7 +37,7 @@ export class DialogHistoriaESNComponent implements OnInit {
   esnForm:FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  seeTable:boolean = false;
+  seeTable:boolean = true;
   seeNoRecords:boolean = false;
   
   constructor( @Inject(MAT_DIALOG_DATA) public data, private readonly dialogRef: MatDialogRef<DialogHistoriaESNComponent>,
@@ -46,7 +46,6 @@ export class DialogHistoriaESNComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFormEsn();
-    console.log(this.data);
   }
 
   onClose():void{
@@ -63,13 +62,12 @@ export class DialogHistoriaESNComponent implements OnInit {
     if(this.esnForm.valid){
       // const request = {filter : {esn: this.esnForm.value.esn,fechaFin: '2022-05-12T09:47:38.423',fechaIni: '2022-05-12T09:47:38.423'}};
       this.garantiasService.findHistoryEsn(this.esnForm.value.esn).subscribe(resp=>{
-        console.log(resp);
         this.dataSource = resp.data;
         if(this.dataSource.length>0){
           this.seeTable = true;
           this.seeNoRecords = false;
         }else{
-          this.seeTable = false;
+          this.seeTable = true;
           this.seeNoRecords = true;
         }
       })

@@ -1,8 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 margin-b-15">
-            <h4 class="font-w-700 margin-b-15">Crear registro básico del {{typeWarrantyText}}</h4>
-            <span class="pointer" (click)="onGarantias()">Garantías</span> > <span class="text-red pointer">Crear registro</span>
+            <h4 *ngIf="this.action=='new'" class="font-w-700 margin-b-15">Crear registro básico del {{typeWarrantyText}}</h4>
+            <h4 *ngIf="this.action=='edit'" class="font-w-700 margin-b-15">Interna de registro Nº122344555</h4>
+            <span class="pointer" (click)="onGarantias()">Garantías</span> > <span class="text-red pointer"> {{this.action=='new'?'Crear registro':'Registro de garantía'}}</span>
         </div>
         <div class="col-md-12">
             <mat-card>
@@ -77,7 +78,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha inicio de garantía</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicioGarantia">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicioGarantia=='-'?'-':esn.fechaInicioGarantia | date: 'dd/MM/yyyy' ">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 flex-align-center">
@@ -175,7 +176,6 @@
                                     <mat-radio-group aria-label="Select an option" color="primary" formControlName="medida">
                                         <mat-radio-button value="h">H</mat-radio-button>
                                         <mat-radio-button value="km">KM</mat-radio-button>
-                                        <mat-radio-button value="mi">MI</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.c">
@@ -217,7 +217,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 margin-b-15">
-                                    <span class="font-w-500 font-sz-16">Quejas o Reclamos</span>
+                                    <span class="font-w-500 font-sz-16">Quejas</span>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
-                                        <mat-label for="">Usuario registrador</mat-label>
+                                        <mat-label for="">Usuario Evaluador</mat-label>
                                         <mat-select placeholder="Placeholder" formControlName="idUsuarioEvaluador">
                                             <mat-option *ngFor="let user of users" [value]="user.value">{{user.name}}</mat-option>
                                         </mat-select>
@@ -273,13 +273,12 @@
                     </form>
                 </mat-card-content>
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
-                    <button mat-raised-button (click)="onsaveRegister()">Guardar</button>
-                    <button mat-raised-button (click)="onReject()">Rechazar</button>
-                    <button mat-raised-button (click)="onObservedRecord()">Observar</button>
-                    <button mat-raised-button color="primary" (click)="onTransfornRecordToOrange()">Transformar</button>
-
-                    <button mat-raised-button (click)="onSendRegister('borrador')">Guardar borrador</button>
-                    <button mat-raised-button color="primary" (click)="onSendRegister('blanca')">Enviar registro</button>                    
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onsaveRegister()">Guardar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onReject()">Rechazar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onObservedRecord()">Observar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" color="primary" (click)="onTransfornRecordToOrange()">Transformar</button>
+                    <button mat-raised-button *ngIf="this.action=='new'" (click)="onSendRegister('borrador')">Guardar borrador</button>
+                    <button mat-raised-button *ngIf="this.action=='new'" color="primary" (click)="onSendRegister('blanca')">Enviar registro</button>                    
                 </mat-card-actions>
             </mat-card>
         </div>

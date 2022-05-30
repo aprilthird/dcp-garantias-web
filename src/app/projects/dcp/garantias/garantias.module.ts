@@ -19,7 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatRadioModule} from '@angular/material/radio';
 import { DialogRegisterEnrollmentComponent } from './dialogs/dialog-register-enrollment/dialog-register-enrollment.component';
-import { MatRippleModule} from '@angular/material/core';
+import { MatRippleModule, MAT_DATE_LOCALE} from '@angular/material/core';
 import { DialogDraftSavedSuccessfullyComponent } from './dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
 import { MassiveBasicRegistrationComponent } from './massive-basic-registration/massive-basic-registration.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -85,6 +85,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatSnackBarModule,
     ReactiveFormsModule,
     MatExpansionModule
-  ]
+  ],
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })
 export class GarantiasModule { }
