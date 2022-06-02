@@ -146,13 +146,16 @@
                   <ng-container matColumnDef="inbox">
                     <th mat-header-cell *matHeaderCellDef> Bandeja </th>
                     <td mat-cell *matCellDef="let element">
-                      <button [ngClass]="{'bgr-gray':element.bandeja==0}" mat-stroked-button>{{getWordInbox(element.bandeja)}}</button>
+                      <button style="color: #64748B; font-weight: 600;" [class]="'state'+element.bandeja" [ngClass]="{'bgr-gray':element.bandeja==0}" mat-stroked-button>
+                        {{getWordInbox(element.bandeja)}}
+                      </button>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="state">
                     <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.nombreEstado=='observado'}">
-                      <mat-icon [ngClass]="{'observed':element.nombreEstado=='observado'}" [class]="'state'+element.nombreEstado" *ngIf="element.nombreEstado=='observado'" svgIcon="heroicons_outline:exclamation"></mat-icon><span>{{element.nombreEstado}}</span>
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
+                      <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
+                      <span>{{element.estado==1?'Rechazado':element.estado==2?'Observado':'Activo'}}</span>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="actions">
@@ -238,10 +241,9 @@
                   
                 </table>
               
-                <div class="flex-xy-center mt-3">
-                  <span>Total de garantías registradas: </span><span class="font-w-500"> {{totalWarranties}}</span>
-                  <span>--</span>
-                  <span> Pagina: </span><span class="font-w-500">{{pageCurrent}} de {{numberOfPages}}</span>
+                <div class="pb-3 text-right">
+                  <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
+                  <span class="mr-1">Total:</span><span class="font-w-500">{{totalWarranties}}</span>
                   <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
                     <mat-icon>chevron_left</mat-icon>
                   </button>

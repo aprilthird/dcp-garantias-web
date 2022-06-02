@@ -104,16 +104,19 @@
             </div>
         </div>
         <div class="col-md-12 buttons margin-b-20">
-            <button class="step" mat-raised-button>Detalles del reclamo</button>
-            <button class="step" mat-raised-button>Fallas</button>
-            <button class="step" mat-raised-button>SRT</button>
-            <button class="step" mat-raised-button>Partes</button>
-            <button class="step" mat-raised-button>Otros reclamables</button>
-            <button class="step" mat-raised-button>Viajes</button>
-            <button class="step" mat-raised-button>Narrativa</button>
-            <button class="step" mat-raised-button>Verificación de detalle</button>
+            <button  [class]="styleButton.detallesStyle" mat-raised-button (click)="change('detalles')">Detalles del reclamo</button>
+            <button  [class]="styleButton.fallasStyle" mat-raised-button (click)="change('fallas')">Fallas</button>
+            <button  [class]="styleButton.srtStyle" mat-raised-button (click)="change('srt')">SRT</button>
+            <button  [class]="styleButton.partesStyle" mat-raised-button (click)="change('partes')">Partes</button>
+            <button  [class]="styleButton.otrosStyle" mat-raised-button (click)="change('otros')">Otros reclamables</button>
+            <button  [class]="styleButton.viajesStyle" mat-raised-button (click)="change('viajes')">Viajes</button>
+            <button  [class]="styleButton.narrativaStyle" mat-raised-button (click)="change('narrativa')">Narrativa</button>
+            <button  [class]="styleButton.verificacionStyle" mat-raised-button (click)="change('verificacion')">Verificación de detalle</button>
         </div>
-        <div class="col-md-12 fallas margin-b-15" *ngIf="false">
+        <div class="col-md-12" *ngIf="button.detalles">
+            asdas
+        </div>
+        <div class="col-md-12 fallas margin-b-15" *ngIf="button.fallas">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Fallas</h5>
@@ -200,7 +203,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 srt margin-b-15" *ngIf="false">
+        <div class="col-md-12 srt margin-b-15" *ngIf="button.srt">
             <div class="row">
                 <div class="col-md-9">
                     <span class="font-w-700">SRT</span>
@@ -355,7 +358,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 partes margin-b-15" *ngIf="false">
+        <div class="col-md-12 partes margin-b-15" *ngIf="button.partes">
             <div class="row">
                 <div class="col-md-9">
                     <span class="font-w-700">Partes</span>
@@ -464,7 +467,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 otrosReclamables margin-b-15" *ngIf="false">
+        <div class="col-md-12 otrosReclamables margin-b-15" *ngIf="button.otros">
             <div class="row">
                 <div class="col-md-8">
                     <span class="font-w-700">Otros reclamables</span>
@@ -553,7 +556,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 viajes margin-b-15" *ngIf="false">
+        <div class="col-md-12 viajes margin-b-15" *ngIf="button.viajes">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Viajes</h5>
@@ -707,7 +710,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 narrativa margin-b-15" *ngIf="false">
+        <div class="col-md-12 narrativa margin-b-15" *ngIf="button.narrativa">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Narrativa</h5>
@@ -761,7 +764,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 verificacionDetalle margin-b-15" *ngIf="true">           
+        <div class="col-md-12 verificacionDetalle margin-b-15" *ngIf="button.verificacion">           
              <div class="row">
                 <div class="col-md-9 margin-b-15">
                     <h5>Vereficacion detalle</h5>

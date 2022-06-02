@@ -28,7 +28,10 @@ export class GarantiasService {
   private urlFindOs = this.baseApiURl + '/Mantenimiento/BuscarOs';
   //traer bitacora
   private urlLogWarranty = this.baseApiURl + '/Core/ObtenerBitacora';
-
+  //agregar evaluacion de registro básico
+  private urlCheckList = this.baseApiURl + '/Mantenimiento/MantenimientoCheckList';
+  //agregar evaluacion de registro básico
+  private urlBitacora= this.baseApiURl + '/Core/MantenimientoBitacora';
 
   constructor(private readonly httpClient: HttpClient,
               private readonly authService: AuthService) { }
@@ -46,6 +49,10 @@ export class GarantiasService {
   deleteWarranty(_request:any):Observable<any>{
     console.log(_request);
     return this.httpClient.post(this.urlMaintenanceWarranties,_request,{headers:this.header});
+  }
+  //buscar ESN
+  checkList(_request:any):Observable<any>{          
+    return this.httpClient.post(this.urlCheckList,_request,{headers:this.header});
   }
   //buscar ESN
   findEsn(esn:string):Observable<any>{
@@ -71,4 +78,9 @@ export class GarantiasService {
   logWarranty(id):Observable<any>{
     return this.httpClient.get(this.urlLogWarranty+'/'+id,{headers:this.header});
   }
+
+    //traer bitacora
+    saveBitacora(_request:any):Observable<any>{          
+      return this.httpClient.post(this.urlBitacora,_request,{headers:this.header});
+    }
 }

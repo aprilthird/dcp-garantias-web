@@ -93,10 +93,10 @@ export class EngineComponent implements OnInit {
       this.warranty = JSON.parse(localStorage.getItem('garantia')); //usar esta variable para llenar la data de la garantia a gestionar en el formulario
       console.log(this.warranty);
       this.formRegisterEngine = new FormGroup({
-        esn: new FormControl('',[Validators.required]),
-        os: new FormControl('',[Validators.required]),
+        esn: new FormControl(this.warranty.esn,[Validators.required]),
+        os: new FormControl(this.warranty.os,[Validators.required]),
         //
-        tipoGarantia: new FormControl([Validators.required]),
+        tipoGarantia: new FormControl(this.warranty.idTipoGarantia,[Validators.required]),
         puntoFalla: new FormControl(''),
         medida: new FormControl(),
         fechaFalla: new FormControl(),
@@ -107,13 +107,15 @@ export class EngineComponent implements OnInit {
         fechaAdicional: new FormControl(),
         ejecucionAdicional: new FormControl(''),
         //
-        idQueja1: new FormControl([Validators.required]),
-        idQueja2: new FormControl([Validators.required]),
-        idQueja3: new FormControl([Validators.required]),
-        idQueja4: new FormControl([Validators.required]),
-        idUsuarioEvaluador: new FormControl([Validators.required]),
-        comentarios: new FormControl('',[Validators.required])
-      })
+        idQueja1: new FormControl(this.warranty.idQueja1,[Validators.required]),
+        idQueja2: new FormControl(this.warranty.idQueja2,[Validators.required]),
+        idQueja3: new FormControl(this.warranty.idQueja3,[Validators.required]),
+        idQueja4: new FormControl(this.warranty.idQueja4,[Validators.required]),
+        idUsuarioEvaluador: new FormControl(this.warranty.idUsuarioEvaluador,[Validators.required]),
+        comentarios: new FormControl(this.warranty.comentarios,[Validators.required])
+      });
+      this.getEsn();
+      this.getOs();
     }
   }
 
@@ -348,35 +350,29 @@ export class EngineComponent implements OnInit {
                       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
                     }else{
                       const data = {
-                        id:0,
                         idMatricula:this.esn.id,
                         codAreaServicios:this.os.codAreaServicios,
                         ...this.formRegisterEngine.value
                       }
                       switch(action){
                         case 'borrador':
-                          const requestBorrador = {...data,bandeja:0};
-                          console.log(requestBorrador);
-                          this.garantiasService.saveWarranty(requestBorrador).subscribe(resp=>{
-                            if(resp.success){
-                              this.onOpenDialogSaveDraft();
-                            }
-                          });
+                          this.onSaveRegister(data,0);
                           break;
                         case 'blanca':
-                          const requestBlanca = {...data,bandeja:1};
-                          console.log(requestBlanca);
-                          this.garantiasService.saveWarranty(requestBlanca).subscribe(resp=>{
-                            if(resp.success){
-                              localStorage.setItem('success','true');
-                              this.router.navigate(['/garantias']);
-                            }
-                          });
+                            this.onSaveRegister(data,1);
+                          case 'edit':
+                            this.onEditRegister(data);
                           break;
                         case 'naranja':
-                          const requestNaranja = {...data,bandeja:2}  
-                          console.log(requestNaranja);                                                  
+                          this.onTransfornRecordToOrange(data);                                            
                           break;
+                        case 'observar':
+                          this.onObservedRecord(data);                                            
+                          break;
+                        case 'rechazar':
+                          this.onReject(data);
+                          break;
+                        
                         default:
                           break;
                       }
@@ -391,45 +387,105 @@ export class EngineComponent implements OnInit {
     }
   }
 
-  onsaveRegister():void{
-    const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-      disableClose:true,
-      data:{text:'Se guardó con éxito'}
-    });
-    dialogSaveRegister.afterClosed().subscribe(resp=>{
-      if(resp){
-        this.router.navigate(['/garantias']);
+  onSaveRegister(data,_bandeja):void{
+    const request = {...data,bandeja:_bandeja,id:0};
+    this.garantiasService.saveWarranty(request).subscribe(resp=>{
+      if(resp.success){
+        if(_bandeja==0){
+          this.onOpenDialogSaveDraft();
+        }
+        if(_bandeja==1){
+          localStorage.setItem('success','true');
+          this.router.navigate(['/garantias']);
+        }
       }
-    })
+    });
   }
 
-  onReject():void{
+  onEditRegister(data):void{
+  const requestEdit = {...data,id:this.warranty.id,activo:true};
+  this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
+    if(resp.success){
+        const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+          disableClose:true,
+          data:{text:'Se guardó con éxito'}
+        });
+        dialogSaveRegister.afterClosed().subscribe(resp=>{
+          if(resp){
+            this.router.navigate(['/garantias']);
+          }
+        });
+      }
+    });
+  }
+
+  onReject(data):void{
     const dialogReject = this.matDialog.open(DialogRejectComponent,{
-      disableClose:true,
-      width:'380px',
-      data: {text:'¿Estás seguro de rechazar este registro?',
-            description:'Al hacerlo el registro ingresará a una bandeja negra'}
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de rechazar este registro?',description:'Al hacerlo el registro ingresará a una bandeja negra'}
     });
-    dialogReject.afterClosed().subscribe(resp=>{
-      console.log(resp);
+    dialogReject.afterClosed().subscribe(dataDialog=>{
+      if(dataDialog.selection){
+        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            const requestGarantiaRechazado = {...data,id:this.warranty.id,estado:1,activo:true} 
+            this.garantiasService.saveWarranty(requestGarantiaRechazado).subscribe(responseGarantia=>{
+              if(responseGarantia.success){
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }
     });
   }
 
-  onObservedRecord():void{
+  onObservedRecord(data):void{
     const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
-      disableClose:true,
-      width:'380px',
-      data: {text:'¿Estás seguro de que deseas observar este registro?'}
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
     });
-    dialogObservedRecord.afterClosed().subscribe(resp=>{
-      console.log(resp);
+    dialogObservedRecord.afterClosed().subscribe(dataDialog=>{
+      if(dataDialog.selection){
+        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            const requestGarantiaObservada = {...data,id:this.warranty.id,estado:2,activo:true} 
+            this.garantiasService.saveWarranty(requestGarantiaObservada).subscribe(responseGarantia=>{
+              if(responseGarantia.success){
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }
     });
   }
 
-  onTransfornRecordToOrange():void{
+  onTransfornRecordToOrange(data):void{    
     const dialogTransforRecordToOrange = this.matDialog.open(DialogTransformRecordToOrangeComponent,{
       disableClose:true,
-      width:'936px'
+      width:'936px',
+      data:{idGarantia:this.warranty.id}
+    });
+    dialogTransforRecordToOrange.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog){
+        const requestNaranja = {...data,bandeja:2,id:this.warranty.id,activo:true};
+        this.garantiasService.saveWarranty(requestNaranja).subscribe(resp=>{
+            if(resp.success){
+              const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+                disableClose:true,
+                data:{text:'Se transformó con éxito'}
+              });
+              dialogSaveRegister.afterClosed().subscribe(resp=>{
+                if(resp){
+                  this.router.navigate(['/garantias']);
+                }
+              });
+            }
+        });
+      }else{
+        console.log('Error en la transformación');
+      }
     });
   }
 

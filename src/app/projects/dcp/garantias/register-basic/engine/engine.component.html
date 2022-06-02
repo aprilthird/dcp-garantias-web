@@ -123,7 +123,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha de liberacion</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.fechaLib">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.fechaLib=='-'?'-':os.fechaLib | date: 'dd/MM/yyyy' ">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -273,10 +273,10 @@
                     </form>
                 </mat-card-content>
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
-                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onsaveRegister()">Guardar</button>
-                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onReject()">Rechazar</button>
-                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onObservedRecord()">Observar</button>
-                    <button mat-raised-button *ngIf="this.action=='edit'" color="primary" (click)="onTransfornRecordToOrange()">Transformar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onSendRegister('edit')">Guardar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onSendRegister('rechazar')">Rechazar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" (click)="onSendRegister('observar')">Observar</button>
+                    <button mat-raised-button *ngIf="this.action=='edit'" color="primary" (click)="onSendRegister('naranja')">Transformar</button>
                     <button mat-raised-button *ngIf="this.action=='new'" (click)="onSendRegister('borrador')">Guardar borrador</button>
                     <button mat-raised-button *ngIf="this.action=='new'" color="primary" (click)="onSendRegister('blanca')">Enviar registro</button>                    
                 </mat-card-actions>

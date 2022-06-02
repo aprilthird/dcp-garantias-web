@@ -13,11 +13,11 @@
         <div class="row">
             <div class="col-md-4">
                 <mat-form-field appearance="fill">
-                    <mat-label class="font-w-700">Usuario elaborador de Informe</mat-label>
-                    <mat-select placeholder="Seleccione" formControlName="user">
-                        <mat-option>Usuario 1</mat-option>
-                        <mat-option>Usuario 2</mat-option>
-                        <mat-option>Usuario 3</mat-option>
+                    <mat-label class="font-w-700">Usuario elaborador de Informe <span class="text-red">*</span></mat-label>
+                    <mat-select placeholder="Seleccione" formControlName="idGarantia">
+                        <mat-option [value]="1">Usuario 1</mat-option>
+                        <mat-option [value]="2">Usuario 2</mat-option>
+                        <mat-option [value]="3">Usuario 3</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -27,12 +27,12 @@
                         <span class="font-w-700">Criterios</span>
                     </div>
                     <div class="col-md-6">
-                        <mat-checkbox class="example-margin" formControlName="datosOk" color="primary">Datos digitados correctamente</mat-checkbox>
-                        <mat-checkbox class="example-margin" formControlName="coherenciaOk" color="primary">Coherencia de unidades</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="criterio1" color="primary">Datos digitados correctamente</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="criterio3" color="primary">Coherencia de unidades</mat-checkbox>
                     </div>
                     <div class="col-md-6">
-                        <mat-checkbox class="example-margin" formControlName="garantiaOk" color="primary">Garantía válida</mat-checkbox>
-                        <mat-checkbox class="example-margin" formControlName="esnOk" color="primary">ESN registrado en el SQL</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="criterio2" color="primary">Garantía válida</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="criterio4" color="primary">ESN registrado en el SQL</mat-checkbox>
                     </div>
                 </div>
             </div>
@@ -40,5 +40,5 @@
     </form>
 </div>
 <div matDialogActions align="end">
-    <button mat-raised-button color="primary">Enviar</button>
+    <button mat-raised-button color="primary" (click)="saveEvaluation()">Enviar</button>
 </div>

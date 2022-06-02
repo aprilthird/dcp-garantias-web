@@ -23,13 +23,101 @@ export class ChangeTrayComponent implements OnInit {
   dataSourceNarrativa = ELEMENT_DATA;
   displayedColumnsNarrativa: string[] = ['quejas','idPromocion' ,'tecnico','causas','correcciones'];
 
+  button={
+    detalles:false,
+    fallas:false,
+    srt:false,
+    partes:false,
+    otros:false,
+    viajes:false,
+    narrativa:false,
+    verificacion:false
+  }
+  styleButton={
+    detallesStyle:'lightButton',
+    fallasStyle:'lightButton',
+    srtStyle:'lightButton',
+    partesStyle:'lightButton',
+    otrosStyle:'lightButton',
+    viajesStyle:'lightButton',
+    narrativaStyle:'lightButton',
+    verificacionStyle:'lightButton'
+  };
   constructor(private readonly matDialog: MatDialog, private readonly router: Router) { }
 
   ngOnInit(): void {
+    this.button.detalles = true;
+    this.styleButton.detallesStyle='darkButton';
   }
 
   onGarantias():void{
     this.router.navigate(['/garantias']);
+  }
+
+  clearButtons():void{
+    this.button.detalles = false;
+    this.styleButton.detallesStyle='lightButton';
+    this.button.fallas=false;
+    this.styleButton.fallasStyle='lightButton';
+    this.button.srt=false;
+    this.styleButton.srtStyle='lightButton';
+    this.button.partes=false;
+    this.styleButton.partesStyle='lightButton';
+    this.button.otros=false;
+    this.styleButton.otrosStyle='lightButton';
+    this.button.viajes=false;
+    this.styleButton.viajesStyle='lightButton';
+    this.button.narrativa=false;
+    this.styleButton.narrativaStyle='lightButton';
+    this.button.verificacion=false;
+    this.styleButton.verificacionStyle='lightButton';
+  }
+
+  change(view):void{
+    switch(view){
+      case 'detalles':
+        this.clearButtons();
+        this.button.detalles=true;
+        this.styleButton.detallesStyle = 'darkButton';
+        break;
+      case 'fallas':
+        this.clearButtons();
+        this.button.fallas=true;
+        this.styleButton.fallasStyle = 'darkButton';
+        break;
+      case 'srt':
+        this.clearButtons();
+        this.button.srt=true;
+        this.styleButton.srtStyle = 'darkButton';
+        break;
+      case 'partes':
+        this.clearButtons();
+        this.button.partes=true;
+        this.styleButton.partesStyle = 'darkButton';
+        break;
+      case 'otros':
+        this.clearButtons();
+        this.button.otros=true;
+        this.styleButton.otrosStyle = 'darkButton';
+        break;
+      case 'viajes':
+        this.clearButtons();
+        this.button.viajes=true;
+        this.styleButton.viajesStyle = 'darkButton';
+        break;
+      case 'narrativa':
+        this.clearButtons();
+        this.button.narrativa=true;
+        this.styleButton.narrativaStyle = 'darkButton';
+        break;
+      case 'verificacion':
+        this.clearButtons();
+        this.button.verificacion=true;
+        this.styleButton.verificacionStyle = 'darkButton';
+        break;
+        default:
+          break;
+    }
   }
 
 }
