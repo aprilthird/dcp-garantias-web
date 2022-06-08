@@ -1,16 +1,16 @@
 <!-- Navigation -->
-<fuse-vertical-navigation class="dark bg-white text-black print:hidden" [appearance]="navigationAppearance" [mode]="isScreenSmall ? 'over' : 'side'"
-    [name]="'mainNavigation'" [navigation]="navigation.default" [opened]="!isScreenSmall">
+<!-- <fuse-vertical-navigation class="dark bg-white text-black print:hidden" [appearance]="navigationAppearance" [mode]="isScreenSmall ? 'over' : 'side'"
+    [name]="'mainNavigation'" [navigation]="navigation.default" [opened]="!isScreenSmall"> -->
     <!-- Navigation header hook -->
-    <ng-container fuseVerticalNavigationContentHeader>
+    <!-- <ng-container fuseVerticalNavigationContentHeader> -->
         <!-- Logo -->
-        <div class="flex items-center h-15" style="margin-left: 26px;">
+        <!-- <div class="flex items-center h-15" style="margin-left: 26px;">
             <img [ngClass]="{'w-10': environment.project === 'dcp', 'w-50': environment.project === 'kmmp'}"
             src="assets/images/logo/logo-{{ environment.project }}.svg" alt="Logo image"/>
         </div>
     </ng-container>
-</fuse-vertical-navigation>
-
+</fuse-vertical-navigation> -->
+<app-menu-dcp style="width: 280px;background-color:#FFFFFF ;"></app-menu-dcp>
 <!-- Wrapper -->
 <div class="flex flex-col flex-auto w-full min-w-0">
 

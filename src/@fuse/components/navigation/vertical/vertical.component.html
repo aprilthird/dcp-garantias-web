@@ -6,11 +6,7 @@
     </div>
 
     <!-- Content -->
-    <div
-        class="fuse-vertical-navigation-content"
-        fuseScrollbar
-        [fuseScrollbarOptions]="{wheelPropagation: inner, suppressScrollX: true}"
-        #navigationContent>
+    <div class="fuse-vertical-navigation-content" fuseScrollbar [fuseScrollbarOptions]="{wheelPropagation: inner, suppressScrollX: true}" #navigationContent>
 
         <!-- Content header -->
         <div class="fuse-vertical-navigation-content-header mb-7">
@@ -22,6 +18,11 @@
 
             <!-- Skip the hidden items -->
             <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+
+                <fuse-vertical-navigation-basic-item
+                    [item]="menuPrincipal[0]"
+                    [name]="name">
+                </fuse-vertical-navigation-basic-item>
 
                 <!-- Aside -->
                 <ng-container *ngIf="item.type === 'aside'">

@@ -7,17 +7,18 @@
     <div class="fuse-vertical-navigation-item">
 
         <!-- Icon -->
-        <ng-container *ngIf="item.icon">
-            <mat-icon
+        <ng-container *ngIf="item.title">
+            <span class="icon-{{getIcon(item.title)}} icon-menu"></span>
+            <!-- <mat-icon
                 class="fuse-vertical-navigation-item-icon"
                 [ngClass]="item.classes?.icon"
-                [svgIcon]="item.icon"></mat-icon>
+                [svgIcon]="item.icon"></mat-icon> -->
         </ng-container>
 
         <!-- Title & Subtitle -->
         <div class="fuse-vertical-navigation-item-title-wrapper">
             <div class="fuse-vertical-navigation-item-title">
-                <span [ngClass]="item.classes?.title">
+                <span>
                     {{item.title}}
                 </span>
             </div>

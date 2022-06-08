@@ -18,6 +18,7 @@ import { DialogDeleteComponent } from './dialogs/dialog-delete/dialog-delete.com
 import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogRejectComponent } from './dialogs/dialog-reject/dialog-reject.component';
 import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-observation.component';
+import { MenuDcpComponent } from './components/menu-dcp/menu-dcp.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-
     UiDialogsComponent,
     GroupPositionPipe,
     TextFilterPipe,
+    MenuDcpComponent
   ],
   declarations: [
     UploadFileComponent,
@@ -51,6 +53,7 @@ import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-
     DialogErrorMessageComponent,
     DialogRejectComponent,
     DialogObservationComponent,
+    MenuDcpComponent,
   ],
   providers: [ExportExcelService],
 })

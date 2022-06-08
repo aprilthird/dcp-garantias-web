@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?fzv4qr');
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?fzv4qr#iefix') format('embedded-opentype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.ttf?fzv4qr') format('truetype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.woff?fzv4qr') format('woff'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.svg?fzv4qr#icomoon') format('svg');
+  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?wu2sgy');
+  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?wu2sgy#iefix') format('embedded-opentype'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.ttf?wu2sgy') format('truetype'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.woff?wu2sgy') format('woff'),
+    url('assets/fonts/dcp-garantias/fonts/icomoon.svg?wu2sgy#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -33,6 +33,29 @@
 }
 .icon-upload_file:before {
   content: "\e902";
+}
+.icon-garantia:before {
+  content: "\e909";
+  color: #fff;
+}
+.icon-report:before {
+  content: "\e90a";
+}
+.icon-configuracion:before {
+  content: "\e905";
+  color: #fff;
+}
+.icon-herramientas:before {
+  content: "\e906";
+  color: #fff;
+}
+.icon-fallas:before {
+  content: "\e907";
+  color: #fff;
+}
+.icon-home:before {
+  content: "\e908";
+  color: #fff;
 }
 .icon-car:before {
   content: "\e900";

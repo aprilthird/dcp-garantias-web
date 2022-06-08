@@ -24,15 +24,16 @@ export class EngineComponent implements OnInit {
   typeWarrantyText:any;
   //variable para la acción que se va a realizar, si es crear o editar  
   action:any;
+  //
   warranty:any;
   //para usarlo como data inicial del esn y donde se va a cargar el esn que se va a usar en la garantía
   esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
   //para usarlo como data inicial del os y donde se va a cargar el os que se va a usar en la garantía
-  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'}
+  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'};
   //tipo de garantia juntos a sus campos
   warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
   //para controlar la vista de cada tipo de garantia
-  viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,}
+  viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,};
   //listado de las quejas
   complaints:any[];
   //formulario

@@ -44,6 +44,8 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
      */
     ngOnInit(): void
     {
+        console.log(this.item);
+        
         // Get the parent navigation component
         this._fuseVerticalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
 
@@ -80,5 +82,26 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    }
+
+    getIcon(title){
+        if(title=='Home'){
+            return 'home';
+        }
+        if(title=='Garantias'){
+            return 'garantia';
+        }
+        if(title=='Gestión de fallas'){
+            return 'fallas';
+        }
+        if(title=='Herramientas digitales'){
+            return 'herramientas';
+        }
+        if(title=='Configuración y mantenimiento'){
+            return 'configuracion';
+        }
+        if(title=='Reportes'){
+            return 'report';
+        }
     }
 }

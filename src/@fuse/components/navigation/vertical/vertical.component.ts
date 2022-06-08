@@ -61,6 +61,16 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     private _fuseScrollbarDirectivesSubscription: Subscription;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    //menu principal
+    menuPrincipal = [
+        {title: "Home",link: "/home"},
+        {title: "Garantias",link: "/garantias"},
+        {title: "Gestión de fallas", link: "/pagina-no-encontrada"},
+        {title: "Herramientas digitales", link: "/pagina-no-encontrada"},
+        {title: "Configuración y mantenimiento",link: "/pagina-no-encontrada"},
+        {id: 0, title: "Reportes", link: "/pagina-no-encontrada"}
+    ];
+
     /**
      * Constructor
      */
@@ -295,6 +305,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
+        console.log(this.navigation);
         // Make sure the name input is not an empty string
         if ( this.name === '' )
         {

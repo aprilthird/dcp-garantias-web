@@ -221,8 +221,19 @@ export class GarantiasListComponent implements OnInit {
   }
 
   editWarranty(warranty):void{
-    localStorage.setItem('action','edit');
-    this.router.navigate(['garantias/register-engine-basic']);
-    localStorage.setItem('garantia',JSON.stringify(warranty));
+    if(warranty.bandeja==0){
+      localStorage.setItem('action','edit');
+      localStorage.setItem('garantia',JSON.stringify(warranty));
+      this.router.navigate(['garantias/register-engine-basic']);
+    }
+    if(warranty.bandeja==1){
+      localStorage.setItem('action','edit');
+      localStorage.setItem('garantia',JSON.stringify(warranty));
+      this.router.navigate(['garantias/register-engine-basic']);
+    }
+    if(warranty.bandeja==2){
+      localStorage.setItem('garantia',JSON.stringify(warranty));
+      this.router.navigate(['garantias/change-tray']);
+    }
   }
 }

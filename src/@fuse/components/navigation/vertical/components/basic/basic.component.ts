@@ -83,16 +83,22 @@ export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestr
 
     getIcon(title){
         if(title=='Home'){
-            return 'heroicons_solid:home';
+            return 'home';
         }
         if(title=='Garantias'){
-            return 'heroicons_solid:ticket';
+            return 'garantia';
         }
         if(title=='Gestión de fallas'){
-            return 'heroicons_solid:paper-airplane';
+            return 'fallas';
         }
         if(title=='Herramientas digitales'){
-            return 'heroicons_solid:briefcase';
+            return 'herramientas';
+        }
+        if(title=='Configuración y mantenimiento'){
+            return 'configuracion';
+        }
+        if(title=='Reportes'){
+            return 'report';
         }
     }
 }
