@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { MasterConstantRequest } from 'app/shared/models/request/master-constant.request';
-
+import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 @Component({
   selector: 'app-dialog-new-constant',
   templateUrl: './dialog-new-constant.component.html',
@@ -12,10 +12,9 @@ import { MasterConstantRequest } from 'app/shared/models/request/master-constant
 export class DialogNewConstantComponent implements OnInit {
 
   formNewConstant: FormGroup;
-  disabledInputCode:boolean;
 
   constructor(private readonly dialogRef: MatDialogRef<DialogNewConstantComponent>,
-              @Inject(MAT_DIALOG_DATA) public data,
+              @Inject(MAT_DIALOG_DATA) public data, private readonly matDialog:MatDialog,
               private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
@@ -31,7 +30,7 @@ export class DialogNewConstantComponent implements OnInit {
         kmRate: new FormControl('',[Validators.required]),
         bfcMarkup: new FormControl('',[Validators.required]),
         siteLabor: new FormControl('',[Validators.required]),
-        activo: new FormControl(true, [Validators.required])
+        estado: new FormControl(true, [Validators.required])
       });
     }else{
       this.formNewConstant = new FormGroup({
@@ -40,7 +39,7 @@ export class DialogNewConstantComponent implements OnInit {
         kmRate: new FormControl(this.data.constant.kmRate,[Validators.required]),
         bfcMarkup: new FormControl(this.data.constant.bfcMarkup,[Validators.required]),
         siteLabor: new FormControl(this.data.constant.siteLabor,[Validators.required]),
-        activo: new FormControl(this.data.constant.activo, [Validators.required])
+        estado: new FormControl(this.data.constant.activo, [Validators.required])
       });
     }
   }
@@ -48,7 +47,8 @@ export class DialogNewConstantComponent implements OnInit {
   onSaveConstant():void{
     if(this.formNewConstant.valid){
       if(this.data.option=='new'){
-        const request = MasterConstantRequest.createFormObject(this.formNewConstant.value, 0);
+        const object = MasterConstantRequest.createFormObject(this.formNewConstant.value, 0);
+        const request = {activo:true,...object};      
         this.configurationAndMaintenanceService.saveConstant(request).subscribe(resp=>{
           console.log(resp)
             if(resp.success){
@@ -58,7 +58,8 @@ export class DialogNewConstantComponent implements OnInit {
             }        
         });
       }else{
-        const request = MasterConstantRequest.createFormObject(this.formNewConstant.value, this.data.constant.id );
+        const object = MasterConstantRequest.createFormObject(this.formNewConstant.value, this.data.constant.id );
+        const request = {activo:true,...object};
         this.configurationAndMaintenanceService.saveConstant(request).subscribe(resp=>{        
           if(resp.success){
             this.dialogRef.close(true);
@@ -68,7 +69,10 @@ export class DialogNewConstantComponent implements OnInit {
       });        
       }
     }else{
-      console.log('error');
+      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+        disableClose:true,
+        data: {text:'Rellene todos los campos requeridos de la constante'}
+      });
     }
   }
 

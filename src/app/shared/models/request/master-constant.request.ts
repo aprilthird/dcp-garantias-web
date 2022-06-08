@@ -8,9 +8,10 @@ export class MasterConstantRequest {
     kmRate:number;
     bfcMarkup:number;
     siteLabor:number;
-    activo:boolean;
+    estado:number;
 
   static createFormObject(obj: any, id:any): MasterConstantRequest {
+    let estado = obj.estado == true ? 1:0;
     const newObj = new MasterConstantRequest();
     newObj.id = ValidateHelper.validNumber(id);
     newObj.codigo = ValidateHelper.validString(obj.codigo);
@@ -18,7 +19,7 @@ export class MasterConstantRequest {
     newObj.kmRate = ValidateHelper.validNumber(obj.kmRate);
     newObj.bfcMarkup = ValidateHelper.validNumber(obj.bfcMarkup);
     newObj.siteLabor = ValidateHelper.validNumber(obj.siteLabor);
-    newObj.activo = ValidateHelper.validBoolean(obj.activo);
+    newObj.estado = estado;
     return newObj;
   }
 }

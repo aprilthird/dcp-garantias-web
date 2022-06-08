@@ -1,43 +1,43 @@
 <div matDialogTitle>
-    <span>Nuevo/Editar parte</span>
+    <span>{{data.option=='new'? 'Nueva': 'Editar'}} parte</span>
 </div>
 <div matDialogContent>
-    <form>
+    <form *ngIf="formGroup" [formGroup]="formGroup">
         <div class="row">
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Código</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="codigo">
                 </mat-form-field>
             </div>
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Tipo</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="number" matInput  placeholder="Ingresar" formControlName="tipo">
                 </mat-form-field>
             </div>
 
             <div class="col-md-4">
                 <mat-form-field>
                     <mat-label>Precio FOB</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="number" matInput  placeholder="Ingresar" formControlName="precioFob">
                 </mat-form-field>
             </div>
 
             <div class="col-md-9">
                 <mat-form-field>
                     <mat-label>Descripcion</mat-label>
-                    <input type="text" matInput  placeholder="Ingresar">
+                    <input type="text" matInput  placeholder="Ingresar" formControlName="descripcion">
                 </mat-form-field>
             </div>
             <div class="col-md-3 flex-xy-center">
-                <mat-slide-toggle color="primary" >Activo</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="estado">Activo</mat-slide-toggle>
             </div>
         </div>
     </form>
 </div>
 <div matDialogActions align="end">
     <button mat-raised-button (click)="onClose()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSavePart()">Crear/Guardar</button>
+    <button mat-raised-button color="primary" (click)="onSavePart()">{{data.option=='new'? 'Crear': 'Guardar'}}</button>
 </div>
 

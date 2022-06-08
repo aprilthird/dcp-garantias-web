@@ -72,9 +72,8 @@ export class ConfigurationAndMaintenanceService {
   saveConstant(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
-  listConstants():Observable<any>{
-    console.log(this.dateLast);
-    const request = {filter : {fechaFin:this.dateCurrent}};
+  listConstants(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayConstants, request, {headers:this.header});
   }
   deleteConstant(_request:any):Observable<any>{
@@ -82,17 +81,17 @@ export class ConfigurationAndMaintenanceService {
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   // srt
-  listSrt():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12'}};
+  listSrt(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTraySrt, request, {headers:this.header});
   }
   maintenanceSrt(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceSrt,_request,{headers:this.header});
   }
 
-  //partes
-  listParts():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T09:47:38.423',fechaIni: '2022-05-12T09:47:38.423'}};
+  //Partes
+  listParts(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayParts, request, {headers:this.header});
   }
   maintenanceParts(_request:MasterConstantRequest):Observable<any>{          

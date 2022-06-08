@@ -7,36 +7,6 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { MatSnackBar,MatSnackBarHorizontalPosition,MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
-
 @Component({
   selector: 'app-constant',
   templateUrl: './constant.component.html',
@@ -45,11 +15,15 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ConstantComponent implements OnInit {
 
   displayedColumns: string[] = ['code', 'laborRate', 'kmRate', 'bcfMarkup', 'siteLabor', 'state', 'actions'];
-  listConstants: any[];
-  totalConstants: number;
-
   dataSource : any[];
-
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -62,6 +36,58 @@ export class ConstantComponent implements OnInit {
     this.getListConstant();
   }
   
+  getListConstant():void{
+    this.configurationAndMaintenanceService.listConstants(this.pageCurrent).subscribe(resp=>{
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();
+    });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result + 1 );
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.getListConstant();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.getListConstant();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
+  }
+
   onDialogNewConstant():void{
     const dialogNewConstant = this.matDialog.open(DialogNewConstantComponent,{
       data: {option:'new'}
@@ -107,7 +133,7 @@ export class ConstantComponent implements OnInit {
   }
 
   deleteConstant(option:any, _constant:any):void{
-    const request = {id:_constant.id, active:false};
+    const request = {id:_constant.id, activo:false};
     if(option){
       this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
         if(resp.success){
@@ -118,13 +144,6 @@ export class ConstantComponent implements OnInit {
     }else{
       console.log('operacion cancelada');      
     }
-  }
-
-  getListConstant():void{
-    this.configurationAndMaintenanceService.listConstants().subscribe(resp=>{
-      this.dataSource = resp.data;
-      this.totalConstants = resp.totalRecords;
-    });
   }
 
   openSnackBar(message:string):void{

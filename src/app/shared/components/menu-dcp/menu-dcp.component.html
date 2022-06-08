@@ -37,7 +37,7 @@
                         </div>
                         <div class="dropdown-menu" style="position: absolute;inset: -10px auto auto 0px !important;margin: 0px;transform: translate(253.333px, -390px);padding: 0px;">
                             <div class="row">
-                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/constant')">Constantes</div>
+                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/constant')">Constantes</div>
                                 <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
                                     <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
                                         <div class="w8 flex-row-center">Datos Garantías</div>
@@ -45,10 +45,10 @@
                                     </div>
                                     <div class="dropdown-menu width-menu-level-1">
                                         <div class="row">
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/warranty-data/type-of-warranty')">Tipo de Garantía</div>
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/warranty-data/complaints')">Queja</div>
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/warranty-data/service-area')">Area de Servicios</div>
-                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/warranty-data/client')">Cliente</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/type-of-warranty')">Tipo de Garantía</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/complaints')">Queja</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/service-area')">Area de Servicios</div>
+                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/client')">Cliente</div>
                                         </div>
                                     </div>
                                 </div>
@@ -59,19 +59,19 @@
                                     </div>
                                     <div class="dropdown-menu width-menu-level-1">
                                         <div class="row">
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/engine/model')">Modelo del motor</div>
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center"(click)="navegacion('/configuration-and-maintenance/master/engine/application')">Aplicaciones del motor</div>
-                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/engine/brand')">Marca del motor</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/model')">Modelo del motor</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center"(click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/application')">Aplicaciones del motor</div>
+                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/brand')">Marca del motor</div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/failures')">
+                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/failures')">
                                     <div class="w8 flex-row-center">Falla</div>
                                     <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
                                 </div>
-                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/srt')">SRT</div>
-                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/parts')">Partes</div>
-                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/other-claims')">Otros Reclamables</div>
+                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/srt')">SRT</div>
+                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/parts')">Partes</div>
+                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-claims')">Otros Reclamables</div>
                                 <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
                                     <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
                                         <div class="w8 flex-row-center">Viajes</div>
@@ -79,9 +79,9 @@
                                     </div>
                                     <div class="dropdown-menu width-menu-level-1">
                                         <div class="row">
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/travel/type-travel')">Tipo de viaje</div>
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/travel/details')">Detalle de viaje</div>
-                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/travel/unit-of-measure')">Unidad de medida</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/type-travel')">Tipo de viaje</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/details')">Detalle de viaje</div>
+                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/unit-of-measure')">Unidad de medida</div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,8 +92,8 @@
                                     </div>
                                     <div class="dropdown-menu width-menu-level-1">
                                         <div class="row">
-                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/other-codes/account-code')">Account Code</div>
-                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacion('/configuration-and-maintenance/master/other-codes/pay-code')">Pay code</div>
+                                            <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/account-code')">Account Code</div>
+                                            <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/pay-code')">Pay code</div>
                                         </div>
                                     </div>
                                 </div>

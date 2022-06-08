@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 
 @Component({
   selector: 'app-dialog-new-srt',
@@ -15,7 +16,7 @@ export class DialogNewSrtComponent implements OnInit {
   formSrt: FormGroup;
 
   constructor(private readonly dialogRef: MatDialogRef<DialogNewSrtComponent>,
-              @Inject(MAT_DIALOG_DATA) public data,
+              @Inject(MAT_DIALOG_DATA) public data,private readonly matDialog:MatDialog,
               private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
@@ -62,11 +63,11 @@ export class DialogNewSrtComponent implements OnInit {
 
   onSaveSrt():void{
     if(this.formSrt.valid){
-      this.formSrt.value.estado==true? this.formSrt.value.estado=1:this.formSrt.value.estado=0;
+      this.formSrt.value.estado==true ? this.formSrt.value.estado=1:this.formSrt.value.estado=0;
       if(this.data.option=='new'){        
         const request = {
                         id:0,
-                        active:true,
+                        activo:true,
                         ...this.formSrt.value
                         }
         console.log(request);
@@ -95,9 +96,13 @@ export class DialogNewSrtComponent implements OnInit {
         });
       }
     }else{
-      console.log('llene todos los campos necesarios')
+      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+        disableClose:true,
+        data: {text:'Rellene todos los campos requeridos de la constante'}
+      });
     }
   }
+  
   onClose():void{
     this.dialogRef.close(false);
   }

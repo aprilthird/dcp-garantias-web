@@ -63,6 +63,10 @@ export class MenuDcpComponent implements OnInit {
     }
   }
 
+  navegacionSubMenu(ruta:string):void{
+    this.router.navigate([ruta]);
+  }
+
   clear():void{
     this.homeMenu='color-text-gray';
     this.homeIcon='icon-menu-gray';
