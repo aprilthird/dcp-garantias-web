@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 
 @Component({
@@ -15,15 +16,78 @@ import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-d
 export class OtherClaimsComponent implements OnInit {
 
   displayedColumns: string[] = ['codigo', 'descripcion', 'estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  
+
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
+
   constructor(private readonly matDialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listOtrosReclamables();
+  }
+
+  listOtrosReclamables():void{
+    this.configurationAndMaintenanceService.listOtrosReclamables(this.pageCurrent).subscribe(resp=>{
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();   
+    });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listOtrosReclamables();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listOtrosReclamables();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewOtherClaim():void{
@@ -34,34 +98,35 @@ export class OtherClaimsComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Otro reclamable creada con éxito');
+        this.listOtrosReclamables();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditOtherClaim(_constant:any):void{
+  onDialogEditOtherClaim(elemento:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceOthersClaimsComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', reclamable:elemento},
       width:'900px'
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Otro reclamable editada con éxito');
-        // this.getListConstant();
+        this.listOtrosReclamables();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteOtherClaim(_constant:any):void{
+  onDialogDeleteOtherClaim(reclamable:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar este otro reclamable?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,reclamable);
     });
   }
 
@@ -72,15 +137,15 @@ export class OtherClaimsComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, reclamable:any):void{
+    reclamable.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.maintenanceOtrosReclamables(reclamable).subscribe(resp=>{
+        if(resp.success){
+          this.listOtrosReclamables();
           this.openSnackBar('Otro reclamable eliminado');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }
@@ -96,21 +161,3 @@ export class OtherClaimsComponent implements OnInit {
   }
 
 }
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'}
-];
-

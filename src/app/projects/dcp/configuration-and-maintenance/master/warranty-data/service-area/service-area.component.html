@@ -20,47 +20,47 @@
               
                   <!-- Position Column -->
                   <ng-container matColumnDef="codigo">
-                    <th mat-header-cell *matHeaderCellDef> Codigo </th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Codigo </th>
                     <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="descripcion">
-                    <th mat-header-cell *matHeaderCellDef> descripcion </th>
+                    <th mat-header-cell *matHeaderCellDef width="15%"> descripcion </th>
                     <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="codigoServicioSap">
-                    <th mat-header-cell *matHeaderCellDef> Codigo de Servicio SAP </th>
+                    <th mat-header-cell *matHeaderCellDef width="13%"> Codigo de Servicio SAP </th>
                     <td mat-cell *matCellDef="let element"> {{element.codigoServicioSap}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="codigoConstante">
-                    <th mat-header-cell *matHeaderCellDef> Codigo de Constante</th>
+                    <th mat-header-cell *matHeaderCellDef width="12%"> Codigo de Constante</th>
                     <td mat-cell *matCellDef="let element"> {{element.codigoConstante}} </td>
                   </ng-container>
                   
                   <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado </th>
+                    <td mat-cell *matCellDef="let element"> {{element.estado==1?'activo':'no activo'}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="bu">
-                    <th mat-header-cell *matHeaderCellDef> BU </th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> BU </th>
                     <td mat-cell *matCellDef="let element"> {{element.bu}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="subBU">
-                    <th mat-header-cell *matHeaderCellDef> Sub BU</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Sub BU</th>
                     <td mat-cell *matCellDef="let element"> {{element.busub}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="lugar">
-                    <th mat-header-cell *matHeaderCellDef> lugar </th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> lugar </th>
                     <td mat-cell *matCellDef="let element"> {{element.lugar}} </td>
                   </ng-container>
                   
                   <ng-container matColumnDef="acciones">
-                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Acciones </th>
                     <td mat-cell *matCellDef="let element">
                       <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
                         <mat-icon (click)="onDialogEditServiceArea(element)">edit</mat-icon>
@@ -75,10 +75,16 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
               
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                               showFirstLastButtons 
-                               aria-label="Select page of periodic elements">
-                </mat-paginator>
+                <div class="pb-3 text-right">
+                  <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
+                  <span class="mr-1">Total:</span><span class="font-w-500">{{totalRecords}}</span>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
               </div>
               
         </div>

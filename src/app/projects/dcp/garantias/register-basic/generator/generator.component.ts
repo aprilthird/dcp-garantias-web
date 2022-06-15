@@ -85,7 +85,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   loadComplaints():void{
-    this.configurationAndMaintenanceService.listComplaints().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.complaints = resp.data;
     });
   }

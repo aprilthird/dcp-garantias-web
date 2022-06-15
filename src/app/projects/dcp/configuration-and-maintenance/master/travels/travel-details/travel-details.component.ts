@@ -5,6 +5,7 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-travel-details',
@@ -14,15 +15,77 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 export class TravelDetailsComponent implements OnInit {
 
   displayedColumns: string[] = ['codigo', 'descripcion','factor', 'estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
+  
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
 
-  constructor(private readonly matDialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+  constructor(private readonly matDialog: MatDialog,private _snackBar: MatSnackBar,
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listDetallesDeViaje();
+  }
+
+  listDetallesDeViaje():void{
+    this.configurationAndMaintenanceService.listDetalleViaje(this.pageCurrent).subscribe(resp=>{
+        this.dataSource = resp.data;
+        this.totalRecords = resp.totalRecords;
+        this.totalRows = resp.pageSize;
+        this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+        this.dataSource = resp.data;
+        this.disabledButtonsPagination();   
+    });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listDetallesDeViaje();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listDetallesDeViaje();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewTravelDetail():void{
@@ -33,34 +96,34 @@ export class TravelDetailsComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Detalle de viaje creada con éxito');
+        this.listDetallesDeViaje();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogEditTravelDetail(_constant:any):void{
+  onDialogEditTravelDetail(element:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceDetailesTravelComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', detalleDeViaje:element},
       width:'900px'
-
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Detalle de viaje editada con éxito');
-        // this.getListConstant();
+        this.listDetallesDeViaje();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteTravelDetail(_constant:any):void{
+  onDialogDeleteTravelDetail(element:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar este detalle?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,element);
     });
   }
 
@@ -71,15 +134,15 @@ export class TravelDetailsComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, detalleDeViaje:any):void{
+    detalleDeViaje.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.maintenanceDetalleViaje(detalleDeViaje).subscribe(resp=>{
+        if(resp.success){
+          this.listDetallesDeViaje();
           this.openSnackBar('Detalle de viaje eliminada');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

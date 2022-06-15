@@ -1,8 +1,8 @@
 <div matDialogTitle>
-    <span>Nuevo/Editar Tipo de Garantia</span>
+    <span>{{data.option=='new'?'Nuevo':'Editar'}} Tipo de Garantia</span>
 </div>
 <div matDialogContent>
-    <form>
+    <form *ngIf="formWarrantyType" [formGroup]="formWarrantyType">
         <div class="row">
             <div class="col-md-4">
                 <mat-form-field>
@@ -25,6 +25,6 @@
 </div>
 <div matDialogActions align="end">
     <button mat-raised-button (click)="onClose()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSaveTypeWarranty()">Crear/Guardar</button>
+    <button mat-raised-button color="primary" (click)="onSaveTypeWarranty()">{{data.option=='new'?'Crear':'Guardar'}}</button>
 </div>
 

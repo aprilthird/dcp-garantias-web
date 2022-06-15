@@ -27,14 +27,14 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.data);
     this.loadFormClient();
-    this.configurationAndMaintenanceService.listEngineModels().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listEngineModels(1).subscribe(resp=>{
       this.engineModels = resp.data;
       console.log(this.engineModels);
     });
-    this.configurationAndMaintenanceService.listEngineApplications().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listEngineApplications(1).subscribe(resp=>{
       this.engineApplications = resp.data;
     });
-    this.configurationAndMaintenanceService.listClients().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listClients(1).subscribe(resp=>{
       this.clients = resp.data;
     });
   }

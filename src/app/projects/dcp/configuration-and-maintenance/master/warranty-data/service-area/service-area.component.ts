@@ -16,6 +16,16 @@ export class ServiceAreaComponent implements OnInit {
   displayedColumns: string[] = ['codigo','descripcion', 'codigoServicioSap','codigoConstante','estado','bu','subBU','lugar','acciones'];
   dataSource = [];
 
+    //datos del paginado
+    totalRecords:any;
+    totalRows:any;
+    numberOfPages:any;
+    pageCurrent:number=1;
+    //botones del paginado
+    disabledButtonMore:boolean=false;
+    disabledButtonLess:boolean=false;
+  
+
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
@@ -28,9 +38,55 @@ export class ServiceAreaComponent implements OnInit {
   }
 
   listServiceAreas():void{
-    this.configurationAndMaintenanceService.listServiceArea().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listServiceArea(this.pageCurrent).subscribe(resp=>{
       this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();
     });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listServiceAreas();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listServiceAreas();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
   onDialogNewServiceArea():void{
     const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceServiceAreaComponent,{
@@ -40,6 +96,7 @@ export class ServiceAreaComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Area de Servicio creada con éxito');
+        this.listServiceAreas();
       }else{
         console.log('operacion cancelada');        
       }
@@ -79,9 +136,9 @@ export class ServiceAreaComponent implements OnInit {
   }
 
   deleteConstant(option:any, serviceArea:any):void{
-    const request = {id:serviceArea.id, active:false};
+    serviceArea.activo=false;
     if(option){
-      this.configurationAndMaintenanceService.deleteServiceArea(request).subscribe(resp=>{
+      this.configurationAndMaintenanceService.deleteServiceArea(serviceArea).subscribe(resp=>{
         if(resp.success){
           this.listServiceAreas();
           this.openSnackBar('Area de Servicio eliminado');

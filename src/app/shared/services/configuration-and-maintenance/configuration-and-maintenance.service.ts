@@ -40,6 +40,10 @@ export class ConfigurationAndMaintenanceService {
   private urlMaintenanceEngineApplication= this.baseApiURl + '/Administracion/MantenimientoAplicacionesMotor';
   private urlTrayEngineApplication = this.baseApiURl + '/Administracion/BandejaAplicacionesMotor';
 
+  //marca de motor
+  private urlMantenimientoMarcaMotor= this.baseApiURl + '/Administracion/MantenimientoMarcaMotor';
+  private urlBandejaMarcaMotor = this.baseApiURl + '/Administracion/BandejaMarcaMotor';
+  
   //clientes
   private urlMaintenanceWarrantyDataClient = this.baseApiURl + '/Administracion/MantenimientoClientes';
   private urlTrayWarrantyDataClient = this.baseApiURl + '/Administracion/BandejaClientes';
@@ -56,6 +60,22 @@ export class ConfigurationAndMaintenanceService {
   private urlMaintenanceComplaints = this.baseApiURl + '/Administracion/MantenimientoQuejas';
   private urlTrayComplaints  = this.baseApiURl + '/Administracion/BandejaQuejas';
 
+  //otros reclamables
+  private urlMantenimientoOtrosReclamables = this.baseApiURl + '/Administracion/MantenimientoOtrosReclamables';
+  private urlBandejaOtrosReclamables  = this.baseApiURl + '/Administracion/BandejaOtrosReclamables';
+
+  //tipo de viaje
+  private urlMantenimientoTipoViajes = this.baseApiURl + '/Administracion/MantenimientoTipoViaje';
+  private urlBandejaTipoViajes  = this.baseApiURl + '/Administracion/BandejaTipoViaje';
+  
+  //detalle de viaje
+  private urlMantenimientoDetalleViajes = this.baseApiURl + '/Administracion/MantenimientoDetalleViaje';
+  private urlBandejaDetalleViajes = this.baseApiURl + '/Administracion/BandejaDetalleViaje';
+  
+  //unidad de medida
+  private urlMantenimientoUnidadMedida = this.baseApiURl + '/Administracion/MantenimientoUnidadMedida';
+  private urlBandejaUnidadMedida = this.baseApiURl + '/Administracion/BandejaUnidadMedida';
+  
   //area de servicio
   private urlMaintenanceServiceArea = this.baseApiURl + '/Administracion/MantenimientoAreaServicio';
   private urlTrayServiceArea = this.baseApiURl + '/Administracion/BandejaAreaServicio';
@@ -88,6 +108,58 @@ export class ConfigurationAndMaintenanceService {
   maintenanceSrt(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceSrt,_request,{headers:this.header});
   }
+  searchSrt(_codigo:any):Observable<any>{
+    const request = {filter : {codigo:_codigo},pageSize:1000};
+    return this.httpClient.post(this.urlTraySrt,request,{headers:this.header});
+  }
+
+  // tipo viaje
+  listTipoViaje(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaTipoViajes, request, {headers:this.header});
+  }
+  maintenanceTipoViaje(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoTipoViajes,_request,{headers:this.header});
+  }
+  listaTiposDeViajeSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlBandejaTipoViajes, request, {headers:this.header});
+  }
+  
+  // detalle viaje
+  listDetalleViaje(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaDetalleViajes, request, {headers:this.header});
+  }
+  maintenanceDetalleViaje(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoDetalleViajes,_request,{headers:this.header});
+  }
+  listaDetallesDeViajeSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlBandejaDetalleViajes, request, {headers:this.header});
+  }
+
+  // unidad de medida
+  listUnidadMedida(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaUnidadMedida, request, {headers:this.header});
+  }
+  maintenanceUnidadMedida(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoUnidadMedida,_request,{headers:this.header});
+  }
+
+  // otros reclamables
+  listOtrosReclamables(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaOtrosReclamables, request, {headers:this.header});
+  }
+  maintenanceOtrosReclamables(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoOtrosReclamables,_request,{headers:this.header});
+  }
+  listaOtrosReclamablesSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlBandejaOtrosReclamables, request, {headers:this.header});
+  }
 
   //Partes
   listParts(_page):Observable<any>{
@@ -97,10 +169,31 @@ export class ConfigurationAndMaintenanceService {
   maintenanceParts(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceParts,_request,{headers:this.header});
   }
+  buscarParte(_codigo:any):Observable<any>{
+    const request = {filter : {codigo:_codigo},pageSize:1000};
+    return this.httpClient.post(this.urlTrayParts,request,{headers:this.header});
+  }
+
+  //Marca del motor
+  listMarcaMotor(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaMarcaMotor, request, {headers:this.header});
+  }
+  listMarcaMotorSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlBandejaMarcaMotor, request, {headers:this.header});
+  }
+  mantenimientoMarcaMotor(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoMarcaMotor,_request,{headers:this.header});
+  }
 
   //modelo de motor
-  listEngineModels():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T16:23:11.942Z',fechaIni: '2022-05-12T16:23:11.942Z'}};
+  listEngineModels(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlTrayEngineModel, request, {headers:this.header});
+  }
+  listaModelosSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
     return this.httpClient.post(this.urlTrayEngineModel, request, {headers:this.header});
   }
   maintenanceEngineModels(_request:MasterConstantRequest):Observable<any>{          
@@ -112,8 +205,8 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //aplicacion de motor
-  listEngineApplications():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T16:23:11.942Z',fechaIni: '2022-05-12T16:23:11.942Z'}};
+  listEngineApplications(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayEngineApplication, request, {headers:this.header});
   }
   maintenanceEngineApplications(_request:MasterConstantRequest):Observable<any>{          
@@ -125,8 +218,8 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //datos garantia - clientes
-  listClients():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-12T16:23:11.942Z',fechaIni: '2022-05-12T16:23:11.942Z'}};
+  listClients(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayWarrantyDataClient, request, {headers:this.header});
   }
   maintenanceClients(_request:MasterConstantRequest):Observable<any>{          
@@ -138,8 +231,8 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //quejas
-  listComplaints():Observable<any>{
-    const request = {filter : {fechaFin:this.dateCurrent}};
+  listComplaints(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayComplaints, request, {headers:this.header});
   }
   maintenanceComplaints(_request:MasterConstantRequest):Observable<any>{          
@@ -168,8 +261,8 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //tipo de garantias
-  listWarrantyTypes():Observable<any>{
-    const request = {filter : {fechaFin: '2022-05-13T15:59:21.335Z',fechaIni: '2022-05-13T15:59:21.335Z'}};
+  listWarrantyTypes(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayWarrantyTypes, request, {headers:this.header});
   }
   maintenanceWarrantyTypes(_request:MasterConstantRequest):Observable<any>{          
@@ -181,8 +274,8 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //area de servicio
-  listServiceArea():Observable<any>{
-    const request = {filter : {fechaFin: this.dateCurrent}};
+  listServiceArea(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
   }
   maintenanceServiceArea(_request:MasterConstantRequest):Observable<any>{          

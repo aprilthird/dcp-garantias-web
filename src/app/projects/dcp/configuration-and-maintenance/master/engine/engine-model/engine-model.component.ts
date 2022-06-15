@@ -21,26 +21,81 @@ export class EngineModelComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  constructor(private readonly matDialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
+
+  constructor(private readonly matDialog: MatDialog,private _snackBar: MatSnackBar,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
     this.listEngineModels();
   }
 
   listEngineModels():void{
-    this.configurationAndMaintenanceService.listEngineModels().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listEngineModels(this.pageCurrent).subscribe(resp=>{
         this.dataSource = resp.data;
-    })
+        this.totalRecords = resp.totalRecords;
+        this.totalRows = resp.pageSize;
+        this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+        this.dataSource = resp.data;
+        this.disabledButtonsPagination();   
+    });
+  }
+  
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listEngineModels();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listEngineModels();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewEngineModel():void{
-    const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceEngineModelComponent,{
+    const dialogNew = this.matDialog.open(DialogMaintenanceEngineModelComponent,{
       data: {option:'new'},
-      width:'900px'
+      width:'900px',
+      disableClose:true
     });
-    dialogNewTravelDetail.afterClosed().subscribe(resp=>{
+    dialogNew.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Modelo de motor creado con éxito');
         this.listEngineModels();

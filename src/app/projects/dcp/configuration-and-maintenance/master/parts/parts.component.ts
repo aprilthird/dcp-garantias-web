@@ -35,6 +35,15 @@ export class PartsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listParts();
+    this.configurationAndMaintenanceService.listTipoViaje(1).subscribe(resp=>{
+      console.log(resp);
+    })
+    this.configurationAndMaintenanceService.listDetalleViaje(1).subscribe(resp=>{
+      console.log(resp);
+    })
+    this.configurationAndMaintenanceService.listUnidadMedida(1).subscribe(resp=>{
+      console.log(resp);
+    })
   }
 
   listParts():void{
@@ -97,6 +106,7 @@ export class PartsComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Parte creada con éxito');
+        this.listParts();
       }else{
         console.log('operacion cancelada');        
       }
@@ -107,24 +117,23 @@ export class PartsComponent implements OnInit {
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenancePartsComponent,{
       data: {option:'edit', part:_part},
       width:'900px'
-
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Parte editada con éxito');
-        // this.getListConstant();
+        this.listParts();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeletePart(_constant:any):void{
+  onDialogDeletePart(parte:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar esta parte?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,parte);
     });
   }
 
@@ -135,15 +144,15 @@ export class PartsComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, parte:any):void{
+    parte.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.maintenanceParts(parte).subscribe(resp=>{
+        if(resp.success){
+          this.listParts();
           this.openSnackBar('Parte eliminado');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

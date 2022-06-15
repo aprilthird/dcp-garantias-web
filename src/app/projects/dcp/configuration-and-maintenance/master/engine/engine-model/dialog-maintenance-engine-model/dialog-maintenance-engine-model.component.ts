@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
+import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 @Component({
   selector: 'app-dialog-maintenance-engine-model',
   templateUrl: './dialog-maintenance-engine-model.component.html',
@@ -12,7 +13,7 @@ export class DialogMaintenanceEngineModelComponent implements OnInit {
   formEngineModel:FormGroup;
 
   constructor(private readonly dialogRef: MatDialogRef<DialogMaintenanceEngineModelComponent>,
-              @Inject(MAT_DIALOG_DATA) public data,
+              @Inject(MAT_DIALOG_DATA) public data,private readonly matDialog:MatDialog,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
@@ -59,8 +60,14 @@ export class DialogMaintenanceEngineModelComponent implements OnInit {
           }
         })
       }
+    }else{
+      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+        disableClose:true,
+        data: {text:'Rellene todos los campos requeridos'}
+      });
     }
   }
+  
   onClose():void{
     this.dialogRef.close(false);
   }

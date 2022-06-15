@@ -16,7 +16,7 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 export class SrtComponent implements OnInit {
 
 
-  displayedColumns: string[] = ['codigo', 'grupoSRT', 'procedimiento', 'paso', 'descripcion', 'tipo', 'dondeSeReparo','fabricaSRT', 'estado','acciones'];
+  displayedColumns: string[] = ['codigo', 'codigoAcceso', 'grupoSRT', 'procedimiento', 'paso', 'descripcion', 'tipo', 'dondeSeReparo','fabricaSRT', 'estado','acciones'];
   dataSource = [];
   //datos del paginado
   totalRecords:any;
@@ -135,15 +135,15 @@ export class SrtComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, srt:any):void{
+    srt.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.maintenanceSrt(srt).subscribe(resp=>{
+        if(resp.success){
+          this.listSrt();
           this.openSnackBar('La SRT fue eliminada');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

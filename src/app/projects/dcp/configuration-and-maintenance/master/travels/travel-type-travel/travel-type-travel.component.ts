@@ -4,6 +4,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogMaintenanceTravelTypeTravelComponent } from '../dialogs/dialog-maintenance-travel-type-travel/dialog-maintenance-travel-type-travel.component';
 
 @Component({
@@ -19,14 +20,74 @@ export class TravelTypeTravelComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
 
-  constructor(private readonly matDialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+  constructor(private readonly matDialog: MatDialog,private _snackBar: MatSnackBar,
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listTiposDeViaje();
   }
 
+  listTiposDeViaje():void{
+    this.configurationAndMaintenanceService.listTipoViaje(this.pageCurrent).subscribe(resp=>{
+        this.dataSource = resp.data;
+        this.totalRecords = resp.totalRecords;
+        this.totalRows = resp.pageSize;
+        this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+        this.dataSource = resp.data;
+        this.disabledButtonsPagination();   
+    });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listTiposDeViaje();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listTiposDeViaje();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
+  }
+  
   onDialogNewTravelType():void{
     const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceTravelTypeTravelComponent,{
       data: {option:'new'},
@@ -35,31 +96,32 @@ export class TravelTypeTravelComponent implements OnInit {
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
         this.openDialogOperationSuccessfully('Tipo de viaje creada con éxito');
+        this.listTiposDeViaje();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteTravelType(_constant:any):void{
+  onDialogDeleteTravelType(tipoDeViaje:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar este tipo de viaje?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,tipoDeViaje);
     });
   }
 
-  onDialogEditTravelType(_constant:any):void{
+  onDialogEditTravelType(element:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceTravelTypeTravelComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', tipoDeViaje:element},
       width:'900px'
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Tipo de viaje editada con éxito');
-        // this.getListConstant();
+        this.listTiposDeViaje();
       }else{
         console.log('operacion cancelada');        
       }
@@ -73,15 +135,15 @@ export class TravelTypeTravelComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, tipoDeViaje:any):void{
+    tipoDeViaje.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.maintenanceTipoViaje(tipoDeViaje).subscribe(resp=>{
+        if(resp.success){
+          this.listTiposDeViaje();
           this.openSnackBar('Tipo de viaje eliminada');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

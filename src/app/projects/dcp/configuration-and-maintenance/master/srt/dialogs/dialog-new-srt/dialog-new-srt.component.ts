@@ -34,6 +34,7 @@ export class DialogNewSrtComponent implements OnInit {
         paso : new FormControl ('',[Validators.required]),
         descripcion : new FormControl ('',[Validators.required]),
         srtFabrica : new FormControl ('',[Validators.required]),
+        codigoAcceso: new FormControl('',[Validators.required]),
         estado: new FormControl (true, [Validators.required])
       });
     }else{
@@ -46,6 +47,7 @@ export class DialogNewSrtComponent implements OnInit {
           paso : new FormControl (this.data.srt.paso,[Validators.required]),
           descripcion : new FormControl (this.data.srt.descripcion,[Validators.required]),
           srtFabrica : new FormControl (this.data.srt.srtFabrica,[Validators.required]),
+          codigoAcceso: new FormControl(this.data.srt.codigoAcceso,[Validators.required]),
           estado: new FormControl (estate, [Validators.required])
         });
     }

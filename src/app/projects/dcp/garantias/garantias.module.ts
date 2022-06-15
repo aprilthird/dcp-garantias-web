@@ -26,7 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogMassiveRegistrationSuccessfullyComponent } from './dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 import { HistoriaESNComponent } from './dialogs/historia-esn/historia-esn.component';
 import { DialogHistoriaESNComponent } from './dialogs/dialog-historia-esn/dialog-historia-esn.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductoNuevoGarantiaReconComponent } from './type-warranties/producto-nuevo-garantia-recon/producto-nuevo-garantia-recon.component';
 import { RepuestoNuevoRespuestoDefectuosoComponent } from './type-warranties/repuesto-nuevo-respuesto-defectuoso/repuesto-nuevo-respuesto-defectuoso.component';
@@ -82,6 +82,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatRippleModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    FormsModule,
     MatSnackBarModule,
     ReactiveFormsModule,
     MatExpansionModule

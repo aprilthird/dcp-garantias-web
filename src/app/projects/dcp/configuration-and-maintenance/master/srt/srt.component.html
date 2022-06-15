@@ -23,39 +23,43 @@
                     <td mat-cell *matCellDef="let element"> {{element.grupoSrt}}-{{element.procedimiento}} </td>
                   </ng-container>
                   <ng-container matColumnDef="grupoSRT">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Grupo SRT </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Grupo SRT </th>
                     <td mat-cell *matCellDef="let element"> {{element.grupoSrt}} </td>
                   </ng-container>
+                  <ng-container matColumnDef="codigoAcceso">
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Codigo acceso </th>
+                    <td mat-cell *matCellDef="let element">{{element.codigoAccesso}}</td>
+                  </ng-container>
                   <ng-container matColumnDef="procedimiento">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Procedimiento </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Procedimiento </th>
                     <td mat-cell *matCellDef="let element"> {{element.procedimiento}} </td>
                   </ng-container>
                   <ng-container matColumnDef="paso">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Paso </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Paso </th>
                     <td mat-cell *matCellDef="let element"> {{element.paso}} </td>
                   </ng-container>
                   <ng-container matColumnDef="descripcion">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Descripcion </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Descripcion </th>
                     <td mat-cell *matCellDef="let element"> {{element.procedimiento}} </td>
                   </ng-container>
                   <ng-container matColumnDef="tipo">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Tipo </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Tipo </th>
                     <td mat-cell *matCellDef="let element"> {{element.tipo==1?'Motor':'Generador'}} </td>
                   </ng-container>
                   <ng-container matColumnDef="dondeSeReparo">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Donse se reparo </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Donse se reparo </th>
                     <td mat-cell *matCellDef="let element"> {{element.lugar==1?'Taller':'Campo'}} </td>
                   </ng-container>
                   <ng-container matColumnDef="fabricaSRT">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> SRT Fabrica </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> SRT Fabrica </th>
                     <td mat-cell *matCellDef="let element"> {{element.srtFabrica}} </td>
                   </ng-container>
                   <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Estado </th>
                     <td mat-cell *matCellDef="let element"> {{element.estado==1?'Activo':'Inactivo'}} </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Acciones </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Acciones </th>
                     <td mat-cell *matCellDef="let element">
                       <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
                         <mat-icon (click)="onDialogEditSRT(element)">edit</mat-icon>

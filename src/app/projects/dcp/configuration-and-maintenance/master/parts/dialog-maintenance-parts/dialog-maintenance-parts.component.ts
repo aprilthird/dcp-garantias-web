@@ -30,12 +30,12 @@ export class DialogMaintenancePartsComponent implements OnInit {
         estado: new FormControl(true, [Validators.required])
       });
     }else{
-      const estate = this.data.srt.estado==1? true:false;
+      const estate = this.data.part.estado==1? true:false;
       this.formGroup = new FormGroup({
-        codigo: new FormControl (this.data.constant.codigo, [Validators.required]),
-        tipo: new FormControl(this.data.constant.tipo,[Validators.required]),
-        precioFob: new FormControl(this.data.constant.precioFob,[Validators.required]),
-        descripcion: new FormControl(this.data.constant.descripcion,[Validators.required]),
+        codigo: new FormControl (this.data.part.codigo, [Validators.required]),
+        tipo: new FormControl(this.data.part.tipo,[Validators.required]),
+        precioFob: new FormControl(this.data.part.precioFob,[Validators.required]),
+        descripcion: new FormControl(this.data.part.descripcion,[Validators.required]),
         estado: new FormControl (estate, [Validators.required])
       });
     }
@@ -55,14 +55,9 @@ export class DialogMaintenancePartsComponent implements OnInit {
           }
         });
       }else{
-        const request = {
-                        id:this.data.srt.id,
-                        activo:true,
-                        ...this.formGroup.value
-                      };
+        const request = { id:this.data.part.id, activo:true, ...this.formGroup.value };
         console.log(request);
-        this.configurationAndMaintenanceService.maintenanceSrt(request).subscribe(resp=>{
-          console.log(resp);
+        this.configurationAndMaintenanceService.maintenanceParts(request).subscribe(resp=>{
           if(resp.success){
             this.dialogRef.close(true);
           }else{

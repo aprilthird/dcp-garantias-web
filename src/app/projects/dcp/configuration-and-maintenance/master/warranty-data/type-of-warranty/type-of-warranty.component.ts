@@ -15,13 +15,21 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 export class TypeOfWarrantyComponent implements OnInit {
 
   displayedColumns: string[] = ['codigo','descripcion','estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = [];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  constructor(private readonly matDialog: MatDialog,
-            private _snackBar: MatSnackBar,
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
+
+  constructor(private readonly matDialog: MatDialog,private _snackBar: MatSnackBar,
             private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
@@ -29,15 +37,61 @@ export class TypeOfWarrantyComponent implements OnInit {
   }
 
   listWarrantyTypes():void{
-    this.configurationAndMaintenanceService.listWarrantyTypes().subscribe(resp=>{
-      console.log(resp);
+    this.configurationAndMaintenanceService.listWarrantyTypes(this.pageCurrent).subscribe(resp=>{
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();  
     });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listWarrantyTypes();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listWarrantyTypes();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewTypeOfWarranty():void{
     const dialogNewTravelDetail = this.matDialog.open(DialogMaintenanceTypeOfWarrantyComponent,{
       data: {option:'new'},
-      width:'900px'
+      width:'900px', disableClose:true
     });
     dialogNewTravelDetail.afterClosed().subscribe(resp=>{
       if(resp){
@@ -52,7 +106,7 @@ export class TypeOfWarrantyComponent implements OnInit {
   onDialogEditTypeOfWarranty(_warrantyType:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceTypeOfWarrantyComponent,{
       data: {option:'edit', warrantyType:_warrantyType},
-      width:'900px'
+      width:'900px',disableClose:true
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {

@@ -21,6 +21,15 @@ export class ClientComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  //botones del paginado
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
+
   constructor(private readonly matDialog: MatDialog,
             private _snackBar: MatSnackBar,
             private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
@@ -30,9 +39,55 @@ export class ClientComponent implements OnInit {
   }
 
   listClients():void{
-    this.configurationAndMaintenanceService.listClients().subscribe(resp=>{
-      this.dataSource = resp.data;      
+    this.configurationAndMaintenanceService.listClients(this.pageCurrent).subscribe(resp=>{
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();   
     });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listClients();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listClients();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewClient():void{
@@ -85,9 +140,9 @@ export class ClientComponent implements OnInit {
   }
 
   deleteConstant(option:any, client:any):void{
-    const request = {id:client.id, activo:false};
+    client.activo=false;
     if(option){
-      this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
+      this.configurationAndMaintenanceService.maintenanceClients(client).subscribe(resp=>{
         if(resp.success){
           this.listClients();
           this.openSnackBar('Cliente eliminado');

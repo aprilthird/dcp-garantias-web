@@ -61,7 +61,7 @@ export class EngineComponent implements OnInit {
   }
 
   loadComplaints():void{
-    this.configurationAndMaintenanceService.listComplaints().subscribe(resp=>{
+    this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.complaints = resp.data;
     });
   }
@@ -98,15 +98,15 @@ export class EngineComponent implements OnInit {
         os: new FormControl(this.warranty.os,[Validators.required]),
         //
         tipoGarantia: new FormControl(this.warranty.idTipoGarantia,[Validators.required]),
-        puntoFalla: new FormControl(''),
-        medida: new FormControl(),
-        fechaFalla: new FormControl(),
-        fechaInicioGarantia: new FormControl(),
-        numParteRepuesto: new FormControl(''),
-        numParteFallo: new FormControl(''),
-        codigoAdicional: new FormControl(''),
-        fechaAdicional: new FormControl(),
-        ejecucionAdicional: new FormControl(''),
+        puntoFalla: new FormControl(this.warranty.puntoFalla),
+        medida: new FormControl(this.warranty.medida),
+        fechaFalla: new FormControl(this.warranty.fechaFalla),
+        fechaInicioGarantia: new FormControl(this.warranty.fechaInicioGarantia),
+        numParteRepuesto: new FormControl(this.warranty.numParteRepuesto),
+        numParteFallo: new FormControl(this.warranty.numParteFallo),
+        codigoAdicional: new FormControl(this.warranty.codigoAdicional),
+        fechaAdicional: new FormControl(this.warranty.fechaAdicional),
+        ejecucionAdicional: new FormControl(this.warranty.ejecucionAdicional),
         //
         idQueja1: new FormControl(this.warranty.idQueja1,[Validators.required]),
         idQueja2: new FormControl(this.warranty.idQueja2,[Validators.required]),
@@ -117,6 +117,7 @@ export class EngineComponent implements OnInit {
       });
       this.getEsn();
       this.getOs();
+      this.selectTypeWarranty();
     }
   }
 
