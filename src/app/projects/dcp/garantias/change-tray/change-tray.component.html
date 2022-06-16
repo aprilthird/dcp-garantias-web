@@ -1346,7 +1346,7 @@
                                     <hr color="#E2E8F0">                                    
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <mat-card class="card-table" style="width: 60%;">
+                                            <mat-card class="card-table">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <span class="font-w-700">Otros reclamables ingresados</span>
@@ -1372,8 +1372,8 @@
                                             <div class="row">
                                                 <div class="col-md-9 d-flex justify-content-end align-items-center"><span>Total:</span></div>
                                                 <div class="col-md-3 d-flex justify-content-start align-items-center">
-                                                    <mat-form-field>
-                                                        <input matInput type="text" placeholder="" [value]="totalPrecioReclamables | currency: 'S/.': 'symbol':''" [disabled]="true">
+                                                    <mat-form-field style="width: 50%;">
+                                                        <input matInput type="text" placeholder="" [value]="totalPrecioReclamables | currency: 'symbol':''" [disabled]="true">
                                                     </mat-form-field>
                                                 </div>
                                             </div>
