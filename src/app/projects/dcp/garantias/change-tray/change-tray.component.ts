@@ -49,6 +49,7 @@ export class ChangeTrayComponent implements OnInit {
   //viajes
   dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; valorDeViajes = []; costoDeViajes = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0;
   displayedColumnsViajes: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo', 'accion'];
+  displayedColumnsViajesVerificacion: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo'];
   fechaDeViaje:any; medioDeTransporteSeleccionado:any; descripcionDeViaje:string ; tipoDeViajeSeleccionado:any; detalleDeViajeSeleccionado:any; unidadDeMedida = 'KM'; cantidadDeTecnicos = 0; 
   //narrativas
   dataSourceNarrativa = [{quejasNarrativa:'', tecnicoResponsable:'Diego Perez (estatico)', idPromotion:'2500TM (estatico)'}];
@@ -537,7 +538,6 @@ export class ChangeTrayComponent implements OnInit {
     }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una fecha'},disableClose:true }); }
   }
   calcularSubTotalDeViaje(a):void{
-    debugger;
     this.costoDeViajes[a] = this.valorDeViajes[a] * 1.5;
     let suma = 0;
     for (let i = 0; i < this.costoDeViajes.length; i++) {
