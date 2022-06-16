@@ -38,11 +38,13 @@ export class ChangeTrayComponent implements OnInit {
   //partes
   dataSourcePartes = []; cantidadPartes = []; precioUnitarioPartes = []; subTotalPartes = [];
   displayedColumnsPartes: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal', 'accion'];
+  displayedColumnsPartesVerificacion: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal'];
   formBuscarParte: FormGroup = new FormGroup({codigoBuscarParte: new FormControl('', [Validators.required])});
   mensajeParteNoExiste: boolean= false; montoTotalPartes = 0; montoTotalPartesConPenalizacion = 0; montoTotalPartesEnSAP = 0;
   //otros reclamables
   dataSourceOtrosReclamables = []; reclamables = [];  preciosReclamables = [];
   displayedColumnsOtrosReclamables: string[] = ['descripcion', 'precio', 'accion'];
+  displayedColumnsOtrosReclamablesVerificacion: string[] = ['descripcion', 'precio'];
   idReclamable : any; descripcionReclamable : string = ''; totalPrecioReclamables: number= 0;
   //viajes
   dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; valorDeViajes = []; costoDeViajes = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0;
