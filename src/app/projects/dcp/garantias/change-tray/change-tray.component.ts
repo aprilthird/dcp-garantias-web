@@ -5,9 +5,7 @@ import { Router } from '@angular/router';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
-import { F } from '@angular/cdk/keycodes';
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
-
+import { DialogAdjuntarDocumentoComponent } from '../dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
@@ -16,45 +14,38 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 export class ChangeTrayComponent implements OnInit {
 
   numberRecord:number=12345678;
-  //marcas de los equipos
-  marcas:[];
-  //modelos de los equipos
-  modelos:[];
+  //marcas y modelos de los equipos
+  marcas:[];   modelos:[];
   documentosDetallesReclamo=[];
   //
-  dataSource = ELEMENT_DATA;
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','description','action'];
+  dataSourceFallas = ELEMENT_DATA;
+  displayedColumnsFallas: string[] = ['position', 'name', 'weight', 'symbol','description','action'];
   //SRT
-  dataSourceSrt=[];
+  dataSourceSrt=[];  auxSrtCantidad = []; auxSrtHorasHombre = []; auxSrtSubTotal = []; documentosSrt= [];
   displayedColumnsSrt: string[] = ['codigo', 'cantidad', 'hhInvertida', 'srtFabrica','descripcion','codigoAcceso', 'subTotalHH', 'accion'];
-  documentosSert= [];
+  displayedColumnsSrtVerificacion: string[] = ['codigo', 'cantidad', 'hhInvertida', 'srtFabrica','descripcion','codigoAcceso', 'subTotalHH'];
   formBuscarSrt: FormGroup = new FormGroup({codigoBuscarSrt: new FormControl('', [Validators.required])});
-  verCamposNuevoSrt:boolean=false;
-  srtObject = {id:'', codigo:'', cantidad:0, horasHombre:0, srtFabrica:'', descripcion:'', codigoAcceso:'',procedimiento:'',grupoSrt:''}
-  verMensajeAgregarNuevoSrt:boolean=false;
-  auxSrtCantidad:any={};
-  auxSrtHorasHombre:any={};
-  auxSrtSubTotal:any={};
+  verCamposNuevoSrt:boolean=false; verMensajeAgregarNuevoSrt:boolean=false; dondeSeReparo: any; montoTotalManoDeObra = 0; montoTotalManoDeObraConPenalizacion = 0; totalHorasHombre = 0;
   //partes
-  dataSourcePartes = []; cantidadPartes = []; precioUnitarioPartes = []; subTotalPartes = [];
+  dataSourcePartes = []; cantidadPartes = []; precioUnitarioPartes = []; subTotalPartes = []; documentosPartes = [];
   displayedColumnsPartes: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal', 'accion'];
   displayedColumnsPartesVerificacion: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal'];
   formBuscarParte: FormGroup = new FormGroup({codigoBuscarParte: new FormControl('', [Validators.required])});
   mensajeParteNoExiste: boolean= false; montoTotalPartes = 0; montoTotalPartesConPenalizacion = 0; montoTotalPartesEnSAP = 0;
   //otros reclamables
-  dataSourceOtrosReclamables = []; reclamables = [];  preciosReclamables = [];
+  dataSourceOtrosReclamables = []; reclamables = [];  preciosReclamables = []; documentosOtrosReclamables = [];
   displayedColumnsOtrosReclamables: string[] = ['descripcion', 'precio', 'accion'];
   displayedColumnsOtrosReclamablesVerificacion: string[] = ['descripcion', 'precio'];
   idReclamable : any; descripcionReclamable : string = ''; totalPrecioReclamables: number= 0;
   //viajes
-  dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; valorDeViajes = []; costoDeViajes = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0;
+  dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; valorDeViajes = []; costoDeViajes = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0; documentosViajes = [];
   displayedColumnsViajes: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo', 'accion'];
   displayedColumnsViajesVerificacion: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo'];
   fechaDeViaje:any; medioDeTransporteSeleccionado:any; descripcionDeViaje:string ; tipoDeViajeSeleccionado:any; detalleDeViajeSeleccionado:any; unidadDeMedida = 'KM'; cantidadDeTecnicos = 0; 
   //narrativas
+  queja1:any={descripcion:''}; queja2:any={descripcion:''}; queja3:any={descripcion:''}; queja4:any={descripcion:''}; causasNarrativa=''; correccionesNarrativa=''; documentosNarrativas = [];
   dataSourceNarrativa = [{quejasNarrativa:'', tecnicoResponsable:'Diego Perez (estatico)', idPromotion:'2500TM (estatico)'}];
-  displayedColumnsNarrativa: string[] = ['quejas','idPromocion' ,'tecnico','causas','correcciones'];
-  causasNarrativa=''; correcionesNarrativa='';
+  displayedColumnsNarrativa: string[] = ['quejas','idPromocion' ,'tecnico','causas','correcciones'];  
   //formulario
   formGroupChangeTray: FormGroup;
   //
@@ -104,7 +95,6 @@ export class ChangeTrayComponent implements OnInit {
     this.button.detalles = true;
     this.styleButton.detallesStyle='darkButton';
     this.warranty = JSON.parse(localStorage.getItem('garantia'));
-    this.loadComplaints();
     this.loadFormGroupChangeTray();
     this.loadFormGroupSrt();
     this.cargarDatosDeMaestras();
@@ -112,6 +102,10 @@ export class ChangeTrayComponent implements OnInit {
   }
 
   cargarDatosDeMaestras():void{
+    this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
+      this.complaints = resp.data;
+      this.obtenerQuejas();
+    });
     this.configurationAndMaintenanceService.listMarcaMotorSinPaginar().subscribe(resp=>{
       this.marcas = resp.data;
     });
@@ -123,13 +117,10 @@ export class ChangeTrayComponent implements OnInit {
     });
     this.configurationAndMaintenanceService.listaTiposDeViajeSinPaginar().subscribe(response=>{
       this.tiposDeViaje = response.data;
-      console.log(this.tiposDeViaje);
     });
     this.configurationAndMaintenanceService.listaDetallesDeViajeSinPaginar().subscribe(response=>{
       this.detallesDeViaje = response.data;
-      console.log(this.detallesDeViaje);
     });
-    this.cargarQuejasEnLaNarrativa();
   }
 
   saveDocDetallesReclamo(event):void{
@@ -193,12 +184,6 @@ export class ChangeTrayComponent implements OnInit {
     this.getEsn();
     this.getOs();
     this.selectTypeWarranty();
-  }
-
-  loadComplaints():void{
-    this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
-      this.complaints = resp.data;
-    });
   }
 
   onGarantias():void{
@@ -387,38 +372,38 @@ export class ChangeTrayComponent implements OnInit {
         break;
     }
   }
-  
+  //SRT
   loadFormGroupSrt():void{
     this.formSrt = new FormGroup({
-      procedimiento: new FormControl('',[Validators.required]),
+      codigo: new FormControl('',[Validators.required]),
       descripcion: new FormControl('',[Validators.required]),
       cantidad: new FormControl('',[Validators.required]),
-      grupoSrt: new FormControl('',[Validators.required]),
+      srtFabrica: new FormControl('',[Validators.required]),
       codigoAcceso: new FormControl('',[Validators.required])
     });
   }
-
   limpiarCamposSrt():void{
     this.formSrt.reset();
   }
-
   guardarNuevaSrt():void{
     if(this.formSrt.valid){
-      const request = {id:0, activo:true, ...this.formSrt.value};
-      this.configurationAndMaintenanceService.maintenanceSrt(request).subscribe(response=>{
-        if(response.success){
-          this.srtObject.id = response.body.id;
-          this.srtObject.codigo = response.body.grupoSRT+'-'+response.body.procedimiento;
-          this.srtObject.cantidad = this.formSrt.value.cantidad;
-          this.srtObject.horasHombre = 0;
-          this.srtObject.srtFabrica = response.body.srtFabrica;
-          this.srtObject.descripcion = response.body.descripcion;
-          this.srtObject.codigoAcceso = response.body.codigoAcceso;
-          this.srtObject.procedimiento = response.body.procedimiento;
-          this.srtObject.grupoSrt = response.body.grupoSRT;
-          this.dataSourceSrt = this.dataSourceSrt.concat([this.srtObject]);
-        }
-      });
+      if(this.dondeSeReparo!=null){
+        const array = this.formSrt.value.codigo.split('-');
+        const request = {id:0, activo:true, grupoSrt:array[0], procedimiento:array[1], lugar:this.dondeSeReparo ,...this.formSrt.value};      
+        this.configurationAndMaintenanceService.maintenanceSrt(request).subscribe(response=>{
+          if(response.success){
+            this.dataSourceSrt = this.dataSourceSrt.concat([response.body]);
+            this.auxSrtCantidad[this.dataSourceSrt.length-1] = 0;
+            this.auxSrtHorasHombre[this.dataSourceSrt.length-1] = 0;
+            this.auxSrtSubTotal[this.dataSourceSrt.length-1] = 0;
+          }
+        });
+      }else{
+        const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+          data:{text:'Debe seleccionar el lugar donde se reparó'},
+          disableClose:true,
+        });
+      }
     }else{
       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
         data:{text:'Ingrese todos los campos SRT'},
@@ -426,27 +411,15 @@ export class ChangeTrayComponent implements OnInit {
       });
     }
   }
-
   buscarSrt():void{
     if(this.formBuscarSrt.valid){
-      console.table(this.dataSourceSrt);
       this.configurationAndMaintenanceService.searchSrt(this.formBuscarSrt.value.codigoBuscarSrt).subscribe(response=>{
         if(response.data[0]){
-          this.srtObject.id = response.data[0].id;
-          // this.srtObject.codigo = response.data[0].grupoSrt+'-'+response.data[0].procedimiento;
-          this.srtObject.cantidad = 0;
-          this.srtObject.horasHombre = 0;
-          this.srtObject.srtFabrica = response.data[0].srtFabrica;
-          this.srtObject.descripcion = response.data[0].descripcion;
-          this.srtObject.codigoAcceso = response.data[0].codigoAcceso;
-          this.srtObject.procedimiento = response.data[0].procedimiento;
-          this.srtObject.grupoSrt = response.data[0].grupoSrt;
-          this.dataSourceSrt = this.dataSourceSrt.concat([this.srtObject]);
-          this.verCamposNuevoSrt=false;
-      console.table(this.dataSourceSrt.length);
-      console.table(this.dataSourceSrt);
-      console.table(this.dataSourceSrt);
-
+          this.dataSourceSrt = this.dataSourceSrt.concat([response.data[0]]);
+          this.auxSrtCantidad[this.dataSourceSrt.length-1] = 0;
+          this.auxSrtHorasHombre[this.dataSourceSrt.length-1] = 0;
+          this.auxSrtSubTotal[this.dataSourceSrt.length-1] = 0;
+          if(this.verCamposNuevoSrt){this.verCamposNuevoSrt=false;}
         }else{
           this.verMensajeAgregarNuevoSrt = true;
           setTimeout(()=>{
@@ -464,9 +437,18 @@ export class ChangeTrayComponent implements OnInit {
       });
     }
   }
-
   calcularSubTotalSrt(index):void{
-    this.auxSrtSubTotal[index] = this.auxSrtCantidad[index] * this.auxSrtHorasHombre[index]; 
+    this.auxSrtSubTotal[index] = this.auxSrtCantidad[index] * this.auxSrtHorasHombre[index] * 10;
+    let sumaTotal = 0;  let sumaHorasHombre = 0; let sumaTotalConPenalizacion = 0;
+    for (let j = 0; j < this.dataSourceSrt.length; j++) {
+      sumaTotal += Number(this.auxSrtSubTotal[j]);
+      sumaHorasHombre += Number(this.auxSrtHorasHombre[j]);      
+    }
+    sumaTotalConPenalizacion = sumaTotal + (sumaTotal * 0.1);
+
+    this.montoTotalManoDeObra = sumaTotal;
+    this.montoTotalManoDeObraConPenalizacion = sumaTotalConPenalizacion;
+    this.totalHorasHombre = sumaHorasHombre;
   }
   //PARTES
   buscarParte():void{
@@ -537,8 +519,8 @@ export class ChangeTrayComponent implements OnInit {
       }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una medio de transporte'},disableClose:true }); }
     }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una fecha'},disableClose:true }); }
   }
-  calcularSubTotalDeViaje(a):void{
-    this.costoDeViajes[a] = this.valorDeViajes[a] * 1.5;
+  calcularSubTotalDeViaje(index):void{
+    this.costoDeViajes[index] = this.valorDeViajes[index] * 1.5;
     let suma = 0;
     for (let i = 0; i < this.costoDeViajes.length; i++) {
       suma += Number(this.costoDeViajes[i]);      
@@ -547,12 +529,31 @@ export class ChangeTrayComponent implements OnInit {
     this.montoTotalDeViajesConPenalizacion = suma + (suma*0.1);
   }
   //NARRATIVAS
-  cargarQuejasEnLaNarrativa():void{
-    let queja1; let queja2; let queja3; let queja4;
-    if(this.warranty.idQueja1!=null){ queja1 = this.complaints.find(queja => queja.id == this.warranty.idQueja1); this.dataSourceNarrativa[0].quejasNarrativa += ' -'+queja1.descripcion}
-    if(this.warranty.idQueja2!=null){ queja2 = this.complaints.find(queja => queja.id == this.warranty.idQueja2); this.dataSourceNarrativa[0].quejasNarrativa += ' -'+queja2.descripcion}
-    if(this.warranty.idQueja3!=null){ queja3 = this.complaints.find(queja => queja.id == this.warranty.idQueja3); this.dataSourceNarrativa[0].quejasNarrativa += ' -'+queja3.descripcion}
-    if(this.warranty.idQueja4!=null){ queja4 = this.complaints.find(queja => queja.id == this.warranty.idQueja4); this.dataSourceNarrativa[0].quejasNarrativa += ' -'+queja4.descripcion}
+  obtenerQuejas():void{
+    if(this.warranty.idQueja1){
+      this.queja1 = this.complaints.find(item => item.id ==this.warranty.idQueja1);
+    }
+    if(this.warranty.idQueja2){
+      this.queja2 = this.complaints.find(item => item.id ==this.warranty.idQueja2);
+    }
+    if(this.warranty.idQueja3){
+      this.queja3 = this.complaints.find(item => item.id ==this.warranty.idQueja3);
+    }
+    if(this.warranty.idQueja4){
+      this.queja4 = this.complaints.find(item => item.id ==this.warranty.idQueja4);
+    }
+  }
+  cargarDocumentoNarrativas(event):void{
+    const document = event.target.files[0];
+    this.documentosDetallesReclamo.push(document);
+    console.log(this.documentosDetallesReclamo);
+    console.log(document);
+  }
+
+  adjuntarDocumento():void{
+    const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
+      
+    });
   }
 }
 

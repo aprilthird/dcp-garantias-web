@@ -39,6 +39,7 @@ import { MemoComponent } from './type-warranties/memo/memo.component';
 import { DialogTransformRecordToOrangeComponent } from './dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
 import { ChangeTrayComponent } from './change-tray/change-tray.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { DialogAdjuntarDocumentoComponent } from './dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     AtcComponent,
     MemoComponent,
     DialogTransformRecordToOrangeComponent,
-    ChangeTrayComponent
+    ChangeTrayComponent,
+    DialogAdjuntarDocumentoComponent
   ],
   imports: [
     CommonModule,

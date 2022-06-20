@@ -4,6 +4,12 @@
 .w3{
     width: 30%;
 }
+.w6{
+    width: 60%;
+}
+.w4{
+    width: 40%;
+}
 .buttons{
     button{
         background-color: #E2E8F0;
@@ -44,4 +50,18 @@ table{
 .card-table{
     border: 1px solid #C6C4C4;
     border-radius: 8px 8px 0px 0px
+}
+.card-narrativa-cabezera{
+    background: #E2E8F0 !important;
+    border-radius: 0px;
+}
+.card-narrativa-cuerpo{
+    background: #F9F9F9 !important;
+    border-radius: 0px 0px 8px 8px
+}
+.monto-narrativa{
+    width: 100%;
+    text-align: end;
+    margin: 0;
+    margin-right: 20px;
 }
