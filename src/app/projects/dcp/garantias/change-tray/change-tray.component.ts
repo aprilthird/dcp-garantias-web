@@ -552,7 +552,11 @@ export class ChangeTrayComponent implements OnInit {
 
   adjuntarDocumento():void{
     const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
-      
+      width: '425px',
+      disableClose:true
+    });
+    dialogoAdjuntarDocumentos.afterClosed().subscribe(resp=>{
+      console.log(resp);
     });
   }
 }

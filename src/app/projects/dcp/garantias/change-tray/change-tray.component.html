@@ -119,7 +119,7 @@
             <button  [class]="styleButton.narrativaStyle" mat-raised-button (click)="change('narrativa')">Narrativa</button>
             <button  [class]="styleButton.verificacionStyle" mat-raised-button (click)="change('verificacion')">Verificación de detalle</button>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12 mb-5">
             <mat-card>
                 <div class="row">
                     <!-- DETALLES DEL RECLAMO-->
@@ -1554,20 +1554,6 @@
                                 <button mat-raised-button (click)="adjuntarDocumento()">
                                     <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
                                 </button>
-                            </div>
-                            <div class="col-md-12 margin-b-10">
-                                <button mat-raised-button (click)="fileInputDetallesReclamo.click()">
-                                    <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
-                                </button>
-                                <input hidden type="file" (change)="saveDocDetallesReclamo($event)" #fileInputDetallesReclamo>
-                            </div>
-                            <div class="col-md-12 margin-b-10">
-                                <div class="row">
-                                    <div class="col-md-2 flex-xy-center" *ngFor="let document of documentosDetallesReclamo">
-                                        <span>{{document.name}}</span>
-                                        <button mat-icon-button (click)="deleteDocumentDetalleReclamo(document.name)"><mat-icon>close</mat-icon></button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
