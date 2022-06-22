@@ -44,9 +44,10 @@ export class MenuDcpComponent implements OnInit {
       this.garantiasIcon='icon-menu-red';
       this.router.navigate([ruta]);
     }
-    if(ruta=='/fallas'){
+    if(ruta=='/gestion-fallas'){
       this.fallasMenu='color-text-black';
       this.fallasIcon='icon-menu-red';
+      this.router.navigate([ruta]);
     }
     if(ruta=='/herramientas'){
       this.herramientasMenu='color-text-black';

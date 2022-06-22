@@ -12,7 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogQuestionNewRecordComponent } from './dialogs/dialog-question-new-record/dialog-question-new-record.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { EngineComponent } from './register-basic/engine/engine.component';
 import { GeneratorComponent } from './register-basic/generator/generator.component';
 import { MatCardModule } from '@angular/material/card';
