@@ -595,35 +595,42 @@
                             <div class="col-md-12">
                                 <mat-card class="card-table">
                                     <div class="row">
-                                        <div class="col-md-11"><span class="font-w-700">SRT ingresados</span></div>
-                                        <div class="col-md-1  text--center"><button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button></div>
+                                        <div class="col-md-11">
+                                            <span class="font-w-700">SRT ingresados</span>
+                                        </div>
+                                        <div class="col-md-1  text--center">
+                                            <button mat-icon-button (click)="eliminarSrts()" [disabled]="dataSourceSrt.length==0">
+                                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                            </button>
+                                        </div>
                                     </div>
                                 </mat-card>
                             </div>
                             <div class="col-md-12 margin-b-15">
                                 <table mat-table [dataSource]="dataSourceSrt" class="mat-elevation-z8">
                                     <ng-container matColumnDef="codigo">
-                                    <th mat-header-cell *matHeaderCellDef width ="12%"> Código SRT </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.grupoSrt+'-'+element.procedimiento}} </td>
+                                        <th mat-header-cell *matHeaderCellDef width ="12%"> Código SRT </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.grupoSrt+'-'+element.procedimiento}} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="cantidad">
-                                    <th mat-header-cell *matHeaderCellDef width ="12%"> Cantidad </th>
-                                    <td mat-cell *matCellDef="let element, let i = index">
-                                        <mat-form-field class="pt-4">
-                                            <input matInput type="text" [(ngModel)]="auxSrtCantidad[i]" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalSrt(i)">
-                                        </mat-form-field>
-                                    </td>
+                                        <th mat-header-cell *matHeaderCellDef width ="12%"> Cantidad </th>
+                                        <td mat-cell *matCellDef="let element, let i = index">
+                                            <mat-form-field class="pt-4">
+                                                <input matInput type="text" [(ngModel)]="element.cantidadSrt" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalSrt(i)">
+                                            </mat-form-field>
+                                        </td>
                                     </ng-container>
                                     <ng-container matColumnDef="hhInvertida">
-                                    <th mat-header-cell *matHeaderCellDef width ="12%"> H-H invertida </th>
-                                    <td mat-cell *matCellDef="let element, let i = index">
-                                        <mat-form-field class="pt-4">
-                                            <input matInput type="text" [(ngModel)]="auxSrtHorasHombre[i]" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalSrt(i)">
-                                        </mat-form-field></td>
+                                        <th mat-header-cell *matHeaderCellDef width ="12%"> H-H invertida </th>
+                                        <td mat-cell *matCellDef="let element, let i = index">
+                                            <mat-form-field class="pt-4">
+                                                <input matInput type="text" [(ngModel)]="element.horasHombreSrt" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalSrt(i)">
+                                            </mat-form-field>
+                                        </td>
                                     </ng-container>
                                     <ng-container matColumnDef="srtFabrica">
-                                    <th mat-header-cell *matHeaderCellDef width ="12%"> SRT Fábrica </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.srtFabrica}} </td>
+                                        <th mat-header-cell *matHeaderCellDef width ="12%"> SRT Fábrica </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.srtFabrica}} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="descripcion">
                                         <th mat-header-cell *matHeaderCellDef width ="23%"> Descripción </th>
@@ -635,12 +642,14 @@
                                     </ng-container>
                                     <ng-container matColumnDef="subTotalHH">
                                         <th mat-header-cell *matHeaderCellDef width ="12%"> Sub total H-H </th>
-                                        <td mat-cell *matCellDef="let element, let i = index"> {{auxSrtSubTotal[i] | currency : 'symbol':'' }} </td>
+                                        <td mat-cell *matCellDef="let element"> {{element.subTotalSrt | currency : 'symbol':'' }} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="accion">
-                                        <th mat-header-cell *matHeaderCellDef width ="5%"></th>
-                                        <td mat-cell *matCellDef="let element" class="text--end">
-                                            <mat-checkbox color="primary"></mat-checkbox>
+                                        <th mat-header-cell *matHeaderCellDef width ="5%">
+                                            <mat-checkbox color="primary" [(ngModel)]="checkBoxEliminarTodoSrt" [ngModelOptions]="{standalone: true}" (ngModelChange)="seleccionarTodoSrt()"  [disabled]="dataSourceSrt.length==0"></mat-checkbox>
+                                        </th>
+                                        <td mat-cell *matCellDef="let element,  let i = index">
+                                            <mat-checkbox color="primary" [(ngModel)]="element.check" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsSrt"></tr>
@@ -717,7 +726,9 @@
                                             <span class="font-w-700">Partes ingresadas</span>
                                         </div>
                                         <div class="col-md-1  text--center">
-                                            <button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button>
+                                            <button mat-icon-button (click)="eliminarPartes()" [disabled]="dataSourcePartes.length==0">
+                                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                            </button>
                                         </div>
                                     </div>
                                 </mat-card>
@@ -736,7 +747,7 @@
                                         <th mat-header-cell *matHeaderCellDef width ="15%"> Cantidad </th>
                                         <td mat-cell *matCellDef="let element, let i = index" >
                                             <mat-form-field class="pt-4">
-                                                <input matInput type="text" placeholder="0" [(ngModel)]="cantidadPartes[i]" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularTotalPartes(i)">
+                                                <input matInput type="text" placeholder="0" [(ngModel)]="element.cantidadParte" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalPartes(i)">
                                             </mat-form-field>
                                         </td>
                                     </ng-container>
@@ -744,7 +755,7 @@
                                         <th mat-header-cell *matHeaderCellDef width ="15%"> Precio Unit. </th>
                                         <td mat-cell *matCellDef="let element, let i = index">
                                             <mat-form-field class="pt-4">
-                                                <input matInput type="text" placeholder="0" [(ngModel)]="precioUnitarioPartes[i]"  [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularTotalPartes(i)">
+                                                <input matInput type="text" placeholder="0" [(ngModel)]="element.precioUnitarioParte"  [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalPartes(i)">
                                             </mat-form-field>
                                         </td>
                                     </ng-container>
@@ -754,12 +765,14 @@
                                     </ng-container>
                                     <ng-container matColumnDef="subTotal">
                                         <th mat-header-cell *matHeaderCellDef width ="15%"> Sub Total </th>
-                                        <td mat-cell *matCellDef="let element, let i = index"> {{ subTotalPartes[i] | currency: 'symbol':'' }} </td>
+                                        <td mat-cell *matCellDef="let element"> {{ element.subTotalParte | currency: 'symbol':'' }} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="accion">
-                                        <th mat-header-cell *matHeaderCellDef width ="5%"></th>
-                                        <td mat-cell *matCellDef="let element" class="text--end">
-                                            <mat-checkbox color="primary"></mat-checkbox>
+                                        <th mat-header-cell *matHeaderCellDef width ="5%">
+                                            <mat-checkbox color="primary" [(ngModel)]="checkBoxEliminarTodoPartes" [ngModelOptions]="{standalone: true}" (ngModelChange)="seleccionarTodoPartes()"  [disabled]="dataSourcePartes.length==0"></mat-checkbox>
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-checkbox color="primary" [(ngModel)]="element.check" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsPartes"></tr>
@@ -839,7 +852,9 @@
                                                 <span class="font-w-700">Otros reclamables ingresados</span>
                                             </div>
                                             <div class="col-md-1  text--center">
-                                                <button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button>
+                                                <button mat-icon-button (click)="eliminarReclamables()" [disabled]="dataSourceOtrosReclamables.length==0">
+                                                    <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                                </button>
                                             </div>
                                         </div>
                                     </mat-card>
@@ -852,16 +867,18 @@
                                         </ng-container>
                                         <ng-container matColumnDef="precio">
                                             <th mat-header-cell *matHeaderCellDef width ="20%"> Precio </th>
-                                            <td mat-cell *matCellDef="let element, let i = index">
+                                            <td mat-cell *matCellDef="let element">
                                                 <mat-form-field class="pt-4">
-                                                    <input matInput type="text" [(ngModel)]="preciosReclamables[i]" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularTotalReclamables()">
+                                                    <input matInput type="text" [(ngModel)]="element.precioReclamable" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularTotalReclamables()">
                                                 </mat-form-field>
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="accion">
-                                            <th mat-header-cell *matHeaderCellDef width ="5%"></th>
+                                            <th mat-header-cell *matHeaderCellDef width ="5%">
+                                                <mat-checkbox color="primary" [(ngModel)]="checkBoxEliminarTodoReclamables" [ngModelOptions]="{standalone: true}" (ngModelChange)="seleccionarTodoReclamables()"  [disabled]="dataSourceOtrosReclamables.length==0"></mat-checkbox>
+                                            </th>
                                             <td mat-cell *matCellDef="let element" class="text--end">
-                                                <mat-checkbox color="primary"></mat-checkbox>
+                                                <mat-checkbox color="primary" [(ngModel)]="element.check" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsOtrosReclamables"></tr>
@@ -961,7 +978,7 @@
                                     <mat-card class="card-table">
                                         <div class="row">
                                             <div class="col-md-11"><span class="font-w-700">Viajes ingresados</span></div>
-                                            <div class="col-md-1  text--center"><button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button></div>
+                                            <div class="col-md-1  text--center"><button mat-icon-button (click)="eliminarViajes()" [disabled]="dataSourceViajes.length==0"><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button></div>
                                         </div>
                                     </mat-card>
                                 </div>
@@ -995,20 +1012,20 @@
                                             <th mat-header-cell *matHeaderCellDef width ="10%"> Valor </th>
                                             <td mat-cell *matCellDef="let element, let i = index">
                                                 <mat-form-field class="pt-4">
-                                                    <input matInput type="text" placeholder="" [(ngModel)]="valorDeViajes[i]" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalDeViaje(i)">
+                                                    <input matInput type="text" [(ngModel)]="element.valorDeViaje" [ngModelOptions]="{standalone: true}" (ngModelChange)="calcularSubTotalDeViaje(i)">
                                                 </mat-form-field>
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="costo">
                                             <th mat-header-cell *matHeaderCellDef width ="10%"> Costo </th>
-                                            <td mat-cell *matCellDef="let element, let i = index" class="ps-3">
-                                                {{costoDeViajes[i]==null?0:costoDeViajes[i] | currency: 'symbol':'' }}
-                                            </td>
+                                            <td mat-cell *matCellDef="let element, let i = index" class="ps-3"> {{element.costoDeViaje | currency: 'symbol':'' }} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="accion">
-                                            <th mat-header-cell *matHeaderCellDef width ="5%"></th>
-                                            <td mat-cell *matCellDef="let element" class="text--end">
-                                                <mat-checkbox color="primary"></mat-checkbox>
+                                            <th mat-header-cell *matHeaderCellDef width ="5%">
+                                                <mat-checkbox color="primary" [(ngModel)]="checkBoxEliminarTodoViajes" [ngModelOptions]="{standalone: true}" (ngModelChange)="seleccionarTodoViajes()"  [disabled]="dataSourceViajes.length==0"></mat-checkbox>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-checkbox color="primary" [(ngModel)]="element.check" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsViajes"></tr>
@@ -1183,28 +1200,27 @@
                                                 <div class="col-md-12">
                                                     <mat-card class="card-table">
                                                         <div class="row">
-                                                            <div class="col-md-11"><span class="font-w-700">SRT ingresados</span></div>
-                                                            <div class="col-md-1  text--center"><button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button></div>
+                                                            <div class="col-md-12"><span class="font-w-700">SRT ingresados</span></div>
                                                         </div>
                                                     </mat-card>
                                                 </div>
                                                 <div class="col-md-12 margin-b-15">
                                                     <table mat-table [dataSource]="dataSourceSrt" class="mat-elevation-z8">
                                                         <ng-container matColumnDef="codigo">
-                                                        <th mat-header-cell *matHeaderCellDef width ="13%"> Código SRT </th>
-                                                        <td mat-cell *matCellDef="let element"> {{element.grupoSrt+'-'+element.procedimiento}} </td>
+                                                            <th mat-header-cell *matHeaderCellDef width ="13%"> Código SRT </th>
+                                                            <td mat-cell *matCellDef="let element"> {{element.grupoSrt+'-'+element.procedimiento}} </td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="cantidad">
-                                                        <th mat-header-cell *matHeaderCellDef width ="13%"> Cantidad </th>
-                                                        <td mat-cell *matCellDef="let element, let i = index">{{auxSrtCantidad[i] | currency : 'symbol':''}}</td>
+                                                            <th mat-header-cell *matHeaderCellDef width ="13%"> Cantidad </th>
+                                                            <td mat-cell *matCellDef="let element">{{element.cantidadSrt | currency : 'symbol':''}}</td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="hhInvertida">
-                                                        <th mat-header-cell *matHeaderCellDef width ="13%"> H-H invertida </th>
-                                                        <td mat-cell *matCellDef="let element, let i = index">{{auxSrtHorasHombre[i] | currency : 'symbol':''}}</td>
+                                                            <th mat-header-cell *matHeaderCellDef width ="13%"> H-H invertida </th>
+                                                            <td mat-cell *matCellDef="let element">{{element.horasHombreSrt | currency : 'symbol':''}}</td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="srtFabrica">
-                                                        <th mat-header-cell *matHeaderCellDef width ="12%"> SRT Fábrica </th>
-                                                        <td mat-cell *matCellDef="let element"> {{element.srtFabrica}} </td>
+                                                            <th mat-header-cell *matHeaderCellDef width ="12%"> SRT Fábrica </th>
+                                                            <td mat-cell *matCellDef="let element"> {{element.srtFabrica}} </td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="descripcion">
                                                             <th mat-header-cell *matHeaderCellDef width ="25%"> Descripción </th>
@@ -1216,7 +1232,7 @@
                                                         </ng-container>
                                                         <ng-container matColumnDef="subTotalHH">
                                                             <th mat-header-cell *matHeaderCellDef width ="12%"> Sub total H-H </th>
-                                                            <td mat-cell *matCellDef="let element, let i = index"> {{auxSrtSubTotal[i] | currency : 'symbol':'' }} </td>
+                                                            <td mat-cell *matCellDef="let element"> {{element.subTotalSrt | currency : 'symbol':'' }} </td>
                                                         </ng-container>
                                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsSrtVerificacion"></tr>
                                                         <tr mat-row *matRowDef="let row; columns: displayedColumnsSrtVerificacion;"></tr>
@@ -1283,11 +1299,11 @@
                                                         </ng-container>
                                                         <ng-container matColumnDef="cantidad">
                                                         <th mat-header-cell *matHeaderCellDef width ="15%"> Cantidad </th>
-                                                        <td mat-cell *matCellDef="let element, let i = index">{{cantidadPartes[i] | currency: 'symbol':''}}</td>
+                                                        <td mat-cell *matCellDef="let element">{{element.cantidadParte | currency: 'symbol':''}}</td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="precioUnitario">
                                                         <th mat-header-cell *matHeaderCellDef width ="15%"> Precio Unit. </th>
-                                                        <td mat-cell *matCellDef="let element, let i = index">{{precioUnitarioPartes[i] | currency: 'symbol':''}}</td>
+                                                        <td mat-cell *matCellDef="let element">{{element.precioUnitarioParte | currency: 'symbol':''}}</td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="precioListaSap">
                                                             <th mat-header-cell *matHeaderCellDef width ="15%"> Precio lista SAP </th>
@@ -1295,7 +1311,7 @@
                                                         </ng-container>
                                                         <ng-container matColumnDef="subTotal">
                                                             <th mat-header-cell *matHeaderCellDef width ="10%"> Sub Total </th>
-                                                            <td mat-cell *matCellDef="let element, let i = index "> {{subTotalPartes[i] | currency: 'symbol':''}} </td>
+                                                            <td mat-cell *matCellDef="let element"> {{element.subTotalParte | currency: 'symbol':''}} </td>
                                                         </ng-container>
                                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsPartesVerificacion"></tr>
                                                         <tr mat-row *matRowDef="let row; columns: displayedColumnsPartesVerificacion;"></tr>
@@ -1343,12 +1359,12 @@
                                                 <div class="col-md-12 margin-b-15">
                                                     <table mat-table [dataSource]="dataSourceOtrosReclamables" class="mat-elevation-z8">
                                                         <ng-container matColumnDef="descripcion">
-                                                        <th mat-header-cell *matHeaderCellDef width ="80%"> Descripcion </th>
-                                                        <td mat-cell *matCellDef="let element"> {{element.descripcion}}</td>
+                                                            <th mat-header-cell *matHeaderCellDef width ="80%"> Descripcion </th>
+                                                            <td mat-cell *matCellDef="let element"> {{element.descripcion}}</td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="precio">
                                                             <th mat-header-cell *matHeaderCellDef width ="20%"> Precio </th>
-                                                            <td mat-cell *matCellDef="let element, let i = index"> {{preciosReclamables[i]}}</td>
+                                                            <td mat-cell *matCellDef="let element"> {{element.precioReclamable}}</td>
                                                         </ng-container>
                                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsOtrosReclamablesVerificacion"></tr>
                                                         <tr mat-row *matRowDef="let row; columns: displayedColumnsOtrosReclamablesVerificacion;"></tr>
@@ -1417,11 +1433,11 @@
                                                         </ng-container>
                                                         <ng-container matColumnDef="valor">
                                                             <th mat-header-cell *matHeaderCellDef width ="10%"> Valor </th>
-                                                            <td mat-cell *matCellDef="let element, let i = index"> {{valorDeViajes[i] | currency: 'symbol':''}} </td>
+                                                            <td mat-cell *matCellDef="let element"> {{element.valorDeViaje | currency: 'symbol':''}} </td>
                                                         </ng-container>
                                                         <ng-container matColumnDef="costo">
                                                             <th mat-header-cell *matHeaderCellDef width ="10%"> Costo </th>
-                                                            <td mat-cell *matCellDef="let element, let i = index" > {{costoDeViajes[i] | currency: 'symbol':'' }} </td>
+                                                            <td mat-cell *matCellDef="let element" > {{element.costoDeViaje | currency: 'symbol':'' }} </td>
                                                         </ng-container>
                                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsViajesVerificacion"></tr>
                                                         <tr mat-row *matRowDef="let row; columns: displayedColumnsViajesVerificacion;"></tr>

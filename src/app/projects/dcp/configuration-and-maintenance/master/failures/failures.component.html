@@ -17,48 +17,38 @@
         <div class="col-md-12">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
-              
-                  <!-- Position Column -->
                   <ng-container matColumnDef="codigo">
                     <th mat-header-cell *matHeaderCellDef> Codigo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.grupoMayor+element.parteFallada+element.tipoFalla}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="grupoMayor">
                     <th mat-header-cell *matHeaderCellDef> Grupo Mayor </th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.grupoMayor}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="descripcionGrupoMayor">
                     <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.grupoMayorDescripcion}}/td>
                   </ng-container>
-
                   <ng-container matColumnDef="parteFallada">
                     <th mat-header-cell *matHeaderCellDef> Parte Fallada </th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.parteFallada}} </td>
                   </ng-container>
-
                   <ng-container matColumnDef="descripcionParteFallada">
                     <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.parteFalladaDescripcion}}</td>
                   </ng-container>
-
                   <ng-container matColumnDef="tipoFalla">
                     <th mat-header-cell *matHeaderCellDef> Tipo de Falla</th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.tipoFalla}}</td>
                   </ng-container>
-
                   <ng-container matColumnDef="descripcionTipoFalla">
                     <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.tipoFallaDescripcion}}</td>
                   </ng-container>
-
                   <ng-container matColumnDef="estado">
                     <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.estado==1?'Activo':'No activo'}} </td>
                   </ng-container>
-                  
                   <ng-container matColumnDef="acciones">
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                     <td mat-cell *matCellDef="let element">
@@ -74,11 +64,16 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-              
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                               showFirstLastButtons 
-                               aria-label="Select page of periodic elements">
-                </mat-paginator>
+                <div class="pb-3 text-right">
+                  <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
+                  <span class="mr-1">Total:</span><span class="font-w-500">{{totalRecords}}</span>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
               </div>
               
         </div>

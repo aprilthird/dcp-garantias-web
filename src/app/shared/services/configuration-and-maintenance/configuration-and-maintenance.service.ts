@@ -44,6 +44,10 @@ export class ConfigurationAndMaintenanceService {
   private urlMantenimientoMarcaMotor= this.baseApiURl + '/Administracion/MantenimientoMarcaMotor';
   private urlBandejaMarcaMotor = this.baseApiURl + '/Administracion/BandejaMarcaMotor';
   
+  //fallas
+  private urlMantenimientoFallas= this.baseApiURl + '/Administracion/MantenimientoTipoFallas';
+  private urlBandejaFallas = this.baseApiURl + '/Administracion/BandejaTipoFallas';
+  
   //clientes
   private urlMaintenanceWarrantyDataClient = this.baseApiURl + '/Administracion/MantenimientoClientes';
   private urlTrayWarrantyDataClient = this.baseApiURl + '/Administracion/BandejaClientes';
@@ -217,6 +221,19 @@ export class ConfigurationAndMaintenanceService {
     return this.httpClient.post(this.urlMaintenanceEngineApplication,_request,{headers:this.header});
   }
 
+  // fallas
+  listaFallas(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.urlBandejaFallas, request, {headers:this.header});
+  }
+  mantenimientoFallas(_request:MasterConstantRequest):Observable<any>{          
+    return this.httpClient.post(this.urlMantenimientoFallas,_request,{headers:this.header});
+  }
+  listaFallasSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlBandejaFallas, request, {headers:this.header});
+  }
+  
   //datos garantia - clientes
   listClients(_page):Observable<any>{
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};

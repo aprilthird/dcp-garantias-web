@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-failures',
@@ -14,15 +15,74 @@ import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-d
 export class FailuresComponent implements OnInit {
 
   displayedColumns: string[] = ['codigo','grupoMayor', 'descripcionGrupoMayor','parteFallada', 'descripcionParteFallada','tipoFalla', 'descripcionTipoFalla' ,'estado','acciones'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
+  dataSource = [];
+  disabledButtonMore:boolean=false;
+  disabledButtonLess:boolean=false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
+  //datos del paginado
+  totalRecords:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+  
   constructor(private readonly matDialog: MatDialog,
-            private _snackBar: MatSnackBar) { }
+            private _snackBar: MatSnackBar, private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
+    this.listFallas();
+  }
+
+  listFallas():void{
+    this.configurationAndMaintenanceService.listaFallas(this.pageCurrent).subscribe(resp=>{      
+      this.dataSource = resp.data;
+      this.totalRecords = resp.totalRecords;
+      this.totalRows = resp.pageSize;
+      this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
+      this.dataSource = resp.data;
+      this.disabledButtonsPagination();
+    });
+  }
+
+  getNumberOfPages(totalRows:any,totalRecords:any):number{
+    let result:any;
+    result = totalRecords / totalRows;
+    if((totalRecords % totalRows)>0){
+      result = (result+1);
+    }
+    return Math.trunc(result);
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listFallas();
+      this.disabledButtonsPagination();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listFallas();
+      this.disabledButtonsPagination();
+    }
+  }
+
+  disabledButtonsPagination(){
+    if(this.pageCurrent == this.numberOfPages){
+      this.disabledButtonLess = true,
+      this.disabledButtonMore = true;
+    }
+    if( this.pageCurrent==1 && this.pageCurrent<this.numberOfPages ){
+      this.disabledButtonLess = true;
+      this.disabledButtonMore = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = false;
+    }
+    if( this.pageCurrent>1 && this.pageCurrent==this.numberOfPages){
+      this.disabledButtonLess = false;
+      this.disabledButtonMore = true;
+    }
   }
 
   onDialogNewFailure():void{
@@ -39,28 +99,28 @@ export class FailuresComponent implements OnInit {
     });
   }
 
-  onDialogEditFailure(_constant:any):void{
+  onDialogEditFailure(_falla:any):void{
     const dialogEditTravelDetail = this.matDialog.open(DialogMaintenanceFailuresComponent,{
-      data: {option:'edit', constant:_constant},
+      data: {option:'edit', falla:_falla},
       width:'900px'
 
     });
     dialogEditTravelDetail.afterClosed().subscribe(resp => {
       if(resp){
         this.openDialogOperationSuccessfully('Falla editada con éxito');
-        // this.getListConstant();
+        this.listFallas();
       }else{
         console.log('operacion cancelada');        
       }
     });
   }
 
-  onDialogDeleteFailure(_constant:any):void{
+  onDialogDeleteFailure(falla:any):void{
     const dialogDelete = this.matDialog.open(DialogDeleteComponent,{
       data:{text:'¿Está seguro de eliminar esta falla?'}
     });
     dialogDelete.afterClosed().subscribe(resp=>{
-      this.deleteConstant(resp,_constant);
+      this.deleteConstant(resp,falla);
     });
   }
 
@@ -71,15 +131,15 @@ export class FailuresComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    // const request = {id:_constant.id, active:false};
+  deleteConstant(option:any, falla:any):void{
+    falla.activo=false;
     if(option){
-      // this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
-        // if(resp.success){
-          // this.getListConstant();
+      this.configurationAndMaintenanceService.mantenimientoFallas(falla).subscribe(resp=>{
+        if(resp.success){
+          this.listFallas();
           this.openSnackBar('Falla eliminado');
-        // }
-      // });
+        }
+      });
     }else{
       console.log('operacion cancelada');      
     }

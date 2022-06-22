@@ -29,8 +29,6 @@ export class SrtComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
   constructor(private readonly matDialog: MatDialog,
               private _snackBar: MatSnackBar,
               private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) { }

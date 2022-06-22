@@ -6,6 +6,7 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogAdjuntarDocumentoComponent } from '../dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
+import { clone, slice } from 'lodash';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
@@ -15,30 +16,30 @@ export class ChangeTrayComponent implements OnInit {
 
   numberRecord:number=12345678;
   //marcas y modelos de los equipos
-  marcas:[];   modelos:[];
-  documentosDetallesReclamo=[];
-  //
-  dataSourceFallas = ELEMENT_DATA;
+  marcas=[];   modelos=[];
+  documentosDetallesReclamo=[]; auxiliarTable = [];
+  //FALLAS
+  dataSourceFallas = ELEMENT_DATA; tiposDeFalla = [];
   displayedColumnsFallas: string[] = ['position', 'name', 'weight', 'symbol','description','action'];
   //SRT
-  dataSourceSrt=[];  auxSrtCantidad = []; auxSrtHorasHombre = []; auxSrtSubTotal = []; documentosSrt= [];
+  dataSourceSrt=[]; documentosSrt= []; checkBoxEliminarTodoSrt=false
   displayedColumnsSrt: string[] = ['codigo', 'cantidad', 'hhInvertida', 'srtFabrica','descripcion','codigoAcceso', 'subTotalHH', 'accion'];
   displayedColumnsSrtVerificacion: string[] = ['codigo', 'cantidad', 'hhInvertida', 'srtFabrica','descripcion','codigoAcceso', 'subTotalHH'];
   formBuscarSrt: FormGroup = new FormGroup({codigoBuscarSrt: new FormControl('', [Validators.required])});
   verCamposNuevoSrt:boolean=false; verMensajeAgregarNuevoSrt:boolean=false; dondeSeReparo: any; montoTotalManoDeObra = 0; montoTotalManoDeObraConPenalizacion = 0; totalHorasHombre = 0;
   //partes
-  dataSourcePartes = []; cantidadPartes = []; precioUnitarioPartes = []; subTotalPartes = []; documentosPartes = [];
+  dataSourcePartes = []; documentosPartes = []; checkBoxEliminarTodoPartes=false
   displayedColumnsPartes: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal', 'accion'];
   displayedColumnsPartesVerificacion: string[] = ['numeroParte', 'descripcion', 'cantidad', 'precioUnitario','precioListaSap','subTotal'];
   formBuscarParte: FormGroup = new FormGroup({codigoBuscarParte: new FormControl('', [Validators.required])});
   mensajeParteNoExiste: boolean= false; montoTotalPartes = 0; montoTotalPartesConPenalizacion = 0; montoTotalPartesEnSAP = 0;
   //otros reclamables
-  dataSourceOtrosReclamables = []; reclamables = [];  preciosReclamables = []; documentosOtrosReclamables = [];
+  dataSourceOtrosReclamables = []; reclamables = []; documentosOtrosReclamables = []; checkBoxEliminarTodoReclamables=false;
   displayedColumnsOtrosReclamables: string[] = ['descripcion', 'precio', 'accion'];
   displayedColumnsOtrosReclamablesVerificacion: string[] = ['descripcion', 'precio'];
   idReclamable : any; descripcionReclamable : string = ''; totalPrecioReclamables: number= 0;
   //viajes
-  dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; valorDeViajes = []; costoDeViajes = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0; documentosViajes = [];
+  dataSourceViajes = []; tiposDeViaje = []; detallesDeViaje = []; montoTotalDeViajes=0; montoTotalDeViajesConPenalizacion:number=0; documentosViajes = []; checkBoxEliminarTodoViajes = false;
   displayedColumnsViajes: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo', 'accion'];
   displayedColumnsViajesVerificacion: string[] = ['fecha','medioTransporte' ,'descripcion','tipo','detalle','unidadMedida','valor', 'costo'];
   fechaDeViaje:any; medioDeTransporteSeleccionado:any; descripcionDeViaje:string ; tipoDeViajeSeleccionado:any; detalleDeViajeSeleccionado:any; unidadDeMedida = 'KM'; cantidadDeTecnicos = 0; 
@@ -112,6 +113,10 @@ export class ChangeTrayComponent implements OnInit {
     this.configurationAndMaintenanceService.listaModelosSinPaginar().subscribe(resp=>{
       this.modelos = resp.data;
     });
+    this.configurationAndMaintenanceService.listaFallasSinPaginar().subscribe(response=>{
+      console.log(response);
+      this.tiposDeFalla = response.data;
+    })
     this.configurationAndMaintenanceService.listaOtrosReclamablesSinPaginar().subscribe(response=>{
       this.reclamables = response.data;
     });
@@ -121,19 +126,6 @@ export class ChangeTrayComponent implements OnInit {
     this.configurationAndMaintenanceService.listaDetallesDeViajeSinPaginar().subscribe(response=>{
       this.detallesDeViaje = response.data;
     });
-  }
-
-  saveDocDetallesReclamo(event):void{
-    const document = event.target.files[0];
-    this.documentosDetallesReclamo.push(document);
-    console.log(this.documentosDetallesReclamo);
-    console.log(document);
-  }
-
-  deleteDocumentDetalleReclamo(name):void{
-    const index = this.documentosDetallesReclamo.findIndex(e=>e.name==name);
-    this.documentosDetallesReclamo.splice(index,1);
-    console.log(index);
   }
 
   getEsn():void{
@@ -392,10 +384,8 @@ export class ChangeTrayComponent implements OnInit {
         const request = {id:0, activo:true, grupoSrt:array[0], procedimiento:array[1], lugar:this.dondeSeReparo ,...this.formSrt.value};      
         this.configurationAndMaintenanceService.maintenanceSrt(request).subscribe(response=>{
           if(response.success){
-            this.dataSourceSrt = this.dataSourceSrt.concat([response.body]);
-            this.auxSrtCantidad[this.dataSourceSrt.length-1] = 0;
-            this.auxSrtHorasHombre[this.dataSourceSrt.length-1] = 0;
-            this.auxSrtSubTotal[this.dataSourceSrt.length-1] = 0;
+            const aux = {cantidadSrt:0,horasHombreSrt:0, subTotalSrt:0, ...response.body};
+            this.dataSourceSrt = this.dataSourceSrt.concat([aux]);
           }
         });
       }else{
@@ -415,10 +405,8 @@ export class ChangeTrayComponent implements OnInit {
     if(this.formBuscarSrt.valid){
       this.configurationAndMaintenanceService.searchSrt(this.formBuscarSrt.value.codigoBuscarSrt).subscribe(response=>{
         if(response.data[0]){
-          this.dataSourceSrt = this.dataSourceSrt.concat([response.data[0]]);
-          this.auxSrtCantidad[this.dataSourceSrt.length-1] = 0;
-          this.auxSrtHorasHombre[this.dataSourceSrt.length-1] = 0;
-          this.auxSrtSubTotal[this.dataSourceSrt.length-1] = 0;
+          const aux = {check:false, cantidadSrt:0, horasHombreSrt:0, subTotalSrt:0, ...response.data[0]};
+          this.dataSourceSrt = this.dataSourceSrt.concat([aux]);
           if(this.verCamposNuevoSrt){this.verCamposNuevoSrt=false;}
         }else{
           this.verMensajeAgregarNuevoSrt = true;
@@ -438,27 +426,47 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
   calcularSubTotalSrt(index):void{
-    this.auxSrtSubTotal[index] = this.auxSrtCantidad[index] * this.auxSrtHorasHombre[index] * 10;
+    this.dataSourceSrt[index].subTotalSrt = this.dataSourceSrt[index].cantidadSrt * this.dataSourceSrt[index].horasHombreSrt * 10;
+    this.calcularTotalSrt();
+  }
+  calcularTotalSrt():void{
     let sumaTotal = 0;  let sumaHorasHombre = 0; let sumaTotalConPenalizacion = 0;
     for (let j = 0; j < this.dataSourceSrt.length; j++) {
-      sumaTotal += Number(this.auxSrtSubTotal[j]);
-      sumaHorasHombre += Number(this.auxSrtHorasHombre[j]);      
+      sumaTotal += Number(this.dataSourceSrt[j].subTotalSrt);
+      sumaHorasHombre += Number(this.dataSourceSrt[j].horasHombreSrt);      
     }
     sumaTotalConPenalizacion = sumaTotal + (sumaTotal * 0.1);
-
     this.montoTotalManoDeObra = sumaTotal;
     this.montoTotalManoDeObraConPenalizacion = sumaTotalConPenalizacion;
     this.totalHorasHombre = sumaHorasHombre;
+  }
+  eliminarSrts():void{
+    let aux = [];
+    for (let i = 0; i < this.dataSourceSrt.length; i++) {
+      if(this.dataSourceSrt[i].check==false){
+        aux.push(this.dataSourceSrt[i]);
+      }
+    }
+    this.dataSourceSrt = aux;
+    this.calcularTotalSrt();
+    if(this.dataSourceSrt.length==0){
+      this.checkBoxEliminarTodoSrt = false;
+    }
+  }
+  seleccionarTodoSrt():void{
+    if(this.dataSourceSrt.length>0){
+      for (let i = 0; i < this.dataSourceSrt.length; i++) {
+        this.dataSourceSrt[i].check = this.checkBoxEliminarTodoSrt;
+      }
+    }
   }
   //PARTES
   buscarParte():void{
     if(this.formBuscarParte.valid){
       this.configurationAndMaintenanceService.buscarParte(this.formBuscarParte.value.codigoBuscarParte).subscribe(response=>{
         if(response.data[0]){
-          this.dataSourcePartes = this.dataSourcePartes.concat([response.data[0]]);
-          this.cantidadPartes[this.dataSourcePartes.length-1] = 0;
-          this.precioUnitarioPartes[this.dataSourcePartes.length-1] = 0;
-          this.subTotalPartes[this.dataSourcePartes.length-1] = 0;
+          const parte = {check:false, cantidadParte:0, precioUnitarioParte:0, subTotalParte:0, ...response.data[0]};
+          this.dataSourcePartes = this.dataSourcePartes.concat([parte]);
         }else{
           this.mensajeParteNoExiste = true;
           setTimeout(()=>{this.mensajeParteNoExiste = false;},5000);
@@ -470,25 +478,57 @@ export class ChangeTrayComponent implements OnInit {
       });
     }
   }
-  calcularTotalPartes(index):void{
-    this.subTotalPartes[index] = this.cantidadPartes[index] * this.precioUnitarioPartes[index] * this.dataSourcePartes[index].precioFob;
-    let sumaTotalPartes = 0; let sumaTotalPartesConPenalizacion = 0; let sumaTotalPartesEnSAP = 0;
-    for (let i = 0; i < this.subTotalPartes.length; i++) { sumaTotalPartes += Number(this.subTotalPartes[i]); }
-    for (let j = 0; j < this.dataSourcePartes.length; j++) { sumaTotalPartesEnSAP += Number(this.dataSourcePartes[j].precioFob); }
+
+  calcularSubTotalPartes(index):void{
+    this.dataSourcePartes[index].subTotalParte = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte * this.dataSourcePartes[index].precioFob;
+    this.calcularTotalPartes();
+  }
+
+  calcularTotalPartes():void{
+    let sumaTotalPartes = 0;
+    let sumaTotalPartesConPenalizacion = 0;
+    let sumaTotalPartesEnSAP = 0;
+    for (let i = 0; i < this.dataSourcePartes.length; i++) {
+      sumaTotalPartes += Number(this.dataSourcePartes[i].subTotalParte);
+    }
+    for (let j = 0; j < this.dataSourcePartes.length; j++) {
+      sumaTotalPartesEnSAP += Number(this.dataSourcePartes[j].precioFob);
+    }
     this.montoTotalPartes = sumaTotalPartes;
     this.montoTotalPartesConPenalizacion = sumaTotalPartes + (sumaTotalPartes * 0.1);
     this.montoTotalPartesEnSAP = sumaTotalPartesEnSAP;
   }
-  //RECLAMABLES
+
+  eliminarPartes():void{
+    let aux = [];
+    for (let i = 0; i < this.dataSourcePartes.length; i++) {
+      if(this.dataSourcePartes[i].check==false){
+        aux.push(this.dataSourcePartes[i]);
+      }
+    }
+    this.dataSourcePartes = aux;
+    this.calcularTotalPartes();
+    if(this.dataSourcePartes.length==0){
+      this.checkBoxEliminarTodoPartes = false;
+    }
+  }
+  seleccionarTodoPartes():void{
+    if(this.dataSourcePartes.length>0){
+      for (let i = 0; i < this.dataSourcePartes.length; i++) {
+        this.dataSourcePartes[i].check = this.checkBoxEliminarTodoPartes;
+      }
+    }
+  }
+  //OTROS RECLAMABLES
   buscarDescripcionDelReclamable():void{
     let reclamable = this.reclamables.find(e => e.id == this.idReclamable);
     this.descripcionReclamable = reclamable.descripcion;
   }
   agregarReclamable():void{
     if(this.idReclamable!=null){
-      let reclamable = this.reclamables.find(e => e.id == this.idReclamable);
-      this.dataSourceOtrosReclamables = this.dataSourceOtrosReclamables.concat([reclamable]);
-      console.log(this.dataSourceOtrosReclamables)
+      const reclamable = this.reclamables.find(e => e.id == this.idReclamable);
+      const fila = {check:false, precioReclamable:0, ...reclamable};
+      this.dataSourceOtrosReclamables = this.dataSourceOtrosReclamables.concat([fila]);
     }else{
       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
         data:{text:'Seleccione un reclamable'},disableClose:true,
@@ -496,14 +536,34 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
   limpiarReclamables():void{
-    console.log(this.preciosReclamables);
+    console.log('falta habilitar');    
   }
   calcularTotalReclamables():void{
     let suma:number = 0;
-    for (let index = 0; index < this.preciosReclamables.length; index++) {
-       suma += Number(this.preciosReclamables[index]);      
+    for (let index = 0; index < this.dataSourceOtrosReclamables.length; index++) {
+       suma += Number(this.dataSourceOtrosReclamables[index].precioReclamable);      
     }
     this.totalPrecioReclamables = suma;
+  }
+  seleccionarTodoReclamables():void{
+    if(this.dataSourceOtrosReclamables.length>0){
+      for (let i = 0; i < this.dataSourceOtrosReclamables.length; i++) {
+        this.dataSourceOtrosReclamables[i].check = this.checkBoxEliminarTodoReclamables;
+      }
+    }
+  }
+  eliminarReclamables():void{
+    let aux = [];
+    for (let i = 0; i < this.dataSourceOtrosReclamables.length; i++) {
+      if(this.dataSourceOtrosReclamables[i].check==false){
+        aux.push(this.dataSourceOtrosReclamables[i]);
+      }
+    }
+    this.dataSourceOtrosReclamables = aux;
+    this.calcularTotalReclamables();
+    if(this.dataSourceOtrosReclamables.length==0){
+      this.checkBoxEliminarTodoReclamables = false;
+    }
   }
   //VIAJES
   agregarViaje():void{
@@ -511,8 +571,16 @@ export class ChangeTrayComponent implements OnInit {
       if(this.medioDeTransporteSeleccionado!=null){
         if(this.tipoDeViajeSeleccionado!=null){
           if(this.detalleDeViajeSeleccionado!=null){
-            const viaje = {fechaDeViaje: this.fechaDeViaje._d, ...this.medioDeTransporteSeleccionado, descripcionDeViaje:this.descripcionDeViaje,...this.tipoDeViajeSeleccionado,
-              ...this.detalleDeViajeSeleccionado, tecnicos:this.cantidadDeTecnicos, unidadDeMedida:this.unidadDeMedida};
+            const viaje = {fechaDeViaje: this.fechaDeViaje._d,
+                          ...this.medioDeTransporteSeleccionado,
+                          descripcionDeViaje:this.descripcionDeViaje,
+                          ...this.tipoDeViajeSeleccionado,
+                          ...this.detalleDeViajeSeleccionado,
+                          tecnicos:this.cantidadDeTecnicos,
+                          unidadDeMedida:this.unidadDeMedida,
+                          valorDeViaje:0,
+                          costoDeViaje:0,
+                        check:false};
               this.dataSourceViajes = this.dataSourceViajes.concat([viaje]);
             }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar un detalle de viaje'},disableClose:true }); }
         }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent, {data:{text:'Debe seleccionar un tipo de viaje'},disableClose:true}); }
@@ -520,13 +588,36 @@ export class ChangeTrayComponent implements OnInit {
     }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una fecha'},disableClose:true }); }
   }
   calcularSubTotalDeViaje(index):void{
-    this.costoDeViajes[index] = this.valorDeViajes[index] * 1.5;
+    this.dataSourceViajes[index].costoDeViaje = this.dataSourceViajes[index].valorDeViaje * 1.5;
+    this.calcularTotalViajes();
+  }
+  calcularTotalViajes():void{
     let suma = 0;
-    for (let i = 0; i < this.costoDeViajes.length; i++) {
-      suma += Number(this.costoDeViajes[i]);      
+    for (let i = 0; i < this.dataSourceViajes.length; i++) {
+      suma += Number(this.dataSourceViajes[i].costoDeViaje);      
     }
     this.montoTotalDeViajes = suma;
     this.montoTotalDeViajesConPenalizacion = suma + (suma*0.1);
+  }
+  eliminarViajes():void{
+    let aux = [];
+    for (let i = 0; i < this.dataSourceViajes.length; i++) {
+      if(this.dataSourceViajes[i].check==false){
+        aux.push(this.dataSourceViajes[i]);
+      }
+    }
+    this.dataSourceViajes = aux;
+    this.calcularTotalViajes();
+    if(this.dataSourceViajes.length==0){
+      this.checkBoxEliminarTodoViajes = false;
+    }
+  }
+  seleccionarTodoViajes():void{
+    if(this.dataSourceViajes.length>0){
+      for (let i = 0; i < this.dataSourceViajes.length; i++) {
+        this.dataSourceViajes[i].check = this.checkBoxEliminarTodoViajes;
+      }
+    }
   }
   //NARRATIVAS
   obtenerQuejas():void{
@@ -549,7 +640,6 @@ export class ChangeTrayComponent implements OnInit {
     console.log(this.documentosDetallesReclamo);
     console.log(document);
   }
-
   adjuntarDocumento():void{
     const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
       width: '425px',
@@ -559,6 +649,7 @@ export class ChangeTrayComponent implements OnInit {
       console.log(resp);
     });
   }
+  
 }
 
 export interface PeriodicElement {
