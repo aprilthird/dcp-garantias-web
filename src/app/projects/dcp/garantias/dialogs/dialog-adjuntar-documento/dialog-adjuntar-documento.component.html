@@ -9,7 +9,7 @@
                 <span>Adjuntar</span>
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="data.modulo=='garantias'">
             <mat-form-field>
                 <mat-label>Seccion</mat-label>
                 <mat-select placeholder="Placeholder" [(ngModel)]="seccionSeleccionada">

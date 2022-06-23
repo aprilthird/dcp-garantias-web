@@ -2,10 +2,10 @@
     <div class="row principal">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="row">
-                <div class="col-xs-8 col-sm-4 col-md-6">
+                <div class="col-xs-8 col-sm-4 col-md-5">
                     <span><h4 class="font-w-700">Gestión de fallas</h4></span>
                 </div>
-                <div class="col-xs-4 col-sm-2 col-md-2">
+                <div class="col-xs-4 col-sm-2 col-md-3">
                     <div matRipple class="notification-green" *ngIf="verMensajeCreacionExitosa">
                       <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>  Se creó correctamente
                     </div>
@@ -19,6 +19,48 @@
                     <button mat-raised-button color="primary" (click)="registroIndividual()">
                         Registro básico individual
                     </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2 search">
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="Buscar N° OS">
+                        <button mat-icon-button matSuffix>
+                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 search">
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" placeholder="Buscar N° ESN">
+                        <button mat-icon-button matSuffix>
+                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker" placeholder="Selecciona">
+                          <input matStartDate placeholder="Start date">
+                          <input matEndDate placeholder="End date">
+                        </mat-date-range-input>
+                        <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                      </mat-form-field>
+                      
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Antiguedad</mat-label>
+                        <mat-select>
+                          <mat-option>Nivel 1</mat-option>
+                          <mat-option>Nivel 2</mat-option>
+                        </mat-select>
+                      </mat-form-field>        
                 </div>
             </div>
         </div>

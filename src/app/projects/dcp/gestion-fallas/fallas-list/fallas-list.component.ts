@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSeleccionarTipoDeRegistroComponent } from '../dialogs/dialog-seleccionar-tipo-de-registro/dialog-seleccionar-tipo-de-registro.component';
 @Component({
   selector: 'app-fallas-list',
   templateUrl: './fallas-list.component.html',
@@ -7,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FallasListComponent implements OnInit {
 
-  verMensajeCreacionExitosa = true;
-  constructor() { }
+  verMensajeCreacionExitosa = false;
+
+  constructor(private readonly matDialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -17,6 +19,8 @@ export class FallasListComponent implements OnInit {
 
   }
   registroIndividual():void{
-
+    const dialogSeleccionarTipoDeRegistro = this.matDialog.open(DialogSeleccionarTipoDeRegistroComponent,{
+      width:'646px'
+    });
   }
 }

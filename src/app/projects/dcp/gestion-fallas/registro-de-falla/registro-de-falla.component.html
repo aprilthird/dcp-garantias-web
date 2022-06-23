@@ -1,0 +1,215 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+            <h4 *ngIf="accion=='new'" class="font-w-700 margin-b-15">Crear registro de fallas</h4>
+            <h4 *ngIf="accion=='edit'" class="font-w-700 margin-b-15">Interna de registro Nº122344555</h4>
+            <span class="pointer" (click)="onListfallas()">Fallas</span> > <span class="text-red pointer"> {{this.accion=='new'?'Crear registro':'Registro de garantía'}}</span>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+            <mat-accordion>
+                <!-- DETALLE RECLAMO-->
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="fw-bold fs-6">Registro básico</mat-panel-title>
+                        <mat-panel-description>
+                            <p class="monto-narrativa font-w-700">-</p>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <hr color="#E2E8F0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Orden de Servicio</mat-label>
+                                        <input matInput type="text" placeholder="N° OS">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">IO</mat-label>
+                                        <input matInput type="text" placeholder="N° IO">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">ESN</mat-label>
+                                        <input matInput type="text" placeholder="N° ESN">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                                    <button mat-raised-button color="primary">Registrar Matricula</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-8">
+                            <mat-card class="card-bg-gray">
+                                <div class="row">
+                                    <div class="col-md-12 mb-5">
+                                        <span class="fs-6">Información de matrícula</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label class="fw-bold">Cliente</mat-label>
+                                            <input matInput type="text" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label class="fw-bold">Aplicación de motor</mat-label>
+                                            <input matInput type="text" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label class="fw-bold">Modelo del motor</mat-label>
+                                            <input matInput type="text" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Area de servicio</mat-label>
+                                        <mat-select placeholder="Seleccionar">
+                                            <mat-option>A</mat-option>
+                                            <mat-option>B</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Aplicacion del equipo</mat-label>
+                                        <input matInput type="text" placeholder="Ingresar aplicacion">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">N° de parte del repuesto</mat-label>
+                                        <input matInput type="text" placeholder="Ingrese el numero de parte">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Punto de falla</mat-label>
+                                        <input matInput type="text" placeholder="Ingrese el punto de falla">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                                    <mat-radio-group aria-label="Select an option" color="primary">
+                                        <mat-radio-button value="h">H</mat-radio-button>
+                                        <mat-radio-button value="km">KM</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Fecha de falla</mat-label>
+                                        <input matInput [matDatepicker]="pickerFechaFalla" placeholder="Ingrese una fecha">
+                                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                        <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
+                                        <mat-datepicker #pickerFechaFalla></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Descripción</mat-label>
+                                        <input matInput type="text" placeholder="Ingrese la descripción">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Usuario que reporta</mat-label>
+                                        <input matInput type="text" [disabled]="true">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">Quejas</div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar">
+                                            <mat-option>A</mat-option>
+                                            <mat-option>B</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar">
+                                            <mat-option>A</mat-option>
+                                            <mat-option>B</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar">
+                                            <mat-option>A</mat-option>
+                                            <mat-option>B</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label class="fw-bold">Breve descripción de los eventos</mat-label>
+                                        <textarea matInput placeholder="Ingrese sus comentarios"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <!-- DETALLE RECLAMO-->
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="font-w-700">Detalle de reclamo</mat-panel-title>
+                        <mat-panel-description>
+                            <p class="monto-narrativa font-w-700">-</p>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <hr color="#E2E8F0">
+                    <p>This is the primary content of the panel.</p>
+                </mat-expansion-panel>                    
+            </mat-accordion>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 margin-b-10">
+                    <span class="font-w-700">Documentos</span>
+                </div>
+                <div class="col-md-12 margin-b-10">
+                    <button mat-raised-button (click)="adjuntarDocumento()">
+                        <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 text-end">
+            <button mat-raised-button class="mx-1">Guardar registro</button>
+            <button mat-raised-button color="primary" class="mx-1">Escalar falla</button>
+        </div>
+    </div>
+</div>

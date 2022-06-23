@@ -9,8 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogQuestionNewRecordComponent implements OnInit {
 
-  constructor( private readonly router: Router,
-                private readonly matDialogRef: MatDialogRef<DialogQuestionNewRecordComponent>) { }
+  constructor( private readonly router: Router,private readonly matDialogRef: MatDialogRef<DialogQuestionNewRecordComponent>) { }
 
   ngOnInit(): void {
   }
