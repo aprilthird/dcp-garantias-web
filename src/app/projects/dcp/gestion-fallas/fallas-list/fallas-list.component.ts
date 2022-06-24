@@ -13,6 +13,7 @@ export class FallasListComponent implements OnInit {
   constructor(private readonly matDialog: MatDialog) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem('success')){ this.mostrarMensajeRegistroExitosoDeUnaFalla(); };
   }
 
   registroMasivo():void{
@@ -22,5 +23,13 @@ export class FallasListComponent implements OnInit {
     const dialogSeleccionarTipoDeRegistro = this.matDialog.open(DialogSeleccionarTipoDeRegistroComponent,{
       width:'646px'
     });
+  }
+
+  mostrarMensajeRegistroExitosoDeUnaFalla():void{
+    this.verMensajeCreacionExitosa = true;
+    setTimeout(()=>{
+      this.verMensajeCreacionExitosa = false;
+    },5000);
+    localStorage.removeItem('success');
   }
 }

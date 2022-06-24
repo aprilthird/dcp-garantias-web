@@ -15,6 +15,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { MatRadioModule } from '@angular/material/radio';
     CommonModule,
     GestionDeFallasRouting,
     FuseDateRangeModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -36,7 +40,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatCardModule,
     MatExpansionModule,
     MatRadioModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSnackBarModule
   ]
 })
 export class GestionFallasModule { }
