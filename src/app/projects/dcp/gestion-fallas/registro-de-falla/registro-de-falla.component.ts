@@ -11,6 +11,7 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 import { UserService } from "app/core/user/user.service";
 import { FallasService } from 'app/shared/services/gestion-fallas/fallas.service';
 import { DialogDraftSavedSuccessfullyComponent } from '../../garantias/dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
+import { DialogAsignacionDeLaFallaComponent } from '../dialogs/dialog-asignacion-de-la-falla/dialog-asignacion-de-la-falla.component';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -20,7 +21,7 @@ import { DialogDraftSavedSuccessfullyComponent } from '../../garantias/dialogs/d
 export class RegistroDeFallaComponent implements OnInit {
 
   accion:string; tipoDeEquipo:string;
-  formFalla: FormGroup;
+  formFalla: FormGroup; formIngDeSoporte: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
   maestraAreasDeServicio = []; maestraQuejas:any[];
@@ -36,6 +37,7 @@ export class RegistroDeFallaComponent implements OnInit {
     this.cargarInfoLocalStorage();
     this.cargarFormulario();
     this.cargarMaestras();
+    this.cargarFormularioIngDeSoporte();
   }
 
   cargarFormulario():void{
@@ -59,6 +61,14 @@ export class RegistroDeFallaComponent implements OnInit {
         //falta agreagr idUsuario
       });
     }
+  }
+
+  cargarFormularioIngDeSoporte():void{
+    this.formIngDeSoporte = new FormGroup({
+      discucion: new FormControl('', [Validators.required]),
+      conclusion: new FormControl('', [Validators.required]),
+      recomendacion: new FormControl('', [Validators.required])
+    });
   }
 
   cargarInfoLocalStorage():void{
@@ -149,16 +159,27 @@ export class RegistroDeFallaComponent implements OnInit {
   guardarFalla(falla:any, accion:any):void{
     if(accion=='registrar'){
       const request = {nivelSoporte:0,...falla};
-      this.registroExitosoDeLaFalla();
-      // this.fallasService.mantenimientoFallas(request).subscribe(response=>{
-      //   if(response.success){
-      //   }
-      // });
+      this.fallasService.mantenimientoFallas(request).subscribe(response=>{
+        if(response.success){
+          this.registroExitosoDeLaFalla();
+        }
+      });
     }
     if(accion=='escalar'){
-      const request = {nivelSoporte:1,...falla};
-      this.fallasService.mantenimientoFallas(request).subscribe(response=>{
-        console.log(response);
+      const dialogAsignacionDeLaFalla = this.matDialog.open(DialogAsignacionDeLaFallaComponent,{
+        width:'425px',
+        disableClose:true
+      });
+      dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
+        if(responseDialog.success){
+          const request = {nivelSoporte:1,asignacionFalla: responseDialog.idUsuario,...falla};
+          this.fallasService.mantenimientoFallas(request).subscribe(response=>{
+            if(response.success){
+              localStorage.setItem('success','true');
+              this.router.navigate(['/gestion-fallas']);
+            }
+          });
+        }
       });
     }
   }

@@ -193,13 +193,34 @@
                 <!-- DETALLE RECLAMO-->
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
-                        <mat-panel-title class="font-w-700">Detalle de reclamo</mat-panel-title>
+                        <mat-panel-title class="font-w-700">Ingeniero de soporte</mat-panel-title>
                         <mat-panel-description>
                             <p class="monto-narrativa font-w-700">-</p>
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                     <hr color="#E2E8F0">
-                    <p>This is the primary content of the panel.</p>
+                    <form *ngIf="formIngDeSoporte" [formGroup]="formIngDeSoporte">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Discusión</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="discucion"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Conclusión</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="conclusion"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Recomendaciones</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="recomendacion"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
                 </mat-expansion-panel>                    
             </mat-accordion>
         </div>
@@ -217,6 +238,8 @@
         </div>
         <div class="col-md-12 text-end mb-5">
             <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Guardar registro</button>
+            <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Cerrar caso</button>
+            <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Observar</button>
             <button mat-raised-button color="primary" class="mx-1" (click)="cargarDatosFalla('escalar')">Escalar falla</button>
         </div>
     </div>

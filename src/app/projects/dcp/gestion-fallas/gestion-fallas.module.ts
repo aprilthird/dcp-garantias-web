@@ -17,12 +17,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogAsignacionDeLaFallaComponent } from './dialogs/dialog-asignacion-de-la-falla/dialog-asignacion-de-la-falla.component';
 
 @NgModule({
   declarations: [
     FallasListComponent,
     DialogSeleccionarTipoDeRegistroComponent,
-    RegistroDeFallaComponent
+    RegistroDeFallaComponent,
+    DialogAsignacionDeLaFallaComponent
   ],
   imports: [
     CommonModule,
