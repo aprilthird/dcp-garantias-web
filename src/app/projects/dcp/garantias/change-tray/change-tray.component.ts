@@ -663,7 +663,7 @@ export class ChangeTrayComponent implements OnInit {
     const data = {
       idMatricula:this.esn.id,
       codAreaServicios:this.os.codAreaServicios,
-      // ...this.formRegisterEngine.value
+      ...this.formGroupChangeTray.value
     }
     switch(action){
       case 'amarilla':
@@ -677,11 +677,36 @@ export class ChangeTrayComponent implements OnInit {
       case 'rechazar':
         this.onReject(data);
         break;
-      
+      case 'back':
+        this.onSaveBack(data);
+        break;
       default:
         break;
     }
   }
+
+  onSaveBack(data):void{
+    // const requestEdit = {...data,bandeja:2,id:this.warranty.id,activo:true};
+    // data.os="100056431";
+    // data.esn="999";
+    // data.idMatricula=this.esn.id;
+    // data.codAreaServicios=this.os.codAreaServicios;
+    const requestEdit = {...data,bandeja:0,id:this.warranty.id,activo:true};
+  
+    this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
+      if(resp.success){
+          // const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+          //   disableClose:true,
+          //   data:{text:'Se guardó con éxito'}
+          // });
+          // dialogSaveRegister.afterClosed().subscribe(resp=>{
+          //   if(resp){
+          //     this.router.navigate(['/garantias']);
+          //   }
+          // });
+        }
+      });
+    }
 
   onSaveRegister(data):void{
     const request = {...data,id:0};
