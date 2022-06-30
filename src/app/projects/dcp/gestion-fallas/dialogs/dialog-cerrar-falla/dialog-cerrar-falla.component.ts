@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-cerrar-falla',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogCerrarFallaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly matDialogRef: MatDialogRef<DialogCerrarFallaComponent>,
+    @Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit(): void {
+  }
+
+  onClose(success):void{
+    this.matDialogRef.close(success);
   }
 
 }

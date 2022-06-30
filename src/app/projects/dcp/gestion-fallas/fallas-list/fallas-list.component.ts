@@ -139,6 +139,8 @@ export class FallasListComponent implements OnInit {
       return 'Fabrica';
     }
   }
+
+  
 }
 
 export interface PeriodicElement {

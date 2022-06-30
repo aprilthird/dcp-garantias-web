@@ -20,6 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogAsignacionDeLaFallaComponent } from './dialogs/dialog-asignacion-de-la-falla/dialog-asignacion-de-la-falla.component';
 import { MatTableModule } from '@angular/material/table';
 import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog
     MatDatepickerModule,
     MatSnackBarModule,
     MatTableModule
-  ]
+  ],
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })
 export class GestionFallasModule { }

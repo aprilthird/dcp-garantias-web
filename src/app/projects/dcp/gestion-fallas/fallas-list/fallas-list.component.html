@@ -106,7 +106,7 @@
                     <th mat-header-cell *matHeaderCellDef width="9%"> Estado </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
                       <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
-                      <span>{{element.estado==1?'Rechazado':element.estado==2?'Observado':'Activo'}}</span>
+                      <span>{{element.estado==3?'Cerrado':element.estado==2?'Observado':'Activo'}}</span>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">

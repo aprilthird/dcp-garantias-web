@@ -28,7 +28,7 @@ export class RegistroDeFallaComponent implements OnInit {
   matriculaEncontrada: any;
   maestraAreasDeServicio = []; maestraQuejas:any[];
   usuarioDeLaSession:any;
-  botonUsuarioRegistrador = false; botonUsuarioEscalador= false;
+  botonUsuarioRegistrador = false; botonUsuarioEscalador= false; botonObservar = false;
   botonIngenieroDeSoporte = false;
   botonEscalarDfse = false; verDFSE = false;
   botonEscalarFabrica = false; verFabrica = false;
@@ -36,7 +36,8 @@ export class RegistroDeFallaComponent implements OnInit {
   deshabilitarFalla:boolean = false;
   fallaParaGestionar:any;
   // data falsa de DFSE para los select
-  items = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
+  items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
+  items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private _snackBar: MatSnackBar,
@@ -56,6 +57,7 @@ export class RegistroDeFallaComponent implements OnInit {
     }
     if(this.accion=='edit'){
       this.fallaParaGestionar = JSON.parse(localStorage.getItem('fallaParaGestionar'));
+      console.log(this.fallaParaGestionar)
       if(this.fallaParaGestionar.nivelSoporte==0){
         this.botonUsuarioEscalador = true;
         this.cargarFormularioFallaConDatos();
@@ -63,6 +65,7 @@ export class RegistroDeFallaComponent implements OnInit {
       if(this.fallaParaGestionar.nivelSoporte==1){
         this.botonEscalarDfse = true;
         this.verDFSE = true;
+        this.botonObservar = true;
         this.cargarFormularioFallaConDatos();
         this.cargarFormularioIngDeSoporte();
       }
@@ -70,6 +73,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.botonEscalarFabrica = true;
         this.verDFSE = true;
         this.verFabrica = true;
+        this.botonObservar = true;
         this.cargarFormularioFallaConDatos();
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
@@ -500,10 +504,10 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;         
             const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
               disableClose:true,
-              width:'380px'
+              width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
             });
             dialogCerrarCaso.afterClosed().subscribe(responseDialog=>{
-              if(responseDialog.success){
+              if(responseDialog){
                 this.fallaParaGestionar.estado = 3;
                 this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                   if(responseApi.success){
@@ -522,5 +526,26 @@ export class RegistroDeFallaComponent implements OnInit {
     }else{
       this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
     }
+  }
+
+  observarFalla():void{
+    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
+    });
+    dialogObservedRecord.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog.selection){
+        const requestBitacora = { idGarantia:this.fallaParaGestionar.id, comentarios:responseDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            this.fallaParaGestionar.estado = 2;
+            this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+              if(responseApi.success){
+                this.router.navigate(['/gestion-fallas']);
+              }
+            });
+          }
+        });
+      }
+    });
   }
 }
