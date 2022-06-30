@@ -6,13 +6,19 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogAdjuntarDocumentoComponent } from '../dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
+import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
+import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { clone, slice } from 'lodash';
+import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transform-record-to-yellow/dialog-transform-record-to-yellow.component';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
   styleUrls: ['./change-tray.component.scss']
 })
 export class ChangeTrayComponent implements OnInit {
+
+  //variable para la acción que se va a realizar, si es crear o editar  
+  action:any;
 
   numberRecord:number=12345678;
   //marcas y modelos de los equipos
@@ -651,6 +657,125 @@ export class ChangeTrayComponent implements OnInit {
     });
   }
   
+  //VERIFICAION DETALLES
+
+  onSendRegister(action):void{
+    const data = {
+      idMatricula:this.esn.id,
+      codAreaServicios:this.os.codAreaServicios,
+      // ...this.formRegisterEngine.value
+    }
+    switch(action){
+      case 'amarilla':
+          this.onTransfornRecordToYellow(data);
+        case 'edit':
+          this.onEditRegister(data);
+        break
+      case 'observar':
+        this.onObservedRecord(data);                                            
+        break;
+      case 'rechazar':
+        this.onReject(data);
+        break;
+      
+      default:
+        break;
+    }
+  }
+
+  onSaveRegister(data):void{
+    const request = {...data,id:0};
+
+    this.garantiasService.saveWarranty(request).subscribe(resp=>{
+      if(resp.success){
+
+        localStorage.setItem('success','true');
+        this.router.navigate(['/garantias']);
+      }
+    });
+  }
+
+  onEditRegister(data):void{
+  // const requestEdit = {...data,bandeja:2,id:this.warranty.id,activo:true};
+  const requestEdit = {...data,esn:"999",id:this.warranty.id,activo:true};
+
+  this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
+    if(resp.success){
+        // const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+        //   disableClose:true,
+        //   data:{text:'Se guardó con éxito'}
+        // });
+        // dialogSaveRegister.afterClosed().subscribe(resp=>{
+        //   if(resp){
+        //     this.router.navigate(['/garantias']);
+        //   }
+        // });
+      }
+    });
+  }
+
+  onReject(data):void{
+    const dialogReject = this.matDialog.open(DialogRejectComponent,{
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de rechazar este registro?',description:'Al hacerlo el registro ingresará a una bandeja negra'}
+    });
+    dialogReject.afterClosed().subscribe(dataDialog=>{
+      if(dataDialog.selection){
+        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            const requestGarantiaRechazado = {...data,id:this.warranty.id,estado:1,activo:true} 
+            this.garantiasService.saveWarranty(requestGarantiaRechazado).subscribe(responseGarantia=>{
+              if(responseGarantia.success){
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  onObservedRecord(data):void{
+    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
+    });
+    dialogObservedRecord.afterClosed().subscribe(dataDialog=>{
+      if(dataDialog.selection){
+        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            const requestGarantiaObservada = {...data,id:this.warranty.id,estado:2,activo:true} 
+            this.garantiasService.saveWarranty(requestGarantiaObservada).subscribe(responseGarantia=>{
+              if(responseGarantia.success){
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  onTransfornRecordToYellow(data):void{    
+    const dialogTransforRecordToYellow = this.matDialog.open(DialogTransformRecordToYellowComponent,{
+      disableClose:true,
+      width:'480px',
+      data:{idGarantia:this.warranty.id}
+    });
+    dialogTransforRecordToYellow.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog){
+        const requestAmarillo = {...data,bandeja:6,id:this.warranty.id,activo:true};
+        this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
+            if(resp.success){
+              this.router.navigate(['/garantias']);
+            }
+        });
+      }else{
+        console.log('Error en la transformación');
+      }
+    });
+  }
+
 }
 
 export interface PeriodicElement {
