@@ -23,4 +23,8 @@ export class FallasService {
   mantenimientoFallas(_request:any):Observable<any>{
     return this.httpClient.post(this.mantenimientoFallasUrl,_request,{headers:this.header});    
   }
+  bandejaFallas(_page):Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.bandejaFallasUrl, request, {headers:this.header});
+  }
 }

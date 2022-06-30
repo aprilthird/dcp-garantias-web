@@ -10,8 +10,8 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 export class DialogAsignacionDeLaFallaComponent implements OnInit {
 
   selectedValue:number;
-  usuarios : any[] = [{nombre:'Juane Perez', id: 10}, {nombre:'Jose Diaz', id: 20}];
-  usuarioResponsable:string='';
+  usuarios : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
+  usuarioResponsable=1;
   
   constructor(private readonly matDialogRef: MatDialogRef<DialogAsignacionDeLaFallaComponent>,
               private readonly matDialog: MatDialog) { }
@@ -19,15 +19,22 @@ export class DialogAsignacionDeLaFallaComponent implements OnInit {
   ngOnInit(): void {
   }
 
+//   Antes del primer escalado: Registrado - B Inicial
+// Escalado Ing. Soporte - Ing. Soporte
+// Escalado DFSE - DFSE
+// Escalado Fábrica - Fábrica
+// Cerrado
+
   onClose():void{
     this.matDialogRef.close({success:false});
   }
 
   agregarAsignacion():void{
-    if(this.usuarioResponsable==''){
-      const dialogMensajeDeError = this.matDialog.open(DialogErrorMessageComponent,{disableClose:true, data:{text:'Seleccione una asignacion'}});
+    console.log(this.selectedValue)
+    if(this.selectedValue!=null){
+      this.matDialogRef.close({success:true, nivelSoporte:this.selectedValue,idUsuario:this.usuarioResponsable})
     }else{
-      this.matDialogRef.close({success:true, idUsuario:this.selectedValue})
+      const dialogMensajeDeError = this.matDialog.open(DialogErrorMessageComponent,{disableClose:true, data:{text:'Seleccione una asignacion'}});
     }
   }
 

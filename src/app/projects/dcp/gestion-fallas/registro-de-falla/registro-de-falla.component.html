@@ -7,12 +7,11 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
             <mat-accordion>
+                <!-- REGISTRO DE LA FALLA -->
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title class="fw-bold fs-6">Registro básico</mat-panel-title>
-                        <mat-panel-description>
-                            <p class="monto-narrativa font-w-700">-</p>
-                        </mat-panel-description>
+                        <mat-panel-description> </mat-panel-description>
                     </mat-expansion-panel-header>
                     <hr color="#E2E8F0">
                     <form *ngIf="formFalla" [formGroup]="formFalla">
@@ -82,7 +81,7 @@
                                         <mat-form-field floatLabel="always">
                                             <mat-label class="fw-bold">Area de servicio</mat-label>
                                             <mat-select placeholder="Seleccionar" formControlName="idArea">
-                                                <mat-option *ngFor="let areaDeServicio of maestraAreasDeServicio" [value]="areaDeServicio.id">
+                                                <mat-option *ngFor="let areaDeServicio of maestraAreasDeServicio" [value]="areaDeServicio.id" >
                                                     {{areaDeServicio.codigo}}
                                                 </mat-option>
                                             </mat-select>
@@ -190,13 +189,11 @@
                         </div>
                     </form>
                 </mat-expansion-panel>
-                <!-- DETALLE RECLAMO-->
-                <mat-expansion-panel>
+                <!-- INGENIERO DE SOPORTE -->
+                <mat-expansion-panel *ngIf="verDFSE">
                     <mat-expansion-panel-header>
-                        <mat-panel-title class="font-w-700">Ingeniero de soporte</mat-panel-title>
-                        <mat-panel-description>
-                            <p class="monto-narrativa font-w-700">-</p>
-                        </mat-panel-description>
+                        <mat-panel-title class="fw-bold fs-6">Ingeniero de soporte</mat-panel-title>
+                        <mat-panel-description> </mat-panel-description>
                     </mat-expansion-panel-header>
                     <hr color="#E2E8F0">
                     <form *ngIf="formIngDeSoporte" [formGroup]="formIngDeSoporte">
@@ -221,7 +218,155 @@
                             </div>
                         </div>
                     </form>
-                </mat-expansion-panel>                    
+                </mat-expansion-panel>
+                <!-- DFSE -->
+                <mat-expansion-panel *ngIf="verFabrica">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="fw-bold fs-6">DFSE</mat-panel-title>
+                        <mat-panel-description> </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <hr color="#E2E8F0">
+                    <form *ngIf="formDFSE" [formGroup]="formDFSE">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Issue Category</mat-label>
+                                    <mat-select placeholder="Placeholder" formControlName="issueCategory">
+                                        <mat-option *ngFor="let item of items" [value]="item.value">
+                                            {{item.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Nivel de Soporte</mat-label>
+                                    <mat-select placeholder="Placeholder" formControlName="nivelSoporte">
+                                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.id">
+                                            {{nivel.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Subestado</mat-label>
+                                    <mat-select placeholder="Placeholder" formControlName="subEstado">
+                                        <mat-option *ngFor="let item of items" [value]="item.value">
+                                            {{item.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>TSR</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="tsr">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3 flex-xy-center">
+                                <mat-radio-group color="primary" formControlName="partsReturn">
+                                    <mat-radio-button value="si">Si</mat-radio-button>
+                                    <mat-radio-button value="no">No</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Tracking Number</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="trakingNumber">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Subestado de Parts Return</mat-label>
+                                    <mat-select placeholder="Placeholder" formControlName="subestadoPartsReturn">
+                                        <mat-option *ngFor="let item of items" [value]="item.value">
+                                            {{item.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Fecha de inicio de desarmado de motor</mat-label>
+                                    <input matInput [matDatepicker]="pickerFechaInicioDesarmado" placeholder="Ingrese una fecha" formControlName="fechaIniDesarmeMotor">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFechaInicioDesarmado"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFechaInicioDesarmado></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Fecha de fin de desarmado de motor</mat-label>
+                                    <input matInput [matDatepicker]="pickerFechaFinDesarmado" placeholder="Ingrese una fecha" formControlName="fechaFinDesarmeMotor">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFechaFinDesarmado"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFechaFinDesarmado></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Fecha de solicitud de partes</mat-label>
+                                    <input matInput [matDatepicker]="pickerFechaSolicitudDePartes" placeholder="Ingrese una fecha" formControlName="fechaSolPartes">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFechaSolicitudDePartes"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFechaSolicitudDePartes></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Fecha de envío</mat-label>
+                                    <input matInput [matDatepicker]="pickerFechaDeEnvio" placeholder="Ingrese una fecha" formControlName="fechaEnvio">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFechaDeEnvio"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFechaDeEnvio></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Discusión</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="discucionDfse"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Conclusión</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="conclusionDfse"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Recomendaciones</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="recomendacionesDfse"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </mat-expansion-panel>
+                <mat-expansion-panel *ngIf="verCerrarCaso">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="fw-bold fs-6">FABRICA</mat-panel-title>
+                        <mat-panel-description> </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <hr color="#E2E8F0">
+                    <form *ngIf="formFabrica" [formGroup]="formFabrica">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Conclusión de fábrica</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus conclusiones" formControlName="conclusionesFabrica"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Comentarios de fábrica</mat-label>
+                                    <textarea matInput placeholder="Ingrese sus comentarios" formControlName="comentariosFabrica"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </mat-expansion-panel>                       
             </mat-accordion>
         </div>
         <div class="col-md-12">
@@ -237,10 +382,14 @@
             </div>
         </div>
         <div class="col-md-12 text-end mb-5">
-            <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Guardar registro</button>
-            <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Cerrar caso</button>
-            <button mat-raised-button class="mx-1" (click)="cargarDatosFalla('registrar')">Observar</button>
-            <button mat-raised-button color="primary" class="mx-1" (click)="cargarDatosFalla('escalar')">Escalar falla</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonUsuarioRegistrador" (click)="registrarNuevaFalla()">Guardar registro</button> <!-- guardar falla -->
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonEscalarDfse" (click)="guardarRegistroIngenieroDeSoporte()">Guardar registro</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()">Escalar a DFSE</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonEscalarFabrica" (click)="guardarRegistroDFSE()">Guardar registro</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()">Escalar a Fabrica</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCaso" (click)="guardarRegistroFabrica()">Guardar registro</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
         </div>
     </div>
 </div>

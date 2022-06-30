@@ -64,9 +64,9 @@ export class GarantiasListComponent implements OnInit {
   seeNotificationCreateWarrantySuccessfully=false;
   //tabla garantias
   displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state','actions'];
+  dataSource = [];
   //tabla bitacora
   displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'monto', 'bandejaActual'];
-  dataSource = [];
   dataSourceBitacora = ELEMENT_DATA;
   expandedElement: any;
   //datos del paginado

@@ -18,13 +18,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogAsignacionDeLaFallaComponent } from './dialogs/dialog-asignacion-de-la-falla/dialog-asignacion-de-la-falla.component';
+import { MatTableModule } from '@angular/material/table';
+import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 
 @NgModule({
   declarations: [
     FallasListComponent,
     DialogSeleccionarTipoDeRegistroComponent,
     RegistroDeFallaComponent,
-    DialogAsignacionDeLaFallaComponent
+    DialogAsignacionDeLaFallaComponent,
+    DialogCerrarFallaComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +46,8 @@ import { DialogAsignacionDeLaFallaComponent } from './dialogs/dialog-asignacion-
     MatExpansionModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule
   ]
 })
 export class GestionFallasModule { }
