@@ -295,11 +295,14 @@ export class ConfigurationAndMaintenanceService {
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
   }
+  listaAreasDeServicioSinPaginar():Observable<any>{
+    const request = {filter : {fechaFin:this.dateCurrent},pageSize:0};
+    return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
+  }  
   maintenanceServiceArea(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
   }
   deleteServiceArea(_request:any):Observable<any>{
-    console.log(_request);
     return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
   }
 }

@@ -121,12 +121,411 @@
         </div>
         <div class="col-md-12 mb-5">
             <mat-card>
+<<<<<<< HEAD
                 <mat-card-content>
                     <div class="row">
                         <!-- DETALLES DEL RECLAMO-->
                         <div class="col-md-12 detalles" [hidden]="!button.detalles">
                             <form *ngIf="formGroupChangeTray" [formGroup]="formGroupChangeTray">
                                 <h6>Detalle del reclamo</h6>
+=======
+                <div class="row">
+                    <!-- DETALLES DEL RECLAMO-->
+                    <div class="col-md-12 detalles" [hidden]="!button.detalles">
+                        <form *ngIf="formGroupChangeTray" [formGroup]="formGroupChangeTray">
+                            <h6>Detalle del reclamo</h6>
+                            <div class="row">
+                                <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+							<mat-form-field appearance="fill">
+                                                        <mat-label for="">ESN</mat-label>
+                                                        <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                            <mat-card class="card-bg-gray">
+                                                <div class="row">
+                                                    <div class="col-md-12 margin-b-15">
+                                                        <span class="font-w-500 font-sz-16">Información de matrícula</span>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Cliente</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.cliente">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Direccion</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.direccion">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Aplicacion del {{typeWarrantyText}}</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.aplicacion">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Modelo del {{typeWarrantyText}}</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.modelo">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">CPL</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.cpl">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">ETO/PTO</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.etoPto">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Fecha inicio de garantía</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicioGarantia=='-'?'-':esn.fechaInicioGarantia | date: 'dd/MM/yyyy' ">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3 flex-align-center">
+                                                        <mat-checkbox color="primary" [value]="esn.bis" [disabled]="true">BIS</mat-checkbox>
+                                                    </div>
+                                                </div>
+                                            </mat-card>
+                                </div>
+                                <div class="col-md-12 mb-3"><span class="font-w-500 font-sz-16">Información del equipo</span></div>
+                                <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <mat-form-field>
+                                                        <mat-label>Marca del equipo</mat-label>
+                                                        <mat-select>
+                                                            <mat-option *ngFor="let marca of marcas" [value]="marca.id">
+                                                                {{marca.codigo}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field>
+                                                        <mat-label>Modelo del equipo</mat-label>
+                                                        <mat-select>
+                                                            <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
+                                                                {{modelo.codigo}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field>
+                                                        <mat-label>VIN del equipo</mat-label>
+                                                        <input type="text" matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3"></div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field>
+                                                        <mat-label>Tecnico responsable</mat-label>
+                                                        <mat-select>
+                                                            <mat-option> 1 </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field>
+                                                        <mat-label>ID promotion</mat-label>
+                                                        <input type="text" matInput [disabled]="true">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                </div>
+                                <div class="col-md-12">
+                                            <hr width="100%">
+                                </div>
+                                <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Orden de servicio</mat-label>
+                                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">BU</mat-label>
+                                                        <input matInput type="text" placeholder="" [disabled]="true" [value]="os.bu">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3"></div>
+                                                <div class="col-md-3"></div>
+                                            </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                            <mat-card class="card-bg-gray">
+                                                <div class="row">
+                                                    <div class="col-md-12 margin-b-15">
+                                                        <span class="font-w-500 font-sz-16">Información del SAP</span>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Clase de actividad</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.claseActividad">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Fecha de liberacion</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.fechaLib=='-'?'-':os.fechaLib | date: 'dd/MM/yyyy' ">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label for="">Area de servicios</mat-label>
+                                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.codAreaServicios">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                    </div>
+                                                </div>
+                                            </mat-card>
+                                </div>
+                                <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Tipo de garantía</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="tipoGarantia" (ngModelChange)="selectTypeWarranty()">
+                                                            <mat-option *ngFor="let warrantyType of warrantyTypes" [value]="warrantyType.value">{{warrantyType.name}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-9"></div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.e">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Numero de parte del repuesto</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="numParteRepuesto">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.a">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Punto de falla</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="puntoFalla">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.i">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Codigo</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="codigoAdicional">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.g">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Punto de ejecución</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="ejecucionAdicional">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3 flex-xy-center" *ngIf="viewsTypesWarranty.b">
+                                                    <mat-radio-group aria-label="Select an option" color="primary" formControlName="medida">
+                                                        <mat-radio-button value="h">H</mat-radio-button>
+                                                        <mat-radio-button value="km">KM</mat-radio-button>
+                                                    </mat-radio-group>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.c">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Fecha de falla</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="fechaFalla" [value]="warranty.fechaFalla | date: 'dd/MM/yyyy' ">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.f">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">N° de parte del componente</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="numParteFallo">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.d">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Fecha de inicio de la garantia</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="fechaInicioGarantia">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="viewsTypesWarranty.h">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Fecha de ejecucion</mat-label>
+                                                        <input matInput type="text" placeholder="Ingresar" formControlName="ejecucionAdicional">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr width="100%">
+                                </div>
+                                <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12 margin-b-15">
+                                                    <span class="font-w-500 font-sz-16">Quejas</span>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Queja 1</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="idQueja1">
+                                                            <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Queja 2</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="idQueja2">
+                                                            <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Queja 3</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="idQueja3">
+                                                            <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Queja 4</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="idQueja4">
+                                                            <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Usuario Evaluador</mat-label>
+                                                        <mat-select placeholder="Placeholder" formControlName="idUsuarioEvaluador">
+                                                            <mat-option *ngFor="let user of users" [value]="user.value">{{user.name}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label for="">Comentarios</mat-label>
+                                                        <textarea matInput placeholder="Ingrese sus comentarios" formControlName="comentarios"></textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-6"></div>
+                                            </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- FALLAS -->
+                    <div class="col-md-12 fallas margin-b-15" [hidden]="!button.fallas">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h5>Fallas</h5>
+                            </div>
+                            <div class="col-md-3 text--end">
+                                <button mat-raised-button>
+                                    <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>
+                                    Registro masivo de fallas
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Sistema</mat-label>
+                                    <mat-select placeholder="Placeholder">
+                                        <mat-option>opcion 1</mat-option>
+                                        <mat-option>opcion 2</mat-option>
+                                        <mat-option>opcion 3</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Parte fallada del sistema</mat-label>
+                                    <mat-select placeholder="Placeholder">
+                                        <mat-option>opcion 1</mat-option>
+                                        <mat-option>opcion 2</mat-option>
+                                        <mat-option>opcion 3</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Modo de falla</mat-label>
+                                    <mat-select placeholder="Placeholder">
+                                        <mat-option>opcion 1</mat-option>
+                                        <mat-option>opcion 2</mat-option>
+                                        <mat-option>opcion 3</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-1 flex-xy-center">
+                                <button mat-raised-button>Agregar</button>
+                            </div>
+                            <div class="col-md-5"></div>
+                            <div class="col-md-12">
+                                <mat-card>
+                                    <div class="row">
+                                        <div class="col-md-11"><span class="font-w-700">Fallas ingresadas</span></div>
+                                        <div class="col-md-1  text--center"><button mat-icon-button><mat-icon svgIcon="heroicons_outline:trash"></mat-icon></button></div>
+                                    </div>
+                                </mat-card>
+                            </div>
+                            <div class="col-md-12">
+                                <table mat-table [dataSource]="dataSourceFallas" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="position">
+                                    <th mat-header-cell *matHeaderCellDef width ="18%"> Código de Falla </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef width ="18%"> Sistema </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="weight">
+                                    <th mat-header-cell *matHeaderCellDef width ="18%"> Parte Fallada del Sistema </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="symbol">
+                                    <th mat-header-cell *matHeaderCellDef width ="18%"> Modo de Falla </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="description">
+                                        <th mat-header-cell *matHeaderCellDef width ="23%"> Descripción de código de falla </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef width ="5%"></th>
+                                        <td mat-cell *matCellDef="let element" class="text--end">
+                                            <mat-checkbox color="primary"></mat-checkbox>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsFallas"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsFallas;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SRT OK-->
+                    <div class="col-md-12 srt margin-b-15" [hidden]="!button.srt">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <span class="font-w-700">SRT</span>
+                            </div>
+                            <div class="col-md-3 text--end">
+                                <button mat-raised-button>
+                                    <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>
+                                    Registro masivo de SRT
+                                </button>
+                            </div>
+                            <div class="col-md-12">
+>>>>>>> 444ad0b91f89bb0f692ad7b40a5380a03d2450fd
                                 <div class="row">
                                     <div class="col-md-12">
                                                 <div class="row">
