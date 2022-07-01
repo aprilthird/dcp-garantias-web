@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-xs-4 col-sm-2 col-md-3">
                     <div matRipple class="notification-green" *ngIf="verMensajeCreacionExitosa">
-                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>  Se creó correctamente
+                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{mensajeExitoso}}
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -99,19 +99,19 @@
                     <td mat-cell *matCellDef="let element"> {{element.fechaFalla | date: 'dd/MM/yyyy'}} </td>
                   </ng-container>
                   <ng-container matColumnDef="nivelSoporte">
-                    <th mat-header-cell *matHeaderCellDef width="8%"> Nivel de Soporte </th>
+                    <th mat-header-cell *matHeaderCellDef width="9%"> Nivel de Soporte </th>
                     <td mat-cell *matCellDef="let element"> {{nivelDeSoporte(element.nivelSoporte)}} </td>
                   </ng-container>
                   <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef width="9%"> Estado </th>
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
                       <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
                       <span>{{element.estado==3?'Cerrado':element.estado==2?'Observado':'Activo'}}</span>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Accion </th>
-                    <td mat-cell *matCellDef="let element">
+                    <th mat-header-cell *matHeaderCellDef width="8%" class="text-center"> Accion </th>
+                    <td mat-cell *matCellDef="let element" style="padding: 0;">
                       <button mat-icon-button aria-label="Example icon button with a home icon">
                         <mat-icon svgIcon="heroicons_outline:pencil-alt" (click)="editarFalla(element)"></mat-icon>
                       </button>
@@ -121,33 +121,35 @@
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="expandedDetail">
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" style="padding-right: 0;" class="caja-bitacora">
                         <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span class="font-w-900">Bitacora</span>
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-12 mt-4 mb-2">
+                                    <span class="font-w-900 fz-6">Bitacora</span>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="scroll-vertical table-bitacora">
+                                <div class="col-md-12 mb-3">
+                                    <div class="table-bitacora"> <!--class="scroll-vertical "> --> 
                                       <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
                                         <ng-container matColumnDef="fecha">
-                                          <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                                          <td mat-cell *matCellDef="let item"> {{item.fechaReg}} </td>
+                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Fecha-Hora </th>
+                                          <td mat-cell *matCellDef="let item" class="text-center"> {{item.fechaReg | date: 'dd/MM/yyyy, hh:mm:ss a'}} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="evaluador">
-                                          <th mat-header-cell *matHeaderCellDef> Evaluador </th>
+                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Usuario Evaluador </th>
                                           <td mat-cell *matCellDef="let item"> {{item.evaluador==null?'-':item.evaluador}} </td>
                                         </ng-container>                            
                                         <ng-container matColumnDef="comentario">
-                                          <th mat-header-cell *matHeaderCellDef> Comentario </th>
-                                          <td mat-cell *matCellDef="let item"> {{item.comentario==null?'-':item.comentario}} </td>
+                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Comentario </th>
+                                          <td mat-cell *matCellDef="let item" class="text-center">
+                                            <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item.comentarios)"><mat-icon>sms</mat-icon></button>
+                                            <span *ngIf="item.comentarios==null">'-'</span>
                                         </ng-container>
                                         <ng-container matColumnDef="estado">
-                                          <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Estado </th>
                                           <td mat-cell *matCellDef="let item"> {{item.estado}} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="nivelSoporteActual">
-                                          <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
+                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Nivel de Soporte Actual</th>
                                           <td mat-cell *matCellDef="let item"> {{item.bandejaActual==null?'0':item.bandejaActual}} </td>
                                         </ng-container>                            
                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>

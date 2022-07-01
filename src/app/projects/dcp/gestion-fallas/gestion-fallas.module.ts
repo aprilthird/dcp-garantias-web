@@ -21,6 +21,7 @@ import { DialogAsignacionDeLaFallaComponent } from './dialogs/dialog-asignacion-
 import { MatTableModule } from '@angular/material/table';
 import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { DialogMostrarComentarioComponent } from './dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     DialogSeleccionarTipoDeRegistroComponent,
     RegistroDeFallaComponent,
     DialogAsignacionDeLaFallaComponent,
-    DialogCerrarFallaComponent
+    DialogCerrarFallaComponent,
+    DialogMostrarComentarioComponent
   ],
   imports: [
     CommonModule,
