@@ -4,15 +4,15 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 @Component({
-  selector: 'app-dialog-transform-record-to-yellow',
-  templateUrl: './dialog-transform-record-to-yellow.component.html',
-  styleUrls: ['./dialog-transform-record-to-yellow.component.scss']
+  selector: 'app-dialog-transform-record-to-green',
+  templateUrl: './dialog-transform-record-to-green.component.html',
+  styleUrls: ['./dialog-transform-record-to-green.component.scss']
 })
-export class DialogTransformRecordToYellowComponent implements OnInit {
+export class DialogTransformRecordToGreenComponent implements OnInit {
 
   formGroup:FormGroup;
 
-  constructor(private readonly dialogRef: MatDialogRef<DialogTransformRecordToYellowComponent>, private readonly matDialog:MatDialog,
+  constructor(private readonly dialogRef: MatDialogRef<DialogTransformRecordToGreenComponent>, private readonly matDialog:MatDialog,
              @Inject(MAT_DIALOG_DATA) public data, private readonly garantiasService:GarantiasService) { }
 
   ngOnInit(): void {
@@ -25,17 +25,12 @@ export class DialogTransformRecordToYellowComponent implements OnInit {
 
   loadForm():void{
     this.formGroup = new FormGroup({
-      checklist1: new FormControl(false),
-      checklist2: new FormControl(false),
-      checklist3: new FormControl(false),
-      checklist4: new FormControl(false),
-      checklist5: new FormControl(false),
-      checklist6: new FormControl(false),
-      checklist7: new FormControl(false),
+      idClaim: new FormControl(null,[Validators.required]),
+      idControl: new FormControl(null,[Validators.required]),
     });
   }
 
-  saveTransform():void{
+  saveRapidServer():void{
     if(this.formGroup.valid){
       this.garantiasService.checkList(this.formGroup.value).subscribe(resp=>{
         if(resp.id){
@@ -46,7 +41,7 @@ export class DialogTransformRecordToYellowComponent implements OnInit {
       })
     }else{
       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Checklist inválido'},
+        data:{text:'Seleccione un claim y un control'},
         disableClose:true
       });
     }

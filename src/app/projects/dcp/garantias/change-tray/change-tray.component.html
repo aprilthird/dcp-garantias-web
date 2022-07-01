@@ -1850,12 +1850,15 @@
                     </div>
                 </mat-card-content>
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
-                    <!-- <button mat-raised-button (click)="onSendRegister('back')">Prueba</button> -->
-                    <button mat-raised-button (click)="onSendRegister('edit')">Guardar</button>
-                    <button mat-raised-button (click)="onSendRegister('rechazar')">Rechazar</button>
-                    <button mat-raised-button (click)="onSendRegister('observar')">Observar</button>
-                    <button mat-raised-button (click)="onSendRegister('preview')">Preview</button>
-                    <button mat-raised-button color="primary" (click)="onSendRegister('amarilla')">Continuar</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja!=4" (click)="onSendRegister('back')">Prueba</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja!=4" (click)="onSendRegister('edit')">Guardar</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja!=4" (click)="onSendRegister('rechazar')">Rechazar</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja!=4" (click)="onSendRegister('observar')">Observar</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja==2 || this.warranty.bandeja==6" (click)="onSendRegister('preview')">Preview</button>
+                    <button mat-raised-button *ngIf="this.warranty.bandeja==3" (click)="onSendRegister('refile')">Refile</button>
+                    <button mat-raised-button color="primary" *ngIf="this.warranty.bandeja==2" (click)="onSendRegister('amarilla')">Mandar a Evaluar</button>
+                    <button mat-raised-button color="primary" *ngIf="this.warranty.bandeja==6" (click)="onSendRegister('verde')">Procesar PreRapidServer</button>
+                    <button mat-raised-button color="primary" *ngIf="this.warranty.bandeja==3" (click)="onSendRegister('gris')">Reclamo Pagado</button>
                 </mat-card-actions>
             </mat-card>
         </div>

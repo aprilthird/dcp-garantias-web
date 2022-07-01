@@ -1,0 +1,62 @@
+<div matDialogTitle>
+    <div class="row">
+        <div class="col-md-11">
+            <span>Transformar</span>
+        </div>
+        <div class="col-md-1 text--end">
+            <mat-icon class="pointer" svgIcon="close" (click)="onClose(false)"></mat-icon>
+        </div>
+    </div>
+</div>
+<div matDialogContent>
+    <form *ngIf="formGroup" [formGroup]="formGroup">
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Fecha de Pago</mat-label>
+                    <input matInput [matDatepicker]="pickerFechaPago" formControlName="paymentDate">
+                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                    <mat-datepicker-toggle matSuffix [for]="pickerFechaPago"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerFechaPago></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Sentencia de Crédito#</mat-label>
+                    <input matInput type="text" placeholder="Sentencia de Crédito#" formControlName="creditStatementNumber">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Crédito#</mat-label>
+                    <input matInput type="text" placeholder="Crédito#" formControlName="creditNumber">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Claim#</mat-label>
+                    <input matInput type="text" placeholder="Claim#" formControlName="idClaim">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Tarifa de Trabajo</mat-label>
+                    <input matInput type="text" placeholder="Tarifa de Trabajo" formControlName="laborRate">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field appearance="fill">
+                    <mat-label class="font-w-700">Control#</mat-label>
+                    <input matInput type="text" placeholder="Claim#" formControlName="idControl">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</div>
+<div matDialogActions align="end">
+    <button mat-raised-button color="primary" (click)="saveTransform()">Enviar</button>
+</div>

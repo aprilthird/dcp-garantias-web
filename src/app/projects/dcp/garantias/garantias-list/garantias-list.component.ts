@@ -90,11 +90,12 @@ export class GarantiasListComponent implements OnInit {
     if(localStorage.getItem('success')){
       this.loadMessage();
     };
+    this.loadFormFilter();
     this.listWarranties();
   }
 
   listWarranties():void{
-    this.garantiasService.listWarranties(this.pageCurrent).subscribe(resp=>{
+    this.garantiasService.listWarranties(this.formFilter, this.pageCurrent).subscribe(resp=>{
       console.log(resp);
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
@@ -121,7 +122,7 @@ export class GarantiasListComponent implements OnInit {
       area: new FormControl(''),
       fechaIni: new FormControl(''),
       fechaFin: new FormControl(''),
-      bandeja: new FormControl(''),
+      estado: new FormControl(''),
       antiguedad: new FormControl('')
     });
   }
@@ -231,7 +232,7 @@ export class GarantiasListComponent implements OnInit {
       localStorage.setItem('garantia',JSON.stringify(warranty));
       this.router.navigate(['garantias/register-engine-basic']);
     }
-    if(warranty.bandeja==2 || warranty.bandeja==3 || warranty.bandeja==4 || warranty.bandeja==5 || warranty.bandeja==6){
+    if(warranty.bandeja>2 && warranty.bandeja<6){
       localStorage.setItem('garantia',JSON.stringify(warranty));
       this.router.navigate(['garantias/change-tray']);
     }

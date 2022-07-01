@@ -10,6 +10,9 @@ import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-r
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { clone, slice } from 'lodash';
 import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transform-record-to-yellow/dialog-transform-record-to-yellow.component';
+import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
+import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
@@ -667,9 +670,16 @@ export class ChangeTrayComponent implements OnInit {
     }
     switch(action){
       case 'amarilla':
-          this.onTransfornRecordToYellow(data);
-        case 'edit':
-          this.onEditRegister(data);
+        this.onTransfornRecordToYellow(data);
+        break;
+      case 'verde':
+        this.onTransfornRecordToGreen(data);
+        break;
+      case 'gris':
+        this.onTransfornRecordToGray(data);
+        break;
+      case 'edit':
+        this.onEditRegister(data);
         break
       case 'observar':
         this.onObservedRecord(data);                                            
@@ -784,7 +794,7 @@ export class ChangeTrayComponent implements OnInit {
   onTransfornRecordToYellow(data):void{    
     const dialogTransforRecordToYellow = this.matDialog.open(DialogTransformRecordToYellowComponent,{
       disableClose:true,
-      width:'480px',
+      width:'680px',
       data:{idGarantia:this.warranty.id}
     });
     dialogTransforRecordToYellow.afterClosed().subscribe(responseDialog=>{
@@ -792,7 +802,14 @@ export class ChangeTrayComponent implements OnInit {
         const requestAmarillo = {...data,bandeja:6,id:this.warranty.id,activo:true};
         this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
             if(resp.success){
-              this.router.navigate(['/garantias']);
+              const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+                data:{text: 'Tu solicitud de reclamo fue enviado a PSG con el siguiente #2636474.'}
+              });
+              dialogOperationSuccessfully.afterClosed().subscribe(resp => {
+                if(resp) {
+                  this.router.navigate(['/garantias']);
+                }
+              });
             }
         });
       }else{
@@ -801,6 +818,59 @@ export class ChangeTrayComponent implements OnInit {
     });
   }
 
+  onTransfornRecordToGreen(data):void{    
+    const dialogTransforRecordToGreen = this.matDialog.open(DialogTransformRecordToGreenComponent,{
+      disableClose:true,
+      width:'480px',
+      data:{idGarantia:this.warranty.id}
+    });
+    dialogTransforRecordToGreen.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog){
+        const requestAmarillo = {...data,bandeja:3,id:this.warranty.id,activo:true};
+        this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
+          if(resp.success){
+            const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+              data:{text: 'Tu solicitud de reclamo generó un PreRapidServer con éxito y fue enviado a bandeja verde.'}
+            });
+            dialogOperationSuccessfully.afterClosed().subscribe(resp => {
+              if(resp) {
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }else{
+        console.log('Error en la transformación');
+      }
+    });
+  }
+
+  onTransfornRecordToGray(data):void{    
+    const dialogTransforRecordToGray = this.matDialog.open(DialogTransformRecordToGrayComponent,{
+      disableClose:true,
+      width:'480px',
+      data:{idGarantia:this.warranty.id}
+    });
+    dialogTransforRecordToGray.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog){
+        const requestAmarillo = {...data,bandeja:4,id:this.warranty.id,activo:true};
+        this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
+          if(resp.success){
+            const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+              data:{text: 'Tu informe de pago fue procesado con exito y se envio a bandeja gris.'}
+            });
+            dialogOperationSuccessfully.afterClosed().subscribe(resp => {
+              if(resp) {
+                this.router.navigate(['/garantias']);
+              }
+            });
+          }
+        });
+      }else{
+        console.log('Error en la transformación');
+      }
+    });
+  }
 }
 
 export interface PeriodicElement {

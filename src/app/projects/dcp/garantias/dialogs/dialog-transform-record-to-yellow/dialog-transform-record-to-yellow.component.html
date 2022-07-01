@@ -1,7 +1,7 @@
 <div matDialogTitle>
     <div class="row">
         <div class="col-md-11">
-            <span>Generar PreRapidServer</span>
+            <span>Checklist Informe</span>
         </div>
         <div class="col-md-1 text--end">
             <mat-icon class="pointer" svgIcon="close" (click)="onClose(false)"></mat-icon>
@@ -12,38 +12,24 @@
     <form *ngIf="formGroup" [formGroup]="formGroup">
         <div class="row">
             <div class="col-md-12">
-                <mat-form-field appearance="fill">
-                    <mat-label class="font-w-700">Claim#</mat-label>
-                    <input matInput type="text" placeholder="Claim#" formControlName="idClaim">
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <mat-form-field appearance="fill">
-                    <mat-label class="font-w-700">Control#</mat-label>
-                    <input matInput type="text" placeholder="Control#" formControlName="idControl">
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-12">
-                <button class="btn-attach" mat-raised-button (click)="fileInputClaimReport.click()">
-                    <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Claim Report
-                </button>
-                <input hidden type="file" (change)="cargarDocumento($event)" #fileInputClaimReport multiple>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-12">
-                <button class="btn-attach" mat-raised-button (click)="fileInputPreview.click()">
-                    <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Preview
-                </button>
-                <input hidden type="file" (change)="cargarDocumento($event)" #fileInputPreview multiple>
+                <mat-checkbox formControlName="checklist1" color="primary">
+                    Factura de compra o constancia de puesta en servicio adjunta.</mat-checkbox>
+                    <mat-checkbox formControlName="checklist2" color="primary">
+                        Orden de reparación o reporte de servcio con firma del técnico y cleinte.</mat-checkbox>
+                        <mat-checkbox formControlName="checklist3" color="primary">
+                            ¿Es la narrativa coherente con la orden de reparación?</mat-checkbox>
+                            <mat-checkbox formControlName="checklist4" color="primary">
+                                ¿Existen imagenes INSITE adjuntas?</mat-checkbox>
+                                <mat-checkbox formControlName="checklist5" color="primary">
+                                    ¿Se tiene los repuestos usados en la reparación?</mat-checkbox>
+                                    <mat-checkbox formControlName="checklist6" color="primary">
+                                        Tarjeta de viaje y sisutento de gastos a reclamar.</mat-checkbox>
+                                        <mat-checkbox formControlName="checklist7" color="primary">
+                                            OrdAprobación del Jefe de area.</mat-checkbox>
             </div>
         </div>
     </form>
 </div>
 <div matDialogActions align="end">
-    <button mat-raised-button color="primary" (click)="saveRapidServer()">Enviar RapidServer</button>
+    <button mat-raised-button color="primary" (click)="saveTransform()">Transformar</button>
 </div>

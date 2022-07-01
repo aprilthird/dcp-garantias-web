@@ -38,9 +38,11 @@ import { AtcComponent } from './type-warranties/atc/atc.component';
 import { MemoComponent } from './type-warranties/memo/memo.component';
 import { DialogTransformRecordToOrangeComponent } from './dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
 import { ChangeTrayComponent } from './change-tray/change-tray.component';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { DialogAdjuntarDocumentoComponent } from './dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
 import { DialogTransformRecordToYellowComponent } from './dialogs/dialog-transform-record-to-yellow/dialog-transform-record-to-yellow.component';
+import { DialogTransformRecordToGreenComponent } from './dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
+import { DialogTransformRecordToGrayComponent } from './dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { DialogTransformRecordToYellowComponent } from './dialogs/dialog-transfo
     MemoComponent,
     DialogTransformRecordToOrangeComponent,
     DialogTransformRecordToYellowComponent,
+    DialogTransformRecordToGreenComponent,
+    DialogTransformRecordToGrayComponent,
     ChangeTrayComponent,
     DialogAdjuntarDocumentoComponent
   ],

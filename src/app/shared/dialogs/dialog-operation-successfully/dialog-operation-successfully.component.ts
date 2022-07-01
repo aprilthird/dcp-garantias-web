@@ -15,7 +15,7 @@ export class DialogOperationSuccessfullyComponent implements OnInit {
   }
 
   onClose():void{
-    this.matDialogRef.close();
+    this.matDialogRef.close(true);
   }
 
 }
