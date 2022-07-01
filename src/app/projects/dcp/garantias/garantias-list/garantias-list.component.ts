@@ -232,7 +232,7 @@ export class GarantiasListComponent implements OnInit {
       localStorage.setItem('garantia',JSON.stringify(warranty));
       this.router.navigate(['garantias/register-engine-basic']);
     }
-    if(warranty.bandeja>=2 && warranty.bandeja=<6){
+    if(warranty.bandeja>=2 && warranty.bandeja<=6){
       localStorage.setItem('garantia',JSON.stringify(warranty));
       this.router.navigate(['garantias/change-tray']);
     }
