@@ -142,6 +142,31 @@ export class ChangeTrayComponent implements OnInit {
     this.garantiasService.findEsn(esn).subscribe(resp=>{
       if(resp.body){
         this.esn = resp.body;
+    
+        let tmp2 = localStorage.getItem('gar_data' + this.esn.id + "_" + 2);
+        if(tmp2 !== null && tmp2 !== "") {
+          console.log(tmp2);
+          this.dataSourceSrt = JSON.parse(tmp2);
+        }
+
+        let tmp3 = localStorage.getItem('gar_data' + this.esn.id + "_" + 3);
+        if(tmp3 !== null && tmp3 !== "") {
+          console.log(tmp3);
+          this.dataSourcePartes = JSON.parse(tmp3);
+        }
+
+        let tmp4 = localStorage.getItem('gar_data' + this.esn.id + "_" + 4);
+        if(tmp4 !== null && tmp4 !== "") {
+          console.log(tmp4);
+          this.dataSourceOtrosReclamables = JSON.parse(tmp4);
+        }        
+
+        let tmp5 = localStorage.getItem('gar_data' + this.esn.id + "_" + 5);
+        if(tmp5 !== null && tmp5 !== "") {
+          console.log(tmp5);
+          this.dataSourceViajes = JSON.parse(tmp5);
+        }
+
       }else{
         console.log('error');
       }
@@ -395,6 +420,7 @@ export class ChangeTrayComponent implements OnInit {
           if(response.success){
             const aux = {cantidadSrt:0,horasHombreSrt:0, subTotalSrt:0, ...response.body};
             this.dataSourceSrt = this.dataSourceSrt.concat([aux]);
+            localStorage.setItem('gar_data' + this.esn.id + "_" + 2, JSON.stringify(this.dataSourceSrt));
           }
         });
       }else{
@@ -416,6 +442,7 @@ export class ChangeTrayComponent implements OnInit {
         if(response.data[0]){
           const aux = {check:false, cantidadSrt:0, horasHombreSrt:0, subTotalSrt:0, ...response.data[0]};
           this.dataSourceSrt = this.dataSourceSrt.concat([aux]);
+          localStorage.setItem('gar_data' + this.esn.id + "_" + 2, JSON.stringify(this.dataSourceSrt));
           if(this.verCamposNuevoSrt){this.verCamposNuevoSrt=false;}
         }else{
           this.verMensajeAgregarNuevoSrt = true;
@@ -461,6 +488,7 @@ export class ChangeTrayComponent implements OnInit {
     if(this.dataSourceSrt.length==0){
       this.checkBoxEliminarTodoSrt = false;
     }
+    localStorage.setItem('gar_data' + this.esn.id + "_" + 2, JSON.stringify(this.dataSourceSrt));
   }
   seleccionarTodoSrt():void{
     if(this.dataSourceSrt.length>0){
@@ -476,6 +504,7 @@ export class ChangeTrayComponent implements OnInit {
         if(response.data[0]){
           const parte = {check:false, cantidadParte:0, precioUnitarioParte:0, subTotalParte:0, ...response.data[0]};
           this.dataSourcePartes = this.dataSourcePartes.concat([parte]);
+          localStorage.setItem('gar_data' + this.esn.id + "_" + 3, JSON.stringify(this.dataSourcePartes));
         }else{
           this.mensajeParteNoExiste = true;
           setTimeout(()=>{this.mensajeParteNoExiste = false;},5000);
@@ -520,6 +549,7 @@ export class ChangeTrayComponent implements OnInit {
     if(this.dataSourcePartes.length==0){
       this.checkBoxEliminarTodoPartes = false;
     }
+    localStorage.setItem('gar_data' + this.esn.id + "_" + 3, JSON.stringify(this.dataSourcePartes));
   }
   seleccionarTodoPartes():void{
     if(this.dataSourcePartes.length>0){
@@ -538,6 +568,7 @@ export class ChangeTrayComponent implements OnInit {
       const reclamable = this.reclamables.find(e => e.id == this.idReclamable);
       const fila = {check:false, precioReclamable:0, ...reclamable};
       this.dataSourceOtrosReclamables = this.dataSourceOtrosReclamables.concat([fila]);
+      localStorage.setItem('gar_data' + this.esn.id + "_" + 4, JSON.stringify(this.dataSourceOtrosReclamables));
     }else{
       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
         data:{text:'Seleccione un reclamable'},disableClose:true,
@@ -573,6 +604,7 @@ export class ChangeTrayComponent implements OnInit {
     if(this.dataSourceOtrosReclamables.length==0){
       this.checkBoxEliminarTodoReclamables = false;
     }
+    localStorage.setItem('gar_data' + this.esn.id + "_" + 4, JSON.stringify(this.dataSourceOtrosReclamables));
   }
   //VIAJES
   agregarViaje():void{
@@ -591,6 +623,7 @@ export class ChangeTrayComponent implements OnInit {
                           costoDeViaje:0,
                         check:false};
               this.dataSourceViajes = this.dataSourceViajes.concat([viaje]);
+          localStorage.setItem('gar_data' + this.esn.id + "_" + 5, JSON.stringify(this.dataSourceViajes));
             }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar un detalle de viaje'},disableClose:true }); }
         }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent, {data:{text:'Debe seleccionar un tipo de viaje'},disableClose:true}); }
       }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una medio de transporte'},disableClose:true }); }
@@ -620,6 +653,7 @@ export class ChangeTrayComponent implements OnInit {
     if(this.dataSourceViajes.length==0){
       this.checkBoxEliminarTodoViajes = false;
     }
+    localStorage.setItem('gar_data' + this.esn.id + "_" + 5, JSON.stringify(this.dataSourceViajes));
   }
   seleccionarTodoViajes():void{
     if(this.dataSourceViajes.length>0){
