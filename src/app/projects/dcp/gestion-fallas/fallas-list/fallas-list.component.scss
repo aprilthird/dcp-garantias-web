@@ -62,4 +62,21 @@ table {
 
   .table-bitacora{
     height: 250px;
+    table{
+      box-shadow: none;
+      th{
+        font-weight: 700;
+        background-color: #F1F1F1;
+        color: #000000 !important;
+        border-bottom: 2px solid #1E293B;
+      }
+    }
   }
+
+.observed{
+  color: red !important;
+}
+
+.caja-bitacora{
+  background-color: #F1F1F1;
+}

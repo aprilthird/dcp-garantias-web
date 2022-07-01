@@ -5,6 +5,7 @@ import { FallasService } from 'app/shared/services/gestion-fallas/fallas.service
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { Router } from '@angular/router';
+import { DialogMostrarComentarioComponent } from '../dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
 
 @Component({
   selector: 'app-fallas-list',
@@ -24,7 +25,7 @@ export class FallasListComponent implements OnInit {
   displayedColumns: string[] = ['os', 'io', 'tsr', 'area', 'serie', 'usuarioResponsable', 'fechaFalla', 'nivelSoporte', 'estado','acciones'];
   dataSource = [];
   displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'nivelSoporteActual'];
-  dataSourceBitacora = ELEMENT_DATA;
+  dataSourceBitacora = [];
   //datos del paginado
   totalFallas:any;
   totalFilas:any;
@@ -34,12 +35,22 @@ export class FallasListComponent implements OnInit {
   botonSiguiente:boolean=false;
   botonAnterior:boolean=false;
   expandedElement: any;
+  //mensaje a mostrar cuando se crea o cierra un caso
+  mensajeExitoso = '-';
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
               private readonly garantiasService:GarantiasService, private readonly router:Router) { }
 
   ngOnInit(): void {
-    if(localStorage.getItem('success')){ this.mostrarMensajeRegistroExitosoDeUnaFalla(); };
+    if(localStorage.getItem('success')){
+      if(localStorage.getItem('success')=='true'){
+        this.mensajeExitoso = 'Se creó correctamente';
+      }
+      if(localStorage.getItem('success')=='cerrado'){
+        this.mensajeExitoso = 'Se cerró el caso correctamente';
+      }
+      this.mostrarMensajeRegistroExitosoDeUnaFalla();
+    };
     this.listarFallas();
   }
 
@@ -108,6 +119,7 @@ export class FallasListComponent implements OnInit {
     this.expandedElement = this.expandedElement === element ? null : element;
     this.garantiasService.logWarranty(element.id).subscribe(resp=>{
       this.dataSourceBitacora = resp.body;
+      console.table(this.dataSourceBitacora)
     });
   }
 
@@ -138,6 +150,13 @@ export class FallasListComponent implements OnInit {
     if(nivel==3){
       return 'Fabrica';
     }
+  }
+
+  mostrarComentario(_comentario):void{
+    const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
+      data:{comentario:_comentario},
+      disableClose:true, width:'500px'
+    });
   }
 }
 

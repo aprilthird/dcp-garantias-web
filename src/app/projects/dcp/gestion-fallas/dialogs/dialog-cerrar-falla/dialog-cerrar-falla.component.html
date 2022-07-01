@@ -1,1 +1,18 @@
-<p>dialog-cerrar-falla works!</p>
+<div matDialogTitle class="text--end">
+    <mat-icon class="pointer" svgIcon="close" (click)="onClose(false)"></mat-icon>
+</div>
+<div matDialogContent>
+    <div class="row">
+        <div class="col-md-12 flex-col-center margin-b-15">
+            <span class="icon-info font-w-700 icon color-yellow"></span>
+            <span class="font-w-700 color-yellow">Cerrar caso</span>
+        </div>
+        <div class="col-md-12 text--center" style="margin-top: 10px;">
+            <span class="font-w-500">{{data.text}}</span>
+        </div>
+    </div>
+</div>
+<div matDialogActions align="center">
+    <button mat-raised-button (click)="onClose(false)">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onClose(true)">Si, Cerrar</button>
+</div>

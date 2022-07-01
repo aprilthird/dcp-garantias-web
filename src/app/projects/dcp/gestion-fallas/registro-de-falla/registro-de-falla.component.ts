@@ -14,6 +14,7 @@ import { DialogDraftSavedSuccessfullyComponent } from '../../garantias/dialogs/d
 import { DialogAsignacionDeLaFallaComponent } from '../dialogs/dialog-asignacion-de-la-falla/dialog-asignacion-de-la-falla.component';
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
+import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -22,22 +23,25 @@ import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialo
 })
 export class RegistroDeFallaComponent implements OnInit {
 
-  accion:string; tipoDeEquipo:string;
+  accion:string; tipoDeEquipo:string; idTipo:any;
   formFalla: FormGroup; formIngDeSoporte: FormGroup; formDFSE: FormGroup; formFabrica: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
   maestraAreasDeServicio = []; maestraQuejas:any[];
   usuarioDeLaSession:any;
-  botonUsuarioRegistrador = false; botonUsuarioEscalador= false;
-  botonIngenieroDeSoporte = false;
-  botonEscalarDfse = false; verDFSE = false;
+  botonUsuarioRegistrador = false; botonUsuarioEscalador= false; botonObservar = false;
+  botonIngenieroDeSoporte = false; botonCerrarCasoIngDeSoporte = false;
+  botonEscalarDfse = false; verDFSE = false; botonCerrarCasoDfse = false;
   botonEscalarFabrica = false; verFabrica = false;
   botonCerrarCaso = false; verCerrarCaso = false;
   deshabilitarFalla:boolean = false;
   fallaParaGestionar:any;
+  mostrarTrakingNumber = false;
   // data falsa de DFSE para los select
-  items = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
+  items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
+  items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
+
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private _snackBar: MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
@@ -56,6 +60,7 @@ export class RegistroDeFallaComponent implements OnInit {
     }
     if(this.accion=='edit'){
       this.fallaParaGestionar = JSON.parse(localStorage.getItem('fallaParaGestionar'));
+      console.log(this.fallaParaGestionar)
       if(this.fallaParaGestionar.nivelSoporte==0){
         this.botonUsuarioEscalador = true;
         this.cargarFormularioFallaConDatos();
@@ -63,6 +68,8 @@ export class RegistroDeFallaComponent implements OnInit {
       if(this.fallaParaGestionar.nivelSoporte==1){
         this.botonEscalarDfse = true;
         this.verDFSE = true;
+        this.botonObservar = true;
+        this.botonCerrarCasoIngDeSoporte = true;
         this.cargarFormularioFallaConDatos();
         this.cargarFormularioIngDeSoporte();
       }
@@ -70,6 +77,8 @@ export class RegistroDeFallaComponent implements OnInit {
         this.botonEscalarFabrica = true;
         this.verDFSE = true;
         this.verFabrica = true;
+        this.botonObservar = true;
+        this.botonCerrarCasoDfse = true;
         this.cargarFormularioFallaConDatos();
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
@@ -163,6 +172,12 @@ export class RegistroDeFallaComponent implements OnInit {
   cargarInfoLocalStorage():void{
     this.accion = localStorage.getItem('action'); //trae de localStorage la acción que se hará (crear e editar falla)
     this.tipoDeEquipo = localStorage.getItem('text'); //trae de localstorge el tipo de equipo (motor o generador)
+    if(this.tipoDeEquipo=='motor'){
+      this.idTipo = 1;
+    }
+    if(this.tipoDeEquipo=='motor'){
+      this.idTipo = 2;
+    }
   }
 
   cargarMaestras():void{
@@ -170,13 +185,16 @@ export class RegistroDeFallaComponent implements OnInit {
       this.maestraAreasDeServicio = response.data;
     });
     this.userService.user$.subscribe(response=>{
-      this.usuarioDeLaSession = response;  
+      this.usuarioDeLaSession = response;
+      console.log(this.usuarioDeLaSession);
     });
     this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.maestraQuejas = resp.data;
     });
   }
-  
+
+  //TRAER LA MATRICULA INGRESADA
+
   getEsn():void{
     const esn = this.formFalla.value.esn;
     if(esn!=''){
@@ -194,6 +212,8 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
+  // LISTAR LAS FALLAS
+
   onListfallas():void{
     this.router.navigate(['/gestion-fallas']);
   }
@@ -209,22 +229,25 @@ export class RegistroDeFallaComponent implements OnInit {
     });
   }
 
+  // REGISTRAR UNA NUEVA MATRICULA
+
   onRegistrarMatricula():void{
-    const dialogRegistrarMatricula = this.matDialog.open(DialogRegisterEnrollmentComponent,{
-      width:'990px',
-      disableClose: true,
-      data: {option:'new',type:'engine', name:'motor'}
-    })
+    const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
+      width: '990px',
+      data: {option:'new',type:'engine', name:'motor'},
+      disableClose:true
+    }
+  );
+dialogNewEnrollment.afterClosed().subscribe(resp=>{
+  if(resp){
+    this.openDialogOperationSuccessfully('Matricula creada con éxito');
+  }else{
+    console.log('operacion cancelada');        
+  }
+});
   }
 
-  openSnackBar(message:string):void{
-    this._snackBar.open(message,'x',{
-      duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      panelClass: ['mat-toolbar', 'mat-primary','button-color']
-    })
-  }
+  // usuario de servicio
 
   registrarNuevaFalla():void{
     const mensaje = 'llene todos los campos';
@@ -234,7 +257,7 @@ export class RegistroDeFallaComponent implements OnInit {
           if(this.formFalla.value.queja2!=null){
             if(this.formFalla.value.queja3!=null){
               if(this.matriculaEncontrada!=null){
-                const nuevaFalla = {id:0, nivelSoporte:0, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
+                const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
                 this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(response=>{
                   if(response.success){
                     this.registroExitosoDeLaFalla();
@@ -265,7 +288,7 @@ export class RegistroDeFallaComponent implements OnInit {
                         if(responseDialog.success){
                           const nuevaFalla = {id:0, nivelSoporte:responseDialog.nivelSoporte, activo:true, asignacionFalla: responseDialog.idUsuario,
                                               idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
-                                              idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
+                                              idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value, idTipo:this.idTipo};
                           this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(response=>{
                               if(response.success){
                                 localStorage.setItem('success','true');
@@ -299,6 +322,8 @@ export class RegistroDeFallaComponent implements OnInit {
       }); 
     }
   }
+
+  // ingeniero de soporte
 
   guardarRegistroIngenieroDeSoporte():void{
     if(this.formIngDeSoporte.valid){
@@ -343,27 +368,32 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
-  mensajeErrorDeCampos(mensaje):void{
-    const dialogMensajeDeError = this.matDialog.open(DialogErrorMessageComponent,{
-      width:'386px',
-      disableClose:true,
-      data:{text:mensaje}
-    });
+  cerrarCasoIngDeSoporte():void{
+    if(this.formIngDeSoporte.valid){
+      this.fallaParaGestionar.activo = true;
+      this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
+      this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
+      this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
+      const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
+        disableClose:true,
+        width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
+      });
+      dialogCerrarCaso.afterClosed().subscribe(responseDialog=>{
+        if(responseDialog){
+          this.fallaParaGestionar.estado = 3;
+          this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+            if(responseApi.success){
+              localStorage.setItem('success','cerrado');
+              this.router.navigate(['/gestion-fallas']);
+            }
+          });
+        }
+      });
+    }else{
+      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
+    }
   }
-
-  registroExitosoDeLaFalla():void{
-    const dialogRegistroExitoso = this.matDialog.open(DialogDraftSavedSuccessfullyComponent,{
-      disableClose:true,
-      data: {text:'Se guardó el registro con éxito'},
-      width:'386px'
-    });
-    dialogRegistroExitoso.afterClosed().subscribe(response=>{
-      if(response){
-        localStorage.setItem('success','true');
-        this.router.navigate(['/gestion-fallas']);
-      }
-    });
-  }
+  // DFSE
 
   guardarRegistroDFSE():void{
     if(this.formIngDeSoporte.valid){
@@ -434,6 +464,51 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
+  cerrarCasoDfse():void{
+    if(this.formIngDeSoporte.valid){
+      this.fallaParaGestionar.activo = true;
+      this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
+      this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
+      this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
+      if(this.formDFSE.valid){
+        this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
+        this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
+        this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
+        this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
+        this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;
+        this.fallaParaGestionar.trakingNumber = this.formDFSE.value.trakingNumber;
+        this.fallaParaGestionar.subestadoPartsReturn = this.formDFSE.value.subestadoPartsReturn;
+        this.fallaParaGestionar.fechaIniDesarmeMotor = this.formDFSE.value.fechaIniDesarmeMotor;
+        this.fallaParaGestionar.fechaFinDesarmeMotor = this.formDFSE.value.fechaFinDesarmeMotor;
+        this.fallaParaGestionar.fechaSolPartes = this.formDFSE.value.fechaSolPartes;
+        this.fallaParaGestionar.fechaEnvio = this.formDFSE.value.fechaEnvio;
+        this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
+        this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
+        this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
+        const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
+          disableClose:true,
+          width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
+        });
+        dialogCerrarCaso.afterClosed().subscribe(responseDialog=>{
+          if(responseDialog){
+            this.fallaParaGestionar.estado = 3;
+            this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+              if(responseApi.success){
+                localStorage.setItem('success','cerrado');
+                this.router.navigate(['/gestion-fallas']);
+              }
+            });
+          }
+        });
+      }else{
+        this.mensajeErrorDeCampos('Llene los campos DFSE');
+      }
+    }else{
+      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
+    }
+  }
+  // FABRICA
+
   guardarRegistroFabrica():void{
     if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
@@ -500,14 +575,14 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;         
             const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
               disableClose:true,
-              width:'380px'
+              width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
             });
             dialogCerrarCaso.afterClosed().subscribe(responseDialog=>{
-              if(responseDialog.success){
+              if(responseDialog){
                 this.fallaParaGestionar.estado = 3;
                 this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                   if(responseApi.success){
-                    localStorage.setItem('success','true');
+                    localStorage.setItem('success','cerrado');
                     this.router.navigate(['/gestion-fallas']);
                   }
                 });
@@ -521,6 +596,79 @@ export class RegistroDeFallaComponent implements OnInit {
       }
     }else{
       this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
+    }
+  }
+
+  // OBSERVAR FALLA
+
+  observarFalla():void{
+    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
+      disableClose:true,width:'450px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
+    });
+    dialogObservedRecord.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog.selection){
+        const requestBitacora = { idGarantia:this.fallaParaGestionar.id, comentarios:responseDialog.comentario };
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+          if(responseBitacora.success){
+            this.fallaParaGestionar.estado = 2;
+            this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+              if(responseApi.success){
+                this.router.navigate(['/gestion-fallas']);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // OTRAS FUNCIONES
+
+  mensajeErrorDeCampos(mensaje):void{
+    const dialogMensajeDeError = this.matDialog.open(DialogErrorMessageComponent,{
+      width:'386px',
+      disableClose:true,
+      data:{text:mensaje}
+    });
+  }
+
+  registroExitosoDeLaFalla():void{
+    const dialogRegistroExitoso = this.matDialog.open(DialogDraftSavedSuccessfullyComponent,{
+      disableClose:true,
+      data: {text:'Se guardó el registro con éxito'},
+      width:'386px'
+    });
+    dialogRegistroExitoso.afterClosed().subscribe(response=>{
+      if(response){
+        localStorage.setItem('success','true');
+        this.router.navigate(['/gestion-fallas']);
+      }
+    });
+  }
+
+  openSnackBar(message:string):void{
+    this._snackBar.open(message,'x',{
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['mat-toolbar', 'mat-primary','button-color']
+    })
+  }
+
+  openDialogOperationSuccessfully(textDialog:string):void{
+    const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
+      data:{text:textDialog}
+    });
+    dialogOperationSuccessfully.afterClosed().subscribe();
+  }
+
+  mostrarTrackingNumber():void{
+    console.log(this.formDFSE.value.partsReturn);
+    if(this.formDFSE.value.partsReturn=='si'){
+      this.mostrarTrakingNumber = true;
+    }
+    if(this.formDFSE.value.partsReturn=='no'){
+      this.mostrarTrakingNumber = false;
     }
   }
 }

@@ -62,13 +62,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field floatLabel="always">
-                                                <mat-label class="fw-bold">Aplicación de motor</mat-label>
+                                                <mat-label class="fw-bold">Aplicación de {{tipoDeEquipo}}</mat-label>
                                                 <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.aplicacion:'-'" [disabled]="true">
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field floatLabel="always">
-                                                <mat-label class="fw-bold">Modelo del motor</mat-label>
+                                                <mat-label class="fw-bold">Modelo del {{tipoDeEquipo}}</mat-label>
                                                 <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.modelo:'-'" [disabled]="true">
                                             </mat-form-field>
                                         </div>
@@ -137,7 +137,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
                                             <mat-label class="fw-bold">Usuario que reporta</mat-label>
-                                            <input matInput type="text" [disabled]="true">
+                                            <input matInput type="text" [disabled]="true" [value]="usuarioDeLaSession.nombres">
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -265,22 +265,29 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3 flex-xy-center">
-                                <mat-radio-group color="primary" formControlName="partsReturn">
-                                    <mat-radio-button value="si">Si</mat-radio-button>
-                                    <mat-radio-button value="no">No</mat-radio-button>
-                                </mat-radio-group>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mat-label class="fw-bold">Parts return</mat-label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <mat-radio-group color="primary" formControlName="partsReturn" (ngModelChange)="mostrarTrackingNumber()">
+                                            <mat-radio-button value="si">Si</mat-radio-button>
+                                            <mat-radio-button value="no">No</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-3">
-                                <mat-form-field floatLabel="always">
+                                <mat-form-field floatLabel="always" *ngIf="mostrarTrakingNumber">
                                     <mat-label>Tracking Number</mat-label>
-                                    <input matInput type="text" placeholder="Ingresar" formControlName="trakingNumber">
+                                    <input matInput type="text" placeholder="Ingresar" [value]="10676485" [disabled]="true">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
-                                <mat-form-field floatLabel="always">
+                                <mat-form-field floatLabel="always" *ngIf="mostrarTrakingNumber">
                                     <mat-label>Subestado de Parts Return</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="subestadoPartsReturn">
-                                        <mat-option *ngFor="let item of items" [value]="item.value">
+                                        <mat-option *ngFor="let item of items2" [value]="item.value">
                                             {{item.viewValue}}
                                         </mat-option>
                                     </mat-select>
@@ -289,7 +296,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
-                                    <mat-label class="fw-bold">Fecha de inicio de desarmado de motor</mat-label>
+                                    <mat-label class="fw-bold">Fecha de inicio de desarmado de  {{tipoDeEquipo}}</mat-label>
                                     <input matInput [matDatepicker]="pickerFechaInicioDesarmado" placeholder="Ingrese una fecha" formControlName="fechaIniDesarmeMotor">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaInicioDesarmado"></mat-datepicker-toggle>
@@ -298,7 +305,7 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
-                                    <mat-label class="fw-bold">Fecha de fin de desarmado de motor</mat-label>
+                                    <mat-label class="fw-bold">Fecha de fin de desarmado de {{tipoDeEquipo}}</mat-label>
                                     <input matInput [matDatepicker]="pickerFechaFinDesarmado" placeholder="Ingrese una fecha" formControlName="fechaFinDesarmeMotor">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaFinDesarmado"></mat-datepicker-toggle>
@@ -383,12 +390,15 @@
         </div>
         <div class="col-md-12 text-end mb-5">
             <button mat-raised-button class="mx-1" *ngIf="botonUsuarioRegistrador" (click)="registrarNuevaFalla()">Guardar registro</button> <!-- guardar falla -->
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
             <button mat-raised-button class="mx-1" *ngIf="botonEscalarDfse" (click)="guardarRegistroIngenieroDeSoporte()">Guardar registro</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()">Escalar a DFSE</button>
             <button mat-raised-button class="mx-1" *ngIf="botonEscalarFabrica" (click)="guardarRegistroDFSE()">Guardar registro</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()">Escalar a Fabrica</button>
             <button mat-raised-button class="mx-1" *ngIf="botonCerrarCaso" (click)="guardarRegistroFabrica()">Guardar registro</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCasoIngDeSoporte" (click)="cerrarCasoIngDeSoporte()">Cerrar caso</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCasoDfse" (click)="cerrarCasoDfse()">Cerrar caso</button>
+            <button mat-raised-button class="mx-1" *ngIf="botonObservar" (click)="observarFalla()">Observar</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()">Escalar a DFSE</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()">Escalar a Fabrica</button>
             <button mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
         </div>
     </div>
