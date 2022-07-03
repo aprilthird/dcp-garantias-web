@@ -22,6 +22,7 @@ import { MatTableModule } from '@angular/material/table';
 import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DialogMostrarComentarioComponent } from './dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { DialogMostrarComentarioComponent } from './dialogs/dialog-mostrar-comen
     MatRadioModule,
     MatDatepickerModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule
   ],
   providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })

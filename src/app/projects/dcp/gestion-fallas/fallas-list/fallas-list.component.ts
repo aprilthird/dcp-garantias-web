@@ -49,6 +49,9 @@ export class FallasListComponent implements OnInit {
       if(localStorage.getItem('success')=='cerrado'){
         this.mensajeExitoso = 'Se cerró el caso correctamente';
       }
+      if(localStorage.getItem('success')=='escalado'){
+        this.mensajeExitoso = 'Se escaló correctamente';
+      }
       this.mostrarMensajeRegistroExitosoDeUnaFalla();
     };
     this.listarFallas();
