@@ -56,9 +56,16 @@ export class RegistroDeFallaComponent implements OnInit {
   cargarFormularios():void{
     if(this.accion=='new'){
       this.botonUsuarioRegistrador=true; this.botonUsuarioEscalador = true;
+      if(this.tipoDeEquipo=='motor'){
+        this.idTipo = 1;
+      }
+      if(this.tipoDeEquipo=='generador'){
+        this.idTipo = 2;
+      }
       this.cargarFormularioFallaSinDatos();
     }
     if(this.accion=='edit'){
+      this.tipoDeEquipo = this.idTipo==1?'motor':'generador';
       this.fallaParaGestionar = JSON.parse(localStorage.getItem('fallaParaGestionar'));
       console.log(this.fallaParaGestionar)
       if(this.fallaParaGestionar.nivelSoporte==0){
@@ -170,14 +177,9 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cargarInfoLocalStorage():void{
+    debugger;
     this.accion = localStorage.getItem('action'); //trae de localStorage la acción que se hará (crear e editar falla)
     this.tipoDeEquipo = localStorage.getItem('text'); //trae de localstorge el tipo de equipo (motor o generador)
-    if(this.tipoDeEquipo=='motor'){
-      this.idTipo = 1;
-    }
-    if(this.tipoDeEquipo=='motor'){
-      this.idTipo = 2;
-    }
   }
 
   cargarMaestras():void{
