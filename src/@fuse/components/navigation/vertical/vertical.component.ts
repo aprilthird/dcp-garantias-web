@@ -63,7 +63,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
 
     seeConfigurationAndMaintenance:boolean=false;
     homeMenu='color-text-black';
-    homeIcon='icon-menu-red';
+    homeIcon='icon-menu-gray';
     garantiasMenu='color-text-gray';
     garantiasIcon='icon-menu-gray';
     fallasMenu='color-text-gray';
@@ -99,8 +99,40 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     showConfigurationAndMaintenance():void{
         this.seeConfigurationAndMaintenance==true?this.seeConfigurationAndMaintenance=false:this.seeConfigurationAndMaintenance=true;
       }
-    
+      
+      cargarEstiloMenu():void{        
+        if(localStorage.getItem('menu')){
+            if(localStorage.getItem('menu')=='/home'){
+                this.homeMenu='color-text-black';
+                this.homeIcon='icon-menu-red';
+              }
+              if(localStorage.getItem('menu')=='/garantias'){
+                this.garantiasMenu='color-text-black';
+                this.garantiasIcon='icon-menu-red';
+              }
+              if(localStorage.getItem('menu')=='/gestion-fallas'){
+                this.fallasMenu='color-text-black';
+                this.fallasIcon='icon-menu-red';
+              }
+              if(localStorage.getItem('menu')=='/herramientas'){
+                this.herramientasMenu='color-text-black';
+                this.herramientasIcon='icon-menu-red';
+              }
+              if(localStorage.getItem('menu')=='/configuracion'){
+                this.configuracionMenu='color-text-black';
+                this.configuracionIcon='icon-menu-red';
+              }
+              if(localStorage.getItem('menu')=='/reportes'){
+                this.reportesMenu='color-text-black';
+                this.reportesIcon='icon-menu-red';
+              }
+        }else{
+            this.homeIcon='icon-menu-red';
+        }
+      }
+
       navegacion(ruta:string):void{
+        localStorage.setItem('menu',ruta);
         this.clear();
         if(ruta=='/home'){
           this.homeMenu='color-text-black';
@@ -361,6 +393,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
+        this.cargarEstiloMenu();
         console.log(this.navigation);
         // Make sure the name input is not an empty string
         if ( this.name === '' )

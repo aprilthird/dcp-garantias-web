@@ -89,6 +89,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.cargarFormularioFallaConDatos();
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
+        this.mostrarTrackingNumber();
       }
       if(this.fallaParaGestionar.nivelSoporte==3){
         this.botonCerrarCaso = true;

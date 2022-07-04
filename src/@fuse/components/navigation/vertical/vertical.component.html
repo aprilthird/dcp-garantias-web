@@ -127,81 +127,89 @@
         </div> -->
 
         <mat-list role="list">
-            <mat-list-item role="listitem" (click)="navegacion('/home')" class="pointer">
+            <mat-list-item role="listitem" (click)="navegacion('/home')" class="pointer" style="padding-left: 10px;">
                 <span [class]="'icon-home '+homeIcon"></span>
-                <span [class]="homeMenu">Home</span>
+                <span [class]="homeMenu" class="text-menu">Home</span>
             </mat-list-item>
-            <mat-list-item role="listitem" (click)="navegacion('/garantias')" class="pointer">
+            <mat-list-item role="listitem" (click)="navegacion('/garantias')" class="pointer" style="padding-left: 10px;">
                 <span [class]="'icon-garantia '+garantiasIcon"></span>
-                <span [class]="garantiasMenu">Garantías</span>
+                <span [class]="garantiasMenu" class="text-menu">Garantías</span>
             </mat-list-item>
-            <mat-list-item role="listitem"  (click)="navegacion('/gestion-fallas')" class="pointer">
+            <mat-list-item role="listitem"  (click)="navegacion('/gestion-fallas')" class="pointer" style="padding-left: 10px;">
                 <span [class]="'icon-fallas '+fallasIcon"></span>
-                <span [class]="fallasMenu">Gestión de fallas</span>
+                <span [class]="fallasMenu" class="text-menu">Gestión de fallas</span>
             </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer">
+            <mat-list-item role="listitem" (click)="navegacion('/herramientas')" class="pointer" style="padding-left: 10px;">
                 <span [class]="'icon-herramientas '+herramientasIcon"></span>
-                <span [class]="herramientasMenu">Herramientas digitales</span>
-                <mat-icon>expand_more</mat-icon>
+                <span [class]="herramientasMenu" class="text-menu">Herramientas digitales</span>
+                <mat-icon class="text-menu">expand_more</mat-icon>
             </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer">
+            <mat-list-item role="listitem"  class="pointer" (click)="navegacion('/configuracion')" style="padding-left: 10px;">
                 <span [class]="'icon-configuracion '+configuracionIcon"></span>
-                <span [class]="configuracionMenu">Configuración y mantenimiento</span>
-                <mat-icon>expand_more</mat-icon>
+                <span [class]="configuracionMenu" class="text-menu">Configuración y mantenimiento</span>
+                <mat-icon class="text-menu">expand_more</mat-icon>
             </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer">
-                <span [class]="'icon-report '+reportesIcon"></span>
-                <span [class]="reportesMenu">Reportes</span>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Matrículas</span>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="maestras">
+                        <span [class]="configuracionMenu" class="text-menu">Maestras</span>
+                        <mat-icon>expand_more</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Gestión de Usuarios</span>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Distribución de Garantías</span>
+                    </mat-list-item>
+            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-stats-bars2 '+reportesIcon"></span>
+                <span [class]="reportesMenu" class="text-menu">Reportes</span>
                 <mat-icon>expand_more</mat-icon>
             </mat-list-item>
           </mat-list>
 
-        <button mat-button [matMenuTriggerFor]="animals">Animal index</button>
-        <mat-menu #animals="matMenu">
-            <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
-            <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
+        <mat-menu #maestras="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/constant')">Constantes</button>
+            <button mat-menu-item [matMenuTriggerFor]="datosGarantia">Datos Garantía</button>
+            <button mat-menu-item [matMenuTriggerFor]="motor">Motor</button>
+            <button mat-menu-item [matMenuTriggerFor]="fallas">Falla</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/srt')">SRT</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/parts')">Partes</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-claims')">Otros Reclamables</button>
+            <button mat-menu-item [matMenuTriggerFor]="viajes">Viajes</button>
+            <button mat-menu-item [matMenuTriggerFor]="otrosCodigos">Otros Códigos</button>
         </mat-menu>
-
-        <mat-menu #vertebrates="matMenu">
-            <button mat-menu-item [matMenuTriggerFor]="fish">Fishes</button>
-            <button mat-menu-item [matMenuTriggerFor]="amphibians">Amphibians</button>
-            <button mat-menu-item [matMenuTriggerFor]="reptiles">Reptiles</button>
-            <button mat-menu-item>Birds</button>
-            <button mat-menu-item>Mammals</button>
+        <!-- datos garantía -->
+        <mat-menu #datosGarantia="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/client')">Cliente</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/complaints')">Quejas</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/service-area')">Áreas de Servicio</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/type-of-warranty')">Tipos de Garantía</button>
         </mat-menu>
-
-        <mat-menu #invertebrates="matMenu">
-            <button mat-menu-item>Insects</button>
-            <button mat-menu-item>Molluscs</button>
-            <button mat-menu-item>Crustaceans</button>
-            <button mat-menu-item>Corals</button>
-            <button mat-menu-item>Arachnids</button>
-            <button mat-menu-item>Velvet worms</button>
-            <button mat-menu-item>Horseshoe crabs</button>
+        <!-- motor -->
+        <mat-menu #motor="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/model')">Modelos del Motor</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/application')">Aplicaciones del Motor</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/brand')">Marcas del Motor</button>
         </mat-menu>
-
-        <mat-menu #fish="matMenu">
-            <button mat-menu-item>Baikal oilfish</button>
-            <button mat-menu-item>Bala shark</button>
-            <button mat-menu-item>Ballan wrasse</button>
-            <button mat-menu-item>Bamboo shark</button>
-            <button mat-menu-item>Banded killifish</button>
+        <!-- fallas -->
+        <mat-menu #fallas="matMenu">
+            <button mat-menu-item>Grupo Mayor</button>
+            <button mat-menu-item>Parte Fallada del Sistema</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/failures')">Tipo de Falla</button>
         </mat-menu>
-
-        <mat-menu #amphibians="matMenu">
-            <button mat-menu-item>Sonoran desert toad</button>
-            <button mat-menu-item>Western toad</button>
-            <button mat-menu-item>Arroyo toad</button>
-            <button mat-menu-item>Yosemite toad</button>
+        <!-- viajes -->
+        <mat-menu #viajes="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/type-travel')">Tipo de Viaje</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/details')">Detalle de Viaje</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/unit-of-measure')">Unidad de Medida</button>
         </mat-menu>
-
-        <mat-menu #reptiles="matMenu">
-            <button mat-menu-item>Banded Day Gecko</button>
-            <button mat-menu-item>Banded Gila Monster</button>
-            <button mat-menu-item>Black Tree Monitor</button>
-            <button mat-menu-item>Blue Spiny Lizard</button>
-            <button mat-menu-item disabled>Velociraptor</button>
-        </mat-menu>
+        <!-- Otros códigos -->
+        <mat-menu #otrosCodigos="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/account-code')">Account code</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/pay-code')">Pay code</button>
+        </mat-menu>        
 
         <!-- Items -->
         <!-- <ng-container *ngFor="let item of navigation; trackBy: trackByFn"> -->

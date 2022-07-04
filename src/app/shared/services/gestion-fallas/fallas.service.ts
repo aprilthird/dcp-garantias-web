@@ -27,4 +27,8 @@ export class FallasService {
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.bandejaFallasUrl, request, {headers:this.header});
   }
+  bandejaBusquedaFallas(_page, _filter):Observable<any>{
+    const request = {filter : _filter ,page:(_page-1),pageSize:10};
+    return this.httpClient.post(this.bandejaFallasUrl, request, {headers:this.header});
+  }
 }
