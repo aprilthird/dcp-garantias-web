@@ -73,7 +73,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Bandeja</mat-label>
-                        <mat-select formControlName="estado" (selectionChange)="listWarranties()">
+                        <mat-select formControlName="bandeja" (selectionChange)="listWarranties()">
                           <mat-option *ngFor="let option of stateOptions" [value]="option.value">
                             {{option.name}}
                           </mat-option>
