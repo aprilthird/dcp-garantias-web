@@ -12,7 +12,9 @@ export class FallasService {
   header = new HttpHeaders({
     'Authorization': this.authService.accessToken
   });
+
  dateCurrent = new Date();
+ 
  private baseApiURl = environment.apiUrl;
  private mantenimientoFallasUrl = this.baseApiURl + '/Mantenimiento/MantenimientoFallas';
  private bandejaFallasUrl = this.baseApiURl + '/Mantenimiento/BandejaFallas';
