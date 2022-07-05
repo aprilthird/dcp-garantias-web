@@ -29,12 +29,12 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
-          <!-- <form *ngIf="formFilter" [formGroup]="formFilter"> -->
+          <form *ngIf="formFilter" [formGroup]="formFilter">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2 search">
                     <mat-form-field appearance="fill">
                         <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
-                        <button mat-icon-button matSuffix>
+                        <button mat-icon-button matSuffix (click)="listWarranties()">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
@@ -42,7 +42,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2 search">
                     <mat-form-field appearance="fill">
                         <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
-                        <button mat-icon-button matSuffix>
+                        <button mat-icon-button matSuffix (click)="listWarranties()">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
@@ -50,7 +50,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Areas</mat-label>
-                        <mat-select formControlName="area">
+                        <mat-select formControlName="area" (selectionChange)="listWarranties()">
                           <mat-option *ngFor="let option of options" [value]="option.value">
                             {{option.name}}
                           </mat-option>
@@ -61,8 +61,8 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Enter a date range</mat-label>
                         <mat-date-range-input [rangePicker]="picker">
-                          <input matStartDate placeholder="Start date" formControlName="fechaIni">
-                          <input matEndDate placeholder="End date" formControlName="fechaFin">
+                          <input matStartDate placeholder="Start date" formControlName="fechaIni" (dateChange)="listWarranties()">
+                          <input matEndDate placeholder="End date" formControlName="fechaFin" (dateChange)="listWarranties()">
                         </mat-date-range-input>
                         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -73,38 +73,25 @@
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Bandeja</mat-label>
-                        <mat-select formControlName="estado">
-                          <mat-option>Inicial</mat-option>
-                          <mat-option>Blanca</mat-option>
-                          <mat-option>Naranja</mat-option>
-                          <mat-option>Amarilla</mat-option>
-                          <mat-option>Verde</mat-option>
-                          <mat-option>Gris</mat-option>
-                          <!-- <mat-option *ngFor="let option of options" [value]="option.value">
+                        <mat-select formControlName="estado" (selectionChange)="listWarranties()">
+                          <mat-option *ngFor="let option of stateOptions" [value]="option.value">
                             {{option.name}}
-                          </mat-option> -->
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>        
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Antiguedad</mat-label>
-                        <mat-select formControlName="antiguedad">
-                          <mat-option>0-29</mat-option>
-                          <mat-option>30-59</mat-option>
-                          <mat-option>60-89</mat-option>
-                          <mat-option>90-119</mat-option>
-                          <mat-option>120-179</mat-option>
-                          <mat-option>180-364</mat-option>
-                          <mat-option>>365</mat-option>
-                          <!-- <mat-option *ngFor="let option of options" [value]="option.value">
+                        <mat-select formControlName="antiguedad" (selectionChange)="listWarranties()">
+                          <mat-option *ngFor="let option of oldOptions" [value]="option.value">
                             {{option.name}}
-                          </mat-option> -->
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>        
                 </div>
             </div>
-            <!-- </form> -->
+            </form>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="mat-elevation-z8">

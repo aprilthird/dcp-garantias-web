@@ -9,7 +9,7 @@ import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dia
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 interface Option {
-  value: string;
+  value: any;
   name: string;
 }
 
@@ -53,11 +53,35 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class GarantiasListComponent implements OnInit {
 
   options: Option[] = [
+    {value:-1, name:'Todas'},
     {value:'opt1', name:'opcion 1'},
     {value:'opt2', name:'opcion 2'},
     {value:'opt3', name:'opcion 3'},
     {value:'opt4', name:'opcion 4'},
   ];
+
+  stateOptions: Option[] = [
+    {value:-1, name:'Todas'},
+    {value:0, name:'Inicial'},
+    {value:1, name:'Blanca'},
+    {value:2, name:'Naranja'},
+    {value:6, name:'Amarilla'},
+    {value:3, name:'Verde'},
+    {value:4, name:'Gris'},
+    {value:5, name:'Negra'},
+  ];
+
+  oldOptions: Option[] = [
+    {value:-1, name:'Todas'},
+    {value:0, name:'0-29'},
+    {value:1, name:'30-59'},
+    {value:2, name:'60-89'},
+    {value:3, name:'90-119'},
+    {value:4, name:'120-179'},
+    {value:5, name:'180-364'},
+    {value:6, name:'>365'},
+  ];
+
   //formulario para el filtro de las garantias
   formFilter:FormGroup;
   //variable para mostrar o no el mensaje de que se creó la garantía con exito
@@ -80,6 +104,9 @@ export class GarantiasListComponent implements OnInit {
   //info para la bitacora
   dataBitacora:any;
 
+  currentDate = new Date();
+  prevDate = new Date(this.currentDate.getFullYear() - 1, this.currentDate.getMonth(), this.currentDate.getDay());
+
   constructor(private readonly matDialog: MatDialog,
               private readonly router: Router,
               private readonly garantiasService: GarantiasService) {
@@ -95,7 +122,11 @@ export class GarantiasListComponent implements OnInit {
   }
 
   listWarranties():void{
-    this.garantiasService.listWarranties(this.formFilter, this.pageCurrent).subscribe(resp=>{
+    const filterData = this.formFilter.value;
+    filterData.area = filterData.area == -1 ? null : filterData.area;
+    filterData.estado = filterData.estado == -1 ? 0 : filterData.estado;
+    filterData.antiguedad = filterData.antiguedad == -1 ? null : filterData.antiguedad;
+    this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
       console.log(resp);
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
@@ -117,13 +148,13 @@ export class GarantiasListComponent implements OnInit {
 
   loadFormFilter():void{
     this.formFilter = new FormGroup({
-      esn: new FormControl(''),
-      os: new FormControl(''),
-      area: new FormControl(''),
-      fechaIni: new FormControl(''),
-      fechaFin: new FormControl(''),
-      estado: new FormControl(''),
-      antiguedad: new FormControl('')
+      esn: new FormControl(null),
+      os: new FormControl(null),
+      area: new FormControl(-1),
+      fechaIni: new FormControl(this.prevDate),
+      fechaFin: new FormControl(this.currentDate),
+      estado: new FormControl(-1),
+      antiguedad: new FormControl(-1)
     });
   }
 
