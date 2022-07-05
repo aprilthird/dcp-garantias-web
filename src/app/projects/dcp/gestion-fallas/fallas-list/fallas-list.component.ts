@@ -41,6 +41,8 @@ export class FallasListComponent implements OnInit {
   // formulario busqueda con filtros
   formBusquedaConFiltros: FormGroup;
   flag = false;
+  inputBuscarPorArea = false;
+  inputBuscarPorEsn = false;
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
               private readonly garantiasService:GarantiasService, private readonly router:Router) { }
@@ -75,14 +77,15 @@ export class FallasListComponent implements OnInit {
     this.flag = true;
     console.log(this.formBusquedaConFiltros.value);
     if(this.formBusquedaConFiltros.value.fechaFin!=null){
-      this.fallasService.bandejaBusquedaFallas(this.paginaActual,this.formBusquedaConFiltros.value).subscribe(responseApi=>{
-        this.totalFallas = responseApi.totalRecords;
-        this.totalFilas = responseApi.pageSize;
-        this.numeroDePaginas = this.obtenerNumeroDePaginas(responseApi.pageSize,responseApi.totalRecords);
-        this.dataSource = responseApi.data;
-        this.deshabilitarBotonesPaginacion(); 
-      });
+      this.formBusquedaConFiltros.value.fechaFin = new Date();
     }
+    this.fallasService.bandejaBusquedaFallas(this.paginaActual,this.formBusquedaConFiltros.value).subscribe(responseApi=>{
+      this.totalFallas = responseApi.totalRecords;
+      this.totalFilas = responseApi.pageSize;
+      this.numeroDePaginas = this.obtenerNumeroDePaginas(responseApi.pageSize,responseApi.totalRecords);
+      this.dataSource = responseApi.data;
+      this.deshabilitarBotonesPaginacion(); 
+    });
   }
 
   cargarFormularioBusqueda():void{
@@ -93,6 +96,8 @@ export class FallasListComponent implements OnInit {
       fechaIni : new FormControl(),
       fechaFin : new FormControl(),
       nivelSoporte : new FormControl(),
+      area : new FormControl(),
+      esn : new FormControl()
     });
   }
 
@@ -121,7 +126,7 @@ export class FallasListComponent implements OnInit {
       this.botonAnterior = true,
       this.botonSiguiente = true;
     }
-    if( this.paginaActual==1 && this.paginaActual<this.numeroDePaginas ){
+    if( this.paginaActual == 1 && this.paginaActual < this.numeroDePaginas ){
       this.botonAnterior = true;
       this.botonSiguiente = false;
     }
@@ -129,7 +134,7 @@ export class FallasListComponent implements OnInit {
       this.botonAnterior = false;
       this.botonSiguiente = false;
     }
-    if( this.paginaActual>1 && this.paginaActual==this.numeroDePaginas){
+    if(this.paginaActual > 1 && this.paginaActual == this.numeroDePaginas){
       this.botonAnterior = false;
       this.botonSiguiente = true;
     }
@@ -138,12 +143,12 @@ export class FallasListComponent implements OnInit {
   changePage(type:string){
     if(type=='more'){
       this.paginaActual = this.paginaActual + 1 ;
-      this.flag==true? this.busquedaFallas():this.listarFallas();
+      this.flag == true ? this.busquedaFallas() : this.listarFallas();
       this.deshabilitarBotonesPaginacion();
     }
     if(type=='less'){
       this.paginaActual = this.paginaActual - 1 ;
-      this.flag==true? this.busquedaFallas():this.listarFallas();
+      this.flag == true ? this.busquedaFallas() : this.listarFallas();
       this.deshabilitarBotonesPaginacion();
     }
   }
@@ -191,6 +196,13 @@ export class FallasListComponent implements OnInit {
       data:{comentario:_comentario},
       disableClose:true, width:'500px'
     });
+  }
+
+  mostrarInputBuscarPorArea():void{
+    this.inputBuscarPorArea = this.inputBuscarPorArea == false ? true : false;
+  }
+  mostrarInputBuscarPorEsn():void{
+    this.inputBuscarPorEsn = this.inputBuscarPorEsn == false ? true : false;
   }
 }
 

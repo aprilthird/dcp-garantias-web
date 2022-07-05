@@ -81,7 +81,7 @@
                       <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
                   </button>
                   <mat-menu #menu="matMenu" xPosition="after">
-                    <button mat-menu-item>
+                    <button mat-menu-item (click)="mostrarInputBuscarPorArea()">
                       <!-- <mat-icon>dialpad</mat-icon> -->
                       <span>Área</span>
                     </button>
@@ -89,13 +89,28 @@
                       <mat-icon>voicemail</mat-icon>
                       <span>Check voice mail</span>
                     </button> -->
-                    <button mat-menu-item>
+                    <button mat-menu-item (click)="mostrarInputBuscarPorEsn()">
                       <!-- <mat-icon>notifications_off</mat-icon> -->
                       <span>ESN</span>
                     </button>
-                  </mat-menu>
-                  
+                  </mat-menu>                  
                 </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 search" *ngIf="inputBuscarPorArea">
+                  <mat-form-field floatLabel="always">
+                      <input matInput type="text" placeholder="Buscar por área" formControlName="area" (ngModelChange)="busquedaFallas()">
+                      <button mat-icon-button matSuffix>
+                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                      </button>
+                  </mat-form-field>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 search" *ngIf="inputBuscarPorEsn">
+                <mat-form-field floatLabel="always">
+                    <input matInput type="text" placeholder="Buscar ESN" formControlName="esn" (ngModelChange)="busquedaFallas()">
+                    <button mat-icon-button matSuffix>
+                        <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
             </div>
           </form>
         </div>

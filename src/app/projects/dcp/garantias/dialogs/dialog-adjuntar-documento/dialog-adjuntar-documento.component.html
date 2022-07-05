@@ -19,7 +19,7 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="data.modulo=='garantias'">
             <mat-form-field>
                 <mat-label>Titulo</mat-label>
                 <input matInput type="text">
@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-12 mb-5">
             <button class="btn-attach" mat-raised-button (click)="fileInputDetallesReclamo.click()">
-                <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
+                <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documentos
             </button>
             <input hidden type="file" (change)="cargarDocumento($event)" #fileInputDetallesReclamo multiple>
         </div>

@@ -27,7 +27,7 @@ export class RegistroDeFallaComponent implements OnInit {
   formFalla: FormGroup; formIngDeSoporte: FormGroup; formDFSE: FormGroup; formFabrica: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
-  maestraAreasDeServicio = []; maestraQuejas:any[];
+  maestraAreasDeServicio = []; maestraQuejas:any[]; documentosAjuntos = []; documentosParaDescargar = [];
   usuarioDeLaSession:any;
   botonUsuarioRegistrador = false; botonUsuarioEscalador= false; botonObservar = false;
   botonIngenieroDeSoporte = false; botonCerrarCasoIngDeSoporte = false;
@@ -219,7 +219,7 @@ export class RegistroDeFallaComponent implements OnInit {
   onListfallas():void{
     this.router.navigate(['/gestion-fallas']);
   }
-
+  // abrir modal para adjuntar documentos
   adjuntarDocumento():void{
     const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
       width: '425px',
@@ -647,7 +647,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       }
     });
   }
-
+  // abrir snack bar para los mensajes
   openSnackBar(message:string):void{
     this._snackBar.open(message,'x',{
       duration: 3000,
@@ -656,14 +656,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       panelClass: ['mat-toolbar', 'mat-primary','button-color']
     })
   }
-
+  // abrir dialogo registro exitoso
   openDialogOperationSuccessfully(textDialog:string):void{
     const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
       data:{text:textDialog}
     });
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
-
+  // mostrar el tracking number del nivel DFSE
   mostrarTrackingNumber():void{
     console.log(this.formDFSE.value.partsReturn);
     if(this.formDFSE.value.partsReturn=='si'){
