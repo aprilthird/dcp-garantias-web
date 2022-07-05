@@ -124,7 +124,7 @@ export class GarantiasListComponent implements OnInit {
   listWarranties():void{
     const filterData = this.formFilter.value;
     filterData.area = filterData.area == -1 ? null : filterData.area;
-    filterData.estado = filterData.estado == -1 ? 0 : filterData.estado;
+    filterData.bandeja = filterData.bandeja == -1 ? null : filterData.bandeja;
     filterData.antiguedad = filterData.antiguedad == -1 ? null : filterData.antiguedad;
     this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
       console.log(resp);
@@ -153,7 +153,7 @@ export class GarantiasListComponent implements OnInit {
       area: new FormControl(-1),
       fechaIni: new FormControl(this.prevDate),
       fechaFin: new FormControl(this.currentDate),
-      estado: new FormControl(-1),
+      bandeja: new FormControl(-1),
       antiguedad: new FormControl(-1)
     });
   }
