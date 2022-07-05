@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?hgh7vm');
-  src:  url('assets/fonts/dcp-garantias/fonts/icomoon.eot?hgh7vm#iefix') format('embedded-opentype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.ttf?hgh7vm') format('truetype'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.woff?hgh7vm') format('woff'),
-    url('assets/fonts/dcp-garantias/fonts/icomoon.svg?hgh7vm#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ux3rx8');
+  src:  url('fonts/icomoon.eot?ux3rx8#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ux3rx8') format('truetype'),
+    url('fonts/icomoon.woff?ux3rx8') format('woff'),
+    url('fonts/icomoon.svg?ux3rx8#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -28,12 +28,12 @@
 .icon-question:before {
   content: "\e904";
 }
-.icon-upload .path1:before {
+.icon-adjuntar_documento .path1:before {
   content: "\e90a";
   color: rgb(100, 116, 139);
   opacity: 0.4;
 }
-.icon-upload .path2:before {
+.icon-adjuntar_documento .path2:before {
   content: "\e90b";
   margin-left: -1em;
   color: rgb(100, 116, 139);
@@ -43,6 +43,9 @@
 }
 .icon-upload_file:before {
   content: "\e902";
+}
+.icon-report-fallas:before {
+  content: "\e90c";
 }
 .icon-garantia:before {
   content: "\e909";
@@ -69,6 +72,12 @@
 }
 .icon-electric-generator:before {
   content: "\e901";
+}
+.icon-stats-bars:before {
+  content: "\e99c";
+}
+.icon-stats-bars2:before {
+  content: "\e99d";
 }
 .icon-info:before {
   content: "\ea0c";

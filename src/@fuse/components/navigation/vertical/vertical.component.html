@@ -13,19 +13,218 @@
             <ng-content select="[fuseVerticalNavigationContentHeader]"></ng-content>
         </div>
 
+        <!-- <div class="col-md-12 menu">
+            <div class="row">
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/home')">
+                    <span [class]="'icon-home '+homeIcon"></span>
+                    <span [class]="homeMenu">Home</span>
+                </div>
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/garantias')">
+                    <span [class]="'icon-garantia '+garantiasIcon"></span>
+                    <span [class]="garantiasMenu">Garantías</span>
+                </div>
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/gestion-fallas')">
+                    <span [class]="'icon-fallas '+fallasIcon"></span>
+                    <span [class]="fallasMenu">Gestión de fallas</span>
+                </div>
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/herramientas')">
+                    <span [class]="'icon-herramientas '+herramientasIcon"></span>
+                    <span [class]="herramientasMenu">Herramientas digitales</span>
+                    <mat-icon>expand_more</mat-icon>
+                </div>
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/configuracion')">
+                    <span [class]="'icon-configuracion '+configuracionIcon"></span>
+                    <span [class]="configuracionMenu">Configuración y mantenimiento</span>
+                    <mat-icon>expand_more</mat-icon>
+                </div>
+                <div class="col-md-12" *ngIf="seeConfigurationAndMaintenance">
+                    <div class="row">
+                        <div class="col-md-12 menu-level-2 height-item-menu"><span>Matriculas</span></div>
+                        <div class="col-md-12 dropend pointer">
+                            <div class="height-item-menu flex-row-center" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 60px;" data-bs-auto-close="outside">
+                                <div class="w8 flex-row-center">Maestras</div>
+                                <div class="w2 flex-row-center"><mat-icon>expand_more</mat-icon></div>                         
+                            </div>
+                            <div class="dropdown-menu" style="position: absolute;inset: -10px auto auto 0px !important;margin: 0px;transform: translate(253.333px, -390px);padding: 0px;">
+                                <div class="row">
+                                    <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/constant')">Constantes</div>
+                                    <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
+                                        <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
+                                            <div class="w8 flex-row-center">Datos Garantías</div>
+                                            <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
+                                        </div>
+                                        <div class="dropdown-menu width-menu-level-1">
+                                            <div class="row">
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/type-of-warranty')">Tipo de Garantía</div>
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/complaints')">Queja</div>
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/service-area')">Area de Servicios</div>
+                                                <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/client')">Cliente</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
+                                        <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
+                                            <div class="w8 flex-row-center">Motor</div>
+                                            <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
+                                        </div>
+                                        <div class="dropdown-menu width-menu-level-1">
+                                            <div class="row">
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/model')">Modelo del motor</div>
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center"(click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/application')">Aplicaciones del motor</div>
+                                                <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/brand')">Marca del motor</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/failures')">
+                                        <div class="w8 flex-row-center">Falla</div>
+                                        <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
+                                    </div>
+                                    <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/srt')">SRT</div>
+                                    <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/parts')">Partes</div>
+                                    <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-claims')">Otros Reclamables</div>
+                                    <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
+                                        <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
+                                            <div class="w8 flex-row-center">Viajes</div>
+                                            <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
+                                        </div>
+                                        <div class="dropdown-menu width-menu-level-1">
+                                            <div class="row">
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/type-travel')">Tipo de viaje</div>
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/details')">Detalle de viaje</div>
+                                                <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/unit-of-measure')">Unidad de medida</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10  border-bottom-item-menu height-item-menu ml-7 flex-row-center">
+                                        <div data-bs-toggle="dropdown" aria-expanded="false" class="height-item-menu flex-row-center w10">
+                                            <div class="w8 flex-row-center">Otros codigos</div>
+                                            <div class="w2 flex-row-center"><mat-icon>chevron_right</mat-icon></div>
+                                        </div>
+                                        <div class="dropdown-menu width-menu-level-1">
+                                            <div class="row">
+                                                <div class="col-md-10 border-bottom-item-menu height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/account-code')">Account Code</div>
+                                                <div class="col-md-10 height-item-menu ml-7 flex-row-center" (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/pay-code')">Pay code</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 menu-level-2 height-item-menu"><span>Gestión de usuarios</span></div>
+                        <div class="col-md-12 menu-level-2 height-item-menu"><span>Distribución de garantias</span></div>
+                    </div>
+                </div>
+                <div class="col-md-12 menu-level-1 pointer" (click)="navegacion('/reportes')">
+                    <div class="w8">
+                        <span [class]="'icon-report '+reportesIcon"></span>
+                        <span [class]="reportesMenu">Reportes</span>
+                    </div>
+                    <div class="w2 text-end">
+                        <mat-icon>expand_more</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <mat-list role="list">
+            <mat-list-item role="listitem" (click)="navegacion('/home')" class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-home '+homeIcon"></span>
+                <span [class]="homeMenu" class="text-menu">Home</span>
+            </mat-list-item>
+            <mat-list-item role="listitem" (click)="navegacion('/garantias')" class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-garantia '+garantiasIcon"></span>
+                <span [class]="garantiasMenu" class="text-menu">Garantías</span>
+            </mat-list-item>
+            <mat-list-item role="listitem"  (click)="navegacion('/gestion-fallas')" class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-fallas '+fallasIcon"></span>
+                <span [class]="fallasMenu" class="text-menu">Gestión de fallas</span>
+            </mat-list-item>
+            <mat-list-item role="listitem" (click)="navegacion('/herramientas')" class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-herramientas '+herramientasIcon"></span>
+                <span [class]="herramientasMenu" class="text-menu">Herramientas digitales</span>
+                <mat-icon class="text-menu">expand_more</mat-icon>
+            </mat-list-item>
+            <mat-list-item role="listitem"  class="pointer" (click)="navegacion('/configuracion')" style="padding-left: 10px;">
+                <span [class]="'icon-configuracion '+configuracionIcon"></span>
+                <span [class]="configuracionMenu" class="text-menu">Configuración y mantenimiento</span>
+                <mat-icon class="text-menu">expand_more</mat-icon>
+            </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Matrículas</span>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="maestras">
+                        <span [class]="configuracionMenu" class="text-menu">Maestras</span>
+                        <mat-icon>expand_more</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Gestión de Usuarios</span>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
+                        <span [class]="configuracionMenu" class="text-menu">Distribución de Garantías</span>
+                    </mat-list-item>
+            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;">
+                <span [class]="'icon-stats-bars2 '+reportesIcon"></span>
+                <span [class]="reportesMenu" class="text-menu">Reportes</span>
+                <mat-icon>expand_more</mat-icon>
+            </mat-list-item>
+          </mat-list>
+
+        <mat-menu #maestras="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/constant')">Constantes</button>
+            <button mat-menu-item [matMenuTriggerFor]="datosGarantia">Datos Garantía</button>
+            <button mat-menu-item [matMenuTriggerFor]="motor">Motor</button>
+            <button mat-menu-item [matMenuTriggerFor]="fallas">Falla</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/srt')">SRT</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/parts')">Partes</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-claims')">Otros Reclamables</button>
+            <button mat-menu-item [matMenuTriggerFor]="viajes">Viajes</button>
+            <button mat-menu-item [matMenuTriggerFor]="otrosCodigos">Otros Códigos</button>
+        </mat-menu>
+        <!-- datos garantía -->
+        <mat-menu #datosGarantia="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/client')">Cliente</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/complaints')">Quejas</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/service-area')">Áreas de Servicio</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/warranty-data/type-of-warranty')">Tipos de Garantía</button>
+        </mat-menu>
+        <!-- motor -->
+        <mat-menu #motor="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/model')">Modelos del Motor</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/application')">Aplicaciones del Motor</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/engine/brand')">Marcas del Motor</button>
+        </mat-menu>
+        <!-- fallas -->
+        <mat-menu #fallas="matMenu">
+            <button mat-menu-item>Grupo Mayor</button>
+            <button mat-menu-item>Parte Fallada del Sistema</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/failures')">Tipo de Falla</button>
+        </mat-menu>
+        <!-- viajes -->
+        <mat-menu #viajes="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/type-travel')">Tipo de Viaje</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/details')">Detalle de Viaje</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/travel/unit-of-measure')">Unidad de Medida</button>
+        </mat-menu>
+        <!-- Otros códigos -->
+        <mat-menu #otrosCodigos="matMenu">
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/account-code')">Account code</button>
+            <button mat-menu-item (click)="navegacionSubMenu('/configuration-and-maintenance/master/other-codes/pay-code')">Pay code</button>
+        </mat-menu>        
+
         <!-- Items -->
-        <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
+        <!-- <ng-container *ngFor="let item of navigation; trackBy: trackByFn"> -->
+
 
             <!-- Skip the hidden items -->
-            <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+            <!-- <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden"> -->
 
-                <fuse-vertical-navigation-basic-item
+                <!-- <fuse-vertical-navigation-basic-item
                     [item]="menuPrincipal[0]"
                     [name]="name">
-                </fuse-vertical-navigation-basic-item>
+                </fuse-vertical-navigation-basic-item> -->
 
                 <!-- Aside -->
-                <ng-container *ngIf="item.type === 'aside'">
+                <!-- <ng-container *ngIf="item.type === 'aside'">
                     <fuse-vertical-navigation-aside-item
                         [item]="item"
                         [name]="name"
@@ -33,49 +232,49 @@
                         [autoCollapse]="autoCollapse"
                         [skipChildren]="true"
                         (click)="toggleAside(item)"></fuse-vertical-navigation-aside-item>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- Basic -->
-                <ng-container *ngIf="item.type === 'basic'">
+                <!-- <ng-container *ngIf="item.type === 'basic'">
                     <fuse-vertical-navigation-basic-item
                         [item]="item"
                         [name]="name">
                     </fuse-vertical-navigation-basic-item>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- Collapsable -->
-                <ng-container *ngIf="item.type === 'collapsable'">
+                <!-- <ng-container *ngIf="item.type === 'collapsable'">
                     <fuse-vertical-navigation-collapsable-item
                         [item]="item"
                         [name]="name"
                         [autoCollapse]="autoCollapse"></fuse-vertical-navigation-collapsable-item>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- Divider -->
-                <ng-container *ngIf="item.type === 'divider'">
+                <!-- <ng-container *ngIf="item.type === 'divider'">
                     <fuse-vertical-navigation-divider-item
                         [item]="item"
                         [name]="name"></fuse-vertical-navigation-divider-item>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- Group -->
-                <ng-container *ngIf="item.type === 'group'">
+                <!-- <ng-container *ngIf="item.type === 'group'">
                     <fuse-vertical-navigation-group-item
                         [item]="item"
                         [name]="name"
                         [autoCollapse]="autoCollapse"></fuse-vertical-navigation-group-item>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- Spacer -->
-                <ng-container *ngIf="item.type === 'spacer'">
+                <!-- <ng-container *ngIf="item.type === 'spacer'">
                     <fuse-vertical-navigation-spacer-item
                         [item]="item"
                         [name]="name"></fuse-vertical-navigation-spacer-item>
-                </ng-container>
+                </ng-container> -->
 
-            </ng-container>
+            <!-- </ng-container> -->
 
-        </ng-container>
+        <!-- </ng-container> -->
 
         <!-- Content footer -->
         <div class="fuse-vertical-navigation-content-footer">

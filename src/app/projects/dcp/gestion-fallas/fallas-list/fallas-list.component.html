@@ -14,12 +14,12 @@
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 d-flex justify-content-end px-1">
                             <button mat-raised-button (click)="registroMasivo()" class="w10">
-                                Registro básico masivo
+                              Crear registro masivo
                             </button>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 d-flex justify-content-end px-1">
                             <button mat-raised-button color="primary" (click)="registroIndividual()" class="w10">
-                                Registro básico individual
+                              Crear registro individual
                             </button>
                         </div>
                     </div>
@@ -27,29 +27,38 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
+          <form *ngIf="formBusquedaConFiltros" [formGroup]="formBusquedaConFiltros">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-2 search">
-                    <mat-form-field appearance="fill">
-                        <input matInput type="text" placeholder="Buscar N° OS">
+                    <mat-form-field floatLabel="always">
+                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os" (ngModelChange)="busquedaFallas()">
                         <button mat-icon-button matSuffix>
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2 search">
-                    <mat-form-field appearance="fill">
-                        <input matInput type="text" placeholder="Buscar N° ESN">
+                    <mat-form-field floatLabel="always">
+                        <input matInput type="text" placeholder="Buscar N° IO" formControlName="io" (ngModelChange)="busquedaFallas()">
                         <button mat-icon-button matSuffix>
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 search">
+                  <mat-form-field floatLabel="always">
+                      <input matInput type="text" placeholder="Buscar TSR" formControlName="tsr" (ngModelChange)="busquedaFallas()">
+                      <button mat-icon-button matSuffix>
+                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                      </button>
+                  </mat-form-field>
+              </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [rangePicker]="picker" placeholder="Selecciona">
-                          <input matStartDate placeholder="Start date">
-                          <input matEndDate placeholder="End date">
+                    <mat-form-field floatLabel="always">
+                        <mat-label>Fecha</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate placeholder="Desde" formControlName="fechaIni" >
+                          <input matEndDate placeholder="Hasta" formControlName="fechaFin" (ngModelChange)="busquedaFallas()">
                         </mat-date-range-input>
                         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -57,15 +66,38 @@
                       </mat-form-field>                      
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Antiguedad</mat-label>
-                        <mat-select>
-                          <mat-option>Nivel 1</mat-option>
-                          <mat-option>Nivel 2</mat-option>
+                    <mat-form-field floatLabel="always">
+                        <mat-label>Nivel de soporte</mat-label>
+                        <mat-select placeholder="Seleccionar" formControlName="nivelSoporte" (ngModelChange)="busquedaFallas()">
+                          <mat-option [value]="0">B. Inicial</mat-option>
+                          <mat-option [value]="1">Ing. Soporte</mat-option>
+                          <mat-option [value]="2">DFSE</mat-option>
+                          <mat-option [value]="3">Fábrica</mat-option>
                         </mat-select>
                       </mat-form-field>        
                 </div>
+                <div class="col-md-1 d-flex justify-content-start align-items-center">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu" xPosition="after">
+                    <button mat-menu-item>
+                      <!-- <mat-icon>dialpad</mat-icon> -->
+                      <span>Área</span>
+                    </button>
+                    <!-- <button mat-menu-item disabled>
+                      <mat-icon>voicemail</mat-icon>
+                      <span>Check voice mail</span>
+                    </button> -->
+                    <button mat-menu-item>
+                      <!-- <mat-icon>notifications_off</mat-icon> -->
+                      <span>ESN</span>
+                    </button>
+                  </mat-menu>
+                  
+                </div>
             </div>
+          </form>
         </div>
         <div class="col-sm-12 col-md-12">
             <div class="mat-elevation-z8">

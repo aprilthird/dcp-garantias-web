@@ -6,6 +6,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
 import { Router } from '@angular/router';
 import { DialogMostrarComentarioComponent } from '../dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fallas-list',
@@ -37,6 +38,9 @@ export class FallasListComponent implements OnInit {
   expandedElement: any;
   //mensaje a mostrar cuando se crea o cierra un caso
   mensajeExitoso = '-';
+  // formulario busqueda con filtros
+  formBusquedaConFiltros: FormGroup;
+  flag = false;
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
               private readonly garantiasService:GarantiasService, private readonly router:Router) { }
@@ -49,9 +53,13 @@ export class FallasListComponent implements OnInit {
       if(localStorage.getItem('success')=='cerrado'){
         this.mensajeExitoso = 'Se cerró el caso correctamente';
       }
+      if(localStorage.getItem('success')=='escalado'){
+        this.mensajeExitoso = 'Se escaló correctamente';
+      }
       this.mostrarMensajeRegistroExitosoDeUnaFalla();
     };
     this.listarFallas();
+    this.cargarFormularioBusqueda();
   }
 
   registroMasivo():void{
@@ -60,6 +68,31 @@ export class FallasListComponent implements OnInit {
   registroIndividual():void{
     const dialogSeleccionarTipoDeRegistro = this.matDialog.open(DialogSeleccionarTipoDeRegistroComponent,{
       width:'646px'
+    });
+  }
+
+  busquedaFallas():void{
+    this.flag = true;
+    console.log(this.formBusquedaConFiltros.value);
+    if(this.formBusquedaConFiltros.value.fechaFin!=null){
+      this.fallasService.bandejaBusquedaFallas(this.paginaActual,this.formBusquedaConFiltros.value).subscribe(responseApi=>{
+        this.totalFallas = responseApi.totalRecords;
+        this.totalFilas = responseApi.pageSize;
+        this.numeroDePaginas = this.obtenerNumeroDePaginas(responseApi.pageSize,responseApi.totalRecords);
+        this.dataSource = responseApi.data;
+        this.deshabilitarBotonesPaginacion(); 
+      });
+    }
+  }
+
+  cargarFormularioBusqueda():void{
+    this.formBusquedaConFiltros = new FormGroup({
+      os : new FormControl(),
+      io : new FormControl(),
+      tsr : new FormControl(),
+      fechaIni : new FormControl(),
+      fechaFin : new FormControl(),
+      nivelSoporte : new FormControl(),
     });
   }
 
@@ -72,6 +105,7 @@ export class FallasListComponent implements OnInit {
       this.deshabilitarBotonesPaginacion(); 
     });
   }
+
 
   obtenerNumeroDePaginas(totalRows:any,totalRecords:any):number{
     let result:any;
@@ -104,12 +138,12 @@ export class FallasListComponent implements OnInit {
   changePage(type:string){
     if(type=='more'){
       this.paginaActual = this.paginaActual + 1 ;
-      this.listarFallas();
+      this.flag==true? this.busquedaFallas():this.listarFallas();
       this.deshabilitarBotonesPaginacion();
     }
     if(type=='less'){
       this.paginaActual = this.paginaActual - 1 ;
-      this.listarFallas();
+      this.flag==true? this.busquedaFallas():this.listarFallas();
       this.deshabilitarBotonesPaginacion();
     }
   }
