@@ -6,7 +6,6 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogDeleteComponent } from 'app/shared/dialogs/dialog-delete/dialog-delete.component';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
-import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-client',

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-massive-registration-successfully',
@@ -9,14 +9,14 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogMassiveRegistrationSuccessfullyComponent implements OnInit {
 
-  constructor(private readonly router: Router,
-    private readonly matDialogRef: MatDialogRef<DialogMassiveRegistrationSuccessfullyComponent>) { }
+  constructor(private readonly router: Router, @Inject(MAT_DIALOG_DATA) public data,
+              private readonly matDialogRef: MatDialogRef<DialogMassiveRegistrationSuccessfullyComponent>) { }
 
   ngOnInit(): void {
   }
 
-  onClose():void{
-    this.matDialogRef.close();
+  onClose(guardar):void{
+    this.matDialogRef.close(guardar);
     this.router.navigate(['/garantias']);
   }
 

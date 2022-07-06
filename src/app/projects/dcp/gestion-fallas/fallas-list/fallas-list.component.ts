@@ -76,7 +76,7 @@ export class FallasListComponent implements OnInit {
   busquedaFallas():void{
     this.flag = true;
     console.log(this.formBusquedaConFiltros.value);
-    if(this.formBusquedaConFiltros.value.fechaFin!=null){
+    if(this.formBusquedaConFiltros.value.fechaFin==null){
       this.formBusquedaConFiltros.value.fechaFin = new Date();
     }
     this.fallasService.bandejaBusquedaFallas(this.paginaActual,this.formBusquedaConFiltros.value).subscribe(responseApi=>{

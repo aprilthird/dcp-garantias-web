@@ -28,28 +28,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./configuration-and-maintenance/configuration-and-maintenance.module").then((m) => m.ConfigurationAndMaintenanceModule),
       },
-
-
-
       {
-        path: "formatos",
+        path: "digital-tools",
         loadChildren: () =>
-          import("./formatos/formatos.module").then((m) => m.FormatosModule),
-      },
-      {
-        path: "informes",
-        loadChildren: () =>
-          import("./actividades/actividades.module").then(
-            (m) => m.ActividadesModule
-          ),
-      },
-      {
-        path: "tipos_servicios",
-        loadChildren: () =>
-          import("./tipos-servicios/tipos-servicios.module").then(
-            (m) => m.TiposServiciosModule
-          ),
-      },
+          import("./herramientas-digitales/herramientas-digitales.module").then((m) => m.HerramientasDigitalesModule),
+      }
     ],
   },
 ];

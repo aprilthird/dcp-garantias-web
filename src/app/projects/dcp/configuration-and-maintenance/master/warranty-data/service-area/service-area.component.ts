@@ -13,7 +13,7 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 })
 export class ServiceAreaComponent implements OnInit {
 
-  displayedColumns: string[] = ['codigo','descripcion', 'codigoServicioSap','codigoConstante','estado','bu','subBU','lugar','acciones'];
+  displayedColumns: string[] = ['codigo','descripcion', 'codigoServicioSap','codigoConstante','estado','bu','subBU','lugar', 'ceco','acciones'];
   dataSource = [];
 
     //datos del paginado

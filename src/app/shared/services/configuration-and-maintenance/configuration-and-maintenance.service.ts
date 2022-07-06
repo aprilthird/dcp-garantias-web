@@ -305,4 +305,8 @@ export class ConfigurationAndMaintenanceService {
   deleteServiceArea(_request:any):Observable<any>{
     return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
   }
+  findServiceAreaByOS(_ceco:any,_codAreaServicios:any):Observable<any>{
+    const request = {filter : {ceco:_ceco,codAreaServicios:_codAreaServicios}};
+    return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
+  }  
 }

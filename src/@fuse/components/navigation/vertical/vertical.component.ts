@@ -62,6 +62,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     seeConfigurationAndMaintenance:boolean=false;
+    seeDigitalTools:boolean=false;
     homeMenu='color-text-black';
     homeIcon='icon-menu-gray';
     garantiasMenu='color-text-gray';
@@ -98,7 +99,10 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
 
     showConfigurationAndMaintenance():void{
         this.seeConfigurationAndMaintenance==true?this.seeConfigurationAndMaintenance=false:this.seeConfigurationAndMaintenance=true;
-      }
+    }
+    showDigitalTools():void{
+        this.seeDigitalTools==true?this.seeDigitalTools=false:this.seeDigitalTools=true;
+    }
       
       cargarEstiloMenu():void{        
         if(localStorage.getItem('menu')){
@@ -152,6 +156,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         if(ruta=='/herramientas'){
           this.herramientasMenu='color-text-black';
           this.herramientasIcon='icon-menu-red';
+          this.showDigitalTools();
         }
         if(ruta=='/configuracion'){
           this.configuracionMenu='color-text-black';

@@ -31,6 +31,7 @@ export class DialogMaintenanceServiceAreaComponent implements OnInit {
         bu: new FormControl('',[Validators.required]),
         busub: new FormControl('',[Validators.required]),
         lugar: new FormControl('',[Validators.required]),
+        ceco: new FormControl('',[Validators.required]),
         estado: new FormControl(true,[Validators.required])
       })
     }else{
@@ -43,6 +44,7 @@ export class DialogMaintenanceServiceAreaComponent implements OnInit {
         bu: new FormControl(this.data.serviceArea.bu,[Validators.required]),
         busub: new FormControl(this.data.serviceArea.busub,[Validators.required]),
         lugar: new FormControl(this.data.serviceArea.lugar,[Validators.required]),
+        ceco: new FormControl(this.data.serviceArea.ceco,[Validators.required]),
         estado: new FormControl(estate,[Validators.required])
       })
     }

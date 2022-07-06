@@ -43,7 +43,8 @@ export class EngineComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
-
+  areaDeServicioAsociado = '';
+  
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar) { }
 
@@ -158,6 +159,10 @@ export class EngineComponent implements OnInit {
       this.garantiasService.findOs(os).subscribe(resp=>{
         if(resp.body){
           this.os = resp.body;
+          this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
+            console.log(responseApi);
+            this.areaDeServicioAsociado = responseApi.descripcion;
+          });
         }else{
           this.openSnackBar('No existe el OS ingresado, pruebe con otro');
           this.os.claseActividad = '-';
