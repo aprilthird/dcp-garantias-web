@@ -29,7 +29,7 @@ export class EngineComponent implements OnInit {
   //para usarlo como data inicial del esn y donde se va a cargar el esn que se va a usar en la garantía
   esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
   //para usarlo como data inicial del os y donde se va a cargar el os que se va a usar en la garantía
-  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'};
+  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-',ceco:'-'};
   //tipo de garantia juntos a sus campos
   warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
   //para controlar la vista de cada tipo de garantia
@@ -43,7 +43,8 @@ export class EngineComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
-  areaDeServicioAsociado = '';
+  areaDeServicioAsociado = '-';
+  verQueja2 = false; verQueja3 = false; verQueja4 = false;
   
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar) { }
@@ -160,8 +161,7 @@ export class EngineComponent implements OnInit {
         if(resp.body){
           this.os = resp.body;
           this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
-            console.log(responseApi);
-            this.areaDeServicioAsociado = responseApi.descripcion;
+            this.areaDeServicioAsociado = responseApi.data[0].descripcion;
           });
         }else{
           this.openSnackBar('No existe el OS ingresado, pruebe con otro');
@@ -327,7 +327,6 @@ export class EngineComponent implements OnInit {
     }
   }
 
-
   onSendRegister(action):void{
     if(this.esn.id=='-'){
       const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un ESN válido!'},disableClose:true});
@@ -338,53 +337,42 @@ export class EngineComponent implements OnInit {
         if(this.formRegisterEngine.value.tipoGarantia==null){
           const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un tipo de garantía!'},disableClose:true});
         }else{
-          if(this.formRegisterEngine.value.idQueja1==null){
-            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la primera queja!'},disableClose:true});
+          if(this.formRegisterEngine.value.idQueja1==null){ // && this.formRegisterEngine.value.idQueja2==null && this.formRegisterEngine.value.idQueja3==null && this.formRegisterEngine.value.idQueja4==null){
+            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione al menos una queja!'},disableClose:true});
           }else{
-            if(this.formRegisterEngine.value.idQueja2==null){
-              const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la segunda queja!'},disableClose:true});
+            if(this.formRegisterEngine.value.idUsuarioEvaluador==null){
+              const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un usuario registrador!'},disableClose:true});
             }else{
-              if(this.formRegisterEngine.value.idQueja3==null){
-                const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la tercera queja!'},disableClose:true});
+              if(this.formRegisterEngine.value.comentarios==''){
+                const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
               }else{
-                if(this.formRegisterEngine.value.idQueja4==null){
-                  const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione la cuarta queja!'},disableClose:true});
-                }else{
-                  if(this.formRegisterEngine.value.idUsuarioEvaluador==null){
-                    const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un usuario registrador!'},disableClose:true});
-                  }else{
-                    if(this.formRegisterEngine.value.comentarios==''){
-                      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
-                    }else{
-                      const data = {
-                        idMatricula:this.esn.id,
-                        codAreaServicios:this.os.codAreaServicios,
-                        ...this.formRegisterEngine.value
-                      }
-                      switch(action){
-                        case 'borrador':
-                          this.onSaveRegister(data,0);
-                          break;
-                        case 'blanca':
-                            this.onSaveRegister(data,1);
-                          case 'edit':
-                            this.onEditRegister(data);
-                          break;
-                        case 'naranja':
-                          this.onTransfornRecordToOrange(data);                                            
-                          break;
-                        case 'observar':
-                          this.onObservedRecord(data);                                            
-                          break;
-                        case 'rechazar':
-                          this.onReject(data);
-                          break;
-                        
-                        default:
-                          break;
-                      }
-                    }
-                  }
+                const data = {
+                  idMatricula:this.esn.id,
+                  codAreaServicios:this.os.codAreaServicios,
+                  codCeco:this.os.ceco,
+                  ...this.formRegisterEngine.value
+                }
+                switch(action){
+                  case 'borrador':
+                    this.onSaveRegister(data,0);
+                    break;
+                  case 'blanca':
+                      this.onSaveRegister(data,1);
+                    case 'edit':
+                      this.onEditRegister(data);
+                    break;
+                  case 'naranja':
+                    this.onTransfornRecordToOrange(data);                                            
+                    break;
+                  case 'observar':
+                    this.onObservedRecord(data);                                            
+                    break;
+                  case 'rechazar':
+                    this.onReject(data);
+                    break;
+                  
+                  default:
+                    break;
                 }
               }
             }
@@ -523,5 +511,20 @@ export class EngineComponent implements OnInit {
       panelClass: ['mat-toolbar', 'mat-primary','button-color']
     })
   }
-  
+  //funciones para mostrar los select de quejas
+  mostrarQueja(numeroDeQueja:number):void{
+    switch (numeroDeQueja) {
+      case 2:
+        this.verQueja2 = true;
+        break;
+      case 3:
+        this.verQueja3 = true;
+        break;
+      case 4:
+        this.verQueja4 = true;
+        break;
+      default:
+        break;
+    }
+  }
 }
