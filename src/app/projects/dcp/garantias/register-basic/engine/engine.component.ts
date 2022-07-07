@@ -185,7 +185,7 @@ export class EngineComponent implements OnInit {
   onOpenDialogRegisterEnrollment():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
           width: '990px',
-          data: {option:'new',type:'engine', name:'motor'},
+          data: {option:'new',type:this.typeWarrantyText, name:'motor'},
           disableClose:true
         }
       );

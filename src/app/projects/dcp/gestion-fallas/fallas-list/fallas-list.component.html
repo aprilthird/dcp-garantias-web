@@ -190,6 +190,7 @@
                                           <td mat-cell *matCellDef="let item" class="text-center">
                                             <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item.comentarios)"><mat-icon>sms</mat-icon></button>
                                             <span *ngIf="item.comentarios==null">'-'</span>
+                                          </td>
                                         </ng-container>
                                         <ng-container matColumnDef="estado">
                                           <th mat-header-cell *matHeaderCellDef class="text-center"> Estado </th>

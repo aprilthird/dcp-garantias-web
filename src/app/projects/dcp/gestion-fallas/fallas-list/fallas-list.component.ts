@@ -193,7 +193,7 @@ export class FallasListComponent implements OnInit {
 
   mostrarComentario(_comentario):void{
     const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
-      data:{comentario:_comentario},
+      data:{comentario:_comentario,text:'La falla ha sido observada'},
       disableClose:true, width:'500px'
     });
   }

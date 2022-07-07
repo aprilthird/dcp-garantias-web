@@ -17,6 +17,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   clients = [];
   directionClient:string='';
   formEnrollment:FormGroup;
+  tipoDeEquipo:number;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private readonly dialogRef: MatDialogRef<DialogRegisterEnrollmentComponent>,
@@ -26,6 +27,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    this.tipoDeEquipo = this.data.type=='motor'?1:2;
     this.loadFormClient();
     this.configurationAndMaintenanceService.listEngineModels(1).subscribe(resp=>{
       this.engineModels = resp.data;
@@ -81,7 +83,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     if(this.formEnrollment.valid){
       console.log(this.formEnrollment.value);      
       if(this.data.option=='new'){
-        const request = { id:0 , activo:true , ...this.formEnrollment.value };
+        const request = { id:0 , tipo:this.tipoDeEquipo, activo:true , ...this.formEnrollment.value };
         this.configurationAndMaintenanceService.maintenanceEnrollment(request).subscribe(resp=>{
           if(resp.success){
             this.dialogRef.close(true);
