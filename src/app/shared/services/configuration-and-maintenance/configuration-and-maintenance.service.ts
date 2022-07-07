@@ -223,7 +223,7 @@ export class ConfigurationAndMaintenanceService {
 
   // fallas
   listaFallas(_page):Observable<any>{
-    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    const request = {filter : {},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlBandejaFallas, request, {headers:this.header});
   }
   mantenimientoFallas(_request:MasterConstantRequest):Observable<any>{          
