@@ -13,6 +13,7 @@ import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transf
 import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
+import { ThrowStmt } from '@angular/compiler';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
@@ -462,16 +463,18 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
   calcularSubTotalSrt(index):void{
-    this.dataSourceSrt[index].subTotalSrt = this.dataSourceSrt[index].cantidadSrt * this.dataSourceSrt[index].horasHombreSrt * 10;
+    this.dataSourceSrt[index].subTotalSrt = this.dataSourceSrt[index].cantidadSrt * this.dataSourceSrt[index].horasHombreSrt * 10 * 57.87;
     this.calcularTotalSrt();
   }
   calcularTotalSrt():void{
-    let sumaTotal = 0;  let sumaHorasHombre = 0; let sumaTotalConPenalizacion = 0;
+    let sumaTotal = 0;  let sumaHorasHombre = 0; let penalizacion = 0; let sumaTotalConPenalizacion = 0;
     for (let j = 0; j < this.dataSourceSrt.length; j++) {
       sumaTotal += Number(this.dataSourceSrt[j].subTotalSrt);
       sumaHorasHombre += Number(this.dataSourceSrt[j].horasHombreSrt);      
     }
-    sumaTotalConPenalizacion = sumaTotal + (sumaTotal * 0.1);
+    penalizacion = this.warranty.antiguedad >= "180 Dias" ? 0.8 
+      : this.warranty.antiguedad >= "119 Dias" ? 0.5 : 0;
+    sumaTotalConPenalizacion = sumaTotal * penalizacion;
     this.montoTotalManoDeObra = sumaTotal;
     this.montoTotalManoDeObraConPenalizacion = sumaTotalConPenalizacion;
     this.totalHorasHombre = sumaHorasHombre;
@@ -517,8 +520,14 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
 
+  formularParte(precio, markup):any{
+    return precio + precio * markup + precio * 0.1512;
+  }
+
   calcularSubTotalPartes(index):void{
-    this.dataSourcePartes[index].subTotalParte = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte * this.dataSourcePartes[index].precioFob;
+    //this.dataSourcePartes[index].precioFob
+    this.dataSourcePartes[index].subTotalParte = this.formularParte(this.dataSourcePartes[index].precioUnitarioParte, 0.26);
+    this.dataSourcePartes[index].subTotal = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte;
     this.calcularTotalPartes();
   }
 
@@ -528,12 +537,14 @@ export class ChangeTrayComponent implements OnInit {
     let sumaTotalPartesEnSAP = 0;
     for (let i = 0; i < this.dataSourcePartes.length; i++) {
       sumaTotalPartes += Number(this.dataSourcePartes[i].subTotalParte);
+      sumaTotalPartesConPenalizacion += Number(this.dataSourcePartes[i].subTotal);
     }
     for (let j = 0; j < this.dataSourcePartes.length; j++) {
       sumaTotalPartesEnSAP += Number(this.dataSourcePartes[j].precioFob);
     }
     this.montoTotalPartes = sumaTotalPartes;
-    this.montoTotalPartesConPenalizacion = sumaTotalPartes + (sumaTotalPartes * 0.1);
+    this.montoTotalPartesConPenalizacion = this.formularParte(sumaTotalPartesConPenalizacion, 
+      this.warranty.antiguedad >= "180 Dias" ? 0 : this.warranty.antiguedad >= "119 Dias" ? 0.1 : 0.26);
     this.montoTotalPartesEnSAP = sumaTotalPartesEnSAP;
   }
 
@@ -630,13 +641,24 @@ export class ChangeTrayComponent implements OnInit {
     }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una fecha'},disableClose:true }); }
   }
   calcularSubTotalDeViaje(index):void{
-    this.dataSourceViajes[index].costoDeViaje = this.dataSourceViajes[index].valorDeViaje * 1.5;
+    let factor = this.dataSourceViajes[index].unidadDeMedida == "Km" 
+      ? 0.43 : this.dataSourceViajes[index].unidadDeMedida == "Hrs"
+      ? 57.87 : 1;
+    this.dataSourceViajes[index].costoDeViaje = this.dataSourceViajes[index].valorDeViaje * factor;
     this.calcularTotalViajes();
   }
   calcularTotalViajes():void{
-    let suma = 0;
+    let suma = 0; let sumaConPenalizacion = 0;
+    let penalizacion = this.warranty.antiguedad >= "180 Dias"
+      ? 0.8 : this.warranty.antiguedad >= "119 Dias"
+      ? 0.5 : 1;
     for (let i = 0; i < this.dataSourceViajes.length; i++) {
-      suma += Number(this.dataSourceViajes[i].costoDeViaje);      
+      if(this.dataSourceViajes[i].unidadDeMedida == "Hrs") {
+      }
+      sumaConPenalizacion += Number(this.dataSourceViajes[i].unidadDeMedida == "Hrs" 
+        ? this.dataSourceViajes[i].costoDeViaje * penalizacion 
+        : this.dataSourceViajes[i].costoDeViaje);
+      suma += Number(this.dataSourceViajes[i].costoDeViaje);
     }
     this.montoTotalDeViajes = suma;
     this.montoTotalDeViajesConPenalizacion = suma + (suma*0.1);
