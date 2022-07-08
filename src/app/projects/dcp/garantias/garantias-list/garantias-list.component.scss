@@ -10,7 +10,8 @@
     padding-left: 10px;
     padding-right: 10px;
     button{
-      font-size: 11px;
+      font-size: small;
+      width: 100%;
     }
 }
 .selectors{
@@ -86,4 +87,16 @@ tr.example-detail-row {
   }
 .table-bitacora{
   height: 300px;
+  table{
+    box-shadow: none;
+    th{
+      font-weight: 700;
+      background-color: #F1F1F1;
+      color: #000000 !important;
+      border-bottom: 2px solid #1E293B;
+    }
+  }
+}
+.caja-bitacora{
+  background-color: #F1F1F1;
 }

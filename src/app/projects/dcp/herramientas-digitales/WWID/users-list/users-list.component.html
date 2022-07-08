@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="row selectors">        
+        <div class="col-md-12">
+            <h4 class="font-w-700">Visualizar Usuarios</h4>
+        </div>
+        <div class="col-md-3 search">
+            <mat-form-field floatLabel="always">
+                <input matInput type="text" placeholder="Buscar por Usuario">
+                <button mat-icon-button matSuffix>
+                    <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 search">
+            <mat-form-field floatLabel="always">
+                <input matInput type="text" placeholder="Buscar por WWID">
+                <button mat-icon-button matSuffix>
+                    <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field floatLabel="always">
+                <mat-label>Fecha de ingreso</mat-label>
+                <mat-date-range-input [rangePicker]="pickerA">
+                  <input matStartDate placeholder="Desde">
+                  <input matEndDate placeholder="Hasta">
+                </mat-date-range-input>
+                <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
+                <mat-date-range-picker #pickerA></mat-date-range-picker>
+              </mat-form-field>     
+        </div>
+        <div class="col-md-3">
+            <mat-form-field floatLabel="always">
+                <mat-label>Fecha de baja</mat-label>
+                <mat-date-range-input [rangePicker]="pickerB">
+                  <input matStartDate placeholder="Desde">
+                  <input matEndDate placeholder="Hasta">
+                </mat-date-range-input>
+                <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matSuffix [for]="pickerB"></mat-datepicker-toggle>
+                <mat-date-range-picker #pickerB></mat-date-range-picker>
+              </mat-form-field>     
+        </div>
+        <div class="col-md-12 mb-5">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <ng-container matColumnDef="usuario">
+                    <th mat-header-cell *matHeaderCellDef width="15%"> Usuario </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="dni">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> DNI </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dni}} </td>
+                  </ng-container>
+                <ng-container matColumnDef="area">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Área </th>
+                    <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaIngreso">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Fecha de Ingreso </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaIngreso | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaBaja">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Fecha de Baja </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaBaja | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="idPromotion">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> ID Promotion</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPromotion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estadoIdPromotion">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado ID Promotion </th>
+                    <td mat-cell *matCellDef="let element"> {{element.estadoIdPromotion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="WWID">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> WWID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.wwid}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estadoWWID">
+                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado del WWID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.estadoWWID}} </td>
+                </ng-container>    
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef width="5%"> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button (click)="onRegisterBasic(element)"><mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon></button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+        </div>
+    </div>
+</div>

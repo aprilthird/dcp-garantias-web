@@ -13,9 +13,9 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">ESN</mat-label>
-                                        <input matInput type="text" placeholder="Buscar ESN" formControlName="esn" (ngModelChange)="getEsn()">
+                                        <input matInput type="text" formControlName="esn" (ngModelChange)="getEsn()" placeholder="Ingrese el ESN">
                                         <button mat-icon-button matSuffix (click)="getEsn()">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
@@ -24,7 +24,8 @@
                                 <div class="col-md-2 flex-align-center">
                                     <span class="flex-align-center pointer" (click)="onOpenDialogHistoryEsn()">
                                         <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
-                                        Historial de {{typeWarrantyText=='motor'?'ESN':'GSN'}}
+                                        Historial de Series
+                                        <!-- {{typeWarrantyText=='motor'?'ESN':'GSN'}} -->
                                     </span>
                                 </div>
                                 <div class="col-md-3 flex-align-center">
@@ -78,7 +79,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Fecha inicio de garantía</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicioGarantia=='-'?'-':esn.fechaInicioGarantia | date: 'dd/MM/yyyy' ">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.fechaInicio=='-'?'-':esn.fechaInicio | date: 'dd/MM/yyyy' ">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 flex-align-center">
@@ -90,9 +91,9 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Orden de servicio</mat-label>
-                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os" (ngModelChange)="getOs()">
+                                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os" (ngModelChange)="getOs()" placeholder="Ingrese el OS">
                                         <button mat-icon-button matSuffix (click)="getOs()">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
@@ -129,7 +130,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">Area de servicios</mat-label>
-                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="os.codAreaServicios">
+                                            <input matInput [disabled]="true" type="text" placeholder="" [value]="areaDeServicioAsociado">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -140,34 +141,34 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Tipo de garantía</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="tipoGarantia" (ngModelChange)="selectTypeWarranty()">
+                                        <mat-select placeholder="Placeholder" formControlName="tipoGarantia" (ngModelChange)="selectTypeWarranty()" placeholder="Seleccionar">
                                             <mat-option *ngFor="let warrantyType of warrantyTypes" [value]="warrantyType.value">{{warrantyType.name}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-9"></div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.e">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Numero de parte del repuesto</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="numParteRepuesto">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.a">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Punto de falla</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="puntoFalla">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.i">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Codigo</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="codigoAdicional">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.g">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Punto de ejecución</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="ejecucionAdicional">
                                     </mat-form-field>
@@ -179,33 +180,33 @@
                                     </mat-radio-group>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.c">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Fecha de falla</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaFalla" formControlName="fechaFalla">
+                                        <input matInput [matDatepicker]="pickerFechaFalla" formControlName="fechaFalla" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaFalla></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.f">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">N° de parte del componente</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="numParteFallo">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.d">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Fecha de inicio de la garantia</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaGarantia" formControlName="fechaInicioGarantia">
+                                        <input matInput [matDatepicker]="pickerFechaGarantia" formControlName="fechaInicioGarantia" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaGarantia"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaGarantia></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.h">
-                                        <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Fecha de ejecucion</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaEjecucion" formControlName="fechaAdicional">
+                                        <input matInput [matDatepicker]="pickerFechaEjecucion" formControlName="fechaAdicional" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaEjecucion"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaEjecucion></mat-datepicker>
@@ -220,41 +221,41 @@
                                     <span class="font-w-500 font-sz-16">Quejas</span>
                                 </div>
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label for="">Queja 1</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="idQueja1">
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label for="">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja1" (ngModelChange)="mostrarQueja(2)">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label for="">Queja 2</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="idQueja2">
+                                    <mat-form-field floatLabel="always" *ngIf="verQueja2">
+                                        <mat-label for="">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja2" (ngModelChange)="mostrarQueja(3)">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label for="">Queja 3</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="idQueja3">
+                                    <mat-form-field floatLabel="always" *ngIf="verQueja3">
+                                        <mat-label for="">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja3" (ngModelChange)="mostrarQueja(4)">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label for="">Queja 4</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="idQueja4">
+                                    <mat-form-field floatLabel="always" *ngIf="verQueja4">
+                                        <mat-label for="">Queja</mat-label>
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja4">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field floatLabel="always">
                                         <mat-label for="">Usuario Evaluador</mat-label>
-                                        <mat-select placeholder="Placeholder" formControlName="idUsuarioEvaluador">
+                                        <mat-select placeholder="Seleccionar" formControlName="idUsuarioEvaluador">
                                             <mat-option *ngFor="let user of users" [value]="user.value">{{user.name}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -262,8 +263,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <mat-form-field appearance="fill">
-                                        <mat-label for="">Comentarios</mat-label>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>Comentarios</mat-label>
                                         <textarea matInput placeholder="Ingrese sus comentarios" formControlName="comentarios"></textarea>
                                     </mat-form-field>
                                 </div>

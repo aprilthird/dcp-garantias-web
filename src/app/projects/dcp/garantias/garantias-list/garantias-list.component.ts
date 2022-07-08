@@ -8,6 +8,7 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { DialogHistoriaESNComponent } from './../dialogs/dialog-historia-esn/dialog-historia-esn.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { DialogMostrarComentarioComponent } from '../../gestion-fallas/dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
 interface Option {
   value: any;
   name: string;
@@ -90,8 +91,8 @@ export class GarantiasListComponent implements OnInit {
   displayedColumns: string[] = ['number', 'serie', 'area', 'type', 'failureDate', 'amount', 'user', 'age', 'inbox', 'state','actions'];
   dataSource = [];
   //tabla bitacora
-  displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'monto', 'bandejaActual'];
-  dataSourceBitacora = ELEMENT_DATA;
+  displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'monto', 'bandejaActual','actions'];
+  dataSourceBitacora = [];
   expandedElement: any;
   //datos del paginado
   totalWarranties:any;
@@ -136,6 +137,10 @@ export class GarantiasListComponent implements OnInit {
     })
   }
 
+  limpiarFiltros():void{
+    this.loadFormFilter(); //si se desea todo sería lo siguiente this.formFilter.reset();
+    this.listWarranties();
+  }
   getNumberOfPages(totalRows:any,totalRecords:any):number{
     let result:any;
     result = totalRecords / totalRows;
@@ -267,5 +272,12 @@ export class GarantiasListComponent implements OnInit {
       localStorage.setItem('garantia',JSON.stringify(warranty));
       this.router.navigate(['garantias/change-tray']);
     }
+  }
+
+  mostrarComentario(_comentario):void{
+    const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
+      data:{comentario:_comentario,text:'Tu reclamo ha sido observado'},
+      disableClose:true, width:'500px'
+    });
   }
 }

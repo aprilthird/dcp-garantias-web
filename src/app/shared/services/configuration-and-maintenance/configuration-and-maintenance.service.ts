@@ -223,7 +223,7 @@ export class ConfigurationAndMaintenanceService {
 
   // fallas
   listaFallas(_page):Observable<any>{
-    const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
+    const request = {filter : {},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlBandejaFallas, request, {headers:this.header});
   }
   mantenimientoFallas(_request:MasterConstantRequest):Observable<any>{          
@@ -305,4 +305,8 @@ export class ConfigurationAndMaintenanceService {
   deleteServiceArea(_request:any):Observable<any>{
     return this.httpClient.post(this.urlMaintenanceServiceArea,_request,{headers:this.header});
   }
+  findServiceAreaByOS(_ceco:any,_codAreaServicios:any):Observable<any>{
+    const request = {filter : {ceco:_ceco,codigo:_codAreaServicios}};
+    return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
+  }  
 }

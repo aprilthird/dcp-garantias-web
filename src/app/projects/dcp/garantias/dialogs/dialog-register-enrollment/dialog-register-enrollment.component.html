@@ -8,7 +8,7 @@
                         <span class="font-sz-18 font-w-500">Datos del cliente</span>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Cliente <span class="color-red">*</span></mat-label>
                             <mat-select placeholder="seleccionar" formControlName="idCliente" (ngModelChange)="setDirectionClient()">
                                 <mat-option *ngFor="let item of clients" [value]="item.id">
@@ -31,18 +31,18 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 margin-b-15">
-                        <span class="font-sz-18 font-w-500">Datos del {{data.name}}</span>
+                        <span class="font-sz-18 font-w-500">Datos del {{data.type}}</span>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>ESN <span class="color-red">*</span></mat-label>
-                            <input matInput type="text" formControlName="esn">
+                            <input matInput type="text" formControlName="esn" placeholder="Ingresar ESN">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
-                            <mat-label>Modelo del {{data.name}} <span class="color-red">*</span></mat-label>
-                            <mat-select placeholder="seleccionar" formControlName="idModelo">
+                        <mat-form-field floatLabel="always">
+                            <mat-label>Modelo del {{data.type}} <span class="color-red">*</span></mat-label>
+                            <mat-select placeholder="seleccionar" formControlName="idModelo" placeholder="Seleccionar modelo">
                                 <mat-option *ngFor="let item of engineModels" [value]="item.id">
                                     {{item.codigo}}
                                 </mat-option>
@@ -50,9 +50,9 @@
                         </mat-form-field>     
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
-                            <mat-label>Aplicacion del {{data.name}} <span class="color-red">*</span></mat-label>
-                            <mat-select placeholder="Placeholder" formControlName="idAplicacion">
+                        <mat-form-field floatLabel="always">
+                            <mat-label>Aplicacion del {{data.type}} <span class="color-red">*</span></mat-label>
+                            <mat-select placeholder="Placeholder" formControlName="idAplicacion" placeholder="Seleccionar aplicación">
                                 <mat-option *ngFor="let item of engineApplications" [value]="item.id">
                                     {{item.codigo}}
                                 </mat-option>
@@ -60,18 +60,18 @@
                         </mat-form-field>     
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>CPL <span class="color-red">*</span></mat-label>
-                            <input matInput type="text" formControlName="cpl">
+                            <input matInput type="text" formControlName="cpl" placeholder="Ingresar CPL">
                         </mat-form-field>     
                     </div>
                     <div class="col-md-4 flex-xy-center">
                         <mat-checkbox color="primary" formControlName="bis">Tiene BIS</mat-checkbox>
                     </div>                                  
                     <div class="col-md-4">
-                        <mat-form-field appearance="fill">
+                        <mat-form-field  floatLabel="always">
                             <mat-label>Fecha de inicio de garantía <span class="color-red">*</span></mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="fechaInicioGarantia">
+                            <input matInput [matDatepicker]="picker" formControlName="fechaInicioGarantia" placeholder="Seleccionar una fecha">
                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
@@ -88,15 +88,15 @@
                         <span class="font-sz-18 font-w-500">Datos opcionales</span>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Potencia(HP)</mat-label>
-                            <input matInput type="text" formControlName="potencia">
+                            <input matInput type="text" formControlName="potencia" placeholder="Ingresar potencia">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Lugar operación</mat-label>
-                            <input matInput type="text" formControlName="lugar">
+                            <input matInput type="text" formControlName="lugar" placeholder="Ingresar lugar"> 
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4" style="display: grid;">
@@ -107,27 +107,27 @@
                           </mat-radio-group>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Cliente final</mat-label>
-                            <input matInput type="text" formControlName="clienteFinal">
+                            <input matInput type="text" formControlName="clienteFinal" placeholder="Ingresar cliente">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Equipo</mat-label>
-                            <input matInput type="text" formControlName="equipo">
+                            <input matInput type="text" formControlName="equipo" placeholder="Ingresar equipo">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>Alt de trabajo (msnm)</mat-label>
-                            <input matInput type="text" formControlName="altura">
+                            <input matInput type="text" formControlName="altura" placeholder="Ingresar altura">
                         </mat-form-field>                    
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field>
+                        <mat-form-field floatLabel="always">
                             <mat-label>PTO</mat-label>
-                            <input matInput type="text" formControlName="etoPto">
+                            <input matInput type="text" formControlName="etoPto" placeholder="Ingresar PTO">
                         </mat-form-field>                    
                     </div>
                 </div>

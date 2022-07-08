@@ -29,8 +29,8 @@ export class ChangeTrayComponent implements OnInit {
   marcas=[];   modelos=[];
   documentosDetallesReclamo=[]; auxiliarTable = [];
   //FALLAS
-  dataSourceFallas = ELEMENT_DATA; tiposDeFalla = [];
-  displayedColumnsFallas: string[] = ['position', 'name', 'weight', 'symbol','description','action'];
+  dataSourceFallas = []; tiposDeFalla = []; fallaSeleccionada:any; checkBoxEliminarTodoFallas=false;
+  displayedColumnsFallas: string[] = ['codigo', 'sistema', 'parteFalladaDelSistema', 'modoDeFalla','descripcionCodigoDefalla','accion'];
   //SRT
   dataSourceSrt=[]; documentosSrt= []; checkBoxEliminarTodoSrt=false
   displayedColumnsSrt: string[] = ['codigo', 'cantidad', 'hhInvertida', 'srtFabrica','descripcion','codigoAcceso', 'subTotalHH', 'accion'];
@@ -124,7 +124,6 @@ export class ChangeTrayComponent implements OnInit {
       this.modelos = resp.data;
     });
     this.configurationAndMaintenanceService.listaFallasSinPaginar().subscribe(response=>{
-      console.log(response);
       this.tiposDeFalla = response.data;
     })
     this.configurationAndMaintenanceService.listaOtrosReclamablesSinPaginar().subscribe(response=>{
@@ -399,6 +398,38 @@ export class ChangeTrayComponent implements OnInit {
         break;
     }
   }
+  //FALLAS
+  seleccionarFalla(idFalla):void{
+    this.fallaSeleccionada = this.tiposDeFalla.find(e => e.id==idFalla);
+    console.log(this.fallaSeleccionada);
+  }
+  agregarFalla():void{
+    if(this.fallaSeleccionada!=null){
+      const row = {...this.fallaSeleccionada, check:false}
+      this.dataSourceFallas = this.dataSourceFallas.concat([row]);
+    }else{
+      this.errorMessage('Debe seleccionar una opción');
+    }
+  }
+  eliminarFallas():void{
+    let aux = [];
+    for (let i = 0; i < this.dataSourceFallas.length; i++) {
+      if(this.dataSourceFallas[i].check==false){
+        aux.push(this.dataSourceFallas[i]);
+      }
+    }
+    this.dataSourceFallas = aux;
+    if(this.dataSourceFallas.length==0){
+      this.checkBoxEliminarTodoFallas = false;
+    }
+  }
+  seleccionarTodasLasFallas():void{
+    if(this.dataSourceFallas.length>0){
+      for (let i = 0; i < this.dataSourceFallas.length; i++) {
+        this.dataSourceFallas[i].check = this.checkBoxEliminarTodoFallas;
+      }
+    }
+  }
   //SRT
   loadFormGroupSrt():void{
     this.formSrt = new FormGroup({
@@ -425,16 +456,10 @@ export class ChangeTrayComponent implements OnInit {
           }
         });
       }else{
-        const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-          data:{text:'Debe seleccionar el lugar donde se reparó'},
-          disableClose:true,
-        });
+        this.errorMessage('Debe seleccionar el lugar donde se reparó');
       }
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Ingrese todos los campos SRT'},
-        disableClose:true,
-      });
+      this.errorMessage('Ingrese todos los campos SRT');
     }
   }
   buscarSrt():void{
@@ -456,10 +481,7 @@ export class ChangeTrayComponent implements OnInit {
         }   
       });
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Ingrese codigo del SRT'},
-        disableClose:true,
-      });
+      this.errorMessage('Ingrese codigo del SRT');
     }
   }
   calcularSubTotalSrt(index):void{
@@ -514,9 +536,7 @@ export class ChangeTrayComponent implements OnInit {
         }   
       });
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Ingrese codigo de la Parte'},disableClose:true,
-      });
+      this.errorMessage('Ingrese codigo de la Parte');
     }
   }
 
@@ -530,7 +550,6 @@ export class ChangeTrayComponent implements OnInit {
     this.dataSourcePartes[index].subTotal = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte;
     this.calcularTotalPartes();
   }
-
   calcularTotalPartes():void{
     let sumaTotalPartes = 0;
     let sumaTotalPartesConPenalizacion = 0;
@@ -547,7 +566,6 @@ export class ChangeTrayComponent implements OnInit {
       this.warranty.antiguedad >= "180 Dias" ? 0 : this.warranty.antiguedad >= "119 Dias" ? 0.1 : 0.26);
     this.montoTotalPartesEnSAP = sumaTotalPartesEnSAP;
   }
-
   eliminarPartes():void{
     let aux = [];
     for (let i = 0; i < this.dataSourcePartes.length; i++) {
@@ -571,7 +589,7 @@ export class ChangeTrayComponent implements OnInit {
   }
   //OTROS RECLAMABLES
   buscarDescripcionDelReclamable():void{
-    let reclamable = this.reclamables.find(e => e.id == this.idReclamable);
+    const reclamable = this.reclamables.find(e => e.id == this.idReclamable);
     this.descripcionReclamable = reclamable.descripcion;
   }
   agregarReclamable():void{
@@ -581,9 +599,7 @@ export class ChangeTrayComponent implements OnInit {
       this.dataSourceOtrosReclamables = this.dataSourceOtrosReclamables.concat([fila]);
       localStorage.setItem('gar_data' + this.esn.id + "_" + 4, JSON.stringify(this.dataSourceOtrosReclamables));
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Seleccione un reclamable'},disableClose:true,
-      });
+      this.errorMessage('Seleccione un reclamable');
     }
   }
   limpiarReclamables():void{
@@ -635,10 +651,10 @@ export class ChangeTrayComponent implements OnInit {
                         check:false};
               this.dataSourceViajes = this.dataSourceViajes.concat([viaje]);
           localStorage.setItem('gar_data' + this.esn.id + "_" + 5, JSON.stringify(this.dataSourceViajes));
-            }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar un detalle de viaje'},disableClose:true }); }
-        }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent, {data:{text:'Debe seleccionar un tipo de viaje'},disableClose:true}); }
-      }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una medio de transporte'},disableClose:true }); }
-    }else{ const dialogError = this.matDialog.open(DialogErrorMessageComponent,{ data:{text:'Debe seleccionar una fecha'},disableClose:true }); }
+            }else{ this.errorMessage('Debe seleccionar un detalle de viaje');}
+        }else{ this.errorMessage('Debe seleccionar un tipo de viaje');}
+      }else{ this.errorMessage('Debe seleccionar una medio de transporte');}
+    }else{ this.errorMessage('Debe seleccionar una fecha');}
   }
   calcularSubTotalDeViaje(index):void{
     let factor = this.dataSourceViajes[index].unidadDeMedida == "Km" 
@@ -714,10 +730,8 @@ export class ChangeTrayComponent implements OnInit {
     dialogoAdjuntarDocumentos.afterClosed().subscribe(resp=>{
       console.log(resp);
     });
-  }
-  
+  }  
   //VERIFICAION DETALLES
-
   onSendRegister(action):void{
     const data = {
       idMatricula:this.esn.id,
@@ -772,7 +786,7 @@ export class ChangeTrayComponent implements OnInit {
           // });
         }
       });
-    }
+  }
 
   onSaveRegister(data):void{
     const request = {...data,id:0};
@@ -925,6 +939,12 @@ export class ChangeTrayComponent implements OnInit {
       }else{
         console.log('Error en la transformación');
       }
+    });
+  }
+
+  errorMessage(message:string):void{
+    const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+      data:{text:message},disableClose:true,
     });
   }
 }

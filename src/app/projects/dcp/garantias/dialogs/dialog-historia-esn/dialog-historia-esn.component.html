@@ -1,7 +1,10 @@
 <div matDialogTitle>
     <div  class="row">
         <div class="col-md-11 margin-b-15">
-            <span>Historial {{data.type=='motor'?'ESN':'GSN'}}</span>
+            <span>
+                Historial se Series
+                <!-- {{data.type=='motor'?'ESN':'GSN'}} -->
+            </span>
         </div>
         <div class="col-md-1 text--end margin-b-15">
             <mat-icon class="pointer" svgIcon="close" (click)="onClose()"></mat-icon>
@@ -22,19 +25,19 @@
     <div class="col-md-12" *ngIf="seeTable" style="margin-bottom: 10px;">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <ng-container matColumnDef="pgbuClaim">
-              <th mat-header-cell *matHeaderCellDef width="17%">{{data.type=='motor'?'Claim':'PGBU Claim'}}</th>
+              <th mat-header-cell *matHeaderCellDef width="17%">{{ data.type=='all'?'PGBU':data.type=='motor'?'Claim':'PGBU Claim'}} Number</th>
               <td mat-cell *matCellDef="let element">{{element.pgbuClaim}}</td>
             </ng-container>
             <ng-container matColumnDef="numberOs">
-              <th mat-header-cell *matHeaderCellDef width="17%">OS</th>
+              <th mat-header-cell *matHeaderCellDef width="16%">N° OS</th>
               <td mat-cell *matCellDef="let element">OS2000{{element.numeroOs}}</td>
             </ng-container>
             <ng-container matColumnDef="serviceArea">
-              <th mat-header-cell *matHeaderCellDef width="17%">Area</th>
+              <th mat-header-cell *matHeaderCellDef width="16%">Area de Servicio</th>
               <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
             </ng-container>
             <ng-container matColumnDef="invoiceNumber">
-              <th mat-header-cell *matHeaderCellDef width="17%">{{data.type=='motor'?'Statement':'Invoice'}} Number<span title="descargar" class="pointer font-w-700">#</span></th>
+              <th mat-header-cell *matHeaderCellDef width="17%">{{data.type=='all'?'Invoice':data.type=='motor'?'Statement':'Invoice'}} Number <span title="descargar" class="pointer font-w-700">#</span></th>
               <td mat-cell *matCellDef="let element"> {{element.invoiceNumber}} </td>
             </ng-container>
             <ng-container matColumnDef="montoFinal">
@@ -42,7 +45,7 @@
                 <td mat-cell *matCellDef="let element"> {{element.montoFinal}} </td>
             </ng-container>
             <ng-container matColumnDef="fechaCartaCredito">
-                <th mat-header-cell *matHeaderCellDef width="15%"> Fecha de Carta de Credito </th>
+                <th mat-header-cell *matHeaderCellDef width="17%"> Fecha de Carta de Credito </th>
                 <td mat-cell *matCellDef="let element"> {{element.fechaCartaCredito}} </td>
             </ng-container>                        
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
