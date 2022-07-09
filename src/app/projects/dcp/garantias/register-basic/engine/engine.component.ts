@@ -343,9 +343,12 @@ export class EngineComponent implements OnInit {
             if(this.formRegisterEngine.value.idUsuarioEvaluador==null){
               const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un usuario registrador!'},disableClose:true});
             }else{
-              if(this.formRegisterEngine.value.comentarios==''){
+              if(this.formRegisterEngine.value.comentarios==''){                
                 const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
               }else{
+                if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
+                if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
+                if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
                 const data = {
                   idMatricula:this.esn.id,
                   codAreaServicios:this.os.codAreaServicios,
@@ -398,7 +401,7 @@ export class EngineComponent implements OnInit {
   }
 
   onEditRegister(data):void{
-  const requestEdit = {...data,id:this.warranty.id,activo:true};
+  const requestEdit = {...data,id:this.warranty.id?this.warranty.id:0,activo:true};
   this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
     if(resp.success){
         const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
@@ -522,6 +525,30 @@ export class EngineComponent implements OnInit {
         break;
       case 4:
         this.verQueja4 = true;
+        break;
+      default:
+        break;
+    }
+  }
+  //ocultar queja
+  ocultarQueja(numeroDeQueja):void{
+    switch (numeroDeQueja) {
+      case 2:
+        if(this.verQueja3==true){
+          this.openSnackBar('No puede eliminar esta queja si existe otra siguiente')
+        }else{
+          this.verQueja2 = false;
+        }
+        break;
+      case 3:
+        if(this.verQueja4==true){
+          this.openSnackBar('No puede eliminar esta queja si existe otra siguiente')
+        }else{
+          this.verQueja3 = false;
+        }
+        break;
+      case 4:
+        this.verQueja4 = false;
         break;
       default:
         break;

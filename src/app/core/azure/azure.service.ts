@@ -12,13 +12,7 @@ import { environment } from "environments/environment";
 export class AzureService {
   constructor() {}
 
-  async uploadFile(
-    file: any,
-    filename: any
-  ): Promise<{
-    response;
-    uuidFileName;
-  }> {
+  async uploadFile(file: any,filename: any): Promise<{response;uuidFileName;}> {
     const extension = "." + filename.split(".").pop();
     const uuidFileName = this.generateUUID();
     const cn = this.getConnectionURL(uuidFileName + extension);
@@ -37,7 +31,7 @@ export class AzureService {
     return `https://${environment.azureAccountName}.blob.core.windows.net/${environment.azureContaineName}/${resourceName}`;
   }
 
-  getResourceUrlComplete(resourceName) {
+  getResourceUrlComplete(resourceName:any) {
     return this.getResourceUrl(resourceName) + "?" + environment.azureSas;
   }
 

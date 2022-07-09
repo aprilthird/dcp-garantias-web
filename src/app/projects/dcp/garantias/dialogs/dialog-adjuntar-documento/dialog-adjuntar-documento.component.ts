@@ -10,6 +10,8 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 export class DialogAdjuntarDocumentoComponent implements OnInit {
   
   seccionSeleccionada: any;
+  documentoSeleccionado:any;
+  tituloDocumento:any;
   documentosCargados = [];
   secciones:any[] = [{idSeccion:1, valorSeccion:'Detalle reclamo'},
                     {idSeccion:2, valorSeccion:'Fallas'},
@@ -27,23 +29,24 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
 
   cargarDocumento(event):void{
     console.log(event);
-    if(this.data.modulo=='garantias'){
-      if(this.seccionSeleccionada!=null){
-        for (let i = 0; i < event.target.files.length; i++) {
-          this.documentosCargados.push(event.target.files[i]);  
-        }
-      }else{
-        const dialogoError = this.matDialog.open(DialogErrorMessageComponent,{
-          data:{text:'Debe seleccionar una sección'},
-          disableClose:true
-        });
-      }    
-    }
-    if(this.data.modulo=='fallas'){
-      for (let i = 0; i < event.target.files.length; i++) {
-        this.documentosCargados.push(event.target.files[i]);  
-      }
-    }
+    this.documentoSeleccionado = event;
+    // if(this.data.modulo=='garantias'){
+    //   if(this.seccionSeleccionada!=null){
+    //     for (let i = 0; i < event.target.files.length; i++) {
+    //       this.documentosCargados.push(event.target.files[i]);  
+    //     }
+    //   }else{
+    //     const dialogoError = this.matDialog.open(DialogErrorMessageComponent,{
+    //       data:{text:'Debe seleccionar una sección'},
+    //       disableClose:true
+    //     });
+    //   }    
+    // }
+    // if(this.data.modulo=='fallas'){
+    //   for (let i = 0; i < event.target.files.length; i++) {
+    //     this.documentosCargados.push(event.target.files[i]);  
+    //   }
+    // }
   }
 
   deleteDocumentDetalleReclamo(name):void{
@@ -52,22 +55,31 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
   }
 
   agregarDocumento():void{
-    if(this.documentosCargados.length==0){
-      const dialogoError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Ningún archivo cargado'},
-        disableClose:true
-      });
-    }else{
+    if(this.documentoSeleccionado!=null){
       if(this.data.modulo=='garantias'){
-        this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
+        if(this.seccionSeleccionada!=null){
+          this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documento:this.documentoSeleccionado,nombreDeldocumento:this.tituloDocumento});
+          // this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
+        }else{
+          this.mensajeDeError('Seleccionar en una sección');
+        }
       }
       if(this.data.modulo=='fallas'){
         this.matDialogRef.close({accion:true,documentos:this.documentosCargados});
       }
+    }else{
+      this.mensajeDeError('Adjuntar un documento');
     }
   }
 
   onClose():void{
     this.matDialogRef.close({accion:false});
+  }
+
+  mensajeDeError(mensaje:string):void{
+    const dialogoError = this.matDialog.open(DialogErrorMessageComponent,{
+      data:{text:mensaje},
+      disableClose:true
+    });
   }
 }
