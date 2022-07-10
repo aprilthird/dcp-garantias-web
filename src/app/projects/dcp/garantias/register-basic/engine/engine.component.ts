@@ -43,9 +43,8 @@ export class EngineComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
-  areaDeServicioAsociado = '-';
-  verQueja2 = false; verQueja3 = false; verQueja4 = false;
-  
+  areaDeServicioAsociado = '-'; verQueja2 = false; verQueja3 = false; verQueja4 = false;
+ 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar) { }
 
