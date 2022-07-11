@@ -13,11 +13,7 @@ import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transf
 import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
-<<<<<<< HEAD
 import { AzureService } from 'app/core/azure/azure.service';
-=======
-import { ThrowStmt } from '@angular/compiler';
->>>>>>> e3bd95796c26333b05b4b3dcaf52bc72e61cf2c9
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
