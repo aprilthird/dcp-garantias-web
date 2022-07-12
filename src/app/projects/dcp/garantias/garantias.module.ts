@@ -43,7 +43,7 @@ import { DialogAdjuntarDocumentoComponent } from './dialogs/dialog-adjuntar-docu
 import { DialogTransformRecordToYellowComponent } from './dialogs/dialog-transform-record-to-yellow/dialog-transform-record-to-yellow.component';
 import { DialogTransformRecordToGreenComponent } from './dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
 import { DialogTransformRecordToGrayComponent } from './dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+// import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
@@ -96,7 +96,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSnackBarModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    NgxMatSelectSearchModule,
+    // NgxMatSelectSearchModule,
     FormsModule,
     MatAutocompleteModule
   ],
