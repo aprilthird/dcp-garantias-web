@@ -104,6 +104,10 @@ export class ConfigurationAndMaintenanceService {
     console.log(_request);
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
+  findConstant(_codigo:any):Observable<any>{
+    const request = {filter : {codigo:_codigo},pageSize:1000};
+    return this.httpClient.post(this.urlTrayConstants,request,{headers:this.header});
+  }
   // srt
   listSrt(_page):Observable<any>{
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};

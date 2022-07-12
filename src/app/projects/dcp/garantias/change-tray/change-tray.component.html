@@ -50,7 +50,8 @@
                                     <span>SRT</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoTotalManoDeObraConPenalizacion | currency :
+                                        'S/.': 'symbol':''}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
@@ -58,7 +59,8 @@
                                     <span>Partes</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoTotalPartesConPenalizacion | currency: 'S/.':
+                                        'symbol':''}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
@@ -66,7 +68,8 @@
                                     <span>Otros reclamables</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{totalPrecioReclamables | currency: 'S/.':
+                                        'symbol':''}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
@@ -74,7 +77,8 @@
                                     <span>Viajes</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoTotalDeViajesConPenalizacion | currency: 'S/.':
+                                        'symbol':''}}</span>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +90,8 @@
                                     <span>IGV</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoIGV | currency :
+                                        'S/.': 'symbol':''}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
@@ -94,7 +99,8 @@
                                     <span>Total</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoTotal | currency :
+                                        'S/.': 'symbol':''}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
@@ -102,7 +108,8 @@
                                     <span>Total a reclamar</span>
                                 </div>
                                 <div class="w3">
-                                    <span class="font-w-700">$-</span>
+                                    <span class="font-w-700">{{montoTotalConIGV | currency :
+                                        'S/.': 'symbol':''}}</span>
                                 </div>
                             </div>
                         </div>
@@ -1816,20 +1823,23 @@
                                                         <span>Total reclamar(US$)</span>
                                                     </div>
                                                     <div class="col-md-6" style="width: 50%;">
-                                                        <span class="font-w-700">$1,711.55</span>
+                                                        <span class="font-w-700">{{montoTotal | currency :
+                                                            'S/.': 'symbol':''}}</span>
                                                     </div>
                                                     <div class="col-md-6" style="width: 50%;">
                                                         <span>IGV</span>
                                                     </div>
                                                     <div class="col-md-6" style="width: 50%;">
-                                                        <span class="font-w-700">$308.08</span>
+                                                        <span class="font-w-700">{{montoIGV | currency :
+                                                            'S/.': 'symbol':''}}</span>
                                                     </div>
                                                     <div class="col-md-6" style="width: 50%;">
                                                         <span>Total del reclamo(US$)</span>
                                                     </div>
                                                     <div class="col-md-6" style="width: 50%;">
                                                         <span class="text-red font-w-700"
-                                                            style="font-size: large;">$2,019.63</span>
+                                                            style="font-size: large;">{{montoTotalConIGV | currency :
+                                                                'S/.': 'symbol':''}}</span>
                                                     </div>
                                                 </div>
                                             </mat-card>

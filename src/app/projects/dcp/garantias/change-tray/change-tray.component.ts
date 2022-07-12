@@ -57,6 +57,8 @@ export class ChangeTrayComponent implements OnInit {
   queja1:any={descripcion:''}; queja2:any={descripcion:''}; queja3:any={descripcion:''}; queja4:any={descripcion:''}; causasNarrativa=''; correccionesNarrativa=''; documentosNarrativas = [];
   dataSourceNarrativa = [{quejasNarrativa:'', tecnicoResponsable:'Diego Perez (estatico)', idPromotion:'2500TM (estatico)'}];
   displayedColumnsNarrativa: string[] = ['quejas','idPromocion' ,'tecnico','causas','correcciones'];  
+  //verificacion
+  montoTotal = 0; montoTotalConIGV = 0; montoIGV = 0;
   //formulario
   formGroupChangeTray: FormGroup;
   //
@@ -85,7 +87,11 @@ export class ChangeTrayComponent implements OnInit {
   //datos de la matricula
   esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
   //datos de orden de servicio
-  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-'};
+  os = {claseActividad:'-', codAreaServicios:'-', fechaLib:'-', os:'-', bu:'-', ceco: '-'};
+  //datos de area de servicio
+  areaService = {codigo:'-', descripcion:'-', codigoServicioSap:'-', codigoConstante:'-'};
+  //datos de constante
+  constante = {codigo:'-', laborRate:'-', kmRate:'-', bfcMarkup:'-', siteLabor:'-'};
   //tipo de garantia juntos a sus campos  
   warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},
                   {value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},
@@ -142,7 +148,9 @@ export class ChangeTrayComponent implements OnInit {
     this.garantiasService.findEsn(esn).subscribe(resp=>{
       if(resp.body){
         this.esn = resp.body;
-    
+        if(this.esn.bis) {
+          this.esn.fechaInicioGarantia = "";
+        }
         let tmp2 = localStorage.getItem('gar_data' + this.esn.id + "_" + 2);
         if(tmp2 !== null && tmp2 !== "") {
           console.log(tmp2);
@@ -178,10 +186,36 @@ export class ChangeTrayComponent implements OnInit {
     this.garantiasService.findOs(os).subscribe(resp=>{
       if(resp.body){
         this.os = resp.body;
+        this.getAreaService();
       }else{
         console.log('error');
       }
     })
+  }
+
+  getAreaService():void{
+    this.configurationAndMaintenanceService
+      .findServiceAreaByOS(this.os.ceco, this.os.codAreaServicios)
+      .subscribe(resp=>{
+        if(resp.data[0]){
+          this.areaService = resp.data[0];
+          this.getConstant();
+        }else{
+          console.log('error');
+        }
+      })
+  }
+
+  getConstant():void{
+    this.configurationAndMaintenanceService
+      .findConstant(this.areaService.codigoConstante)
+      .subscribe(resp=>{
+        if(resp.data[0]){
+          this.constante = resp.data[0];
+        }else{
+          console.log('error');
+        }
+      })
   }
 
   loadFormGroupChangeTray():void{
@@ -485,7 +519,7 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
   calcularSubTotalSrt(index):void{
-    this.dataSourceSrt[index].subTotalSrt = this.dataSourceSrt[index].cantidadSrt * this.dataSourceSrt[index].horasHombreSrt * 10 * 57.87;
+    this.dataSourceSrt[index].subTotalSrt = this.dataSourceSrt[index].cantidadSrt * this.dataSourceSrt[index].horasHombreSrt * 10 * Number(this.constante.laborRate);
     this.calcularTotalSrt();
   }
   calcularTotalSrt():void{
@@ -500,6 +534,7 @@ export class ChangeTrayComponent implements OnInit {
     this.montoTotalManoDeObra = sumaTotal;
     this.montoTotalManoDeObraConPenalizacion = sumaTotalConPenalizacion;
     this.totalHorasHombre = sumaHorasHombre;
+    this.calcularTotal();
   }
   eliminarSrts():void{
     let aux = [];
@@ -540,13 +575,13 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
 
-  formularParte(precio, markup):any{
-    return precio + precio * markup + precio * 0.1512;
+  formularParte(precio, markup):number{
+    return precio + precio * markup + precio * Number(this.constante.bfcMarkup);
   }
 
   calcularSubTotalPartes(index):void{
     //this.dataSourcePartes[index].precioFob
-    this.dataSourcePartes[index].subTotalParte = this.formularParte(this.dataSourcePartes[index].precioUnitarioParte, 0.26);
+    this.dataSourcePartes[index].subTotalParte = this.formularParte(Number(this.dataSourcePartes[index].precioUnitarioParte), Number(this.constante.bfcMarkup));
     this.dataSourcePartes[index].subTotal = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte;
     this.calcularTotalPartes();
   }
@@ -563,8 +598,11 @@ export class ChangeTrayComponent implements OnInit {
     }
     this.montoTotalPartes = sumaTotalPartes;
     this.montoTotalPartesConPenalizacion = this.formularParte(sumaTotalPartesConPenalizacion, 
-      this.warranty.antiguedad >= "180 Dias" ? 0 : this.warranty.antiguedad >= "119 Dias" ? 0.1 : 0.26);
+      this.warranty.antiguedad >= "180 Dias" 
+      ? 0 : this.warranty.antiguedad >= "119 Dias" 
+      ? 0.1 : Number(this.constante.bfcMarkup));
     this.montoTotalPartesEnSAP = sumaTotalPartesEnSAP;
+    this.calcularTotal();
   }
   eliminarPartes():void{
     let aux = [];
@@ -611,6 +649,7 @@ export class ChangeTrayComponent implements OnInit {
        suma += Number(this.dataSourceOtrosReclamables[index].precioReclamable);      
     }
     this.totalPrecioReclamables = suma;
+    this.calcularTotal();
   }
   seleccionarTodoReclamables():void{
     if(this.dataSourceOtrosReclamables.length>0){
@@ -657,9 +696,10 @@ export class ChangeTrayComponent implements OnInit {
     }else{ this.errorMessage('Debe seleccionar una fecha');}
   }
   calcularSubTotalDeViaje(index):void{
-    let factor = this.dataSourceViajes[index].unidadDeMedida == "Km" 
-      ? 0.43 : this.dataSourceViajes[index].unidadDeMedida == "Hrs"
-      ? 57.87 : 1;
+    let factor = this.dataSourceViajes[index].tipoTransporte != "Movilidad de Empresa"
+      ? Number(this.constante.laborRate) * 0.4 : this.dataSourceViajes[index].unidadDeMedida == "Km" 
+      ? Number(this.constante.kmRate) : this.dataSourceViajes[index].unidadDeMedida == "Hrs"
+      ? Number(this.constante.laborRate) : 1;
     this.dataSourceViajes[index].costoDeViaje = this.dataSourceViajes[index].valorDeViaje * factor;
     this.calcularTotalViajes();
   }
@@ -678,6 +718,7 @@ export class ChangeTrayComponent implements OnInit {
     }
     this.montoTotalDeViajes = suma;
     this.montoTotalDeViajesConPenalizacion = suma + (suma*0.1);
+    this.calcularTotal();
   }
   eliminarViajes():void{
     let aux = [];
@@ -732,6 +773,17 @@ export class ChangeTrayComponent implements OnInit {
     });
   }  
   //VERIFICAION DETALLES
+  calcularTotal():void {
+    this.montoTotal = 
+      this.montoTotalDeViajesConPenalizacion +
+      this.montoTotalManoDeObraConPenalizacion +
+      this.montoTotalPartesConPenalizacion +
+      this.totalPrecioReclamables;
+    
+    this.montoIGV = this.montoTotal * 0.18;
+
+    this.montoTotalConIGV = this.montoTotal + this.montoIGV;
+  }
   onSendRegister(action):void{
     const data = {
       idMatricula:this.esn.id,
