@@ -41,6 +41,8 @@ export class RegistroDeFallaComponent implements OnInit {
   items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
+  verQueja2 = false; verQueja3 = false;
+
 
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private _snackBar: MatSnackBar,
@@ -219,7 +221,9 @@ export class RegistroDeFallaComponent implements OnInit {
   onListfallas():void{
     this.router.navigate(['/gestion-fallas']);
   }
+
   // abrir modal para adjuntar documentos
+
   adjuntarDocumento():void{
     const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
       width: '425px',
@@ -256,19 +260,21 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
     if(this.formFalla.valid){
       if(this.formFalla.value.idArea!=null){
         if(this.formFalla.value.queja1!=null){
-          if(this.formFalla.value.queja2!=null){
-            if(this.formFalla.value.queja3!=null){
-              if(this.matriculaEncontrada!=null){
-                const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
-                this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(response=>{
-                  if(response.success){
-                    this.registroExitosoDeLaFalla();
-                  }
-                });
-              }else{ this.mensajeErrorDeCampos(mensaje); }
-            }else{ this.mensajeErrorDeCampos(mensaje); }            
-          }else{ this.mensajeErrorDeCampos(mensaje); }
-        }else{ this.mensajeErrorDeCampos(mensaje); }
+            if(this.matriculaEncontrada!=null){
+              const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
+              this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
+                if(responseApi.success){
+                  //guardamos en la bitacora
+                  const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
+                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                    if(responseBitacora.success){
+                      this.registroExitosoDeLaFalla();
+                    }
+                  });
+                }
+              });
+            }else{ this.mensajeErrorDeCampos(mensaje); }
+        }else{ this.mensajeErrorDeCampos('Seleccione al menos una queja'); }
       }else{ this.mensajeErrorDeCampos(mensaje); }
     }else{ this.mensajeErrorDeCampos(mensaje); }
   }
@@ -291,10 +297,16 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                           const nuevaFalla = {id:0, nivelSoporte:responseDialog.nivelSoporte, activo:true, asignacionFalla: responseDialog.idUsuario,
                                               idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
                                               idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value, idTipo:this.idTipo};
-                          this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(response=>{
-                              if(response.success){
-                                localStorage.setItem('success','escalado');
-                                this.router.navigate(['/gestion-fallas']);
+                          this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
+                              if(responseApi.success){
+                                //guardamos en la bitacora
+                                const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:responseDialog.nivelSoporte};
+                                this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                                  if(responseBitacora.success){
+                                    localStorage.setItem('success','escalado');
+                                    this.router.navigate(['/gestion-fallas']);
+                                  }
+                                });
                               }
                           });
                         }
@@ -316,8 +328,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
             this.fallaParaGestionar.asignacionFalla= responseDialog.idUsuario
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(response=>{
               if(response.success){
-                localStorage.setItem('success','true');
-                this.router.navigate(['/gestion-fallas']);
+                //guardamos en la bitacora
+                const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:responseDialog.nivelSoporte};
+                this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                  if(responseBitacora.success){
+                    localStorage.setItem('success','true');
+                    this.router.navigate(['/gestion-fallas']);
+                  }
+                });                
               }
             });
           }
@@ -395,6 +413,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
     }
   }
+
   // DFSE
 
   guardarRegistroDFSE():void{
@@ -509,6 +528,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
     }
   }
+
   // FABRICA
 
   guardarRegistroFabrica():void{
@@ -609,7 +629,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
     });
     dialogObservedRecord.afterClosed().subscribe(responseDialog=>{
       if(responseDialog.selection){
-        const requestBitacora = { idGarantia:this.fallaParaGestionar.id, comentarios:responseDialog.comentario };
+        const requestBitacora = {tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:responseDialog.comentario, estado:2, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
         this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
           if(responseBitacora.success){
             this.fallaParaGestionar.estado = 2;
@@ -673,4 +693,35 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.mostrarTrakingNumber = false;
     }
   }
+
+    //funciones para mostrar los select de quejas
+    mostrarQueja(numeroDeQueja:number):void{
+      switch (numeroDeQueja) {
+        case 2:
+          this.verQueja2 = true;
+          break;
+        case 3:
+          this.verQueja3 = true;
+          break;
+        default:
+          break;
+      }
+    }
+    //ocultar queja
+    ocultarQueja(numeroDeQueja):void{
+      switch (numeroDeQueja) {
+        case 2:
+          if(this.verQueja3==true){
+            this.openSnackBar('No puede eliminar esta queja si existe otra siguiente')
+          }else{
+            this.verQueja2 = false;
+          }
+          break;
+        case 3:
+            this.verQueja3 = false;
+          break;
+        default:
+          break;
+      }
+    }
 }

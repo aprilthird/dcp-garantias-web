@@ -204,6 +204,19 @@ export class FallasListComponent implements OnInit {
   mostrarInputBuscarPorEsn():void{
     this.inputBuscarPorEsn = this.inputBuscarPorEsn == false ? true : false;
   }
+
+  //bitacora
+  getEstado(numeroEstado:number):string{
+    if(numeroEstado==1){
+      return 'Aprobado';
+    }
+    if(numeroEstado==2){
+      return 'Observado';
+    }
+    if(numeroEstado==3){
+      return 'Cerrado';
+    }
+  }
 }
 
 export interface PeriodicElement {
