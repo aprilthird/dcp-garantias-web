@@ -10,9 +10,9 @@
             </div>
         </div>
         <div class="col-md-12" *ngIf="data.modulo=='garantias'">
-            <mat-form-field>
+            <mat-form-field floatLabel="always">
                 <mat-label>Seccion</mat-label>
-                <mat-select placeholder="Placeholder" [(ngModel)]="seccionSeleccionada">
+                <mat-select placeholder="Seleccionar una sección" [(ngModel)]="seccionSeleccionada">
                     <mat-option *ngFor="let seccion of secciones" [value]="seccion.idSeccion">
                         {{seccion.valorSeccion}}
                     </mat-option>
@@ -20,25 +20,26 @@
             </mat-form-field>
         </div>
         <div class="col-md-12" *ngIf="data.modulo=='garantias'">
-            <mat-form-field>
+            <mat-form-field floatLabel="always">
                 <mat-label>Titulo</mat-label>
-                <input matInput type="text">
+                <input matInput type="text" [(ngModel)]="tituloDocumento" placeholder="Ingresar Titulo del Documento">
             </mat-form-field>
         </div>
         <div class="col-md-12 mb-5">
             <button class="btn-attach" mat-raised-button (click)="fileInputDetallesReclamo.click()">
-                <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documentos
+                <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
             </button>
-            <input hidden type="file" (change)="cargarDocumento($event)" #fileInputDetallesReclamo multiple>
+            <input hidden type="file" (change)="cargarDocumento($event)" #fileInputDetallesReclamo>
+            <!-- multiple> -->
         </div>
-        <div class="col-md-12 mb-5">
+        <!-- <div class="col-md-12 mb-5">
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-start align-items-center" *ngFor="let documento of documentosCargados">
                     <span>{{documento.name}}</span>
                     <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-12 text-center bnt-add">
             <button mat-raised-button color="primary" (click)="agregarDocumento()">Agregar</button>
         </div>

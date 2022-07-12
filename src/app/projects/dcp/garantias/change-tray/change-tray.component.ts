@@ -13,7 +13,7 @@ import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transf
 import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
-import { ThrowStmt } from '@angular/compiler';
+import { AzureService } from 'app/core/azure/azure.service';
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
@@ -106,7 +106,7 @@ export class ChangeTrayComponent implements OnInit {
   formSrt: FormGroup;
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router, private readonly garantiasService:GarantiasService,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,  private _azureService: AzureService) { }
 
   ngOnInit(): void {
     this.button.detalles = true;
@@ -115,7 +115,6 @@ export class ChangeTrayComponent implements OnInit {
     this.loadFormGroupChangeTray();
     this.loadFormGroupSrt();
     this.cargarDatosDeMaestras();
-    console.log(this.warranty);    
   }
 
   cargarDatosDeMaestras():void{
@@ -762,16 +761,47 @@ export class ChangeTrayComponent implements OnInit {
     console.log(this.documentosDetallesReclamo);
     console.log(document);
   }
+  //modal adjuntar documento
   adjuntarDocumento():void{
     const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
       width: '425px',
       disableClose:true,
       data: {modulo:'garantias'}
     });
-    dialogoAdjuntarDocumentos.afterClosed().subscribe(resp=>{
-      console.log(resp);
+    dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialog=>{
+      console.log(responseDialog);
+      if(responseDialog.accion){
+        this.onChargeFile(responseDialog.documento);
+      }
     });
-  }  
+  }
+
+  async onChargeFile(event: any) {
+    if (event) {
+      const { target } = event;
+      const file = target.files[0];
+      const blob = new Blob([file], { type: file.type });
+      const response = await this._azureService.uploadFile(blob, file.name);
+      console.log(response);
+      
+    }
+  }
+
+  // async onChageFile(event: any, control: string) {
+  //   if (event) {
+  //     const { target } = event;
+  //     const file = target.files[0];
+  //     const blob = new Blob([file], { type: file.type });
+  //     this.filesLoading[`${control}`] = true;
+  //     try {
+  //       const response = await this._azureService.uploadFile(blob, file.name);
+  //       this.formGroup.get(control).setValue(response.uuidFileName);
+  //     } catch (e) {}
+  //     this.filesLoading[`${control}`] = false;
+  //   } else {
+  //     this.formGroup.get(control).setValue("");
+  //   }
+  // }
   //VERIFICAION DETALLES
   calcularTotal():void {
     this.montoTotal = 

@@ -4,7 +4,7 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { messages } from 'app/mock-api/apps/chat/data';
 @Component({
   selector: 'app-dialog-register-enrollment',
   templateUrl: './dialog-register-enrollment.component.html',
@@ -14,7 +14,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   engineModels=[];
   engineApplications=[];
-  clients = [];
+  clients = []; clienteSeleccionado:any;
   directionClient:string='';
   formEnrollment:FormGroup;
   tipoDeEquipo:number;
@@ -36,15 +36,12 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     this.configurationAndMaintenanceService.listEngineApplications(1).subscribe(resp=>{
       this.engineApplications = resp.data;
     });
-    this.configurationAndMaintenanceService.listClients(1).subscribe(resp=>{
-      this.clients = resp.data;
-    });
   }
 
   loadFormClient():void{
     if(this.data.option=='new'){
       this.formEnrollment = new FormGroup({
-        idCliente: new FormControl('',[Validators.required]),
+        razonSocial: new FormControl('',[Validators.required]),
         esn: new FormControl('',[Validators.required]),
         idModelo: new FormControl('',[Validators.required]),
         idAplicacion: new FormControl('',[Validators.required]),
@@ -61,7 +58,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
       })
     }else{
       this.formEnrollment = new FormGroup({
-        idCliente: new FormControl('',[Validators.required]),
+        razonSocial: new FormControl('',[Validators.required]),
         esn: new FormControl('',[Validators.required]),
         idModelo: new FormControl('',[Validators.required]),
         idAplicacion: new FormControl('',[Validators.required]),
@@ -81,19 +78,20 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   onSaveEnrollment():void{
     if(this.formEnrollment.valid){
-      console.log(this.formEnrollment.value);      
       if(this.data.option=='new'){
-        const request = { id:0 , tipo:this.tipoDeEquipo, activo:true , ...this.formEnrollment.value };
-        this.configurationAndMaintenanceService.maintenanceEnrollment(request).subscribe(resp=>{
-          if(resp.success){
-            this.dialogRef.close(true);
-          }else{
-            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-              data:{text:'Error del servicio en la creacion de la matricula'},
-              disableClose:true
-            });
-          }
-        });
+        if(this.clienteSeleccionado==null){
+          this.errorMessage('Ingrese un cliente válido');
+        }else{
+          const request = { id:0 , tipo:this.tipoDeEquipo, activo:true, codigoSap:this.clienteSeleccionado.codigoSap,
+                          direccion:this.clienteSeleccionado.direccion, ...this.formEnrollment.value };
+          this.configurationAndMaintenanceService.maintenanceEnrollment(request).subscribe(resp=>{
+            if(resp.success){
+              this.dialogRef.close(true);
+            }else{
+              this.errorMessage('Error del servicio en la creacion de la matricula');
+            }
+          });
+        }
       }else{
         const request = { id:this.data.client.id , activo:true , ...this.formEnrollment.value };
         this.configurationAndMaintenanceService.maintenanceClients(request).subscribe(resp=>{
@@ -101,18 +99,12 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
           if(resp.success){
             this.dialogRef.close(true);
           }else{
-            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-              data:{text:'Error del servicio en la edicion de la matricula'},
-              disableClose:true
-            });
+            this.errorMessage('Error del servicio en la edicion de la matricula');
           }
         })
       }
     }else{
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
-        data:{text:'Ingrese todos los campos necesarios'},
-        disableClose:true
-      });
+      this.errorMessage('Ingrese todos los campos necesarios');
     }
   }
 
@@ -124,4 +116,27 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
+  
+  buscarCliente():void{
+    console.log(this.formEnrollment.value.razonSocial);
+    if(this.formEnrollment.value.razonSocial.length>2){
+      this.configurationAndMaintenanceService.searchClienteByName(this.formEnrollment.value.razonSocial).subscribe(responseApi=>{
+        console.log(responseApi);
+        this.clients = responseApi.body;
+      });
+    }else{
+      this.clients = [];
+      this.errorMessage('Ingrese mínimo 3 caracteres');
+    }
+  }
+
+  guardarIdCliente(id:any):void{
+    this.clienteSeleccionado = this.clients.find(e => e.id == id);
+  }
+
+  errorMessage(message:string):void{
+    const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
+      disableClose:true, data:{text:message}, width:'350px'
+  });
+  }
 }
