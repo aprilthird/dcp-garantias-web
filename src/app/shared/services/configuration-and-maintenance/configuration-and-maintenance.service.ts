@@ -95,16 +95,12 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //constantes
-  saveConstant(_request:MasterConstantRequest):Observable<any>{          
+  maintenanceConstants(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   listConstants(_page):Observable<any>{
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayConstants, request, {headers:this.header});
-  }
-  deleteConstant(_request:any):Observable<any>{
-    console.log(_request);
-    return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   findConstant(_codigo:any):Observable<any>{
     const request = {filter : {codigo:_codigo},pageSize:1000};

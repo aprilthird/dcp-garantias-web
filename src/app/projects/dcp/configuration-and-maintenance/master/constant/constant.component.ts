@@ -14,7 +14,7 @@ import { MatSnackBar,MatSnackBarHorizontalPosition,MatSnackBarVerticalPosition }
 })
 export class ConstantComponent implements OnInit {
 
-  displayedColumns: string[] = ['code', 'laborRate', 'kmRate', 'bcfMarkup', 'siteLabor', 'state', 'actions'];
+  displayedColumns: string[] = ['code', 'laborRate', 'kmRate', 'bfc', 'markup', 'siteLabor', 'state', 'actions'];
   dataSource : any[];
   //datos del paginado
   totalRecords:any;
@@ -132,10 +132,10 @@ export class ConstantComponent implements OnInit {
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
 
-  deleteConstant(option:any, _constant:any):void{
-    const request = {id:_constant.id, activo:false};
+  deleteConstant(option:any, constante:any):void{
+    constante.activo = false;
     if(option){
-      this.configurationAndMaintenanceService.deleteConstant(request).subscribe(resp=>{
+      this.configurationAndMaintenanceService.maintenanceConstants(constante).subscribe(resp=>{
         if(resp.success){
           this.getListConstant();
           this.openSnackBar('La constante fue eliminada');

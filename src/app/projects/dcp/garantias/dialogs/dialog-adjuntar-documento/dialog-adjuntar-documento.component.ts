@@ -27,9 +27,10 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  cargarDocumento(event):void{
-    console.log(event);
-    this.documentoSeleccionado = event;
+  cargarDocumentos(event):void{
+    for (let i = 0; i < event.target.files.length; i++) {
+      this.documentosCargados.push(event.target.files[i]);  
+    }
     // if(this.data.modulo=='garantias'){
     //   if(this.seccionSeleccionada!=null){
     //     for (let i = 0; i < event.target.files.length; i++) {
@@ -49,16 +50,16 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
     // }
   }
 
-  deleteDocumentDetalleReclamo(name):void{
+  deleteDocumentDetalleReclamo(name:any):void{
     const index = this.documentosCargados.findIndex(e=>e.name==name);
     this.documentosCargados.splice(index,1);
   }
 
   agregarDocumento():void{
-    if(this.documentoSeleccionado!=null){
+    if(this.documentosCargados.length>0){
       if(this.data.modulo=='garantias'){
         if(this.seccionSeleccionada!=null){
-          this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documento:this.documentoSeleccionado,nombreDeldocumento:this.tituloDocumento});
+          this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
           // this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
         }else{
           this.mensajeDeError('Seleccionar en una sección');
@@ -68,7 +69,7 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
         this.matDialogRef.close({accion:true,documentos:this.documentosCargados});
       }
     }else{
-      this.mensajeDeError('Adjuntar un documento');
+      this.mensajeDeError('Seleccione al menos un documento');
     }
   }
 

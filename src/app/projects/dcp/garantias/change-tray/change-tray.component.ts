@@ -770,9 +770,9 @@ export class ChangeTrayComponent implements OnInit {
     });
     dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialog=>{
       console.log(responseDialog);
-      if(responseDialog.accion){
-        this.onChargeFile(responseDialog.documento);
-      }
+      // if(responseDialog.accion){
+      //   this.onChargeFile(responseDialog.documento);
+      // }
     });
   }
 

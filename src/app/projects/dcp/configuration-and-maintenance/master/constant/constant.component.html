@@ -20,37 +20,43 @@
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="code">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> Codigo </th>
+                    <th mat-header-cell *matHeaderCellDef width="13%"> Codigo </th>
                     <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
                   </ng-container>
               
                   <!-- Name Column -->
                   <ng-container matColumnDef="laborRate">
-                    <th mat-header-cell *matHeaderCellDef  width="15%"> LaborRate </th>
+                    <th mat-header-cell *matHeaderCellDef  width="13%"> LaborRate </th>
                     <td mat-cell *matCellDef="let element"> {{element.laborRate}} </td>
                   </ng-container>
               
                   <!-- Weight Column -->
                   <ng-container matColumnDef="kmRate">
-                    <th mat-header-cell *matHeaderCellDef  width="15%"> KmRate </th>
+                    <th mat-header-cell *matHeaderCellDef  width="13%"> KmRate </th>
                     <td mat-cell *matCellDef="let element"> {{element.kmRate}} </td>
                   </ng-container>
               
                   <!-- Symbol Column -->
-                  <ng-container matColumnDef="bcfMarkup">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> BCFMarkup </th>
-                    <td mat-cell *matCellDef="let element"> {{element.bfcMarkup}} </td>
+                  <ng-container matColumnDef="bfc">
+                    <th mat-header-cell *matHeaderCellDef width="13%"> BCF </th>
+                    <td mat-cell *matCellDef="let element"> {{element.bfc}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="markup">
+                    <th mat-header-cell *matHeaderCellDef width="13%"> Markup </th>
+                    <td mat-cell *matCellDef="let element"> {{element.markup}} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="siteLabor">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> SiteLabor </th>
+                    <th mat-header-cell *matHeaderCellDef width="13%"> SiteLabor </th>
                     <td mat-cell *matCellDef="let element"> {{element.siteLabor}} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="state">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> Estado </th>
+                    <th mat-header-cell *matHeaderCellDef width="12%"> Estado </th>
                     <td mat-cell *matCellDef="let element"> {{element.estado==0? 'Activo':'Inactivo'}} </td>
                   </ng-container>          
                   

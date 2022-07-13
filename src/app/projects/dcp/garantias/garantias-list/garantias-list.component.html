@@ -1,8 +1,8 @@
 <div class="container mb-3">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="col-sm-12 col-md-12">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-4 pointer" (click)="limpiarFiltros()">
+                <div class="col-xs-6 col-sm-6 col-md-3 pointer" (click)="limpiarFiltros()">
                     <h4 class="font-w-700">Garantías</h4>
                 </div>
                 <div class="col-md-2">
@@ -10,28 +10,32 @@
                       <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>  Se creó correctamente
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 col-xl-2 flex-end">
-                    <span class="pointer" (click)="onOpenDialogHistoriaEsn()">
-                        <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
-                        Historial de Series
-                    </span>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 col-xl-2 flex-end btn-register">
-                    <button mat-raised-button (click)="onMassiveRegistrationBasic()">
-                        Registro básico masivo
-                    </button>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 col-xl-2 flex-end btn-register">
-                    <button mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
-                        Registro básico individual
-                    </button>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end">
+                            <span class="pointer" (click)="onOpenDialogHistoriaEsn()">
+                                <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
+                                Historial de Series
+                            </span>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end btn-register">
+                            <button mat-raised-button (click)="onMassiveRegistrationBasic()">
+                                Registro básico masivo
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end btn-register">
+                            <button mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
+                                Registro básico individual
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
           <form *ngIf="formFilter" [formGroup]="formFilter">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2 search">
+                <div class="col-xs-12 col-sm-6 col-md-2 search">
                     <mat-form-field floatLabel="always">
                         <mat-label>OS</mat-label>
                         <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
@@ -40,7 +44,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2 search">
+                <div class="col-xs-12 col-sm-6 col-md-2 search">
                     <mat-form-field floatLabel="always">
                         <mat-label>ESN</mat-label>
                         <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
@@ -49,7 +53,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-2">
                     <mat-form-field floatLabel="always">
                         <mat-label>Areas</mat-label>
                         <mat-select formControlName="area" (selectionChange)="listWarranties()">
@@ -59,7 +63,7 @@
                         </mat-select>
                       </mat-form-field>                    
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Fecha de Falla</mat-label>
                         <mat-date-range-input [rangePicker]="picker">
@@ -71,7 +75,7 @@
                         <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>                      
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Bandeja</mat-label>
                         <mat-select formControlName="bandeja" (selectionChange)="listWarranties()">
@@ -81,7 +85,7 @@
                         </mat-select>
                       </mat-form-field>        
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-2">
                     <mat-form-field appearance="fill">
                         <mat-label>Antiguedad</mat-label>
                         <mat-select formControlName="antiguedad" (selectionChange)="listWarranties()">
@@ -94,7 +98,7 @@
             </div>
             </form>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="col-sm-12 col-md-12">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
                   <ng-container matColumnDef="number">
