@@ -52,6 +52,7 @@ export class ConfigurationAndMaintenanceService {
   private urlMaintenanceWarrantyDataClient = this.baseApiURl + '/Administracion/MantenimientoClientes';
   private urlTrayWarrantyDataClient = this.baseApiURl + '/Administracion/BandejaClientes';
   private urlSearchClientByName = this.baseApiURl + '/Administracion/BuscarClientesPorNombre';
+  private urlSearchClientByCode= this.baseApiURl + '/Administracion/BuscarClientesPorId';
 
   //matricula
   private urlMaintenanceEnrollment = this.baseApiURl + '/Administracion/MantenimientoMatricula';
@@ -253,6 +254,9 @@ export class ConfigurationAndMaintenanceService {
   }
   searchClienteByName(name:any):Observable<any>{
     return this.httpClient.get(this.urlSearchClientByName+'/'+name, {headers:this.header});
+  }
+  searchClienteByCode(code:any):Observable<any>{
+    return this.httpClient.get(this.urlSearchClientByCode+'/'+code, {headers:this.header});
   }
 
   //quejas

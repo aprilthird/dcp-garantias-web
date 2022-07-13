@@ -37,6 +37,7 @@ export class RegistroDeFallaComponent implements OnInit {
   deshabilitarFalla:boolean = false;
   fallaParaGestionar:any;
   mostrarTrakingNumber = false;
+  trackinNumberGenerated = '123456';
   // data falsa de DFSE para los select
   items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
@@ -102,6 +103,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
         this.cargarFormularioFabrica();
+        this.mostrarTrackingNumber();
       }
     }
   }
@@ -160,7 +162,7 @@ export class RegistroDeFallaComponent implements OnInit {
       subEstado: new FormControl(this.fallaParaGestionar.subEstado!=null?this.fallaParaGestionar.subEstado:null, [Validators.required]),
       tsr: new FormControl(this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'', [Validators.required]),
       partsReturn: new FormControl(this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:null, [Validators.required]),
-      trakingNumber: new FormControl(this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:'', [Validators.required]),
+      trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:this.trackinNumberGenerated, disabled:true}),
       subestadoPartsReturn: new FormControl(this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null, [Validators.required]),
       fechaIniDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null, [Validators.required]),
       fechaFinDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaFinDesarmeMotor!=null?this.fallaParaGestionar.fechaFinDesarmeMotor:null, [Validators.required]),
@@ -353,7 +355,13 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-            this.registroExitosoDeLaFalla();
+            //guardamos en la bitacora
+            const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+            this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+              if(responseBitacora.success){
+                this.registroExitosoDeLaFalla();
+              }
+            });    
           }
       });
     }else{
@@ -377,8 +385,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
           this.fallaParaGestionar.nivelSoporte = responseDialog.nivelSoporte;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                 if(responseApi.success){
-                  localStorage.setItem('success','escalado');
-                  this.router.navigate(['/gestion-fallas']);
+                    //guardamos en la bitacora
+                    const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                    this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                      if(responseBitacora.success){
+                        localStorage.setItem('success','escalado');
+                        this.router.navigate(['/gestion-fallas']);
+                      }
+                    });    
                 }
             });
         }
@@ -403,8 +417,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
           this.fallaParaGestionar.estado = 3;
           this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
-              localStorage.setItem('success','cerrado');
-              this.router.navigate(['/gestion-fallas']);
+                //guardamos en la bitacora
+                const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                  if(responseBitacora.success){
+                    localStorage.setItem('success','cerrado');
+                    this.router.navigate(['/gestion-fallas']);
+                  }
+                });   
             }
           });
         }
@@ -439,7 +459,13 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-            this.registroExitosoDeLaFalla();
+              //guardamos en la bitacora
+              const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+              this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                if(responseBitacora.success){
+                  this.registroExitosoDeLaFalla();
+                }
+              });  
           }
       });
       }else{
@@ -473,11 +499,18 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-            localStorage.setItem('success','escalado');
-            this.router.navigate(['/gestion-fallas']);
+              //guardamos en la bitacora
+              const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+              this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                if(responseBitacora.success){
+                    localStorage.setItem('success','escalado');
+                    this.router.navigate(['/gestion-fallas']);
+                }
+              });  
           }
       });
       }else{
+        console.log(this.formDFSE.value);
         this.mensajeErrorDeCampos('Llene los campos DFSE');
       }
     }else{
@@ -515,8 +548,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
             this.fallaParaGestionar.estado = 3;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                localStorage.setItem('success','cerrado');
-                this.router.navigate(['/gestion-fallas']);
+                  //guardamos en la bitacora
+                  const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:3, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                    if(responseBitacora.success){
+                        localStorage.setItem('success','cerrado');
+                        this.router.navigate(['/gestion-fallas']);
+                    }
+                  });  
               }
             });
           }
@@ -557,7 +596,13 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
             this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;          
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                this.registroExitosoDeLaFalla();
+                  //guardamos en la bitacora
+                  const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                    if(responseBitacora.success){
+                      this.registroExitosoDeLaFalla();
+                    }
+                  });
               }
             });
         }else{
@@ -604,8 +649,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                 this.fallaParaGestionar.estado = 3;
                 this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                   if(responseApi.success){
-                    localStorage.setItem('success','cerrado');
-                    this.router.navigate(['/gestion-fallas']);
+                      //guardamos en la bitacora
+                      const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:3, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                      this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                        if(responseBitacora.success){
+                            localStorage.setItem('success','cerrado');
+                            this.router.navigate(['/gestion-fallas']);
+                        }
+                      });
                   }
                 });
               }
@@ -646,13 +697,15 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
 
   // OTRAS FUNCIONES
 
-  mensajeErrorDeCampos(mensaje):void{
+  mensajeErrorDeCampos(mensaje:string):void{
     const dialogMensajeDeError = this.matDialog.open(DialogErrorMessageComponent,{
       width:'386px',
       disableClose:true,
       data:{text:mensaje}
     });
   }
+
+  //mensaje registro exitoso
 
   registroExitosoDeLaFalla():void{
     const dialogRegistroExitoso = this.matDialog.open(DialogDraftSavedSuccessfullyComponent,{
@@ -685,7 +738,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
   }
   // mostrar el tracking number del nivel DFSE
   mostrarTrackingNumber():void{
-    console.log(this.formDFSE.value.partsReturn);
     if(this.formDFSE.value.partsReturn=='si'){
       this.mostrarTrakingNumber = true;
     }

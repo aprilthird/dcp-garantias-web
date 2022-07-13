@@ -156,7 +156,7 @@ export class FallasListComponent implements OnInit {
   seeBitacora(element):void{
     console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.garantiasService.logWarranty(element.id).subscribe(resp=>{
+    this.garantiasService.logWarranty(element.id,2).subscribe(resp=>{
       this.dataSourceBitacora = resp.body;
       console.table(this.dataSourceBitacora)
     });
@@ -215,6 +215,9 @@ export class FallasListComponent implements OnInit {
     }
     if(numeroEstado==3){
       return 'Cerrado';
+    }
+    if(numeroEstado==0){
+      return 'Activo';
     }
   }
 }

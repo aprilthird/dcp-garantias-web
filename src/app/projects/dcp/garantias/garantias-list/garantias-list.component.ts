@@ -218,7 +218,7 @@ export class GarantiasListComponent implements OnInit {
   seeBitacora(element):void{
     console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.garantiasService.logWarranty(element.id).subscribe(resp=>{
+    this.garantiasService.logWarranty(element.id,1).subscribe(resp=>{
       console.log(resp);
       this.dataBitacora = resp.body;
       this.dataSourceBitacora = resp.body;

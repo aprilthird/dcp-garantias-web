@@ -14,7 +14,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   engineModels=[];
   engineApplications=[];
-  clients = []; clienteSeleccionado:any;
+  clients = []; clienteEncontrado:any;
   directionClient:string='';
   formEnrollment:FormGroup;
   tipoDeEquipo:number;
@@ -79,11 +79,11 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   onSaveEnrollment():void{
     if(this.formEnrollment.valid){
       if(this.data.option=='new'){
-        if(this.clienteSeleccionado==null){
+        if(this.clienteEncontrado==null){
           this.errorMessage('Ingrese un cliente válido');
         }else{
-          const request = { id:0 , tipo:this.tipoDeEquipo, activo:true, codigoSap:this.clienteSeleccionado.codigoSap,
-                          direccion:this.clienteSeleccionado.direccion, ...this.formEnrollment.value };
+          const request = { id:0 , tipo:this.tipoDeEquipo, activo:true, codigoSap:this.clienteEncontrado.codigoSap,
+                          direccion:this.clienteEncontrado.direccion, ...this.formEnrollment.value };
           this.configurationAndMaintenanceService.maintenanceEnrollment(request).subscribe(resp=>{
             if(resp.success){
               this.dialogRef.close(true);
@@ -118,10 +118,8 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   
   buscarCliente():void{
-    console.log(this.formEnrollment.value.razonSocial);
     if(this.formEnrollment.value.razonSocial.length>2){
       this.configurationAndMaintenanceService.searchClienteByName(this.formEnrollment.value.razonSocial).subscribe(responseApi=>{
-        console.log(responseApi);
         this.clients = responseApi.body;
       });
     }else{
@@ -130,8 +128,11 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     }
   }
 
-  guardarIdCliente(id:any):void{
-    this.clienteSeleccionado = this.clients.find(e => e.id == id);
+  seleccionarCliente(clienteSeleccionado:any):void{
+    this.configurationAndMaintenanceService.searchClienteByCode(clienteSeleccionado.codigoSap).subscribe(responseApi=>{
+      this.clienteEncontrado = responseApi.body;
+    });
+    
   }
 
   errorMessage(message:string):void{
