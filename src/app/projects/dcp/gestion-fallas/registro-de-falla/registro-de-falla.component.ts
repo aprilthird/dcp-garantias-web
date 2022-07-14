@@ -15,7 +15,6 @@ import { DialogAsignacionDeLaFallaComponent } from '../dialogs/dialog-asignacion
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
-import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -38,7 +37,7 @@ export class RegistroDeFallaComponent implements OnInit {
   deshabilitarFalla:boolean = false;
   fallaParaGestionar:any;
   mostrarTrakingNumber = false;
-  trackinNumberGenerated = '123456';
+  trackinNumberGenerated = Math.floor(Math.random() * 100000000);
   // data falsa de DFSE para los select
   items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
@@ -58,14 +57,15 @@ export class RegistroDeFallaComponent implements OnInit {
 
   cargarFormularios():void{
     if(this.accion=='new'){
-      this.botonUsuarioRegistrador=true; this.botonUsuarioEscalador = true;
+      this.botonUsuarioRegistrador=true;
+      this.botonUsuarioEscalador = true;
       if(this.tipoDeEquipo=='motor'){
         this.idTipo = 1;
       }
       if(this.tipoDeEquipo=='generador'){
         this.idTipo = 2;
       }
-      this.cargarFormularioFallaSinDatos();
+      this.cargarFormularioRegistroBasico();
     }
     if(this.accion=='edit'){
       this.tipoDeEquipo = this.idTipo==1?'motor':'generador';
@@ -73,14 +73,15 @@ export class RegistroDeFallaComponent implements OnInit {
       console.log(this.fallaParaGestionar)
       if(this.fallaParaGestionar.nivelSoporte==0){
         this.botonUsuarioEscalador = true;
-        this.cargarFormularioFallaConDatos();
+        this.botonUsuarioRegistrador=true;
+        this.cargarFormularioRegistroBasico();
       }
       if(this.fallaParaGestionar.nivelSoporte==1){
         this.botonEscalarDfse = true;
         this.verDFSE = true;
         this.botonObservar = true;
         this.botonCerrarCasoIngDeSoporte = true;
-        this.cargarFormularioFallaConDatos();
+        this.cargarFormularioRegistroBasico();
         this.cargarFormularioIngDeSoporte();
       }
       if(this.fallaParaGestionar.nivelSoporte==2){
@@ -89,7 +90,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.verFabrica = true;
         this.botonObservar = true;
         this.botonCerrarCasoDfse = true;
-        this.cargarFormularioFallaConDatos();
+        this.cargarFormularioRegistroBasico();
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
         this.mostrarTrackingNumber();
@@ -99,7 +100,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.verDFSE = true;
         this.verFabrica = true;
         this.verCerrarCaso = true;
-        this.cargarFormularioFallaConDatos();
+        this.cargarFormularioRegistroBasico();
         this.cargarFormularioIngDeSoporte();
         this.cargarFormularioDFSE();
         this.cargarFormularioFabrica();
@@ -108,44 +109,47 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
-  cargarFormularioFallaSinDatos():void{
+  cargarFormularioRegistroBasico():void{
     this.formFalla = new FormGroup({
-      os: new FormControl('', [Validators.required]),
-      io: new FormControl('', [Validators.required]),
-      esn: new FormControl('', [Validators.required]),
-      idArea: new FormControl(null),
-      aplicacion: new FormControl('', [Validators.required]),
-      numParte: new FormControl('',[Validators.required]),
-      puntoFalla: new FormControl('',[Validators.required]),
-      tipoFalla: new FormControl('',[Validators.required]),
-      fechaFalla: new FormControl('',[Validators.required]),
-      descripcion: new FormControl('',[Validators.required]),
-      queja1: new FormControl(null),
-      queja2: new FormControl(null),
-      queja3: new FormControl(null),
-      evento: new FormControl('',[Validators.required]),
+      os: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.os:'', [Validators.required]),
+      io: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.io:'', [Validators.required]),
+      esn: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.esn:'', [Validators.required]),
+      idArea: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.idArea:null),
+      aplicacion: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.aplicacion:'', [Validators.required]),
+      numParte: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.numParte:'',[Validators.required]),
+      puntoFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.puntoFalla:'',[Validators.required]),
+      tipoFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.tipoFalla:'',[Validators.required]),
+      fechaFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.fechaFalla:'',[Validators.required]),
+      descripcion: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.descripcion:'',[Validators.required]),
+      queja1: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja1:null),
+      queja2: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja2:null),
+      queja3: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja3:null),
+      evento: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.evento:'',[Validators.required]),
     });
+    if(this.fallaParaGestionar!=null){
+      this.getEsn();
+    }
   }
 
-  cargarFormularioFallaConDatos():void{
-    this.formFalla = new FormGroup({
-      os: new FormControl({value:this.fallaParaGestionar.os, disabled:true}),
-      io: new FormControl({value:this.fallaParaGestionar.io, disabled:true}),
-      esn: new FormControl({value:this.fallaParaGestionar.esn, disabled:true}),
-      idArea: new FormControl({value:this.fallaParaGestionar.idArea, disabled:true}),
-      aplicacion: new FormControl({value:this.fallaParaGestionar.aplicacion, disabled:true}),
-      numParte: new FormControl({value:this.fallaParaGestionar.numParte, disabled:true}),
-      puntoFalla: new FormControl({value: this.fallaParaGestionar.puntoFalla, disabled:true}),
-      tipoFalla: new FormControl({value:this.fallaParaGestionar.tipoFalla, disabled:true}),
-      fechaFalla: new FormControl({value:this.fallaParaGestionar.fechaFalla, disabled:true}),
-      descripcion: new FormControl({value:this.fallaParaGestionar.descripcion, disabled:true}),
-      queja1: new FormControl({value:this.fallaParaGestionar.queja1, disabled:true}),
-      queja2: new FormControl({value:this.fallaParaGestionar.queja2, disabled:true}),
-      queja3: new FormControl({value:this.fallaParaGestionar.queja3, disabled:true}),
-      evento: new FormControl({value:this.fallaParaGestionar.evento, disabled:true}),
-  });
-  this.getEsn();
-  }
+  // cargarFormularioRegistroBasico():void{
+  //   this.formFalla = new FormGroup({
+  //     os: new FormControl(this.fallaParaGestionar.os),
+  //     io: new FormControl(this.fallaParaGestionar.io),
+  //     esn: new FormControl(this.fallaParaGestionar.esn),
+  //     idArea: new FormControl(this.fallaParaGestionar.idArea),
+  //     aplicacion: new FormControl(this.fallaParaGestionar.aplicacion),
+  //     numParte: new FormControl(this.fallaParaGestionar.numParte),
+  //     puntoFalla: new FormControl( this.fallaParaGestionar.puntoFalla),
+  //     tipoFalla: new FormControl(this.fallaParaGestionar.tipoFalla),
+  //     fechaFalla: new FormControl(this.fallaParaGestionar.fechaFalla),
+  //     descripcion: new FormControl(this.fallaParaGestionar.descripcion),
+  //     queja1: new FormControl(this.fallaParaGestionar.queja1),
+  //     queja2: new FormControl(this.fallaParaGestionar.queja2),
+  //     queja3: new FormControl(this.fallaParaGestionar.queja3),
+  //     evento: new FormControl(this.fallaParaGestionar.evento),
+  // });
+  // this.getEsn();
+  // }
 
   cargarFormularioIngDeSoporte():void{
     this.formIngDeSoporte = new FormGroup({
@@ -163,7 +167,7 @@ export class RegistroDeFallaComponent implements OnInit {
       tsr: new FormControl(this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'', [Validators.required]),
       partsReturn: new FormControl(this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:null, [Validators.required]),
       trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:this.trackinNumberGenerated, disabled:true}),
-      subestadoPartsReturn: new FormControl(this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null, [Validators.required]),
+      subestadoPartsReturn: new FormControl(this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null),
       fechaIniDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null, [Validators.required]),
       fechaFinDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaFinDesarmeMotor!=null?this.fallaParaGestionar.fechaFinDesarmeMotor:null, [Validators.required]),
       fechaSolPartes: new FormControl(this.fallaParaGestionar.fechaSolPartes!=null?this.fallaParaGestionar.fechaSolPartes:null, [Validators.required]),
@@ -218,7 +222,7 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
-  // LISTAR LAS FALLAS
+  // IR A LA VISTA LISTADO DE FALLAS
 
   onListfallas():void{
     this.router.navigate(['/gestion-fallas']);
@@ -257,28 +261,33 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
 
   // usuario de servicio
 
-  registrarNuevaFalla():void{
-    const mensaje = 'llene todos los campos';
-    if(this.formFalla.valid){
-      if(this.formFalla.value.idArea!=null){
-        if(this.formFalla.value.queja1!=null){
-            if(this.matriculaEncontrada!=null){
-              const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
-              this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
-                if(responseApi.success){
-                  //guardamos en la bitacora
-                  const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
-                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                    if(responseBitacora.success){
-                      this.registroExitosoDeLaFalla();
-                    }
-                  });
-                }
-              });
-            }else{ this.mensajeErrorDeCampos(mensaje); }
-        }else{ this.mensajeErrorDeCampos('Seleccione al menos una queja'); }
-      }else{ this.mensajeErrorDeCampos(mensaje); }
-    }else{ this.mensajeErrorDeCampos(mensaje); }
+  registrarFalla():void{
+    if(this.accion=='new'){
+      const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
+      this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
+        if(responseApi.success){
+          //guardamos en la bitacora
+          const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
+          this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+            if(responseBitacora.success){
+              this.registroExitosoDeLaFalla();
+            }
+          });
+        }
+      });
+    }else{
+      this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+        if(responseApi.success){
+          //guardamos en la bitacora
+          const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
+          this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+            if(responseBitacora.success){
+              this.registroExitosoDeLaFalla();
+            }
+          });
+        }
+      });
+    }
   }
 
   escalarFalla():void{
@@ -353,6 +362,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
+      this.fallaParaGestionar.estado = 1;
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
             //guardamos en la bitacora
@@ -383,18 +393,19 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         if(responseDialog.success){
           this.fallaParaGestionar.asignacionFalla1 = responseDialog.idUsuario;
           this.fallaParaGestionar.nivelSoporte = responseDialog.nivelSoporte;
-            this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
-                if(responseApi.success){
-                    //guardamos en la bitacora
-                    const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-                    this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                      if(responseBitacora.success){
-                        localStorage.setItem('success','escalado');
-                        this.router.navigate(['/gestion-fallas']);
-                      }
-                    });    
-                }
-            });
+          this.fallaParaGestionar.estado = 1;
+          this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
+              if(responseApi.success){
+                  //guardamos en la bitacora
+                  const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                    if(responseBitacora.success){
+                      localStorage.setItem('success','escalado');
+                      this.router.navigate(['/gestion-fallas']);
+                    }
+                  });    
+              }
+          });
         }
       });
     }else{
@@ -457,6 +468,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
+        this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
               //guardamos en la bitacora
@@ -497,6 +509,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
+        this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
               //guardamos en la bitacora
@@ -593,7 +606,8 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
         if(this.formFabrica.valid){
             this.fallaParaGestionar.conclusionesFabrica = this.formFabrica.value.conclusionesFabrica;
-            this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;          
+            this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;
+            this.fallaParaGestionar.estado = 1;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
                   //guardamos en la bitacora
@@ -720,7 +734,9 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       }
     });
   }
+
   // abrir snack bar para los mensajes
+
   openSnackBar(message:string):void{
     this._snackBar.open(message,'x',{
       duration: 3000,
@@ -729,14 +745,18 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       panelClass: ['mat-toolbar', 'mat-primary','button-color']
     })
   }
+
   // abrir dialogo registro exitoso
+
   openDialogOperationSuccessfully(textDialog:string):void{
     const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
       data:{text:textDialog}
     });
     dialogOperationSuccessfully.afterClosed().subscribe();
   }
+
   // mostrar el tracking number del nivel DFSE
+
   mostrarTrackingNumber():void{
     if(this.formDFSE.value.partsReturn=='si'){
       this.mostrarTrakingNumber = true;
