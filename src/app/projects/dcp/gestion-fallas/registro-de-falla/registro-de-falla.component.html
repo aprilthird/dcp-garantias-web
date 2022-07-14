@@ -1,8 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
-            <h4 *ngIf="accion=='new'" class="font-w-700 margin-b-15">Crear registro de fallas</h4>
-            <h4 *ngIf="accion=='edit'" class="font-w-700 margin-b-15">Interna de registro Nº122344555</h4>
+            <h4 class="font-w-700 margin-b-15">Crear registro de fallas</h4>
+            <!-- <h4 *ngIf="accion=='new'" class="font-w-700 margin-b-15">Crear registro de fallas</h4>
+            <h4 *ngIf="accion=='edit'" class="font-w-700 margin-b-15">Interna de registro Nº122344555</h4> -->
             <span class="pointer" (click)="onListfallas()">Fallas</span> > <span class="text-red pointer"> {{this.accion=='new'?'Crear registro':'Registro de garantía'}}</span>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
