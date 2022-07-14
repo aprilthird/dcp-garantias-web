@@ -119,6 +119,7 @@ export class EngineComponent implements OnInit {
       this.getEsn();
       this.getOs();
       this.selectTypeWarranty();
+      this.mostrarQuejasIngresadas();
     }
   }
 
@@ -529,7 +530,9 @@ export class EngineComponent implements OnInit {
         break;
     }
   }
+
   //ocultar queja
+
   ocultarQueja(numeroDeQueja):void{
     switch (numeroDeQueja) {
       case 2:
@@ -551,6 +554,20 @@ export class EngineComponent implements OnInit {
         break;
       default:
         break;
+    }
+  }
+
+  // MOSTRAR LAS QUEJAS PERTINENTES
+
+  mostrarQuejasIngresadas():void{
+    if(this.warranty.idQueja2!=null){
+      this.verQueja2 = true;
+    }
+    if(this.warranty.idQueja3!=null){
+      this.verQueja3 = true;
+    }
+    if(this.warranty.idQueja4!=null){
+      this.verQueja4 = true;
     }
   }
 }

@@ -70,7 +70,7 @@ export class RegistroDeFallaComponent implements OnInit {
     if(this.accion=='edit'){
       this.tipoDeEquipo = this.idTipo==1?'motor':'generador';
       this.fallaParaGestionar = JSON.parse(localStorage.getItem('fallaParaGestionar'));
-      console.log(this.fallaParaGestionar)
+      this.mostrarQuejasRegistradas();
       if(this.fallaParaGestionar.nivelSoporte==0){
         this.botonUsuarioEscalador = true;
         this.botonUsuarioRegistrador=true;
@@ -276,6 +276,20 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         }
       });
     }else{
+      this.fallaParaGestionar.os = this.formFalla.value.os;
+      this.fallaParaGestionar.io = this.formFalla.value.io;
+      this.fallaParaGestionar.esn = this.formFalla.value.esn;
+      this.fallaParaGestionar.idArea = this.formFalla.value.idArea;
+      this.fallaParaGestionar.aplicacion = this.formFalla.value.aplicacion;
+      this.fallaParaGestionar.numParte = this.formFalla.value.numParte;
+      this.fallaParaGestionar.puntoFalla = this.formFalla.value.puntoFalla;
+      this.fallaParaGestionar.tipoFalla = this.formFalla.value.tipoFalla;
+      this.fallaParaGestionar.fechaFalla = this.formFalla.value.fechaFalla;
+      this.fallaParaGestionar.descripcion = this.formFalla.value.descripcion;
+      this.fallaParaGestionar.queja1 = this.formFalla.value.queja1;
+      this.fallaParaGestionar.queja2 = this.formFalla.value.queja2;
+      this.fallaParaGestionar.queja3 = this.formFalla.value.queja3;
+      this.fallaParaGestionar.evento = this.formFalla.value.evento;
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
         if(responseApi.success){
           //guardamos en la bitacora
@@ -343,7 +357,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                 const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:responseDialog.nivelSoporte};
                 this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
                   if(responseBitacora.success){
-                    localStorage.setItem('success','true');
+                    localStorage.setItem('success','escalado');
                     this.router.navigate(['/gestion-fallas']);
                   }
                 });                
@@ -700,6 +714,7 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
             this.fallaParaGestionar.estado = 2;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
+                localStorage.setItem('success','observado');
                 this.router.navigate(['/gestion-fallas']);
               }
             });
@@ -800,4 +815,12 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       }
   }
 
+  mostrarQuejasRegistradas():void{
+    if(this.fallaParaGestionar.queja2!=null){
+      this.verQueja2 = true;
+    }
+    if(this.fallaParaGestionar.queja2!=null){
+      this.verQueja3 = true;
+    }
+  }
 }

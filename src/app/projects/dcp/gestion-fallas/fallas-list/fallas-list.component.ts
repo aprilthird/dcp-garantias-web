@@ -58,6 +58,9 @@ export class FallasListComponent implements OnInit {
       if(localStorage.getItem('success')=='escalado'){
         this.notificacionDeAccionHecha = 'Se escaló correctamente';
       }
+      if(localStorage.getItem('success')=='observado'){
+        this.notificacionDeAccionHecha = 'Se ha observado correctamente';
+      }
       this.mostrarMensajeDeAccionHechoEnUnaFalla();
     };
     this.cargarFormularioBusqueda();
