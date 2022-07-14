@@ -128,7 +128,6 @@ export class GarantiasListComponent implements OnInit {
     filterData.bandeja = filterData.bandeja == -1 ? null : filterData.bandeja;
     filterData.antiguedad = filterData.antiguedad == -1 ? null : filterData.antiguedad;
     this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
-      console.log(resp);
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
       this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
@@ -219,7 +218,6 @@ export class GarantiasListComponent implements OnInit {
     console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
     this.garantiasService.logWarranty(element.id,1).subscribe(resp=>{
-      console.log(resp);
       this.dataBitacora = resp.body;
       this.dataSourceBitacora = resp.body;
     });

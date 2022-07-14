@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -15,6 +15,7 @@ import { DialogAsignacionDeLaFallaComponent } from '../dialogs/dialog-asignacion
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -43,8 +44,7 @@ export class RegistroDeFallaComponent implements OnInit {
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   verQueja2 = false; verQueja3 = false;
-
-
+  
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private _snackBar: MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
@@ -746,8 +746,9 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
     }
   }
 
-    //funciones para mostrar los select de quejas
-    mostrarQueja(numeroDeQueja:number):void{
+  //funciones para mostrar los select de quejas
+
+  mostrarQueja(numeroDeQueja:number):void{
       switch (numeroDeQueja) {
         case 2:
           this.verQueja2 = true;
@@ -758,9 +759,11 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         default:
           break;
       }
-    }
-    //ocultar queja
-    ocultarQueja(numeroDeQueja):void{
+  }
+
+  //ocultar queja
+
+  ocultarQueja(numeroDeQueja):void{
       switch (numeroDeQueja) {
         case 2:
           if(this.verQueja3==true){
@@ -775,5 +778,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         default:
           break;
       }
-    }
+  }
+
 }

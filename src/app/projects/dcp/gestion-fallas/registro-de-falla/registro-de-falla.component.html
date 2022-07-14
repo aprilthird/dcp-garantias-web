@@ -8,7 +8,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
             <mat-accordion>
                 <!-- REGISTRO DE LA FALLA -->
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="!verDFSE">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="fw-bold fs-6">Registro básico</mat-panel-title>
                         <mat-panel-description> </mat-panel-description>
@@ -193,7 +193,7 @@
                     </form>
                 </mat-expansion-panel>
                 <!-- INGENIERO DE SOPORTE -->
-                <mat-expansion-panel *ngIf="verDFSE">
+                <mat-expansion-panel *ngIf="verDFSE" [expanded]="verDFSE">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="fw-bold fs-6">Ingeniero de soporte</mat-panel-title>
                         <mat-panel-description> </mat-panel-description>
@@ -223,7 +223,7 @@
                     </form>
                 </mat-expansion-panel>
                 <!-- DFSE -->
-                <mat-expansion-panel *ngIf="verFabrica">
+                <mat-expansion-panel *ngIf="verFabrica" [expanded]="verFabrica">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="fw-bold fs-6">DFSE</mat-panel-title>
                         <mat-panel-description> </mat-panel-description>
@@ -354,7 +354,8 @@
                         </div>
                     </form>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="verCerrarCaso">
+                <!-- FABRICA -->
+                <mat-expansion-panel *ngIf="verCerrarCaso" [expanded]="verCerrarCaso">
                     <mat-expansion-panel-header>
                         <mat-panel-title class="fw-bold fs-6">FABRICA</mat-panel-title>
                         <mat-panel-description> </mat-panel-description>
