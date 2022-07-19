@@ -132,7 +132,7 @@
                   <th mat-header-cell *matHeaderCellDef> Antiguedad </th>
                   <td mat-cell *matCellDef="let element">
                     <!-- <mat-icon [ngStyle]="{'color':getColorAge(element.antiguedad)}">fiber_manual_record</mat-icon>  -->
-                    {{element.antiguedad}}
+                    {{element.antiguedad?element.antiguedad:'-'}}
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="inbox">

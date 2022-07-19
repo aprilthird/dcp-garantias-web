@@ -282,13 +282,16 @@ export class GarantiasListComponent implements OnInit {
       this.mensajeDeAccionRealizada = 'Se editó el registro';
     }
     if(localStorage.getItem('success')=='registroBlanco'){
-      this.mensajeDeAccionRealizada = 'Registró enviado (Bandeja Blanca)';
+      this.mensajeDeAccionRealizada = 'Registro enviado (Bandeja Blanca)';
     }
     if(localStorage.getItem('success')=='observado'){
       this.mensajeDeAccionRealizada = 'Registro observado';
     }
     if(localStorage.getItem('success')=='registroNaranja'){
-      this.mensajeDeAccionRealizada = 'Registró enviado (Bandeja Naranja)';
+      this.mensajeDeAccionRealizada = 'Registro enviado (Bandeja Naranja)';
+    }
+    if(localStorage.getItem('success')=='rechazado'){
+      this.mensajeDeAccionRealizada = 'Registro rechazado';
     }
     this.seeNotificationCreateWarrantySuccessfully = true;
     setTimeout(()=>{

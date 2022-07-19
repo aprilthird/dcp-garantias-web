@@ -76,13 +76,13 @@
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada!=null?matriculaEcontrada.etoPto:'-'">
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3">
-                                        <mat-form-field appearance="fill">
-                                            <mat-label for="">Fecha inicio de garantía</mat-label>
+                                    <div class="col-md-3" *ngIf="mostrarFechaGarantia">
+                                        <mat-form-field>
+                                            <mat-label>Fecha inicio de garantía</mat-label>
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada==null?'-':matriculaEcontrada.fechaInicio | date: 'dd/MM/yyyy' ">
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3 flex-align-center">
+                                    <div class="col-md-3 flex-align-center"  *ngIf="mostrarBis">
                                         <mat-checkbox color="primary" [disabled]="true" [value]="matriculaEcontrada!=null?matriculaEcontrada.bis:false">BIS</mat-checkbox>
                                     </div>
                                 </div>
@@ -236,6 +236,9 @@
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint><span class="text-danger pointer" (click)="ocultarQueja(2)">Eliminar</span></mat-hint>
+                                        <!-- <button mat-icon-button matSuffix (click)="ocultarQueja(2)" color="primary">
+                                            <mat-icon >close</mat-icon>
+                                        </button> -->
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
@@ -245,6 +248,9 @@
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint><span class="text-danger pointer" (click)="ocultarQueja(3)">Eliminar</span></mat-hint>
+                                        <!-- <button mat-icon-button matSuffix (click)="ocultarQueja(3)" color="primary">
+                                            <mat-icon >close</mat-icon>
+                                        </button> -->
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
@@ -254,6 +260,9 @@
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint><span class="text-danger pointer" (click)="ocultarQueja(4)">Eliminar</span></mat-hint>
+                                        <!-- <button mat-icon-button matSuffix (click)="ocultarQueja(4)" color="primary">
+                                            <mat-icon >close</mat-icon>
+                                        </button> -->
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">

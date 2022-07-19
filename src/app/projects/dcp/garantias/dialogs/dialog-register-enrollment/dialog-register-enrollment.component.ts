@@ -47,7 +47,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
         idAplicacion: new FormControl('',[Validators.required]),
         cpl: new FormControl('',[Validators.required]),
         bis: new FormControl(false,[Validators.required]),
-        fechaInicioGarantia: new FormControl([Validators.required]),
+        fechaInicioGarantia: new FormControl(),
         potencia: new FormControl(''),
         lugar: new FormControl(''),
         canal: new FormControl(),
