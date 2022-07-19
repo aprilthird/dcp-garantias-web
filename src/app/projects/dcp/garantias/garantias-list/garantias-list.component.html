@@ -1,319 +1,321 @@
 <div class="container mb-3">
     <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-3 pointer" (click)="limpiarFiltros()">
-                    <h4 class="font-w-700">Garantías</h4>
-                </div>
-                <div class="col-md-2">
-                    <div matRipple class="notification-green" *ngIf="seeNotificationCreateWarrantySuccessfully">
-                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>  Se creó correctamente
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end">
-                            <span class="pointer" (click)="onOpenDialogHistoriaEsn()">
-                                <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
-                                Historial de Series
-                            </span>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end btn-register">
-                            <button mat-raised-button (click)="onMassiveRegistrationBasic()">
-                                Registro básico masivo
-                            </button>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-4 flex-end btn-register">
-                            <button mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
-                                Registro básico individual
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-5" (click)="limpiarFiltros()">
+              <h4 class="font-w-700">Garantías</h4>
+          </div>
+          <div class="col-md-7">
+              <div matRipple class="notification-green" *ngIf="seeNotificationCreateWarrantySuccessfully">
+                <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{mensajeDeAccionRealizada!=null?mensajeDeAccionRealizada:''}}
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-4 pointer d-flex align-items-center justify-content-center" (click)="onOpenDialogHistoriaEsn()">
+                <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
+                <span>Historial de Series</span>                                
+            </div>
+            <div class="col-md-4 btn-register">
+                <button mat-raised-button (click)="onMassiveRegistrationBasic()">
+                    Registro básico masivo
+                </button>
+            </div>
+            <div class="col-md-4 btn-register">
+                <button mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
+                    Registro básico individual
+                </button>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
-          <form *ngIf="formFilter" [formGroup]="formFilter">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-2 search">
-                    <mat-form-field floatLabel="always">
-                        <mat-label>OS</mat-label>
-                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
-                        <button mat-icon-button matSuffix (click)="listWarranties()">
-                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-2 search">
-                    <mat-form-field floatLabel="always">
-                        <mat-label>ESN</mat-label>
-                        <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
-                        <button mat-icon-button matSuffix (click)="listWarranties()">
-                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-2">
-                    <mat-form-field floatLabel="always">
-                        <mat-label>Areas</mat-label>
-                        <mat-select formControlName="area" (selectionChange)="listWarranties()">
-                          <mat-option *ngFor="let option of options" [value]="option.value">
-                            {{option.name}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>                    
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-2">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Fecha de Falla</mat-label>
-                        <mat-date-range-input [rangePicker]="picker">
-                          <input matStartDate placeholder="Start date" formControlName="fechaIni" (dateChange)="listWarranties()">
-                          <input matEndDate placeholder="End date" formControlName="fechaFin" (dateChange)="listWarranties()">
-                        </mat-date-range-input>
-                        <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker></mat-date-range-picker>
-                    </mat-form-field>                      
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-2">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Bandeja</mat-label>
-                        <mat-select formControlName="bandeja" (selectionChange)="listWarranties()">
-                          <mat-option *ngFor="let option of stateOptions" [value]="option.value">
-                            {{option.name}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>        
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-2">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Antiguedad</mat-label>
-                        <mat-select formControlName="antiguedad" (selectionChange)="listWarranties()">
-                          <mat-option *ngFor="let option of oldOptions" [value]="option.value">
-                            {{option.name}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>        
-                </div>
-            </div>
-            </form>
-        </div>
-        <div class="col-sm-12 col-md-12">
-            <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
-                  <ng-container matColumnDef="number">
-                    <th mat-header-cell *matHeaderCellDef> N° OS </th>
-                    <td mat-cell *matCellDef="let element"> {{element.os}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="serie">
-                    <th mat-header-cell *matHeaderCellDef> Serie </th>
-                    <td mat-cell *matCellDef="let element"> {{element.esn}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="area">
-                    <th mat-header-cell *matHeaderCellDef> Area </th>
-                    <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="type">
-                    <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.agrupacion}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="failureDate">
-                    <th mat-header-cell *matHeaderCellDef> Fecha de falla </th>
-                    <td mat-cell *matCellDef="let element"> {{element.fechaFalla | date: 'dd/MM/yyyy'}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="amount">
-                    <th mat-header-cell *matHeaderCellDef> Monto ($) </th>
-                    <!-- {{element.amount | currency: 's/.': 'symbol':''}}  cuando es en soles -->
-                    <td mat-cell *matCellDef="let element"> {{element.monto==null?'0':element.monto | currency:'symbol':''}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="user">
-                    <th mat-header-cell *matHeaderCellDef> Usuario </th>
-                    <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="age">
-                    <th mat-header-cell *matHeaderCellDef> Antiguedad </th>
-                    <td mat-cell *matCellDef="let element">
-                      <!-- <mat-icon [ngStyle]="{'color':getColorAge(element.antiguedad)}">fiber_manual_record</mat-icon>  -->
-                      {{element.antiguedad}}
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="inbox">
-                    <th mat-header-cell *matHeaderCellDef> Bandeja </th>
-                    <td mat-cell *matCellDef="let element">
-                      <button style="color: #64748B; font-weight: 600;" [class]="'state'+element.bandeja" [ngClass]="{'bgr-gray':element.bandeja==0}" mat-stroked-button>
-                        {{getWordInbox(element.bandeja)}}
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 selectors">
+        <form *ngIf="formFilter" [formGroup]="formFilter">
+          <div class="row">
+              <div class="col-xs-12 col-sm-6 col-md-2 search">
+                  <mat-form-field floatLabel="always">
+                      <mat-label>OS</mat-label>
+                      <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
+                      <button mat-icon-button matSuffix (click)="listWarranties()">
+                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                       </button>
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="state">
-                    <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
-                      <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
-                      <span>{{element.estado==1?'Rechazado':element.estado==2?'Observado':'Activo'}}</span>
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> Accion </th>
-                    <td mat-cell *matCellDef="let element">
-                      <button mat-icon-button aria-label="Example icon button with a home icon">
-                        <mat-icon svgIcon="heroicons_outline:pencil-alt" (click)="editWarranty(element)"></mat-icon>
+                  </mat-form-field>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 search">
+                  <mat-form-field floatLabel="always">
+                      <mat-label>ESN</mat-label>
+                      <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
+                      <button mat-icon-button matSuffix (click)="listWarranties()">
+                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                       </button>
-                      <button mat-icon-button aria-label="Example icon button with a home icon">
-                        <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>                        
-                      </button>
+                  </mat-form-field>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2">
+                  <mat-form-field floatLabel="always">
+                      <mat-label>Areas</mat-label>
+                      <mat-select formControlName="area" (selectionChange)="listWarranties()">
+                        <mat-option *ngFor="let option of options" [value]="option.value">
+                          {{option.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>                    
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2">
+                  <mat-form-field appearance="fill">
+                      <mat-label>Fecha de Falla</mat-label>
+                      <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date" formControlName="fechaIni">
+                        <input matEndDate placeholder="End date" formControlName="fechaFin" (dateChange)="listWarranties()">
+                      </mat-date-range-input>
+                      <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>                      
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2">
+                  <mat-form-field appearance="fill">
+                      <mat-label>Bandeja</mat-label>
+                      <mat-select formControlName="bandeja" (selectionChange)="listWarranties()">
+                        <mat-option *ngFor="let option of stateOptions" [value]="option.value">
+                          {{option.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>        
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2">
+                  <mat-form-field appearance="fill">
+                      <mat-label>Antiguedad</mat-label>
+                      <mat-select formControlName="antiguedad" (selectionChange)="listWarranties()">
+                        <mat-option *ngFor="let option of oldOptions" [value]="option.value">
+                          {{option.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>        
+              </div>
+          </div>
+          </form>
+      </div>
+      <div class="col-sm-12 col-md-12">
+          <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                <ng-container matColumnDef="number">
+                  <th mat-header-cell *matHeaderCellDef> N° OS </th>
+                  <td mat-cell *matCellDef="let element"> {{element.os}} </td>
+                </ng-container>
+                <ng-container matColumnDef="serie">
+                  <th mat-header-cell *matHeaderCellDef> Serie </th>
+                  <td mat-cell *matCellDef="let element"> {{element.esn}} </td>
+                </ng-container>
+                <ng-container matColumnDef="area">
+                  <th mat-header-cell *matHeaderCellDef> Area </th>
+                  <td mat-cell *matCellDef="let element"> {{element.areaServicio}} </td>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                  <td mat-cell *matCellDef="let element"> {{element.agrupacion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="failureDate">
+                  <th mat-header-cell *matHeaderCellDef> Fecha de falla </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fechaFalla | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="amount">
+                  <th mat-header-cell *matHeaderCellDef> Monto ($) </th>
+                  <!-- {{element.amount | currency: 's/.': 'symbol':''}}  cuando es en soles -->
+                  <td mat-cell *matCellDef="let element"> {{element.monto==null?'0':element.monto | currency:'symbol':''}} </td>
+                </ng-container>
+                <ng-container matColumnDef="user">
+                  <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                  <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
+                </ng-container>
+                <ng-container matColumnDef="age">
+                  <th mat-header-cell *matHeaderCellDef> Antiguedad </th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-icon [ngStyle]="{'color':getColorAge(element.antiguedad)}">fiber_manual_record</mat-icon>  -->
+                    {{element.antiguedad}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="inbox">
+                  <th mat-header-cell *matHeaderCellDef> Bandeja </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button [class]="colorDeLaBandeja(element)" mat-stroked-button>
+                      {{bandejaGarantia(element)}}
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="state">
+                  <th mat-header-cell *matHeaderCellDef> Estado </th>
+                  <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
+                    <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
+                    <span>{{getEstado(element.estado)}}</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Accion </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button aria-label="Example icon button with a home icon">
+                      <mat-icon svgIcon="heroicons_outline:pencil-alt" (click)="editWarranty(element)"></mat-icon>
+                    </button>
+                    <button mat-icon-button aria-label="Example icon button with a home icon">
+                      <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>                        
+                    </button>
 
-                    </td>
-                  </ng-container>
+                  </td>
+                </ng-container>
 
-                  <ng-container matColumnDef="expandedDetail">
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="caja-bitacora">
-                        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                          <div class="row my-4">
-                            <div class="col-md-5" style="border-right: 2px dashed;">
-                              <div class="row">
-                                <div class="col-md-12 mb-3 font-sz-18 font-w-900">Detalles</div>
-                                <div class="col-md-12 my-3 font-sz-16 font-w-700">Fechas</div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Dias en servicio</div>
-                                    <div class="col-md-12">112 D</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Dias en PSG</div>
-                                    <div class="col-md-12">112 D</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Dias de Fabrica</div>
-                                    <div class="col-md-12">112 D</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-12 my-3 font-sz-16 font-w-700">Informe</div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Fecha de aprobacion</div>
-                                    <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
-                                    <div class="col-md-10 d-flex align-items-center">12/11/21</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Monto del informe</div>
-                                    <div class="col-md-12">$3400</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-12 my-3 font-sz-16 font-w-700">RapidServe</div>
-                                <div class="col-md-4 flex-column font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Fecha de Ingreso</div>
-                                    <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
-                                    <div class="col-md-10 d-flex align-items-center">12/11/21</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Monto Total</div>
-                                    <div class="col-md-12">$3400</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Claim#</div>
-                                    <div class="col-md-12">12345</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-12 my-3 font-sz-16 font-w-700">Final de Pago</div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Fecha de Pago</div>
-                                    <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
-                                    <div class="col-md-10 d-flex align-items-center">12/11/21</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Monto Final</div>
-                                    <div class="col-md-12">$3400</div>
-                                  </div>
-                                </div>
-                                <div class="col-md-4 flex-column font-sz-12">
-                                  <div class="row">
-                                    <div class="col-md-12 font-w-700">Rentabilidad</div>
-                                    <div class="col-md-12">14.60</div>
-                                  </div>
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="caja-bitacora">
+                      <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div class="row my-4">
+                          <div class="col-md-5" style="border-right: 2px dashed;">
+                            <div class="row">
+                              <div class="col-md-12 mb-3 font-sz-18 font-w-900">Detalles</div>
+                              <div class="col-md-12 my-3 font-sz-16 font-w-700">Fechas</div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Dias en servicio</div>
+                                  <div class="col-md-12">112 D</div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="col-md-7">
-                              <p class="font-w-900 font-sz-18">Bitacora</p>
-                              <div class="table-bitacora"> <!--scroll-vertical // agregar esa clase para hacer scroll-->
-                                <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
-                                  <ng-container matColumnDef="fecha">
-                                    <th mat-header-cell *matHeaderCellDef width="15%"> Fecha </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.fechaReg | date: 'dd/MM/yyyy'}} </td>
-                                  </ng-container>
-                                  <ng-container matColumnDef="evaluador">
-                                    <th mat-header-cell *matHeaderCellDef width="15%"> Evaluador </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.evaluador==null?'-':item.evaluador}} </td>
-                                  </ng-container>                            
-                                  <ng-container matColumnDef="comentario">
-                                    <th mat-header-cell *matHeaderCellDef width="15%" class="text-center"> Comentario </th>
-                                    <td mat-cell *matCellDef="let item" class="text-center">
-                                      <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item.comentarios)"><mat-icon>sms</mat-icon></button>
-                                      <span *ngIf="item.comentarios==null">'-'</span>
-                                    </td>
-                                  </ng-container>
-                                  <ng-container matColumnDef="estado">
-                                    <th mat-header-cell *matHeaderCellDef width="15%"> Estado </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.estado}} </td>
-                                  </ng-container>
-                                  <ng-container matColumnDef="monto">
-                                    <th mat-header-cell *matHeaderCellDef width="15%"> Monto </th>
-                                    <td mat-cell *matCellDef="let item"> {{item.amount==null?'0':item.amount}} </td>
-                                  </ng-container>
-                                  <ng-container matColumnDef="bandejaActual" width="15%">
-                                    <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
-                                    <td mat-cell *matCellDef="let item"> {{item.bandejaActual==null?'0':item.bandejaActual}} </td>
-                                  </ng-container>
-                                  <ng-container matColumnDef="actions">
-                                    <th mat-header-cell *matHeaderCellDef width="10%"> </th>
-                                    <td mat-cell *matCellDef="let item">
-                                     <img style="height: 16px;" class="pointer" src="./../../../../../assets/icons/file-check.svg" alt="">
-                                    </td>
-                                  </ng-container>                         
-                                  <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>
-                                  <tr mat-row *matRowDef="let row; columns: displayedColumnsBitacora;"></tr>
-                                </table>      
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Dias en PSG</div>
+                                  <div class="col-md-12">112 D</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Dias de Fabrica</div>
+                                  <div class="col-md-12">112 D</div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 my-3 font-sz-16 font-w-700">Informe</div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Fecha de aprobacion</div>
+                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
+                                  <div class="col-md-10 d-flex align-items-center">12/11/21</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Monto del informe</div>
+                                  <div class="col-md-12">$3400</div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 my-3 font-sz-16 font-w-700">RapidServe</div>
+                              <div class="col-md-4 flex-column font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Fecha de Ingreso</div>
+                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
+                                  <div class="col-md-10 d-flex align-items-center">12/11/21</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Monto Total</div>
+                                  <div class="col-md-12">$3400</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Claim#</div>
+                                  <div class="col-md-12">12345</div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 my-3 font-sz-16 font-w-700">Final de Pago</div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Fecha de Pago</div>
+                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
+                                  <div class="col-md-10 d-flex align-items-center">12/11/21</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Monto Final</div>
+                                  <div class="col-md-12">$3400</div>
+                                </div>
+                              </div>
+                              <div class="col-md-4 flex-column font-sz-12">
+                                <div class="row">
+                                  <div class="col-md-12 font-w-700">Rentabilidad</div>
+                                  <div class="col-md-12">14.60</div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                      </div>
-                    </td>
-                  </ng-container>
-              
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
-                      [class.example-expanded-row]="expandedElement === element"
-                      (click)="seeBitacora(element)"></tr>
-                  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-                  
-                </table>
-              
-                <div class="pb-3 text-right">
-                  <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
-                  <span class="mr-1">Total:</span><span class="font-w-500">{{totalWarranties}}</span>
-                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
-                    <mat-icon>chevron_left</mat-icon>
-                  </button>
-                  <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
-                    <mat-icon>chevron_right</mat-icon>
-                  </button>
-                </div>
+                          <div class="col-md-7">
+                            <p class="font-w-900 font-sz-18">Bitacora</p>
+                            <div class="table-bitacora scroll-vertical"> <!-- // agregar esa clase para hacer scroll-->
+                              <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
+                                <ng-container matColumnDef="fecha">
+                                  <th mat-header-cell *matHeaderCellDef width="18%"> Fecha </th>
+                                  <td mat-cell *matCellDef="let item"> {{item.fechaReg | date: 'dd/MM/yyyy, hh:mm a'}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="evaluador">
+                                  <th mat-header-cell *matHeaderCellDef width="15%"> Evaluador </th>
+                                  <td mat-cell *matCellDef="let item"> {{item.evaluador==null?'-':item.evaluador}} </td>
+                                </ng-container>                            
+                                <ng-container matColumnDef="comentario">
+                                  <th mat-header-cell *matHeaderCellDef width="12%" class="text-center"> Comentario </th>
+                                  <td mat-cell *matCellDef="let item" class="text-center">
+                                    <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item.comentarios)"><mat-icon>sms</mat-icon></button>
+                                    <span *ngIf="item.comentarios==null">-</span>
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="estado">
+                                  <th mat-header-cell *matHeaderCellDef width="15%"> Estado </th>
+                                  <td mat-cell *matCellDef="let item"> {{getEstado(item.estado)}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="monto">
+                                  <th mat-header-cell *matHeaderCellDef width="15%"> Monto </th>
+                                  <td mat-cell *matCellDef="let item"> {{item.amount==null?'-':item.amount}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bandejaActual" width="15%">
+                                  <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
+                                  <td mat-cell *matCellDef="let item">
+                                      <button [class]="colorDeLaBandejaBitacora(item)" mat-stroked-button>
+                                        {{bandejaBitacora(item)}}
+                                      </button>
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="actions">
+                                  <th mat-header-cell *matHeaderCellDef width="10%"> </th>
+                                  <td mat-cell *matCellDef="let item">
+                                  <img style="height: 16px;" class="pointer" src="./../../../../../assets/icons/file-check.svg" alt="">
+                                  </td>
+                                </ng-container>                         
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsBitacora;"></tr>
+                              </table>      
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="seeBitacora(element)"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                
+              </table>
+            
+              <div class="pb-3 text-right">
+                <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
+                <span class="mr-1">Total:</span><span class="font-w-500">{{totalWarranties}}</span>
+                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
               </div>
-              
-        </div>
+            </div>
+            
+      </div>
     </div>
 </div>

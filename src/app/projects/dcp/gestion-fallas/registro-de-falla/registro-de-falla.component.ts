@@ -196,7 +196,6 @@ export class RegistroDeFallaComponent implements OnInit {
     });
     this.userService.user$.subscribe(response=>{
       this.usuarioDeLaSession = response;
-      console.log(this.usuarioDeLaSession);
     });
     this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.maestraQuejas = resp.data;
@@ -310,8 +309,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       if(this.formFalla.valid){
         if(this.formFalla.value.idArea!=null){
           if(this.formFalla.value.queja1!=null){
-            if(this.formFalla.value.queja2!=null){
-              if(this.formFalla.value.queja3!=null){
                 if(this.matriculaEncontrada!=null){
                     const dialogAsignacionDeLaFalla = this.matDialog.open(DialogAsignacionDeLaFallaComponent,{
                       width:'425px',
@@ -336,8 +333,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                           });
                         }
                     });             
-                }else{ this.mensajeErrorDeCampos(mensaje); }
-              }else{ this.mensajeErrorDeCampos(mensaje); }            
             }else{ this.mensajeErrorDeCampos(mensaje); }
           }else{ this.mensajeErrorDeCampos(mensaje); }
         }else{ this.mensajeErrorDeCampos(mensaje); }
@@ -371,7 +366,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
   // ingeniero de soporte
 
   guardarRegistroIngenieroDeSoporte():void{
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
@@ -388,9 +382,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
             });    
           }
       });
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   escalarFallaHaciaDFSE():void{
@@ -462,12 +453,10 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
   // DFSE
 
   guardarRegistroDFSE():void{
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
-      if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
         this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
@@ -494,12 +483,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
               });  
           }
       });
-      }else{
-        this.mensajeErrorDeCampos('Llene los campos DFSE');
-      }
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   escalarHaciaFabrica():void{
@@ -598,12 +581,10 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
   // FABRICA
 
   guardarRegistroFabrica():void{
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
-      if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
         this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
@@ -618,7 +599,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
         this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
-        if(this.formFabrica.valid){
             this.fallaParaGestionar.conclusionesFabrica = this.formFabrica.value.conclusionesFabrica;
             this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;
             this.fallaParaGestionar.estado = 1;
@@ -633,15 +613,6 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                   });
               }
             });
-        }else{
-          this.mensajeErrorDeCampos('Llene los campos Fabrica');
-        }
-      }else{
-        this.mensajeErrorDeCampos('Llene los campos DFSE');
-      }
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   cerrarCaso():void{

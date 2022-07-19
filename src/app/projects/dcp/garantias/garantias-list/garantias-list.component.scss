@@ -21,26 +21,26 @@
         align-items: flex-end;
     }
 }
+
 table{
     button{
         width: 50%;
     }
 }
-.bgr-gray{
-    background-color: #E2E8F0 !important;
-    font-style: italic;
-}
+
 .observed{
     color: red !important;
 }
 
-.state0{ border-color: #E2E8F0 !important;}
-.state1{ border-color: #263238 !important;}
-.state2{ border-color: #FD9C00 !important;}
-.state3{ border-color: #5BC500 !important;}
-.state4{ border-color: #64748B !important;}
-.state5{ border-color: #000000 !important;}
-.state6{ border-color: #FFD600 !important;}
+.bandeja0{ border:2px solid !important;border-color: #E2E8F0 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important; background-color: #E2E8F0 !important; font-style: italic;}
+.bandeja1{ border:2px solid !important;border-color: #263238 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.bandeja2{ border:2px solid !important;border-color: #FD9C00 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.bandeja3{ border:2px solid !important;border-color: #5BC500 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.bandeja4{ border:2px solid !important;border-color: #64748B !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.bandeja5{ border:2px solid !important;border-color: #000000 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.bandeja6{ border:2px solid !important;border-color: #FFD600 !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.estado2 { border:2px solid !important; border-color: red !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
+.estado4 { border:2px solid !important;border-color: black !important;color: #64748B !important; font-weight: 600 !important; width: 80% !important;}
 
 tr.example-detail-row {
     height: 0;
@@ -86,7 +86,7 @@ tr.example-detail-row {
     opacity: 0.5;
   }
 .table-bitacora{
-  height: 300px;
+  height: 410px;
   table{
     box-shadow: none;
     th{
