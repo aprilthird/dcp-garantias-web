@@ -97,7 +97,7 @@ export class FallasListComponent implements OnInit {
       tsr : new FormControl(),
       fechaIni : new FormControl(new Date()),
       fechaFin : new FormControl(new Date()),
-      nivelSoporte : new FormControl(),
+      soporte : new FormControl(),
       area : new FormControl(),
       esn : new FormControl()
     });
