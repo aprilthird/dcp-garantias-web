@@ -369,6 +369,20 @@ export class EngineComponent implements OnInit {
     }
   }
 
+  agregarQueja():void{
+    if(this.verQueja2==false){
+      this.verQueja2 = true;
+    }else{
+      if(this.verQueja3==false){
+        this.verQueja3 = true;
+      }else{
+        if(this.verQueja4==false){
+          this.verQueja4 = true;
+        }
+      }
+    }
+  }
+
   //ocultar queja
 
   ocultarQueja(numeroDeQueja:number):void{
@@ -447,11 +461,11 @@ export class EngineComponent implements OnInit {
                   });
               }
           });
-      }else{
-          this.mostrarMensajeDeError('La matrícula y el orden de servicio son obligatorios en un borrador');
+      }else{        
+          this.mostrarMensajeDeError('Matrícula y Orden de Servicio obligatorios para un borrador');
       }
   }else{
-      this.mostrarMensajeDeError('La matrícula y el orden de servicio son obligatorios en un borrador');
+      this.mostrarMensajeDeError('Matrícula y Orden de Servicio obligatorios para un borrador');
   }
 
 

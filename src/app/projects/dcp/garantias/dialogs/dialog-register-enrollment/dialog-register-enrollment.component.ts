@@ -18,6 +18,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   directionClient:string='';
   formEnrollment:FormGroup;
   tipoDeEquipo:number;
+  verFechaGarantia = true;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private readonly dialogRef: MatDialogRef<DialogRegisterEnrollmentComponent>,
@@ -138,6 +139,10 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   errorMessage(message:string):void{
     const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
       disableClose:true, data:{text:message}, width:'350px'
-  });
+    });
+  }
+
+  cambiarBis():void{
+    this.verFechaGarantia=this.verFechaGarantia?false:true;
   }
 }

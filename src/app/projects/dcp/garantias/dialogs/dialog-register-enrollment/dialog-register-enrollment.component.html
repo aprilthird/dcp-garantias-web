@@ -12,7 +12,7 @@
                             <mat-label>Cliente</mat-label>
                             <input matInput type="text" formControlName="razonSocial" [matAutocomplete]="auto" placeholder="Buscar Cliente">
                             <!-- <mat-spinner [diameter]="24" matSuffix *ngIf="!botonBuscarCliente"></mat-spinner> -->
-                            <button mat-icon-button matSuffix color="primary">
+                            <button type="button" mat-icon-button matSuffix color="primary">
                                 <mat-icon svgIcon="heroicons_outline:search" (click)="buscarCliente()"></mat-icon>
                             </button>
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -87,10 +87,10 @@
                         </mat-form-field>     
                     </div>
                     <div class="col-md-4 flex-xy-center">
-                        <mat-checkbox color="primary" formControlName="bis">Tiene BIS</mat-checkbox>
+                        <mat-checkbox color="primary" formControlName="bis" (click)="cambiarBis()">Tiene BIS</mat-checkbox>
                     </div>                                  
                     <div class="col-md-4">
-                        <mat-form-field  floatLabel="always">
+                        <mat-form-field  floatLabel="always" *ngIf="verFechaGarantia">
                             <mat-label>Fecha de inicio de garantía <span class="color-red">*</span></mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="fechaInicioGarantia" placeholder="Seleccionar una fecha">
                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->

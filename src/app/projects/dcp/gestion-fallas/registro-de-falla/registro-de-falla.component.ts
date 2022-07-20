@@ -794,4 +794,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.verQueja3 = true;
     }
   }
+
+  agregarQueja():void{
+      if(this.verQueja2==false){
+          this.verQueja2 = true;
+      }else{
+          if(this.verQueja3==false){
+              this.verQueja3 = true;
+          }
+      }
+  }
 }

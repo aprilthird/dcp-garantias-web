@@ -148,11 +148,16 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-12 mb-4">Quejas</div>
+                                    <div class="col-md-12 margin-b-15 d-flex align-items-center">
+                                        <span class="font-w-500 font-sz-16">Quejas</span>
+                                        <button type="button" mat-icon-button color="primary" (click)="agregarQueja()" title="Agregar queja">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
                                             <mat-label class="fw-bold">Queja</mat-label>
-                                            <mat-select placeholder="Seleccionar" formControlName="queja1" (ngModelChange)="mostrarQueja(2)">
+                                            <mat-select placeholder="Seleccionar" formControlName="queja1">
                                                 <mat-option *ngFor="let queja of maestraQuejas" [value]="queja.id">
                                                     {{queja.descripcion}}
                                                 </mat-option>
@@ -163,7 +168,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always" *ngIf="verQueja2">
                                             <mat-label class="fw-bold">Queja</mat-label>
-                                            <mat-select placeholder="Seleccionar" formControlName="queja2" (ngModelChange)="mostrarQueja(3)">
+                                            <mat-select placeholder="Seleccionar" formControlName="queja2">
                                                 <mat-option *ngFor="let queja of maestraQuejas" [value]="queja.id">
                                                     {{queja.descripcion}}
                                                 </mat-option>

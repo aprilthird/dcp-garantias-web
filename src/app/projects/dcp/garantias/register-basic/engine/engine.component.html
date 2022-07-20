@@ -217,13 +217,16 @@
                         <hr width="100%" color="#E2E8F0">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-12 margin-b-15">
+                                <div class="col-md-12 margin-b-15 d-flex align-items-center">
                                     <span class="font-w-500 font-sz-16">Quejas</span>
+                                    <button type="button" mat-icon-button color="primary" (click)="agregarQueja()" title="Agregar queja">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field floatLabel="always">
                                         <mat-label for="">Queja</mat-label>
-                                        <mat-select placeholder="Seleccionar" formControlName="idQueja1" (ngModelChange)="mostrarQueja(2)">
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja1">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint>-</mat-hint>
@@ -232,7 +235,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field floatLabel="always" *ngIf="verQueja2">
                                         <mat-label for="">Queja</mat-label>
-                                        <mat-select placeholder="Seleccionar" formControlName="idQueja2" (ngModelChange)="mostrarQueja(3)">
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja2">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint><span class="text-danger pointer" (click)="ocultarQueja(2)">Eliminar</span></mat-hint>
@@ -244,7 +247,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field floatLabel="always" *ngIf="verQueja3">
                                         <mat-label for="">Queja</mat-label>
-                                        <mat-select placeholder="Seleccionar" formControlName="idQueja3" (ngModelChange)="mostrarQueja(4)">
+                                        <mat-select placeholder="Seleccionar" formControlName="idQueja3">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
                                         <mat-hint><span class="text-danger pointer" (click)="ocultarQueja(3)">Eliminar</span></mat-hint>
