@@ -100,6 +100,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     FormsModule,
     MatAutocompleteModule
   ],
-  providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class GarantiasModule { }

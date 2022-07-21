@@ -38,6 +38,7 @@ export class RegistroDeFallaComponent implements OnInit {
   fallaParaGestionar:any;
   mostrarTrakingNumber = false;
   trackinNumberGenerated = Math.floor(Math.random() * 100000000);
+  fechaHoy = new Date;
   // data falsa de DFSE para los select
   items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];

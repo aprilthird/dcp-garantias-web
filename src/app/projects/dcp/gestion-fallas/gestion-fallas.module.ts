@@ -54,6 +54,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTableModule,
     MatMenuModule
   ],
-  providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class GestionFallasModule { }
