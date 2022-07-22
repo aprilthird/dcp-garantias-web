@@ -49,14 +49,14 @@ export class GarantiasListComponent implements OnInit {
   ];
 
   oldOptions: Option[] = [
-    {value:-1, name:'Todas'},
-    {value:0, name:'0-29'},
-    {value:1, name:'30-59'},
-    {value:2, name:'60-89'},
-    {value:3, name:'90-119'},
-    {value:4, name:'120-179'},
-    {value:5, name:'180-364'},
-    {value:6, name:'>365'},
+    {value:0, name:'Todas'},
+    {value:1, name:'0-29'},
+    {value:2, name:'30-59'},
+    {value:3, name:'60-89'},
+    {value:4, name:'90-119'},
+    {value:5, name:'120-179'},
+    {value:6, name:'180-364'},
+    {value:7, name:'>365'},
   ];
 
   //formulario para el filtro de las garantias
@@ -102,7 +102,7 @@ export class GarantiasListComponent implements OnInit {
     const filterData = this.formFilter.value;
     filterData.area = filterData.area == -1 ? null : filterData.area;
     filterData.bandeja = filterData.bandeja == -1 ? null : filterData.bandeja;
-    filterData.antiguedad = filterData.antiguedad == -1 ? null : filterData.antiguedad;
+    filterData.antiguedad = filterData.antiguedad;
     this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
@@ -137,7 +137,7 @@ export class GarantiasListComponent implements OnInit {
       fechaFin: new FormControl(this.currentDate),
       // fechaFin: new FormControl(dateCurrent),
       bandeja: new FormControl(-1),
-      antiguedad: new FormControl(-1)
+      antiguedad: new FormControl(0)
     });
   }
 
