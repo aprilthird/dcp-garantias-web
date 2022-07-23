@@ -363,4 +363,5 @@ export class GarantiasListComponent implements OnInit {
       disableClose:true, width:'500px'
     });
   }
+  
 }
