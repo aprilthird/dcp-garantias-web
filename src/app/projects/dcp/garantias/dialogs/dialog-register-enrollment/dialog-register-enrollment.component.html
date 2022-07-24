@@ -20,6 +20,7 @@
                                     {{client.razonSocial}}
                                 </mat-option>
                             </mat-autocomplete>
+                            <mat-hint *ngIf="spinnerBusqueda"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                         </mat-form-field>
                     </div>
                     <!-- <div class="col-md-4">

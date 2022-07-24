@@ -102,7 +102,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="fill">
                                         <mat-label for="">BU</mat-label>
-                                        <input matInput type="text" placeholder="" [disabled]="true" [value]="ordenDeServicioEncontrado!=null?ordenDeServicioEncontrado.bu:'-'">
+                                        <input matInput type="text" placeholder="" [disabled]="true" [value]="areaDeServicioAsociadoAlOrdenDeServicio!=null?areaDeServicioAsociadoAlOrdenDeServicio.bu:'-'">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3"></div>
@@ -140,7 +140,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <mat-form-field floatLabel="always">
                                         <mat-label for="">Tipo de garantía</mat-label>
                                         <mat-select placeholder="Placeholder" formControlName="tipoGarantia" (ngModelChange)="selectTypeWarranty()" placeholder="Seleccionar">
@@ -148,7 +148,9 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-9"></div>
+                                <div class="col-md-8 d-flex align-items-center">
+                                    <span class="text-danger" *ngIf="formRegisterEngine.value.tipoGarantia==null">Seleccione un tipo de garantía</span>
+                                </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.e">
                                     <mat-form-field floatLabel="always">
                                         <mat-label for="">Numero de parte del repuesto</mat-label>
@@ -157,19 +159,19 @@
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.a">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label for="">Punto de falla</mat-label>
+                                        <mat-label for="">Punto de falla {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="puntoFalla">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.i">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label for="">Codigo</mat-label>
+                                        <mat-label for="">Codigo {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="codigoAdicional">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.g">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label for="">Punto de ejecución</mat-label>
+                                        <mat-label for="">Punto de ejecución {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="ejecucionAdicional">
                                     </mat-form-field>
                                 </div>
@@ -181,7 +183,7 @@
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.c">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label>Fecha de falla</mat-label>
+                                        <mat-label>Fecha de falla {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput [matDatepicker]="pickerFechaFalla" formControlName="fechaFalla" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
@@ -190,13 +192,13 @@
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.f">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label for="">N° de parte del componente</mat-label>
+                                        <mat-label for="">N° de parte del componente que falló</mat-label>
                                         <input matInput type="text" placeholder="Ingresar" formControlName="numParteFallo">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.d">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label>Fecha de Inicio {{formRegisterEngine.value.tipoGarantia==3?'de Repuesto':'de la Garantia'}}</mat-label>
+                                        <mat-label>Fecha inicio de la garantía {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput [matDatepicker]="pickerFechaGarantia" formControlName="fechaInicioGarantia" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaGarantia"></mat-datepicker-toggle>
@@ -205,7 +207,7 @@
                                 </div>
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.h">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label>Fecha de ejecucion</mat-label>
+                                        <mat-label>Fecha de ejecucion {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
                                         <input matInput [matDatepicker]="pickerFechaEjecucion" formControlName="fechaAdicional" placeholder="Seleccione una fecha">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaEjecucion"></mat-datepicker-toggle>

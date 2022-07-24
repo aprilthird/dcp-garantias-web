@@ -19,6 +19,7 @@ import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dial
 import { DialogRejectComponent } from './dialogs/dialog-reject/dialog-reject.component';
 import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-observation.component';
 import { MenuDcpComponent } from './components/menu-dcp/menu-dcp.component';
+import { SnackBarMessageComponent } from './dialogs/snack-bar-message/snack-bar-message.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { MenuDcpComponent } from './components/menu-dcp/menu-dcp.component';
     DialogRejectComponent,
     DialogObservationComponent,
     MenuDcpComponent,
+    SnackBarMessageComponent,
   ],
   providers: [ExportExcelService],
 })

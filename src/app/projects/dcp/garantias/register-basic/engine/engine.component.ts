@@ -8,12 +8,14 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatSnackBar} from '@angular/material/snack-bar';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogTransformRecordToOrangeComponent } from '../../dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
 import { UserService } from 'app/core/user/user.service';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -32,23 +34,30 @@ export class EngineComponent implements OnInit {
   ordenDeServicioEncontrado:any;
   
   //tipo de garantia juntos a sus campos
-  warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
+  warrantyTypes = [ {value: 1, name: "Producto Nuevo"},
+                    {value: 2, name: "Motor Recon"},
+                    {value: 3, name: "Repuesto Nuevo"},
+                    {value: 4, name: "Repuesto Defectuoso"},
+                    {value: 5, name: "Extendidad (CAP)"},
+                    {value: 6, name: "Extendida Componente Mayor"},
+                    {value: 7, name: "CDC Quality y Support y Campaña "},
+                    {value: 8, name: "TRP"},
+                    {value: 9, name: "ATC"},
+                    {value: 10, name: "Warrany Memo"},]
   //para controlar la vista de cada tipo de garantia
   viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,};
   //listado de las quejas
   complaints:any[];
   //formulario
   formRegisterEngine:FormGroup;
-  //configuraciones para el snackbar
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
   areaDeServicioAsociadoAlOrdenDeServicio:any; verQueja2 = false; verQueja3 = false; verQueja4 = false;
   usuarioDeLaSession:any; verCamposBandeja = -1;
   mostrarFechaGarantia=true; mostrarBis=true;
+
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private matSnackBar: MatSnackBar,
               private readonly userService:UserService) { }
 
   ngOnInit(): void {
@@ -345,14 +354,17 @@ export class EngineComponent implements OnInit {
   }
   
   openSnackBar(message:string):void{
-    this._snackBar.open(message,'x',{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
       duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      panelClass: ['mat-toolbar', 'mat-primary','button-color']
-    })
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
   }
+
   //funciones para mostrar los select de quejas
+
   mostrarQueja(numeroDeQueja:number):void{
     switch (numeroDeQueja) {
       case 2:
@@ -646,6 +658,7 @@ export class EngineComponent implements OnInit {
   }
 
   // EDITAR REGISTRO BLANCO
+
   guardarBlancoEditado():void{
     this.garantiaParaGestionar.idMatricula=this.matriculaEcontrada.id;
     this.garantiaParaGestionar.codAreaServicios = this.ordenDeServicioEncontrado.codAreaServicios;
@@ -691,6 +704,7 @@ export class EngineComponent implements OnInit {
   }
 
   // ENVIAR REGISTRO BLANCO A NARANJA
+
   enviarBlancaParaNaranja():void{
     if(!(this.matriculaEcontrada==null)){
       if(!(this.ordenDeServicioEncontrado==null)){
@@ -837,6 +851,26 @@ export class EngineComponent implements OnInit {
     });
   }
 
+  //TEXTO SEGUN TIPO DE GARANTIA
+
+  textoSegunTipoDeGarantia(tipoDeGarantia:number):string{
+    switch(tipoDeGarantia){
+      case 3: return 'del repuesto';
+      break;
+      case 4: return 'del repuesto';
+      break;
+      case 7: return 'de campaña';
+      break;
+      case 8: return 'de TRP';
+      break;
+      case 9: return 'de ATC';
+      break;
+      case 10: return 'de Warrany Memo';
+      break;
+      default: return ''
+        break;
+    }
+  }
   //mensaje de error
 
   mostrarMensajeDeError(mensaje:string):void{
