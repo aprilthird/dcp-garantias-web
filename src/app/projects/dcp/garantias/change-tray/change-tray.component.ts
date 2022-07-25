@@ -14,11 +14,13 @@ import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transfo
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 import { AzureService } from 'app/core/azure/azure.service';
+
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
   styleUrls: ['./change-tray.component.scss']
 })
+
 export class ChangeTrayComponent implements OnInit {
 
   //variable para la acción que se va a realizar, si es crear o editar  
@@ -112,6 +114,7 @@ export class ChangeTrayComponent implements OnInit {
     this.button.detalles = true;
     this.styleButton.detallesStyle='darkButton';
     this.warranty = JSON.parse(localStorage.getItem('garantia'));
+    console.log(this.warranty);
     this.loadFormGroupChangeTray();
     this.loadFormGroupSrt();
     this.cargarDatosDeMaestras();

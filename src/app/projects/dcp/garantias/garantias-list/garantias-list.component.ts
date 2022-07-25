@@ -46,6 +46,7 @@ export class GarantiasListComponent implements OnInit {
     {value:3, name:'Verde'},
     {value:4, name:'Gris'},
     {value:5, name:'Negra'},
+    {value:11, name:'Roja'},
   ];
 
   oldOptions: Option[] = [
@@ -357,9 +358,9 @@ export class GarantiasListComponent implements OnInit {
     }
   }
 
-  mostrarComentario(_comentario):void{
-    const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
-      data:{comentario:_comentario,text:'Tu reclamo ha sido observado'},
+  mostrarComentario(itemBitacora:any):void{
+    this.matDialog.open(DialogMostrarComentarioComponent,{
+      data:{bitacora:itemBitacora},
       disableClose:true, width:'500px'
     });
   }

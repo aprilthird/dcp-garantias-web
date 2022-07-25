@@ -55,6 +55,7 @@ export class EngineComponent implements OnInit {
   areaDeServicioAsociadoAlOrdenDeServicio:any; verQueja2 = false; verQueja3 = false; verQueja4 = false;
   usuarioDeLaSession:any; verCamposBandeja = -1;
   mostrarFechaGarantia=true; mostrarBis=true;
+  mostrarProgressBarEsn : boolean = false; mostrarProgressBarOS : boolean = false; 
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private matSnackBar: MatSnackBar,
@@ -140,8 +141,10 @@ export class EngineComponent implements OnInit {
   getEsn():void{
     const esn = this.formRegisterEngine.value.esn;
     if(esn!=''){
+      this.mostrarProgressBarEsn = true;
       this.garantiasService.findEsn(esn).subscribe(resp=>{
         if(resp.body){
+          this.mostrarProgressBarEsn = false;
           this.matriculaEcontrada = resp.body;
           this.mostrarBis = this.matriculaEcontrada.fechaInicio? false:true;
           this.mostrarFechaGarantia = this.matriculaEcontrada.fechaInicio? true:false;
@@ -173,8 +176,10 @@ export class EngineComponent implements OnInit {
   getOs():void{
     const os = this.formRegisterEngine.value.os;
     if(os!=''){
+      this.mostrarProgressBarOS = true;
       this.garantiasService.findOs(os).subscribe(resp=>{
         if(resp.body){
+          this.mostrarProgressBarOS = false;
           this.ordenDeServicioEncontrado = resp.body;
           this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
             this.areaDeServicioAsociadoAlOrdenDeServicio = responseApi.data[0];

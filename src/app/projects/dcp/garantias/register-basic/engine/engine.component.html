@@ -19,6 +19,7 @@
                                         <button mat-icon-button matSuffix (click)="getEsn()" color="primary">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
+                                        <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2 flex-align-center">
@@ -97,6 +98,7 @@
                                         <button mat-icon-button matSuffix (click)="getOs()" color="primary" [disabled]="action=='edit'">
                                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                         </button>
+                                        <mat-hint *ngIf="mostrarProgressBarOS"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
@@ -260,7 +262,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field floatLabel="always" *ngIf="verQueja4">
-                                        <mat-label for="">Queja</mat-label>
+                                        <mat-label>Queja</mat-label>
                                         <mat-select placeholder="Seleccionar" formControlName="idQueja4">
                                             <mat-option *ngFor="let item of complaints" [value]="item.id">{{item.descripcion}}</mat-option>
                                         </mat-select>
@@ -272,7 +274,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field floatLabel="always">
-                                        <mat-label for="">Usuario Registrador</mat-label>
+                                        <mat-label>Usuario Registrador</mat-label>
                                         <input matInput type="text" [disabled]="true" [value]="usuarioDeLaSession.nombres">
                                     </mat-form-field>
                                 </div>
