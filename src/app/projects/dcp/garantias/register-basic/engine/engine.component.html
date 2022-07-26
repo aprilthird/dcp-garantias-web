@@ -30,7 +30,7 @@
                                     </span>
                                 </div>
                                 <div class="col-md-3 flex-align-center">
-                                    <button mat-raised-button color="primary" (click)="onOpenDialogRegisterEnrollment()">Registrar matrícula</button>
+                                    <button mat-raised-button color="primary" type="button" (click)="onOpenDialogRegisterEnrollment()">Registrar Matricula</button>
                                 </div>
                                 <div class="col-md-4"></div>
                             </div>
@@ -55,13 +55,13 @@
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
-                                            <mat-label for="">Aplicacion del {{typeWarrantyText}}</mat-label>
+                                            <mat-label for="">Aplicacion del {{garantiaParaGestionar==null?typeWarrantyText:garantiaParaGestionar.tipo==1?'motor':'generador'}}</mat-label>
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada!=null?matriculaEcontrada.aplicacion:'-'">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="fill">
-                                            <mat-label for="">Modelo del {{typeWarrantyText}}</mat-label>
+                                            <mat-label for="">Modelo del {{garantiaParaGestionar==null?typeWarrantyText:garantiaParaGestionar.tipo==1?'motor':'generador'}}</mat-label>
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada!=null?matriculaEcontrada.modelo:'-'">
                                         </mat-form-field>
                                     </div>
@@ -71,7 +71,7 @@
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada!=null?matriculaEcontrada.cpl:'-'">
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" *ngIf="mostrarPTO">
                                         <mat-form-field appearance="fill">
                                             <mat-label for="">PTO</mat-label>
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada!=null?matriculaEcontrada.etoPto:'-'">
@@ -83,7 +83,7 @@
                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="matriculaEcontrada==null?'-':matriculaEcontrada.fechaInicio | date: 'dd/MM/yyyy' ">
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3 flex-align-center"  *ngIf="mostrarBis">
+                                    <div class="col-md-3 flex-align-center" *ngIf="mostrarBis">
                                         <mat-checkbox color="primary" [disabled]="true" [value]="matriculaEcontrada!=null?matriculaEcontrada.bis:false">BIS</mat-checkbox>
                                     </div>
                                 </div>

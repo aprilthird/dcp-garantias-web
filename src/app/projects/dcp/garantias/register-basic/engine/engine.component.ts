@@ -54,7 +54,7 @@ export class EngineComponent implements OnInit {
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
   areaDeServicioAsociadoAlOrdenDeServicio:any; verQueja2 = false; verQueja3 = false; verQueja4 = false;
   usuarioDeLaSession:any; verCamposBandeja = -1;
-  mostrarFechaGarantia=true; mostrarBis=true;
+  mostrarFechaGarantia = true; mostrarBis = true; mostrarPTO = true;
   mostrarProgressBarEsn : boolean = false; mostrarProgressBarOS : boolean = false; 
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
@@ -143,11 +143,12 @@ export class EngineComponent implements OnInit {
     if(esn!=''){
       this.mostrarProgressBarEsn = true;
       this.garantiasService.findEsn(esn).subscribe(resp=>{
+        this.mostrarProgressBarEsn = false;
         if(resp.body){
-          this.mostrarProgressBarEsn = false;
           this.matriculaEcontrada = resp.body;
           this.mostrarBis = this.matriculaEcontrada.fechaInicio? false:true;
           this.mostrarFechaGarantia = this.matriculaEcontrada.fechaInicio? true:false;
+          this.mostrarPTO = this.matriculaEcontrada.pto? true:false;
         }else{
           this.openSnackBar('Matricula no registrada');
           this.matriculaEcontrada = null;
@@ -159,27 +160,13 @@ export class EngineComponent implements OnInit {
     }
   }
 
-  // getOsEdit(valor:any):void{
-  //   this.garantiasService.findOs(valor).subscribe(resp=>{
-  //     if(resp.body){
-  //       this.ordenDeServicioEncontrado = resp.body;
-  //       this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
-  //         this.areaDeServicioAsociadoAlOrdenDeServicio = responseApi.data[0];
-  //       });
-  //     }else{
-  //       this.openSnackBar('No existe el OS');
-  //       this.ordenDeServicioEncontrado = null;
-  //     }
-  //   })
-  // }
-  
   getOs():void{
     const os = this.formRegisterEngine.value.os;
     if(os!=''){
       this.mostrarProgressBarOS = true;
       this.garantiasService.findOs(os).subscribe(resp=>{
+        this.mostrarProgressBarOS = false;
         if(resp.body){
-          this.mostrarProgressBarOS = false;
           this.ordenDeServicioEncontrado = resp.body;
           this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
             this.areaDeServicioAsociadoAlOrdenDeServicio = responseApi.data[0];
@@ -198,7 +185,10 @@ export class EngineComponent implements OnInit {
   onOpenDialogRegisterEnrollment():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
           width: '990px',
-          data: {option:'new',type:this.typeWarrantyText, name:'motor'},
+          data: {
+            option:'new',
+            type:this.garantiaParaGestionar==null?this.typeWarrantyText:this.garantiaParaGestionar.tipo==1?'motor':'generador'
+          },
           disableClose:true
         }
       );
@@ -358,6 +348,8 @@ export class EngineComponent implements OnInit {
     })
   }
   
+  //notificacion de error
+
   openSnackBar(message:string):void{
     this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
       data: message,
@@ -457,6 +449,7 @@ export class EngineComponent implements OnInit {
                 codCeco:this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.ceco:null,
                 idAreaServicio:this.areaDeServicioAsociadoAlOrdenDeServicio?this.areaDeServicioAsociadoAlOrdenDeServicio.id:null,
                 idUsuarioEvaluador: this.usuarioDeLaSession.id, //para usuario registrador
+                tipo:this.typeWarrantyText=='motor'?1:2,
                 ...this.formRegisterEngine.value
             };
           this.garantiasService.saveWarranty(request).subscribe(responseApiGarantia=>{
@@ -508,6 +501,7 @@ export class EngineComponent implements OnInit {
                               codCeco:this.ordenDeServicioEncontrado.ceco,
                               idAreaServicio:this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.id:null,
                               idUsuarioEvaluador: this.usuarioDeLaSession.id, //para usuario registrador
+                              tipo:this.typeWarrantyText=='motor'?1:2,
                               ...this.formRegisterEngine.value
                           };
                         this.garantiasService.saveWarranty(request).subscribe(responseApiGarantia=>{
@@ -876,6 +870,7 @@ export class EngineComponent implements OnInit {
         break;
     }
   }
+  
   //mensaje de error
 
   mostrarMensajeDeError(mensaje:string):void{

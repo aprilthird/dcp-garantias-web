@@ -15,6 +15,7 @@ import { DialogAsignacionDeLaFallaComponent } from '../dialogs/dialog-asignacion
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -23,7 +24,7 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 })
 export class RegistroDeFallaComponent implements OnInit {
 
-  accion:string; tipoDeEquipo:string; idTipo:any;
+  accion:string; tipoDeEquipo:string; tipo:number;
   formFalla: FormGroup; formIngDeSoporte: FormGroup; formDFSE: FormGroup; formFabrica: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
@@ -44,9 +45,10 @@ export class RegistroDeFallaComponent implements OnInit {
   items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   verQueja2 = false; verQueja3 = false;
+  mostrarProgressBarEsn : boolean = false;
   
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
-              private readonly garantiasService: GarantiasService, private _snackBar: MatSnackBar,
+              private readonly garantiasService: GarantiasService, private readonly matSnackBar:MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
               private readonly userService:UserService, private readonly fallasService:FallasService) { }
 
@@ -61,15 +63,14 @@ export class RegistroDeFallaComponent implements OnInit {
       this.botonUsuarioRegistrador=true;
       this.botonUsuarioEscalador = true;
       if(this.tipoDeEquipo=='motor'){
-        this.idTipo = 1;
+        this.tipo = 1;
       }
       if(this.tipoDeEquipo=='generador'){
-        this.idTipo = 2;
+        this.tipo = 2;
       }
       this.cargarFormularioRegistroBasico();
     }
     if(this.accion=='edit'){
-      this.tipoDeEquipo = this.idTipo==1?'motor':'generador';
       this.fallaParaGestionar = JSON.parse(localStorage.getItem('fallaParaGestionar'));
       this.mostrarQuejasRegistradas();
       if(this.fallaParaGestionar.nivelSoporte==0){
@@ -132,26 +133,6 @@ export class RegistroDeFallaComponent implements OnInit {
     }
   }
 
-  // cargarFormularioRegistroBasico():void{
-  //   this.formFalla = new FormGroup({
-  //     os: new FormControl(this.fallaParaGestionar.os),
-  //     io: new FormControl(this.fallaParaGestionar.io),
-  //     esn: new FormControl(this.fallaParaGestionar.esn),
-  //     idArea: new FormControl(this.fallaParaGestionar.idArea),
-  //     aplicacion: new FormControl(this.fallaParaGestionar.aplicacion),
-  //     numParte: new FormControl(this.fallaParaGestionar.numParte),
-  //     puntoFalla: new FormControl( this.fallaParaGestionar.puntoFalla),
-  //     tipoFalla: new FormControl(this.fallaParaGestionar.tipoFalla),
-  //     fechaFalla: new FormControl(this.fallaParaGestionar.fechaFalla),
-  //     descripcion: new FormControl(this.fallaParaGestionar.descripcion),
-  //     queja1: new FormControl(this.fallaParaGestionar.queja1),
-  //     queja2: new FormControl(this.fallaParaGestionar.queja2),
-  //     queja3: new FormControl(this.fallaParaGestionar.queja3),
-  //     evento: new FormControl(this.fallaParaGestionar.evento),
-  // });
-  // this.getEsn();
-  // }
-
   cargarFormularioIngDeSoporte():void{
     this.formIngDeSoporte = new FormGroup({
       discucion: new FormControl(this.fallaParaGestionar.discucion!=null?this.fallaParaGestionar.discucion:'', [Validators.required]),
@@ -208,7 +189,9 @@ export class RegistroDeFallaComponent implements OnInit {
   getEsn():void{
     const esn = this.formFalla.value.esn;
     if(esn!=''){
+      this.mostrarProgressBarEsn = true;
       this.garantiasService.findEsn(esn).subscribe(response=>{
+        this.mostrarProgressBarEsn = false;
         if(response.body){
           this.matriculaEncontrada = response.body;
         }else{
@@ -246,28 +229,43 @@ export class RegistroDeFallaComponent implements OnInit {
   onRegistrarMatricula():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
       width: '990px',
-      data: {option:'new',type:'engine', name:'motor'},
+      data: {
+        option:'new',
+        type:this.fallaParaGestionar==null?this.tipoDeEquipo:this.fallaParaGestionar.tipo==1?'motor':this.fallaParaGestionar.tipo==2?'generador':'¡Error!'
+      },
       disableClose:true
-    }
-  );
-dialogNewEnrollment.afterClosed().subscribe(resp=>{
-  if(resp){
-    this.openDialogOperationSuccessfully('Matricula creada con éxito');
-  }else{
-    console.log('operacion cancelada');        
-  }
-});
+      });
+    dialogNewEnrollment.afterClosed().subscribe(resp=>{
+      if(resp){
+        this.openDialogOperationSuccessfully('Matricula creada con éxito');
+      }else{
+        console.log('operacion cancelada');        
+      }
+    });
   }
 
   // usuario de servicio
 
   registrarFalla():void{
     if(this.accion=='new'){
-      const nuevaFalla = {id:0, nivelSoporte:0, idTipo:this.idTipo, activo:true, idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'', idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value};
+      const nuevaFalla = {
+        id:0, nivelSoporte:0,
+        tipo:this.tipo,
+        activo:true,
+        idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
+        idUsuario: this.usuarioDeLaSession.id,
+        ...this.formFalla.value};
       this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
         if(responseApi.success){
           //guardamos en la bitacora
-          const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
+          const requestBitacora = {
+            tipo:2,
+            idEntidad:responseApi.body.id,
+            evaluador:1,
+            comentarios:null,
+            estado:1,
+            nivelSoporteActual:0
+          };
           this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
             if(responseBitacora.success){
               this.registroExitosoDeLaFalla();
@@ -293,7 +291,14 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
         if(responseApi.success){
           //guardamos en la bitacora
-          const requestBitacora = { tipo:2, idEntidad:responseApi.body.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:0};
+          const requestBitacora = {
+            tipo:2,
+            idEntidad:responseApi.body.id,
+            evaluador:1,
+            comentarios:null,
+            estado:1,
+            nivelSoporteActual:0
+          };
           this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
             if(responseBitacora.success){
               this.registroExitosoDeLaFalla();
@@ -317,9 +322,16 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
                     });
                     dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
                         if(responseDialog.success){
-                          const nuevaFalla = {id:0, nivelSoporte:responseDialog.nivelSoporte, activo:true, asignacionFalla: responseDialog.idUsuario,
-                                              idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
-                                              idUsuario: this.usuarioDeLaSession.id, ...this.formFalla.value, idTipo:this.idTipo};
+                          const nuevaFalla = {
+                            id:0,
+                            nivelSoporte:responseDialog.nivelSoporte,
+                            activo:true,
+                            asignacionFalla: responseDialog.idUsuario,
+                            idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
+                            idUsuario: this.usuarioDeLaSession.id,
+                            ...this.formFalla.value,
+                            tipo:this.tipo
+                          };
                           this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
                               if(responseApi.success){
                                 //guardamos en la bitacora
@@ -725,12 +737,13 @@ dialogNewEnrollment.afterClosed().subscribe(resp=>{
   // abrir snack bar para los mensajes
 
   openSnackBar(message:string):void{
-    this._snackBar.open(message,'x',{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
       duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      panelClass: ['mat-toolbar', 'mat-primary','button-color']
-    })
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
   }
 
   // abrir dialogo registro exitoso

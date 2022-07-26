@@ -42,10 +42,11 @@
                                             <button type="button" mat-icon-button matSuffix color="primary" (click)="getEsn()">
                                                 <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                             </button>
+                                            <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-2 d-flex justify-content-center align-items-center">
-                                        <button mat-raised-button color="primary" (click)="onRegistrarMatricula()">Registrar Matricula</button>
+                                        <button mat-raised-button type="button" color="primary" (click)="onRegistrarMatricula()">Registrar Matricula</button>
                                     </div>
                                 </div>
                             </div>
@@ -63,13 +64,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field floatLabel="always">
-                                                <mat-label class="fw-bold">Aplicación de {{tipoDeEquipo}}</mat-label>
+                                                <mat-label class="fw-bold">Aplicación de {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
                                                 <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.aplicacion:'-'" [disabled]="true">
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field floatLabel="always">
-                                                <mat-label class="fw-bold">Modelo del {{tipoDeEquipo}}</mat-label>
+                                                <mat-label class="fw-bold">Modelo del {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
                                                 <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.modelo:'-'" [disabled]="true">
                                             </mat-form-field>
                                         </div>
@@ -305,7 +306,7 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
-                                    <mat-label class="fw-bold">Fecha de inicio de desarmado de  {{tipoDeEquipo}}</mat-label>
+                                    <mat-label class="fw-bold">Fecha de inicio de desarmado de  {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
                                     <input matInput [matDatepicker]="pickerFechaInicioDesarmado" placeholder="Ingrese una fecha" formControlName="fechaIniDesarmeMotor">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaInicioDesarmado"></mat-datepicker-toggle>
@@ -314,7 +315,7 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
-                                    <mat-label class="fw-bold">Fecha de fin de desarmado de {{tipoDeEquipo}}</mat-label>
+                                    <mat-label class="fw-bold">Fecha de fin de desarmado de {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
                                     <input matInput [matDatepicker]="pickerFechaFinDesarmado" placeholder="Ingrese una fecha" formControlName="fechaFinDesarmeMotor">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaFinDesarmado"></mat-datepicker-toggle>

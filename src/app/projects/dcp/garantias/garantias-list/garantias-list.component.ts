@@ -341,7 +341,7 @@ export class GarantiasListComponent implements OnInit {
     }
   }
 
-  editWarranty(warranty):void{
+  editWarranty(warranty:any):void{
     if(warranty.bandeja==0){
       localStorage.setItem('action','edit');
       localStorage.setItem('garantia',JSON.stringify(warranty));

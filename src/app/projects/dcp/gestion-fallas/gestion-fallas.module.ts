@@ -23,6 +23,7 @@ import { DialogCerrarFallaComponent } from './dialogs/dialog-cerrar-falla/dialog
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DialogMostrarComentarioComponent } from './dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDatepickerModule,
     MatSnackBarModule,
     MatTableModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })

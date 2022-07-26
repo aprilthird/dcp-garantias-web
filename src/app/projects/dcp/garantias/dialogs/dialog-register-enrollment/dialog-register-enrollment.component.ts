@@ -128,7 +128,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   buscarCliente():void{
     if(this.formEnrollment.value.razonSocial.length>2){
-      this.spinnerBusqueda = true;      
+      this.spinnerBusqueda = true;  
       this.configurationAndMaintenanceService.searchClienteByName(this.formEnrollment.value.razonSocial).subscribe(responseApi=>{
         this.spinnerBusqueda = false;
         this.clients = responseApi.body;
