@@ -16,6 +16,9 @@ import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observatio
 import { DialogCerrarFallaComponent } from '../dialogs/dialog-cerrar-falla/dialog-cerrar-falla.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+import { BlobServiceClient, AnonymousCredential, newPipeline } from '@azure/storage-blob';
+import { environment } from 'environments/environment';
+import { AzureService } from 'app/core/azure/azure.service';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -46,11 +49,13 @@ export class RegistroDeFallaComponent implements OnInit {
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   verQueja2 = false; verQueja3 = false;
   mostrarProgressBarEsn : boolean = false;
+  documentos = [];
   
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private readonly matSnackBar:MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
-              private readonly userService:UserService, private readonly fallasService:FallasService) { }
+              private readonly userService:UserService, private readonly fallasService:FallasService,
+              private _azureService: AzureService) { }
 
   ngOnInit(): void {
     this.cargarInfoLocalStorage();
@@ -219,12 +224,35 @@ export class RegistroDeFallaComponent implements OnInit {
       disableClose:true,
       data:{modulo:'fallas'}
     });
-    dialogoAdjuntarDocumentos.afterClosed().subscribe(resp=>{
-      console.log(resp);
+    dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialogAjuntarDocumento=>{
+      this.documentos =  responseDialogAjuntarDocumento;
     });
   }
 
+  // https://garantias.blob.core.windows.net/archivos/637bc30de1e5fe8e6d16e745faf59454-1658952588421.png
   // REGISTRAR UNA NUEVA MATRICULA
+
+  async subirArchivosAlServidor(_entidad:number){
+    console.log('ok');
+    console.log(this.documentos);
+    for (let i = 0; i < this.documentos.length; i++) {
+      const file = this.documentos[i];
+      const blob = new Blob([file], { type: file.type });
+      const response:any =  await this._azureService.uploadFile(blob, file.name);
+      const urlFile = this._azureService.getResourceUrl(response.uuidFileName);
+      console.log(response);
+      console.log(urlFile);
+      const request = {
+        tipo:2,
+        entidad:_entidad,
+        nombre:file.name,
+        ruta:urlFile,
+      };
+      this.garantiasService.saveAdjuntos(request).subscribe(responseApi=>{
+        console.log(responseApi);
+      })
+    }
+  }
 
   onRegistrarMatricula():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
@@ -257,6 +285,8 @@ export class RegistroDeFallaComponent implements OnInit {
         ...this.formFalla.value};
       this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
         if(responseApi.success){
+          //guardamos los adjuntos
+          this.subirArchivosAlServidor(responseApi.body.id);
           //guardamos en la bitacora
           const requestBitacora = {
             tipo:2,

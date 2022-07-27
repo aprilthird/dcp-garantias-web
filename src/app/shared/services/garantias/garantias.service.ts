@@ -32,6 +32,8 @@ export class GarantiasService {
   private urlCheckList = this.baseApiURl + '/Mantenimiento/MantenimientoCheckList';
   //agregar evaluacion de registro básico
   private urlBitacora= this.baseApiURl + '/Core/MantenimientoBitacora';
+  //asd
+  private urlAdjunto = this.baseApiURl + '/Administracion/MantenimientoAdjuntos'
 
   constructor(private readonly httpClient: HttpClient,
               private readonly authService: AuthService) { }
@@ -80,5 +82,9 @@ export class GarantiasService {
   //traer bitacora
   saveBitacora(_request:any):Observable<any>{          
     return this.httpClient.post(this.urlBitacora,_request,{headers:this.header});
+  }
+
+  saveAdjuntos(_request:any):Observable<any>{          
+    return this.httpClient.post(this.urlAdjunto,_request,{headers:this.header});
   }
 }

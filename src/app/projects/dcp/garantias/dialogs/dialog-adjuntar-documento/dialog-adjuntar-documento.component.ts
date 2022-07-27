@@ -27,7 +27,7 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  cargarDocumentos(event):void{
+  cargarDocumentos(event:any):void{
     for (let i = 0; i < event.target.files.length; i++) {
       this.documentosCargados.push(event.target.files[i]);  
     }

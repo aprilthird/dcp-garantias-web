@@ -397,6 +397,9 @@
                         <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
                     </button>
                 </div>
+                <div class="col-md-3" *ngFor="let documento of documentos">
+                    {{documento.name}}
+                </div>
             </div>
         </div>
         <div class="col-md-12 text-end mb-5">
