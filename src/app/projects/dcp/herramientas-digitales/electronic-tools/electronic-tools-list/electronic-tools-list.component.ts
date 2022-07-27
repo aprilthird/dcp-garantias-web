@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
 @Component({
   selector: 'app-electronic-tools-list',
@@ -9,17 +10,47 @@ import { Router } from '@angular/router';
 export class ElectronicToolsListComponent implements OnInit {
 
   displayedColumns: string[] = ['usuario', 'area', 'jefeAprobador', 'tipoDeLicencia', 'cantidad', 'pcidEquipo', 'fechaDeSolicitud', 'estado', 'action'];
-  dataSource = ELEMENT_DATA;
+  dataSource = [];
 
-  constructor(private readonly router: Router) { }
+  //datos del paginado
+  totalUsers:any;
+  totalRows:any;
+  numberOfPages:any;
+  pageCurrent:number=1;
+
+  constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService) { }
 
   ngOnInit(): void {
+    this.listUsers();
   }
 
-  crearSolicitudDeHerramienta():void{
+  listUsers():void {
+    let tmp = localStorage.getItem("datasrcwwid");
+    if(tmp !== null && tmp !== "") {
+      this.dataSource = JSON.parse(tmp);
+    } else {
+      this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
+        // this.totalUsers = responseApi.totalRecords;
+        // this.totalRows = responseApi.pageSize;
+        // this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
+        // this.dataSource = responseApi.data;
+        
+        localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
+        this.dataSource = responseApi.body;
+      });
+    }
+  }
+
+  onEditBasic(usuario:any):void{
+    localStorage.setItem('action','edit');
+    localStorage.setItem('usuario',JSON.stringify(usuario));
     this.router.navigate(['/digital-tools/tool-request']);
   }
 
+  onRegisterBasic():void{
+    localStorage.setItem('action','create');
+    this.router.navigate(['/digital-tools/tool-request']);
+  }
 }
 
 export interface PeriodicElement {
