@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BasicRegistrationComponent } from './WWID/basic-registration/basic-registration.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolRequestComponent } from './electronic-tools/tool-request/tool-request.component';
 
 @NgModule({
@@ -32,7 +33,9 @@ import { ToolRequestComponent } from './electronic-tools/tool-request/tool-reque
     MatTableModule,
     MatIconModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class HerramientasDigitalesModule { }
