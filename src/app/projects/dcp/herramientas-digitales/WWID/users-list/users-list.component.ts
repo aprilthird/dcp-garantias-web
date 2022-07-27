@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
@@ -49,8 +49,26 @@ export class UsersListComponent implements OnInit {
 
   loadFormFilter():void {
     this.formFilter = new FormGroup({
-
+      usr: new FormControl(''),
+      wwid: new FormControl(''),
+      fechaIngresoInicio: new FormControl(''),
+      fechaIngresoFin: new FormControl(''),
+      fechaBajaInicio: new FormControl(''),
+      fechaBajaFin: new FormControl(''),
     });
+  }
+
+  filterData():void {
+    let tmp = localStorage.getItem("datasrcwwid");
+    if(tmp !== null && tmp !== "") {
+      this.dataSource = JSON.parse(tmp);
+    }
+    if(this.formFilter.value.usr !== "") {
+      this.dataSource = this.dataSource.filter(i => i.nombres.includes(this.formFilter.value.usr) || i.apellidos.includes(this.formFilter.value.usr));
+    }
+    if(this.formFilter.value.wwid !== "") {
+      this.dataSource = this.dataSource.filter(i => i.wwid.includes(this.formFilter.value.wwid));
+    }
   }
 
   onRegisterBasic(usuario:any):void{
