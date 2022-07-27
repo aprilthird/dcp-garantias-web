@@ -52,6 +52,7 @@ export class ConfigurationAndMaintenanceService {
   private urlMaintenanceWarrantyDataClient = this.baseApiURl + '/Administracion/MantenimientoClientes';
   private urlTrayWarrantyDataClient = this.baseApiURl + '/Administracion/BandejaClientes';
   private urlSearchClientByName = this.baseApiURl + '/Administracion/BuscarClientesPorNombre';
+  private urlSearchClientByCode= this.baseApiURl + '/Administracion/BuscarClientesPorId';
 
   //matricula
   private urlMaintenanceEnrollment = this.baseApiURl + '/Administracion/MantenimientoMatricula';
@@ -94,16 +95,12 @@ export class ConfigurationAndMaintenanceService {
   }
 
   //constantes
-  saveConstant(_request:MasterConstantRequest):Observable<any>{          
+  maintenanceConstants(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   listConstants(_page):Observable<any>{
     const request = {filter : {fechaFin:this.dateCurrent},page:(_page-1),pageSize:10};
     return this.httpClient.post(this.urlTrayConstants, request, {headers:this.header});
-  }
-  deleteConstant(_request:any):Observable<any>{
-    console.log(_request);
-    return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
   }
   findConstant(_codigo:any):Observable<any>{
     const request = {filter : {codigo:_codigo},pageSize:1000};
@@ -253,6 +250,9 @@ export class ConfigurationAndMaintenanceService {
   }
   searchClienteByName(name:any):Observable<any>{
     return this.httpClient.get(this.urlSearchClientByName+'/'+name, {headers:this.header});
+  }
+  searchClienteByCode(code:any):Observable<any>{
+    return this.httpClient.get(this.urlSearchClientByCode+'/'+code, {headers:this.header});
   }
 
   //quejas

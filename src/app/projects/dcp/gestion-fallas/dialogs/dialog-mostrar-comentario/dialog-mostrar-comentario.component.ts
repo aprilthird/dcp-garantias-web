@@ -16,4 +16,14 @@ export class DialogMostrarComentarioComponent implements OnInit {
   onClose(success):void{
     this.matDialogRef.close(success);
   }
+
+  obtenerTexto(estado:number):string{
+    switch(estado){
+      case 4: return 'Tu reclamo ha sido rechazado';
+      break;
+      case 2: return 'Tu reclamo ha sido observado';
+      break;
+      default: break;
+    }
+  }
 }

@@ -73,12 +73,12 @@ export class GarantiasService {
   }
 
   //traer bitacora
-  logWarranty(id):Observable<any>{
-    return this.httpClient.get(this.urlLogWarranty+'/'+id,{headers:this.header});
+  logWarranty(idEntidad :number,tipo:number):Observable<any>{
+    return this.httpClient.get(this.urlLogWarranty+'/'+idEntidad+'/'+tipo,{headers:this.header});
   }
 
-    //traer bitacora
-    saveBitacora(_request:any):Observable<any>{          
-      return this.httpClient.post(this.urlBitacora,_request,{headers:this.header});
-    }
+  //traer bitacora
+  saveBitacora(_request:any):Observable<any>{          
+    return this.httpClient.post(this.urlBitacora,_request,{headers:this.header});
+  }
 }

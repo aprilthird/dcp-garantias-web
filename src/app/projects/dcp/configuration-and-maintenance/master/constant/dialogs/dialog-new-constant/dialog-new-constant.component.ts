@@ -28,7 +28,8 @@ export class DialogNewConstantComponent implements OnInit {
         codigo: new FormControl ('', [Validators.required]),
         laborRate: new FormControl('',[Validators.required]),
         kmRate: new FormControl('',[Validators.required]),
-        bfcMarkup: new FormControl('',[Validators.required]),
+        bfc: new FormControl('',[Validators.required]),
+        markup: new FormControl('',[Validators.required]),
         siteLabor: new FormControl('',[Validators.required]),
         estado: new FormControl(true, [Validators.required])
       });
@@ -37,7 +38,8 @@ export class DialogNewConstantComponent implements OnInit {
         codigo: new FormControl (this.data.constant.codigo, [Validators.required]),
         laborRate: new FormControl(this.data.constant.laborRate,[Validators.required]),
         kmRate: new FormControl(this.data.constant.kmRate,[Validators.required]),
-        bfcMarkup: new FormControl(this.data.constant.bfcMarkup,[Validators.required]),
+        bfc: new FormControl(this.data.constant.bfc,[Validators.required]),
+        markup: new FormControl(this.data.constant.markup,[Validators.required]),
         siteLabor: new FormControl(this.data.constant.siteLabor,[Validators.required]),
         estado: new FormControl(this.data.constant.activo, [Validators.required])
       });
@@ -49,8 +51,7 @@ export class DialogNewConstantComponent implements OnInit {
       if(this.data.option=='new'){
         const object = MasterConstantRequest.createFormObject(this.formNewConstant.value, 0);
         const request = {activo:true,...object};      
-        this.configurationAndMaintenanceService.saveConstant(request).subscribe(resp=>{
-          console.log(resp)
+        this.configurationAndMaintenanceService.maintenanceConstants(request).subscribe(resp=>{
             if(resp.success){
               this.dialogRef.close(true);
             }else{
@@ -60,7 +61,7 @@ export class DialogNewConstantComponent implements OnInit {
       }else{
         const object = MasterConstantRequest.createFormObject(this.formNewConstant.value, this.data.constant.id );
         const request = {activo:true,...object};
-        this.configurationAndMaintenanceService.saveConstant(request).subscribe(resp=>{        
+        this.configurationAndMaintenanceService.maintenanceConstants(request).subscribe(resp=>{        
           if(resp.success){
             this.dialogRef.close(true);
           }else{

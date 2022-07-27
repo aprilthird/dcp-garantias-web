@@ -8,11 +8,14 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatSnackBar} from '@angular/material/snack-bar';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
 import { DialogTransformRecordToOrangeComponent } from '../../dialogs/dialog-transform-record-to-orange/dialog-transform-record-to-orange.component';
+import { UserService } from 'app/core/user/user.service';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -25,28 +28,38 @@ export class EngineComponent implements OnInit {
   //variable para la acción que se va a realizar, si es crear o editar  
   action:any;
   //
-  warranty:any;
-  //para usarlo como data inicial del esn y donde se va a cargar el esn que se va a usar en la garantía
-  esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
-  //para usarlo como data inicial del os y donde se va a cargar el os que se va a usar en la garantía
-  os = {claseActividad:'-' ,codAreaServicios:'-' ,fechaLib:'-', os:'-', bu:'-',ceco:'-'};
+  garantiaParaGestionar:any;
+
+  matriculaEcontrada:any;
+  ordenDeServicioEncontrado:any;
+  
   //tipo de garantia juntos a sus campos
-  warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},{value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},{value: 7, name: "Cdc"},{value: 8, name: "Trp"},{value: 9, name: "Atc"},{value: 10, name: "Memo"},]
+  warrantyTypes = [ {value: 1, name: "Producto Nuevo"},
+                    {value: 2, name: "Motor Recon"},
+                    {value: 3, name: "Repuesto Nuevo"},
+                    {value: 4, name: "Repuesto Defectuoso"},
+                    {value: 5, name: "Extendidad (CAP)"},
+                    {value: 6, name: "Extendida Componente Mayor"},
+                    {value: 7, name: "CDC Quality y Support y Campaña "},
+                    {value: 8, name: "TRP"},
+                    {value: 9, name: "ATC"},
+                    {value: 10, name: "Warrany Memo"},]
   //para controlar la vista de cada tipo de garantia
   viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,};
   //listado de las quejas
   complaints:any[];
   //formulario
   formRegisterEngine:FormGroup;
-  //configuraciones para el snackbar
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   //lista de usuarios provisional
   users=[{value:1,name:'Abel Nalvate Ramirez'},{value:2,name:'Alexander Flores Cisneros'},{value:3,name:'Alejandro Gonzales Sánchez'},];
-  areaDeServicioAsociado = '-'; verQueja2 = false; verQueja3 = false; verQueja4 = false;
- 
+  areaDeServicioAsociadoAlOrdenDeServicio:any; verQueja2 = false; verQueja3 = false; verQueja4 = false;
+  usuarioDeLaSession:any; verCamposBandeja = -1;
+  mostrarFechaGarantia = true; mostrarBis = true; mostrarPTO = true;
+  mostrarProgressBarEsn : boolean = false; mostrarProgressBarOS : boolean = false; 
+
   constructor(private readonly matDialog: MatDialog, private readonly router: Router,private readonly garantiasService: GarantiasService,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private _snackBar: MatSnackBar) { }
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,private matSnackBar: MatSnackBar,
+              private readonly userService:UserService) { }
 
   ngOnInit(): void {
     this.typeWarrantyText = localStorage.getItem('text'); //trae de localstorge el tipo de garantia a crear (motor o generador)
@@ -59,6 +72,9 @@ export class EngineComponent implements OnInit {
     });
     this.loadComplaints();
     this.loadFormRegisterEngine();
+    this.userService.user$.subscribe(response=>{
+      this.usuarioDeLaSession = response;
+    });
   }
 
   loadComplaints():void{
@@ -70,121 +86,109 @@ export class EngineComponent implements OnInit {
   loadFormRegisterEngine():void{
     if(this.action=='new'){
       this.formRegisterEngine = new FormGroup({
-        esn: new FormControl(''),
-        os: new FormControl(''),
+        esn: new FormControl(),
+        os: new FormControl(),
         //
-        tipoGarantia: new FormControl(null),
-        puntoFalla: new FormControl(''),
+        tipoGarantia: new FormControl(),
+        puntoFalla: new FormControl(),
         medida: new FormControl(),
         fechaFalla: new FormControl(),
         fechaInicioGarantia: new FormControl(),
-        numParteRepuesto: new FormControl(''),
-        numParteFallo: new FormControl(''),
-        codigoAdicional: new FormControl(''),
+        numParteRepuesto: new FormControl(),
+        numParteFallo: new FormControl(),
+        codigoAdicional: new FormControl(),
         fechaAdicional: new FormControl(),
-        ejecucionAdicional: new FormControl(''),
+        ejecucionAdicional: new FormControl(),
         //
-        idQueja1: new FormControl(null),
-        idQueja2: new FormControl(null),
-        idQueja3: new FormControl(null),
-        idQueja4: new FormControl(null),
-        idUsuarioEvaluador: new FormControl(null),
-        comentarios: new FormControl('')
+        idQueja1: new FormControl(),
+        idQueja2: new FormControl(),
+        idQueja3: new FormControl(),
+        idQueja4: new FormControl(),
+        comentarios: new FormControl(),
       })
     }else{
-      this.warranty = JSON.parse(localStorage.getItem('garantia')); //usar esta variable para llenar la data de la garantia a gestionar en el formulario
-      console.log(this.warranty);
+      this.garantiaParaGestionar = JSON.parse(localStorage.getItem('garantia')); //usar esta variable para llenar la data de la garantia a gestionar en el formulario
+      this.verCamposBandeja = this.garantiaParaGestionar.bandeja;
+      console.log(this.garantiaParaGestionar);
       this.formRegisterEngine = new FormGroup({
-        esn: new FormControl(this.warranty.esn,[Validators.required]),
-        os: new FormControl(this.warranty.os,[Validators.required]),
+        esn: new FormControl(this.garantiaParaGestionar.esn,[Validators.required]),
+        os: new FormControl(this.garantiaParaGestionar.os,[Validators.required]),
         //
-        tipoGarantia: new FormControl(this.warranty.idTipoGarantia,[Validators.required]),
-        puntoFalla: new FormControl(this.warranty.puntoFalla),
-        medida: new FormControl(this.warranty.medida),
-        fechaFalla: new FormControl(this.warranty.fechaFalla),
-        fechaInicioGarantia: new FormControl(this.warranty.fechaInicioGarantia),
-        numParteRepuesto: new FormControl(this.warranty.numParteRepuesto),
-        numParteFallo: new FormControl(this.warranty.numParteFallo),
-        codigoAdicional: new FormControl(this.warranty.codigoAdicional),
-        fechaAdicional: new FormControl(this.warranty.fechaAdicional),
-        ejecucionAdicional: new FormControl(this.warranty.ejecucionAdicional),
+        tipoGarantia: new FormControl(this.garantiaParaGestionar.idTipoGarantia,[Validators.required]),
+        puntoFalla: new FormControl(this.garantiaParaGestionar.puntoFalla),
+        medida: new FormControl(this.garantiaParaGestionar.medida),
+        fechaFalla: new FormControl(this.garantiaParaGestionar.fechaFalla),
+        fechaInicioGarantia: new FormControl(this.garantiaParaGestionar.fechaInicioGarantia),
+        numParteRepuesto: new FormControl(this.garantiaParaGestionar.numParteRepuesto),
+        numParteFallo: new FormControl(this.garantiaParaGestionar.numParteFallo),
+        codigoAdicional: new FormControl(this.garantiaParaGestionar.codigoAdicional),
+        fechaAdicional: new FormControl(this.garantiaParaGestionar.fechaAdicional),
+        ejecucionAdicional: new FormControl(this.garantiaParaGestionar.ejecucionAdicional),
         //
-        idQueja1: new FormControl(this.warranty.idQueja1,[Validators.required]),
-        idQueja2: new FormControl(this.warranty.idQueja2,[Validators.required]),
-        idQueja3: new FormControl(this.warranty.idQueja3,[Validators.required]),
-        idQueja4: new FormControl(this.warranty.idQueja4,[Validators.required]),
-        idUsuarioEvaluador: new FormControl(this.warranty.idUsuarioEvaluador,[Validators.required]),
-        comentarios: new FormControl(this.warranty.comentarios,[Validators.required])
+        idQueja1: new FormControl(this.garantiaParaGestionar.idQueja1,[Validators.required]),
+        idQueja2: new FormControl(this.garantiaParaGestionar.idQueja2,[Validators.required]),
+        idQueja3: new FormControl(this.garantiaParaGestionar.idQueja3,[Validators.required]),
+        idQueja4: new FormControl(this.garantiaParaGestionar.idQueja4,[Validators.required]),
+        comentarios: new FormControl(this.garantiaParaGestionar.comentarios,[Validators.required])
       });
       this.getEsn();
       this.getOs();
       this.selectTypeWarranty();
+      this.mostrarQuejasIngresadas();
     }
   }
 
   getEsn():void{
     const esn = this.formRegisterEngine.value.esn;
     if(esn!=''){
+      this.mostrarProgressBarEsn = true;
       this.garantiasService.findEsn(esn).subscribe(resp=>{
+        this.mostrarProgressBarEsn = false;
         if(resp.body){
-          this.esn = resp.body;
+          this.matriculaEcontrada = resp.body;
+          this.mostrarBis = this.matriculaEcontrada.fechaInicio? false:true;
+          this.mostrarFechaGarantia = this.matriculaEcontrada.fechaInicio? true:false;
+          this.mostrarPTO = this.matriculaEcontrada.pto? true:false;
         }else{
-          this.openSnackBar('No existe matricula con tal ESN');
-          this.esn.id = '-';
-          this.esn.cliente = '-';
-          this.esn.direccion = '-';
-          this.esn.aplicacion = '-';
-          this.esn.modelo = '-';
-          this.esn.etoPto = '-';
-          this.esn.fechaInicioGarantia = '-';
-          this.esn.bis = false;
+          this.openSnackBar('Matricula no registrada');
+          this.matriculaEcontrada = null;
         }
       })
     }else{
-      this.openSnackBar('Ingrese el ESN');
-      this.esn.id = '-';
-      this.esn.cliente = '-';
-      this.esn.direccion = '-';
-      this.esn.aplicacion = '-';
-      this.esn.modelo = '-';
-      this.esn.etoPto = '-';
-      this.esn.fechaInicioGarantia = '-';
-      this.esn.bis = false;
+      this.openSnackBar('Ingrese un valor');
+      this.matriculaEcontrada = null;
     }
   }
 
   getOs():void{
     const os = this.formRegisterEngine.value.os;
     if(os!=''){
+      this.mostrarProgressBarOS = true;
       this.garantiasService.findOs(os).subscribe(resp=>{
+        this.mostrarProgressBarOS = false;
         if(resp.body){
-          this.os = resp.body;
+          this.ordenDeServicioEncontrado = resp.body;
           this.configurationAndMaintenanceService.findServiceAreaByOS(resp.body.ceco,resp.body.codAreaServicios).subscribe(responseApi=>{
-            this.areaDeServicioAsociado = responseApi.data[0].descripcion;
+            this.areaDeServicioAsociadoAlOrdenDeServicio = responseApi.data[0];
           });
         }else{
           this.openSnackBar('No existe el OS ingresado, pruebe con otro');
-          this.os.claseActividad = '-';
-          this.os.codAreaServicios = '-';
-          this.os.fechaLib = '-';
-          this.os.os = '-';
-          this.os.bu = '-';
+          this.ordenDeServicioEncontrado = null;
         }
       })
     }else{
       this.openSnackBar('Ingrese el OS');
-      this.os.claseActividad = '-';
-      this.os.codAreaServicios = '-';
-      this.os.fechaLib = '-';
-      this.os.os = '-';
-      this.os.bu = '-';
+      this.ordenDeServicioEncontrado = null;
     }
   }
 
   onOpenDialogRegisterEnrollment():void{
     const dialogNewEnrollment = this.matDialog.open(DialogRegisterEnrollmentComponent,{
           width: '990px',
-          data: {option:'new',type:this.typeWarrantyText, name:'motor'},
+          data: {
+            option:'new',
+            type:this.garantiaParaGestionar==null?this.typeWarrantyText:this.garantiaParaGestionar.tipo==1?'motor':'generador'
+          },
           disableClose:true
         }
       );
@@ -207,7 +211,6 @@ export class EngineComponent implements OnInit {
       width: '900px'
     });
   }
-
 
   selectTypeWarranty(){
     switch (this.formRegisterEngine.value.tipoGarantia) {
@@ -326,166 +329,6 @@ export class EngineComponent implements OnInit {
     }
   }
 
-  onSendRegister(action):void{
-    if(this.esn.id=='-'){
-      const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un ESN válido!'},disableClose:true});
-    }else{
-      if(this.os.codAreaServicios=='-'){
-        const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un OS válido!'},disableClose:true});
-      }else{
-        if(this.formRegisterEngine.value.tipoGarantia==null){
-          const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un tipo de garantía!'},disableClose:true});
-        }else{
-          if(this.formRegisterEngine.value.idQueja1==null){ // && this.formRegisterEngine.value.idQueja2==null && this.formRegisterEngine.value.idQueja3==null && this.formRegisterEngine.value.idQueja4==null){
-            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione al menos una queja!'},disableClose:true});
-          }else{
-            if(this.formRegisterEngine.value.idUsuarioEvaluador==null){
-              const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Seleccione un usuario registrador!'},disableClose:true});
-            }else{
-              if(this.formRegisterEngine.value.comentarios==''){                
-                const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingresa algún comentario!'},disableClose:true});
-              }else{
-                if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
-                if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
-                if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
-                const data = {
-                  idMatricula:this.esn.id,
-                  codAreaServicios:this.os.codAreaServicios,
-                  codCeco:this.os.ceco,
-                  ...this.formRegisterEngine.value
-                }
-                switch(action){
-                  case 'borrador':
-                    this.onSaveRegister(data,0);
-                    break;
-                  case 'blanca':
-                      this.onSaveRegister(data,1);
-                    case 'edit':
-                      this.onEditRegister(data);
-                    break;
-                  case 'naranja':
-                    this.onTransfornRecordToOrange(data);                                            
-                    break;
-                  case 'observar':
-                    this.onObservedRecord(data);                                            
-                    break;
-                  case 'rechazar':
-                    this.onReject(data);
-                    break;
-                  
-                  default:
-                    break;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  onSaveRegister(data,_bandeja):void{
-    const request = {...data,bandeja:_bandeja,id:0};
-    this.garantiasService.saveWarranty(request).subscribe(resp=>{
-      if(resp.success){
-        if(_bandeja==0){
-          this.onOpenDialogSaveDraft();
-        }
-        if(_bandeja==1){
-          localStorage.setItem('success','true');
-          this.router.navigate(['/garantias']);
-        }
-      }
-    });
-  }
-
-  onEditRegister(data):void{
-  const requestEdit = {...data,id:this.warranty.id?this.warranty.id:0,activo:true};
-  this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
-    if(resp.success){
-        const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-          disableClose:true,
-          data:{text:'Se guardó con éxito'}
-        });
-        dialogSaveRegister.afterClosed().subscribe(resp=>{
-          if(resp){
-            this.router.navigate(['/garantias']);
-          }
-        });
-      }
-    });
-  }
-
-  onReject(data):void{
-    const dialogReject = this.matDialog.open(DialogRejectComponent,{
-      disableClose:true,width:'380px',data: {text:'¿Estás seguro de rechazar este registro?',description:'Al hacerlo el registro ingresará a una bandeja negra'}
-    });
-    dialogReject.afterClosed().subscribe(dataDialog=>{
-      if(dataDialog.selection){
-        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
-        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-          if(responseBitacora.success){
-            const requestGarantiaRechazado = {...data,id:this.warranty.id,estado:1,activo:true} 
-            this.garantiasService.saveWarranty(requestGarantiaRechazado).subscribe(responseGarantia=>{
-              if(responseGarantia.success){
-                this.router.navigate(['/garantias']);
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  onObservedRecord(data):void{
-    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
-      disableClose:true,width:'380px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
-    });
-    dialogObservedRecord.afterClosed().subscribe(dataDialog=>{
-      if(dataDialog.selection){
-        const requestBitacora = { idGarantia:this.warranty.id, comentarios:dataDialog.comentario };
-        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-          if(responseBitacora.success){
-            const requestGarantiaObservada = {...data,id:this.warranty.id,estado:2,activo:true} 
-            this.garantiasService.saveWarranty(requestGarantiaObservada).subscribe(responseGarantia=>{
-              if(responseGarantia.success){
-                this.router.navigate(['/garantias']);
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  onTransfornRecordToOrange(data):void{    
-    const dialogTransforRecordToOrange = this.matDialog.open(DialogTransformRecordToOrangeComponent,{
-      disableClose:true,
-      width:'936px',
-      data:{idGarantia:this.warranty.id}
-    });
-    dialogTransforRecordToOrange.afterClosed().subscribe(responseDialog=>{
-      if(responseDialog){
-        const requestNaranja = {...data,bandeja:2,id:this.warranty.id,activo:true};
-        this.garantiasService.saveWarranty(requestNaranja).subscribe(resp=>{
-            if(resp.success){
-              const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-                disableClose:true,
-                data:{text:'Se transformó con éxito'}
-              });
-              dialogSaveRegister.afterClosed().subscribe(resp=>{
-                if(resp){
-                  this.router.navigate(['/garantias']);
-                }
-              });
-            }
-        });
-      }else{
-        console.log('Error en la transformación');
-      }
-    });
-  }
-
   openDialogOperationSuccessfully(textDialog:string):void{
     const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
       data:{text:textDialog}
@@ -505,15 +348,20 @@ export class EngineComponent implements OnInit {
     })
   }
   
+  //notificacion de error
+
   openSnackBar(message:string):void{
-    this._snackBar.open(message,'x',{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
       duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      panelClass: ['mat-toolbar', 'mat-primary','button-color']
-    })
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
   }
+
   //funciones para mostrar los select de quejas
+
   mostrarQueja(numeroDeQueja:number):void{
     switch (numeroDeQueja) {
       case 2:
@@ -529,8 +377,24 @@ export class EngineComponent implements OnInit {
         break;
     }
   }
+
+  agregarQueja():void{
+    if(this.verQueja2==false){
+      this.verQueja2 = true;
+    }else{
+      if(this.verQueja3==false){
+        this.verQueja3 = true;
+      }else{
+        if(this.verQueja4==false){
+          this.verQueja4 = true;
+        }
+      }
+    }
+  }
+
   //ocultar queja
-  ocultarQueja(numeroDeQueja):void{
+
+  ocultarQueja(numeroDeQueja:number):void{
     switch (numeroDeQueja) {
       case 2:
         if(this.verQueja3==true){
@@ -552,5 +416,467 @@ export class EngineComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  // MOSTRAR LAS QUEJAS PERTINENTES
+
+  mostrarQuejasIngresadas():void{
+    if(this.garantiaParaGestionar.idQueja2!=null){
+      this.verQueja2 = true;
+    }
+    if(this.garantiaParaGestionar.idQueja3!=null){
+      this.verQueja3 = true;
+    }
+    if(this.garantiaParaGestionar.idQueja4!=null){
+      this.verQueja4 = true;
+    }
+  }
+
+  // GUARDAR BORRADOR (REGISTRO NUEVO)
+
+  guardarBorradorRegistroNuevo():void{
+    if(!(this.matriculaEcontrada==null)){
+      if(!(this.ordenDeServicioEncontrado==null)){
+          if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
+          if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
+          if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
+          this.formRegisterEngine.value.codAreaServicios=this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.codAreaServicios:null;
+          const request = {
+                id:0,
+                activo:true,
+                bandeja:0,
+                idMatricula:this.matriculaEcontrada?this.matriculaEcontrada.id:null,
+                codCeco:this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.ceco:null,
+                idAreaServicio:this.areaDeServicioAsociadoAlOrdenDeServicio?this.areaDeServicioAsociadoAlOrdenDeServicio.id:null,
+                idUsuarioEvaluador: this.usuarioDeLaSession.id, //para usuario registrador
+                tipo:this.typeWarrantyText=='motor'?1:2,
+                ...this.formRegisterEngine.value
+            };
+          this.garantiasService.saveWarranty(request).subscribe(responseApiGarantia=>{
+              if(responseApiGarantia.success){
+                  const requestBitacora = {
+                        tipo:1,
+                        idEntidad:responseApiGarantia.body.id,
+                        evaluador:1,
+                        comentarios:null,
+                        estado:1,
+                        monto:0,
+                        bandejaActual:0,
+                    };
+                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+                        if(responseApiBitacora.success){
+                            localStorage.setItem('success','borrador');
+                            this.router.navigate(['/garantias']);
+                        }
+                  });
+              }
+          });
+      }else{        
+          this.mostrarMensajeDeError('Matrícula y Orden de Servicio obligatorios para un borrador');
+      }
+  }else{
+      this.mostrarMensajeDeError('Matrícula y Orden de Servicio obligatorios para un borrador');
+  }
+
+
+  }
+
+  //GUARDAR BANDEJA BLANCA (REGISTRO NUEVO)
+
+  guardarBandejaBlancaRegistroNuevo():void{
+      if(!(this.matriculaEcontrada==null)){
+          if(!(this.ordenDeServicioEncontrado==null)){
+              if(!(this.formRegisterEngine.value.tipoGarantia==null)){
+                  if(!(this.formRegisterEngine.value.idQueja1==null)){
+                      if(!(this.formRegisterEngine.value.comentarios=='')){
+                        if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
+                        if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
+                        if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
+                        this.formRegisterEngine.value.codAreaServicios=this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.codAreaServicios:null;
+                        const request = {
+                              id:0,
+                              activo:true,
+                              bandeja:1,
+                              idMatricula:this.matriculaEcontrada.id,
+                              codCeco:this.ordenDeServicioEncontrado.ceco,
+                              idAreaServicio:this.ordenDeServicioEncontrado?this.ordenDeServicioEncontrado.id:null,
+                              idUsuarioEvaluador: this.usuarioDeLaSession.id, //para usuario registrador
+                              tipo:this.typeWarrantyText=='motor'?1:2,
+                              ...this.formRegisterEngine.value
+                          };
+                        this.garantiasService.saveWarranty(request).subscribe(responseApiGarantia=>{
+                            if(responseApiGarantia.success){
+                                const requestBitacora = {
+                                      tipo:1,
+                                      idEntidad:responseApiGarantia.body.id,
+                                      evaluador:1,
+                                      comentarios:null,
+                                      estado:1,
+                                      monto:0,
+                                      bandejaActual:0,
+                                  };
+                                this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+                                      if(responseApiBitacora.success){
+                                          localStorage.setItem('success','registroBlanco');
+                                          this.router.navigate(['/garantias']);
+                                      }
+                                });
+                            }
+                        });
+                      }else{
+                          this.mostrarMensajeDeError('Escriba comentarios');
+                      }
+                  }else{
+                      this.mostrarMensajeDeError('Seleccione al menos una queja');
+                  }
+              }else{
+                  this.mostrarMensajeDeError('Seleccione un tipo de garantía')
+              }
+          }else{
+              this.mostrarMensajeDeError('OS Invalido');
+          }
+      }else{
+          this.mostrarMensajeDeError('ESN Invalido');
+      }
+  }
+
+  // EDITAR BORRADOR EXISTENTE
+
+  editarBorrador():void{
+    this.garantiaParaGestionar.idMatricula=this.matriculaEcontrada.id;
+    this.garantiaParaGestionar.codAreaServicios = this.ordenDeServicioEncontrado.codAreaServicios;
+    this.garantiaParaGestionar.codCeco = this.ordenDeServicioEncontrado.ceco;
+    this.garantiaParaGestionar.idUsuarioEvaluador = this.usuarioDeLaSession.id;
+    this.garantiaParaGestionar.esn = this.formRegisterEngine.value.esn
+    this.garantiaParaGestionar.os = this.formRegisterEngine.value.os
+    this.garantiaParaGestionar.tipoGarantia = this.formRegisterEngine.value.tipoGarantia
+    this.garantiaParaGestionar.puntoFalla = this.formRegisterEngine.value.puntoFalla
+    this.garantiaParaGestionar.medida = this.formRegisterEngine.value.medida
+    this.garantiaParaGestionar.fechaFalla = this.formRegisterEngine.value.fechaFalla
+    this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia
+    this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia
+    this.garantiaParaGestionar.numParteFallo = this.formRegisterEngine.value.numParteFallo
+    this.garantiaParaGestionar.codigoAdicional = this.formRegisterEngine.value.codigoAdicional
+    this.garantiaParaGestionar.fechaAdicional = this.formRegisterEngine.value.fechaAdicional
+    this.garantiaParaGestionar.ejecucionAdicional = this.formRegisterEngine.value.ejecucionAdicional
+    this.garantiaParaGestionar.idQueja1 = this.formRegisterEngine.value.idQueja1
+    this.garantiaParaGestionar.idQueja2 = this.formRegisterEngine.value.idQueja2
+    this.garantiaParaGestionar.idQueja3 = this.formRegisterEngine.value.idQueja3
+    this.garantiaParaGestionar.idQueja4 = this.formRegisterEngine.value.idQueja4
+    this.garantiaParaGestionar.comentarios = this.formRegisterEngine.value.comentarios    
+    this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseApiGarantia=>{
+      if(responseApiGarantia.success){
+        const requestBitacora = {
+              tipo:1,
+              idEntidad:this.garantiaParaGestionar.id,
+              evaluador:1,
+              comentarios:null,
+              estado:1,
+              monto:0,
+              bandejaActual:0,
+          };
+        
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+              if(responseApiBitacora.success){
+                  localStorage.setItem('success','editado');
+                  this.router.navigate(['/garantias']);
+              }
+        });
+    }
+    });
+  }
+
+  // ENVIAR BORRADOR EXISTENTE A BLANCA
+
+  enviarBorradorParaBandejaBlanca():void{
+    if(!(this.matriculaEcontrada==null)){
+      if(!(this.ordenDeServicioEncontrado==null)){
+          if(!(this.formRegisterEngine.value.tipoGarantia==null)){
+              if(!(this.formRegisterEngine.value.idQueja1==null)){
+                  if(!(this.formRegisterEngine.value.comentarios=='')){
+                      if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
+                      if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
+                      if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
+                      this.garantiaParaGestionar.idMatricula=this.matriculaEcontrada.id;
+                      this.garantiaParaGestionar.codAreaServicios = this.ordenDeServicioEncontrado.codAreaServicios;
+                      this.garantiaParaGestionar.codCeco = this.ordenDeServicioEncontrado.ceco;
+                      this.garantiaParaGestionar.idUsuarioEvaluador = this.usuarioDeLaSession.id;
+                      this.garantiaParaGestionar.esn = this.formRegisterEngine.value.esn;
+                      this.garantiaParaGestionar.os = this.formRegisterEngine.value.os;
+                      this.garantiaParaGestionar.tipoGarantia = this.formRegisterEngine.value.tipoGarantia;
+                      this.garantiaParaGestionar.puntoFalla = this.formRegisterEngine.value.puntoFalla;
+                      this.garantiaParaGestionar.medida = this.formRegisterEngine.value.medida;
+                      this.garantiaParaGestionar.fechaFalla = this.formRegisterEngine.value.fechaFalla;
+                      this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+                      this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+                      this.garantiaParaGestionar.numParteFallo = this.formRegisterEngine.value.numParteFallo;
+                      this.garantiaParaGestionar.codigoAdicional = this.formRegisterEngine.value.codigoAdicional;
+                      this.garantiaParaGestionar.fechaAdicional = this.formRegisterEngine.value.fechaAdicional;
+                      this.garantiaParaGestionar.ejecucionAdicional = this.formRegisterEngine.value.ejecucionAdicional;
+                      this.garantiaParaGestionar.idQueja1 = this.formRegisterEngine.value.idQueja1;
+                      this.garantiaParaGestionar.idQueja2 = this.formRegisterEngine.value.idQueja2;
+                      this.garantiaParaGestionar.idQueja3 = this.formRegisterEngine.value.idQueja3;
+                      this.garantiaParaGestionar.idQueja4 = this.formRegisterEngine.value.idQueja4;
+                      this.garantiaParaGestionar.comentarios = this.formRegisterEngine.value.comentarios;
+                      this.garantiaParaGestionar.bandeja = 1;
+                      this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseApiGarantia=>{
+                        if(responseApiGarantia.success){
+                          const requestBitacora = {
+                                tipo:1,
+                                idEntidad:this.garantiaParaGestionar.id,
+                                evaluador:1,
+                                comentarios:null,
+                                estado:1,
+                                monto:0,
+                                bandejaActual:1,
+                            };
+                          
+                          this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+                                if(responseApiBitacora.success){
+                                    localStorage.setItem('success','registroBlanco');
+                                    this.router.navigate(['/garantias']);
+                                }
+                          });
+                      }
+                      });
+                  }else{
+                      this.mostrarMensajeDeError('Escriba comentarios');
+                  }
+              }else{
+                  this.mostrarMensajeDeError('Seleccione al menos una queja');
+              }
+          }else{
+              this.mostrarMensajeDeError('Seleccione un tipo de garantía')
+          }
+      }else{
+          this.mostrarMensajeDeError('OS Invalido');
+      }
+  }else{
+      this.mostrarMensajeDeError('ESN Invalido');
+    }
+  }
+
+  // EDITAR REGISTRO BLANCO
+
+  guardarBlancoEditado():void{
+    this.garantiaParaGestionar.idMatricula=this.matriculaEcontrada.id;
+    this.garantiaParaGestionar.codAreaServicios = this.ordenDeServicioEncontrado.codAreaServicios;
+    this.garantiaParaGestionar.codCeco = this.ordenDeServicioEncontrado.ceco;
+    this.garantiaParaGestionar.idUsuarioEvaluador = this.usuarioDeLaSession.id;;
+    this.garantiaParaGestionar.esn = this.formRegisterEngine.value.esn;
+    this.garantiaParaGestionar.os = this.formRegisterEngine.value.os;
+    this.garantiaParaGestionar.tipoGarantia = this.formRegisterEngine.value.tipoGarantia;
+    this.garantiaParaGestionar.puntoFalla = this.formRegisterEngine.value.puntoFalla;
+    this.garantiaParaGestionar.medida = this.formRegisterEngine.value.medida;
+    this.garantiaParaGestionar.fechaFalla = this.formRegisterEngine.value.fechaFalla;
+    this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+    this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+    this.garantiaParaGestionar.numParteFallo = this.formRegisterEngine.value.numParteFallo;
+    this.garantiaParaGestionar.codigoAdicional = this.formRegisterEngine.value.codigoAdicional;
+    this.garantiaParaGestionar.fechaAdicional = this.formRegisterEngine.value.fechaAdicional;
+    this.garantiaParaGestionar.ejecucionAdicional = this.formRegisterEngine.value.ejecucionAdicional;
+    this.garantiaParaGestionar.idQueja1 = this.formRegisterEngine.value.idQueja1;
+    this.garantiaParaGestionar.idQueja2 = this.formRegisterEngine.value.idQueja2;
+    this.garantiaParaGestionar.idQueja3 = this.formRegisterEngine.value.idQueja3;
+    this.garantiaParaGestionar.idQueja4 = this.formRegisterEngine.value.idQueja4;
+    this.garantiaParaGestionar.comentarios = this.formRegisterEngine.value.comentarios;
+    this.garantiaParaGestionar.estado = 1;
+    this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseApiGarantia=>{
+      if(responseApiGarantia.success){
+        const requestBitacora = {
+              tipo:1,
+              idEntidad:this.garantiaParaGestionar.id,
+              evaluador:1,
+              comentarios:null,
+              estado:1,
+              monto:0,
+              bandejaActual:1,
+          };        
+        this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+              if(responseApiBitacora.success){
+                  localStorage.setItem('success','editado');
+                  this.router.navigate(['/garantias']);
+              }
+        });
+    }
+    });
+  }
+
+  // ENVIAR REGISTRO BLANCO A NARANJA
+
+  enviarBlancaParaNaranja():void{
+    if(!(this.matriculaEcontrada==null)){
+      if(!(this.ordenDeServicioEncontrado==null)){
+          if(!(this.formRegisterEngine.value.tipoGarantia==null)){
+              if(!(this.formRegisterEngine.value.idQueja1==null)){
+                  if(!(this.formRegisterEngine.value.comentarios=='')){
+                      if(this.verQueja2==false){this.formRegisterEngine.value.idQueja2=null}
+                      if(this.verQueja3==false){this.formRegisterEngine.value.idQueja3=null}
+                      if(this.verQueja4==false){this.formRegisterEngine.value.idQueja4=null}
+                      this.garantiaParaGestionar.idMatricula=this.matriculaEcontrada.id;
+                      this.garantiaParaGestionar.codAreaServicios = this.ordenDeServicioEncontrado.codAreaServicios;
+                      this.garantiaParaGestionar.codCeco = this.ordenDeServicioEncontrado.ceco;
+                      this.garantiaParaGestionar.idUsuarioEvaluador = this.usuarioDeLaSession.id;
+                      this.garantiaParaGestionar.esn = this.formRegisterEngine.value.esn;
+                      this.garantiaParaGestionar.os = this.formRegisterEngine.value.os;
+                      this.garantiaParaGestionar.tipoGarantia = this.formRegisterEngine.value.tipoGarantia;
+                      this.garantiaParaGestionar.puntoFalla = this.formRegisterEngine.value.puntoFalla;
+                      this.garantiaParaGestionar.medida = this.formRegisterEngine.value.medida;
+                      this.garantiaParaGestionar.fechaFalla = this.formRegisterEngine.value.fechaFalla;
+                      this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+                      this.garantiaParaGestionar.fechaInicioGarantia = this.formRegisterEngine.value.fechaInicioGarantia;
+                      this.garantiaParaGestionar.numParteFallo = this.formRegisterEngine.value.numParteFallo;
+                      this.garantiaParaGestionar.codigoAdicional = this.formRegisterEngine.value.codigoAdicional;
+                      this.garantiaParaGestionar.fechaAdicional = this.formRegisterEngine.value.fechaAdicional;
+                      this.garantiaParaGestionar.ejecucionAdicional = this.formRegisterEngine.value.ejecucionAdicional;
+                      this.garantiaParaGestionar.idQueja1 = this.formRegisterEngine.value.idQueja1;
+                      this.garantiaParaGestionar.idQueja2 = this.formRegisterEngine.value.idQueja2;
+                      this.garantiaParaGestionar.idQueja3 = this.formRegisterEngine.value.idQueja3;
+                      this.garantiaParaGestionar.idQueja4 = this.formRegisterEngine.value.idQueja4;
+                      this.garantiaParaGestionar.comentarios = this.formRegisterEngine.value.comentarios;
+                      this.garantiaParaGestionar.estado = 1;
+                      this.garantiaParaGestionar.bandeja = 2;
+                      const dialogTransforRecordToOrange = this.matDialog.open(DialogTransformRecordToOrangeComponent,{
+                        disableClose:true,
+                        width:'936px',
+                        data:{idGarantia:this.garantiaParaGestionar.id}
+                      });
+                      dialogTransforRecordToOrange.afterClosed().subscribe(responseDialog=>{
+                          if(responseDialog){
+                              this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseApiGarantia=>{
+                                if(responseApiGarantia.success){
+                                  const requestBitacora = {
+                                        tipo:1,
+                                        idEntidad:this.garantiaParaGestionar.id,
+                                        evaluador:1,
+                                        comentarios:null,
+                                        estado:1,
+                                        monto:0,
+                                        bandejaActual:2,
+                                    };
+                                  
+                                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseApiBitacora=>{
+                                        if(responseApiBitacora.success){
+                                            localStorage.setItem('success','registroNaranja');
+                                            this.router.navigate(['/garantias']);
+                                        }
+                                  });
+                              }
+                              });
+                          }
+                        });
+                  }else{
+                      this.mostrarMensajeDeError('Escriba comentarios');
+                  }
+              }else{
+                  this.mostrarMensajeDeError('Seleccione al menos una queja');
+              }
+          }else{
+              this.mostrarMensajeDeError('Seleccione un tipo de garantía')
+          }
+      }else{
+          this.mostrarMensajeDeError('OS Invalido');
+      }
+  }else{
+      this.mostrarMensajeDeError('ESN Invalido');
+    }
+  }
+  // RECHAZAR REGISTRO
+
+  rechazarRegistro():void{
+    const dialogReject = this.matDialog.open(DialogRejectComponent,{
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de rechazar este registro?',description:'Al hacerlo el registro ingresará a una bandeja negra'}
+    });
+    dialogReject.afterClosed().subscribe(responseDialog=>{
+      if(responseDialog.selection){
+        const requestBitacora = {
+          tipo:1,
+          idEntidad:this.garantiaParaGestionar.id,
+          evaluador:1,
+          comentarios:responseDialog.comentario,
+          estado:4,
+          monto:0,
+          bandejaActual:this.garantiaParaGestionar.bandeja,
+        };
+    this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+      if(responseBitacora.success){
+          this.garantiaParaGestionar.estado = 4;
+          this.garantiaParaGestionar.codCeco = this.garantiaParaGestionar.ceco;
+          this.garantiaParaGestionar.codAreaServicios = this.garantiaParaGestionar.codAreaServicioSap;
+          this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseGarantia=>{
+            if(responseGarantia.success){
+              localStorage.setItem('success','rechazado');
+              this.router.navigate(['/garantias']);
+            }
+          });
+      }
+    });
+      }
+    });
+  }
+
+  //OBSERVAR REGISTRO
+
+  observarRegistro():void{
+    const dialogObservedRecord = this.matDialog.open(DialogObservationComponent,{
+      disableClose:true,width:'380px',data: {text:'¿Estás seguro de que deseas observar este registro?'}
+    });
+    dialogObservedRecord.afterClosed().subscribe(responseDialog=>{
+        if(responseDialog.selection){
+            this.garantiaParaGestionar.codCeco = this.garantiaParaGestionar.ceco;
+            this.garantiaParaGestionar.codAreaServicios = this.garantiaParaGestionar.codAreaServicioSap;
+            this.garantiaParaGestionar.estado = 2;
+            this.garantiasService.saveWarranty(this.garantiaParaGestionar).subscribe(responseGarantia=>{
+              if(responseGarantia.success){
+                const requestBitacora = {
+                  tipo:1,
+                  idEntidad:this.garantiaParaGestionar.id,
+                  evaluador:1,
+                  comentarios:responseDialog.comentario,
+                  estado:2,
+                  monto:0,
+                  bandejaActual:this.garantiaParaGestionar.bandeja,
+                };
+                this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
+                    if(responseBitacora.success){
+                      localStorage.setItem('success','observado');
+                      this.router.navigate(['/garantias']);      
+                    }
+                });
+
+              }
+            });
+      }
+    });
+  }
+
+  //TEXTO SEGUN TIPO DE GARANTIA
+
+  textoSegunTipoDeGarantia(tipoDeGarantia:number):string{
+    switch(tipoDeGarantia){
+      case 3: return 'del repuesto';
+      break;
+      case 4: return 'del repuesto';
+      break;
+      case 7: return 'de campaña';
+      break;
+      case 8: return 'de TRP';
+      break;
+      case 9: return 'de ATC';
+      break;
+      case 10: return 'de Warrany Memo';
+      break;
+      default: return ''
+        break;
+    }
+  }
+  
+  //mensaje de error
+
+  mostrarMensajeDeError(mensaje:string):void{
+    const dialogError = this.matDialog.open(DialogErrorMessageComponent,
+      {data:{text:mensaje},
+      disableClose:true
+    });
   }
 }

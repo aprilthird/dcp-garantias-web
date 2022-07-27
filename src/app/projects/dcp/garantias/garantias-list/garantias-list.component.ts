@@ -14,31 +14,6 @@ interface Option {
   name: string;
 }
 
-export interface PeriodicElement {
-  number: number;
-  serie: string;
-  area: string;
-  type: string;
-  failureDate: string;
-  amount: number;
-  user: string;
-  age: number;
-  inbox: number;
-  state: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {number: 1, serie: '66304283', area: 'Piura Motores', type: 'GFA', failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 0, state: 'servicios'},
-  {number: 2, serie: '66304283', area: 'Piura Motores', type: 'GFA', failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 150, inbox: 1, state: 'rechazado'},
-  {number: 3, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 195, inbox: 2, state: 'observado'},
-  {number: 4, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 368, inbox: 3, state: 'servicios'},
-  {number: 5, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 10, inbox: 4, state: 'rechazado'},
-  {number: 6, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 368, inbox: 5, state: 'observado'},
-  {number: 7, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 361, inbox: 6, state: 'servicios'},
-  {number: 8, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 0, state: 'rechazado'},
-  {number: 9, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'observado'}
-];
-
 @Component({
   selector: 'app-garantias-list',
   templateUrl: './garantias-list.component.html',
@@ -51,6 +26,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     ]),
   ],
 })
+
 export class GarantiasListComponent implements OnInit {
 
   options: Option[] = [
@@ -70,17 +46,18 @@ export class GarantiasListComponent implements OnInit {
     {value:3, name:'Verde'},
     {value:4, name:'Gris'},
     {value:5, name:'Negra'},
+    {value:11, name:'Roja'},
   ];
 
   oldOptions: Option[] = [
-    {value:-1, name:'Todas'},
-    {value:0, name:'0-29'},
-    {value:1, name:'30-59'},
-    {value:2, name:'60-89'},
-    {value:3, name:'90-119'},
-    {value:4, name:'120-179'},
-    {value:5, name:'180-364'},
-    {value:6, name:'>365'},
+    {value:0, name:'Todas'},
+    {value:1, name:'0-29'},
+    {value:2, name:'30-59'},
+    {value:3, name:'60-89'},
+    {value:4, name:'90-119'},
+    {value:5, name:'120-179'},
+    {value:6, name:'180-364'},
+    {value:7, name:'>365'},
   ];
 
   //formulario para el filtro de las garantias
@@ -104,7 +81,7 @@ export class GarantiasListComponent implements OnInit {
   disabledButtonLess:boolean=false;
   //info para la bitacora
   dataBitacora:any;
-
+  mensajeDeAccionRealizada:string;
   currentDate = new Date();
   prevDate = new Date(this.currentDate.getFullYear() - 1, this.currentDate.getMonth(), this.currentDate.getDay());
 
@@ -126,9 +103,8 @@ export class GarantiasListComponent implements OnInit {
     const filterData = this.formFilter.value;
     filterData.area = filterData.area == -1 ? null : filterData.area;
     filterData.bandeja = filterData.bandeja == -1 ? null : filterData.bandeja;
-    filterData.antiguedad = filterData.antiguedad == -1 ? null : filterData.antiguedad;
+    filterData.antiguedad = filterData.antiguedad;
     this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
-      console.log(resp);
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
       this.numberOfPages = this.getNumberOfPages(resp.pageSize,resp.totalRecords);
@@ -152,14 +128,17 @@ export class GarantiasListComponent implements OnInit {
 
 
   loadFormFilter():void{
+    let dateCurrent = new Date; console.log(dateCurrent);
     this.formFilter = new FormGroup({
       esn: new FormControl(null),
       os: new FormControl(null),
       area: new FormControl(-1),
       fechaIni: new FormControl(this.prevDate),
+      // fechaIni: new FormControl(dateCurrent),
       fechaFin: new FormControl(this.currentDate),
+      // fechaFin: new FormControl(dateCurrent),
       bandeja: new FormControl(-1),
-      antiguedad: new FormControl(-1)
+      antiguedad: new FormControl(0)
     });
   }
 
@@ -170,23 +149,112 @@ export class GarantiasListComponent implements OnInit {
     if(days>=360){ return '#FF857A'; }
   }
 
-  getColorInbox(state):string{
-    if(state==1){return 'state1'}
-    if(state==2){return 'state2'}
-    if(state==3){return 'state3'}
-    if(state==4){return 'state4'}
-    if(state==5){return 'state5'}
-    if(state==6){return 'state6'}
+  colorDeLaBandeja(garantia:any):string{
+    let claseEstilo:string;
+    if(garantia.estado==2){
+      claseEstilo = 'estado2';
+      return claseEstilo;
+    }else{
+      if(garantia.estado==4){
+        claseEstilo = 'estado4';
+        return claseEstilo;
+      }
+      else{
+        switch (garantia.bandeja) {
+          case 0:return 'bandeja0';
+            break;
+          case 1:return 'bandeja1';
+            break;
+          case 2:return 'bandeja2';
+            break;
+          case 3:return 'bandeja3';
+            break;
+          case 4:return 'bandeja4';
+            break;
+          case 5:return 'bandeja5';
+            break;
+          case 6:return 'bandeja6';
+            break;
+          default:
+            break;
+        }
+      }
+    }
   }
 
-  getWordInbox(state):string{
-    if(state==0){return 'B. Inicial'}
-    if(state==1){return 'Blanco'}
-    if(state==2){return 'Naranja'}
-    if(state==3){return 'Verde'}
-    if(state==4){return 'Gris'}
-    if(state==5){return 'Negra'}
-    if(state==6){return 'Amarillo'}
+  colorDeLaBandejaBitacora(garantia:any):string{
+    let claseEstilo:string;
+    if(garantia.estado==2){
+      claseEstilo = 'estado2';
+      return claseEstilo;
+    }else{
+      if(garantia.estado==4){
+        claseEstilo = 'estado4';
+        return claseEstilo;
+      }
+      else{
+        switch (garantia.bandejaActual) {
+          case 0:return 'bandeja0';
+            break;
+          case 1:return 'bandeja1';
+            break;
+          case 2:return 'bandeja2';
+            break;
+          case 3:return 'bandeja3';
+            break;
+          case 4:return 'bandeja4';
+            break;
+          case 5:return 'bandeja5';
+            break;
+          case 6:return 'bandeja6';
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  bandejaGarantia(garantia:any):string{
+    if(garantia.estado==2){return 'Roja';}
+    if(garantia.estado==4){return 'Negra';}
+    if(garantia.bandeja==0){return 'B. Inicial'}
+    if(garantia.bandeja==1){return 'Blanco'}
+    if(garantia.bandeja==2){return 'Naranja'}
+    if(garantia.bandeja==3){return 'Verde'}
+    if(garantia.bandeja==4){return 'Gris'}
+    if(garantia.bandeja==5){return 'Negra'}
+    if(garantia.bandeja==6){return 'Amarillo'}
+  }
+
+  bandejaBitacora(garantia:any):string{
+    if(garantia.estado==2){return 'Roja';}
+    if(garantia.estado==4){return 'Negra';}
+    if(garantia.bandejaActual==0){return 'B. Inicial'}
+    if(garantia.bandejaActual==1){return 'Blanco'}
+    if(garantia.bandejaActual==2){return 'Naranja'}
+    if(garantia.bandejaActual==3){return 'Verde'}
+    if(garantia.bandejaActual==4){return 'Gris'}
+    if(garantia.bandejaActual==5){return 'Negra'}
+    if(garantia.bandejaActual==6){return 'Amarillo'}
+  }
+
+  getEstado(numeroEstado:number):string{
+    if(numeroEstado==1){
+      return 'Aprobado';
+    }
+    if(numeroEstado==2){
+      return 'Observado';
+    }
+    if(numeroEstado==3){
+      return 'Cerrado';
+    }
+    if(numeroEstado==0){
+      return 'Activo';
+    }
+    if(numeroEstado==4){
+      return 'Rechazado';
+    }
   }
 
   onOpenDialogQuestionNewRecord():void{
@@ -208,6 +276,24 @@ export class GarantiasListComponent implements OnInit {
   }
 
   loadMessage():void{
+    if(localStorage.getItem('success')=='borrador'){
+      this.mensajeDeAccionRealizada = 'Se guardó el borrador';
+    }
+    if(localStorage.getItem('success')=='editado'){
+      this.mensajeDeAccionRealizada = 'Se editó el registro';
+    }
+    if(localStorage.getItem('success')=='registroBlanco'){
+      this.mensajeDeAccionRealizada = 'Registro enviado (Bandeja Blanca)';
+    }
+    if(localStorage.getItem('success')=='observado'){
+      this.mensajeDeAccionRealizada = 'Registro observado';
+    }
+    if(localStorage.getItem('success')=='registroNaranja'){
+      this.mensajeDeAccionRealizada = 'Registro enviado (Bandeja Naranja)';
+    }
+    if(localStorage.getItem('success')=='rechazado'){
+      this.mensajeDeAccionRealizada = 'Registro rechazado';
+    }
     this.seeNotificationCreateWarrantySuccessfully = true;
     setTimeout(()=>{
       this.seeNotificationCreateWarrantySuccessfully = false;
@@ -216,10 +302,8 @@ export class GarantiasListComponent implements OnInit {
   }
 
   seeBitacora(element):void{
-    console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.garantiasService.logWarranty(element.id).subscribe(resp=>{
-      console.log(resp);
+    this.garantiasService.logWarranty(element.id,1).subscribe(resp=>{
       this.dataBitacora = resp.body;
       this.dataSourceBitacora = resp.body;
     });
@@ -257,7 +341,7 @@ export class GarantiasListComponent implements OnInit {
     }
   }
 
-  editWarranty(warranty):void{
+  editWarranty(warranty:any):void{
     if(warranty.bandeja==0){
       localStorage.setItem('action','edit');
       localStorage.setItem('garantia',JSON.stringify(warranty));
@@ -274,10 +358,11 @@ export class GarantiasListComponent implements OnInit {
     }
   }
 
-  mostrarComentario(_comentario):void{
-    const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
-      data:{comentario:_comentario,text:'Tu reclamo ha sido observado'},
+  mostrarComentario(itemBitacora:any):void{
+    this.matDialog.open(DialogMostrarComentarioComponent,{
+      data:{bitacora:itemBitacora},
       disableClose:true, width:'500px'
     });
   }
+  
 }

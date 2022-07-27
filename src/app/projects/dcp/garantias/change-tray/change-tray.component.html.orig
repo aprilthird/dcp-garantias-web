@@ -183,7 +183,7 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <mat-form-field appearance="fill">
-                                                            <mat-label for="">ETO</mat-label>
+                                                            <mat-label for="">PTO</mat-label>
                                                             <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.etoPto">
                                                         </mat-form-field>
                                                     </div>
@@ -575,7 +575,7 @@
                                                         </div>
                                                         <div class="col-md-3">
                                                             <mat-form-field appearance="fill">
-                                                                <mat-label for="">ETO</mat-label>
+                                                                <mat-label for="">PTO</mat-label>
                                                                 <input matInput [disabled]="true" type="text" placeholder="" [value]="esn.etoPto">
                                                             </mat-form-field>
                                                         </div>

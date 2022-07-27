@@ -6,7 +6,8 @@ export class MasterConstantRequest {
     codigo:string;
     laborRate:number;
     kmRate:number;
-    bfcMarkup:number;
+    bfc:number;
+    markup:number;
     siteLabor:number;
     estado:number;
 
@@ -17,7 +18,8 @@ export class MasterConstantRequest {
     newObj.codigo = ValidateHelper.validString(obj.codigo);
     newObj.laborRate = ValidateHelper.validNumber(obj.laborRate);
     newObj.kmRate = ValidateHelper.validNumber(obj.kmRate);
-    newObj.bfcMarkup = ValidateHelper.validNumber(obj.bfcMarkup);
+    newObj.bfc = ValidateHelper.validNumber(obj.bfc);
+    newObj.markup = ValidateHelper.validNumber(obj.markup);
     newObj.siteLabor = ValidateHelper.validNumber(obj.siteLabor);
     newObj.estado = estado;
     return newObj;

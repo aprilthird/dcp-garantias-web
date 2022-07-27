@@ -8,17 +8,18 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 import { DialogAdjuntarDocumentoComponent } from '../dialogs/dialog-adjuntar-documento/dialog-adjuntar-documento.component';
 import { DialogRejectComponent } from 'app/shared/dialogs/dialog-reject/dialog-reject.component';
 import { DialogObservationComponent } from 'app/shared/dialogs/dialog-observation/dialog-observation.component';
-import { clone, slice } from 'lodash';
 import { DialogTransformRecordToYellowComponent } from '../dialogs/dialog-transform-record-to-yellow/dialog-transform-record-to-yellow.component';
 import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transform-record-to-green/dialog-transform-record-to-green.component';
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 import { AzureService } from 'app/core/azure/azure.service';
+
 @Component({
   selector: 'app-change-tray',
   templateUrl: './change-tray.component.html',
   styleUrls: ['./change-tray.component.scss']
 })
+
 export class ChangeTrayComponent implements OnInit {
 
   //variable para la acción que se va a realizar, si es crear o editar  
@@ -85,7 +86,7 @@ export class ChangeTrayComponent implements OnInit {
   //guardamos la garantia que llega
   warranty:any;
   //datos de la matricula
-  esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicioGarantia:'-',bis:false};
+  esn = {id:'-',cliente:'-',direccion:'-',aplicacion:'-',modelo:'-',cpl:'-',etoPto:'-',fechaInicio:'-',bis:false,pto:'-'};
   //datos de orden de servicio
   os = {claseActividad:'-', codAreaServicios:'-', fechaLib:'-', os:'-', bu:'-', ceco: '-'};
   //datos de area de servicio
@@ -104,6 +105,8 @@ export class ChangeTrayComponent implements OnInit {
   viewsTypesWarranty = {a:false,b:false,c:false,d:false,e:false,f:false,g:false,h:false,i:false,};
   //nuevo SRT
   formSrt: FormGroup;
+  mostrarFechaGarantia = true; mostrarBis = true; mostrarPTO = true;
+  mostrarProgressBarEsn : boolean = false; 
 
   constructor(private readonly matDialog: MatDialog, private readonly router: Router, private readonly garantiasService:GarantiasService,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,  private _azureService: AzureService) { }
@@ -112,6 +115,7 @@ export class ChangeTrayComponent implements OnInit {
     this.button.detalles = true;
     this.styleButton.detallesStyle='darkButton';
     this.warranty = JSON.parse(localStorage.getItem('garantia'));
+    console.log(this.warranty);
     this.loadFormGroupChangeTray();
     this.loadFormGroupSrt();
     this.cargarDatosDeMaestras();
@@ -144,12 +148,14 @@ export class ChangeTrayComponent implements OnInit {
 
   getEsn():void{
     const esn = this.formGroupChangeTray.value.esn;
+    this.mostrarProgressBarEsn = true;
     this.garantiasService.findEsn(esn).subscribe(resp=>{
       if(resp.body){
+        this.mostrarProgressBarEsn = false;
         this.esn = resp.body;
-        if(this.esn.bis) {
-          this.esn.fechaInicioGarantia = "";
-        }
+        this.mostrarBis = this.esn.fechaInicio? false:true;
+        this.mostrarFechaGarantia = this.esn.fechaInicio? true:false;
+        this.mostrarPTO = this.esn.pto? true:false;
         let tmp2 = localStorage.getItem('gar_data' + this.esn.id + "_" + 2);
         if(tmp2 !== null && tmp2 !== "") {
           console.log(tmp2);
@@ -173,7 +179,6 @@ export class ChangeTrayComponent implements OnInit {
           console.log(tmp5);
           this.dataSourceViajes = JSON.parse(tmp5);
         }
-
       }else{
         console.log('error');
       }
@@ -434,7 +439,6 @@ export class ChangeTrayComponent implements OnInit {
   //FALLAS
   seleccionarFalla(idFalla):void{
     this.fallaSeleccionada = this.tiposDeFalla.find(e => e.id==idFalla);
-    console.log(this.fallaSeleccionada);
   }
   agregarFalla():void{
     if(this.fallaSeleccionada!=null){
@@ -770,9 +774,9 @@ export class ChangeTrayComponent implements OnInit {
     });
     dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialog=>{
       console.log(responseDialog);
-      if(responseDialog.accion){
-        this.onChargeFile(responseDialog.documento);
-      }
+      // if(responseDialog.accion){
+      //   this.onChargeFile(responseDialog.documento);
+      // }
     });
   }
 
@@ -1029,19 +1033,15 @@ export class ChangeTrayComponent implements OnInit {
       data:{text:message},disableClose:true,
     });
   }
-}
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+  //mensaje de error
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'}
-];
+  mostrarMensajeDeError(mensaje:string):void{
+    const dialogError = this.matDialog.open(DialogErrorMessageComponent,
+      {data:{text:mensaje},
+      disableClose:true
+    });
+  }
+
+}
 

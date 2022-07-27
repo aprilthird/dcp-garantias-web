@@ -11,39 +11,36 @@
         <div class="col-md-12 mb-3">
             <mat-card>
                 <div class="row">
-                    <div class="col-md-3 flex-column margin-b-15" style="justify-content: center;">
-                        <span>N° OS</span>
-                        <span class="font-w-700">os20008484824</span>
-                    </div>
-                    <div class="col-md-3 margin-b-20">
+                    <div class="col-md-3 d-flex align-items-center" style="border-right: 2px dashed #64748B;">N° OS<span class="fw-bold">{{warranty.os}}</span></div>
+                    <div class="col-md-3 d-flex align-items-center" style="border-right: 2px dashed #64748B;">
                         <div class="row">
                             <div class="col-md-12 flex-row">
-                                <div class="w7">
+                                <div class="w5">
                                     <span>Tipo de garantia</span>
                                 </div>
-                                <div class="w3">
-                                    <span class="font-w-700">GFA</span>
+                                <div class="w5">
+                                    <span class="font-w-700">{{warranty.tipoGarantia}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
-                                <div class="w7">
+                                <div class="w5">
                                     <span>Serie</span>
                                 </div>
-                                <div class="w3">
-                                    <span class="font-w-700">7809099</span>
+                                <div class="w5">
+                                    <span class="font-w-700">{{warranty.esn}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12 flex-row">
-                                <div class="w7">
+                                <div class="w5">
                                     <span>Area de servicio</span>
                                 </div>
-                                <div class="w3">
-                                    <span class="font-w-700">Piura</span>
+                                <div class="w5">
+                                    <span class="font-w-700">{{warranty.areaServicio}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 margin-b-20">
+                    <div class="col-md-3 d-flex align-items-center" style="border-right: 2px dashed #64748B;">
                         <div class="row">
                             <div class="col-md-12 flex-row">
                                 <div class="w7">
@@ -83,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 margin-b-20">
+                    <div class="col-md-3 d-flex align-items-center">
                         <div class="row">
                             <div class="col-md-12 flex-row">
                                 <div class="w7">
@@ -145,8 +142,8 @@
                                             <div class="col-md-3">
                                                 <mat-form-field appearance="fill">
                                                     <mat-label for="">ESN</mat-label>
-                                                    <input matInput type="text" placeholder="Buscar ESN"
-                                                        formControlName="esn">
+                                                    <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
+                                                    <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -173,7 +170,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <mat-form-field appearance="fill">
-                                                        <mat-label for="">Aplicacion del {{typeWarrantyText}}
+                                                        <mat-label for="">Aplicacion del {{warranty==null?'-':warranty.tipo==1?'motor':'Grupo Electrógeno'}}
                                                         </mat-label>
                                                         <input matInput [disabled]="true" type="text" placeholder=""
                                                             [value]="esn.aplicacion">
@@ -181,7 +178,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <mat-form-field appearance="fill">
-                                                        <mat-label for="">Modelo del {{typeWarrantyText}}</mat-label>
+                                                        <mat-label for="">Modelo del {{warranty==null?'-':warranty.tipo==1?'motor':'GE'}}</mat-label>
                                                         <input matInput [disabled]="true" type="text" placeholder=""
                                                             [value]="esn.modelo">
                                                     </mat-form-field>
@@ -193,23 +190,22 @@
                                                             [value]="esn.cpl">
                                                     </mat-form-field>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3" *ngIf="mostrarPTO">
                                                     <mat-form-field appearance="fill">
-                                                        <mat-label for="">ETO</mat-label>
+                                                        <mat-label for="">PTO</mat-label>
                                                         <input matInput [disabled]="true" type="text" placeholder=""
                                                             [value]="esn.etoPto">
                                                     </mat-form-field>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <mat-form-field appearance="fill">
+                                                <div class="col-md-3" *ngIf="mostrarFechaGarantia">
+                                                    <mat-form-field>
                                                         <mat-label for="">Fecha inicio de garantía</mat-label>
                                                         <input matInput [disabled]="true" type="text" placeholder=""
-                                                            [value]="esn.fechaInicioGarantia=='-'?'-':esn.fechaInicioGarantia | date: 'dd/MM/yyyy' ">
+                                                            [value]="esn.fechaInicio=='-'?'-':esn.fechaInicio | date: 'dd/MM/yyyy' ">
                                                     </mat-form-field>
                                                 </div>
-                                                <div class="col-md-3 flex-align-center">
-                                                    <mat-checkbox color="primary" [value]="esn.bis" [disabled]="true">
-                                                        BIS</mat-checkbox>
+                                                <div class="col-md-3 flex-align-center" *ngIf="mostrarBis">
+                                                    <mat-checkbox color="primary" [value]="esn.bis" [disabled]="true">BIS</mat-checkbox>
                                                 </div>
                                             </div>
                                         </mat-card>

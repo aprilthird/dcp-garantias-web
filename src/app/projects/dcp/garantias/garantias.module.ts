@@ -45,6 +45,7 @@ import { DialogTransformRecordToGreenComponent } from './dialogs/dialog-transfor
 import { DialogTransformRecordToGrayComponent } from './dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 // import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -98,8 +99,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatExpansionModule,
     // NgxMatSelectSearchModule,
     FormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatProgressBarModule
   ],
-  providers:[{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class GarantiasModule { }

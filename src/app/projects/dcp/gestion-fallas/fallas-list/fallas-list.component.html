@@ -3,11 +3,11 @@
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="row">
                 <div class="col-xs-8 col-sm-6 col-md-4">
-                    <h4 class="font-w-700">Gestión de fallas</h4>
+                    <h4 class="font-w-700 pointer" title="Click para limpiar filtros" (click)="limpiarFiltros()">Gestión de fallas</h4>
                 </div>
                 <div class="col-xs-4 col-sm-2 col-md-3">
-                    <div matRipple class="notification-green" *ngIf="verMensajeCreacionExitosa">
-                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{mensajeExitoso}}
+                    <div matRipple class="notification-green" *ngIf="mostrarMensaje">
+                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{notificacionDeAccionHecha}}
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -31,34 +31,37 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-2 search">
                     <mat-form-field floatLabel="always">
-                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os" (ngModelChange)="busquedaFallas()">
-                        <button mat-icon-button matSuffix>
+                        <mat-label>OS:</mat-label>
+                        <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
+                        <button mat-icon-button matSuffix (click)="listarFallas(true)">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2 search">
                     <mat-form-field floatLabel="always">
-                        <input matInput type="text" placeholder="Buscar N° IO" formControlName="io" (ngModelChange)="busquedaFallas()">
-                        <button mat-icon-button matSuffix>
+                        <mat-label>IO:</mat-label>
+                        <input matInput type="text" placeholder="Buscar N° IO" formControlName="io">
+                        <button mat-icon-button matSuffix (click)="listarFallas(true)">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2 search">
                   <mat-form-field floatLabel="always">
-                      <input matInput type="text" placeholder="Buscar TSR" formControlName="tsr" (ngModelChange)="busquedaFallas()">
-                      <button mat-icon-button matSuffix>
+                      <mat-label>TSR:</mat-label>
+                      <input matInput type="text" placeholder="Buscar TSR" formControlName="tsr">
+                      <button mat-icon-button matSuffix (click)="listarFallas(true)">
                           <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                       </button>
                   </mat-form-field>
               </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <mat-form-field floatLabel="always">
-                        <mat-label>Fecha</mat-label>
+                        <mat-label>Fecha de Falla</mat-label>
                         <mat-date-range-input [rangePicker]="picker">
-                          <input matStartDate placeholder="Desde" formControlName="fechaIni" >
-                          <input matEndDate placeholder="Hasta" formControlName="fechaFin" (ngModelChange)="busquedaFallas()">
+                          <input matStartDate placeholder="Desde" formControlName="fechaIni" placeholder="Desde">
+                          <input matEndDate placeholder="Hasta" formControlName="fechaFin" (dateChange)="listarFallas(true)" placeholder="Hasta">
                         </mat-date-range-input>
                         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -68,7 +71,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-2">
                     <mat-form-field floatLabel="always">
                         <mat-label>Nivel de soporte</mat-label>
-                        <mat-select placeholder="Seleccionar" formControlName="nivelSoporte" (ngModelChange)="busquedaFallas()">
+                        <mat-select placeholder="Seleccionar" formControlName="soporte" (selectionChange)="listarFallas(true)">
                           <mat-option [value]="0">B. Inicial</mat-option>
                           <mat-option [value]="1">Ing. Soporte</mat-option>
                           <mat-option [value]="2">DFSE</mat-option>
@@ -97,16 +100,16 @@
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2 search" *ngIf="inputBuscarPorArea">
                   <mat-form-field floatLabel="always">
-                      <input matInput type="text" placeholder="Buscar por área" formControlName="area" (ngModelChange)="busquedaFallas()">
-                      <button mat-icon-button matSuffix>
+                      <input matInput type="text" placeholder="Buscar por área" formControlName="area">
+                      <button mat-icon-button matSuffix (click)="listarFallas(true)">
                           <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                       </button>
                   </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-2 search" *ngIf="inputBuscarPorEsn">
                 <mat-form-field floatLabel="always">
-                    <input matInput type="text" placeholder="Buscar ESN" formControlName="esn" (ngModelChange)="busquedaFallas()">
-                    <button mat-icon-button matSuffix>
+                    <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
+                    <button mat-icon-button matSuffix (click)="listarFallas(true)">
                         <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                     </button>
                 </mat-form-field>
@@ -153,14 +156,14 @@
                     <th mat-header-cell *matHeaderCellDef width="10%"> Estado </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
                       <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
-                      <span>{{element.estado==3?'Cerrado':element.estado==2?'Observado':'Activo'}}</span>
+                      <span>{{getEstado(element.estado)}}</span>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="acciones">
                     <th mat-header-cell *matHeaderCellDef width="8%" class="text-center"> Accion </th>
                     <td mat-cell *matCellDef="let element" style="padding: 0;">
-                      <button mat-icon-button aria-label="Example icon button with a home icon">
-                        <mat-icon svgIcon="heroicons_outline:pencil-alt" (click)="editarFalla(element)"></mat-icon>
+                      <button mat-icon-button aria-label="Example icon button with a home icon" [disabled]="element.estado==3" (click)="editarFalla(element)">
+                        <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon>
                       </button>
                       <button mat-icon-button aria-label="Example icon button with a home icon">
                         <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>                        
@@ -175,30 +178,30 @@
                                     <span class="font-w-900 fz-6">Bitacora</span>
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <div class="table-bitacora"> <!--class="scroll-vertical "> --> 
+                                    <div class="table-bitacora scroll-vertical"> <!--class="scroll-vertical "> --> 
                                       <table mat-table [dataSource]="dataSourceBitacora" class="mat-elevation-z8">
                                         <ng-container matColumnDef="fecha">
-                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Fecha-Hora </th>
-                                          <td mat-cell *matCellDef="let item" class="text-center"> {{item.fechaReg | date: 'dd/MM/yyyy, hh:mm:ss a'}} </td>
+                                          <th mat-header-cell *matHeaderCellDef width="20%"> Fecha-Hora </th>
+                                          <td mat-cell *matCellDef="let item"> {{item.fechaReg | date: 'dd/MM/yyyy, hh:mm a'}} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="evaluador">
-                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Usuario Evaluador </th>
+                                          <th mat-header-cell *matHeaderCellDef width="20%"> Usuario Evaluador </th>
                                           <td mat-cell *matCellDef="let item"> {{item.evaluador==null?'-':item.evaluador}} </td>
                                         </ng-container>                            
                                         <ng-container matColumnDef="comentario">
-                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Comentario </th>
-                                          <td mat-cell *matCellDef="let item" class="text-center">
+                                          <th mat-header-cell *matHeaderCellDef width="20%"> Comentario </th>
+                                          <td mat-cell *matCellDef="let item">
                                             <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item.comentarios)"><mat-icon>sms</mat-icon></button>
-                                            <span *ngIf="item.comentarios==null">'-'</span>
+                                            <span *ngIf="item.comentarios==null">-</span>
                                           </td>
                                         </ng-container>
                                         <ng-container matColumnDef="estado">
-                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Estado </th>
-                                          <td mat-cell *matCellDef="let item"> {{item.estado}} </td>
+                                          <th mat-header-cell *matHeaderCellDef width="20%"> Estado </th>
+                                          <td mat-cell *matCellDef="let item"> {{getEstado(item.estado)}} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="nivelSoporteActual">
-                                          <th mat-header-cell *matHeaderCellDef class="text-center"> Nivel de Soporte Actual</th>
-                                          <td mat-cell *matCellDef="let item"> {{item.bandejaActual==null?'0':item.bandejaActual}} </td>
+                                          <th mat-header-cell *matHeaderCellDef width="20%"> Nivel de Soporte Actual</th>
+                                          <td mat-cell *matCellDef="let item"> {{nivelDeSoporte(item.nivelSoporteActual)}} </td>
                                         </ng-container>                            
                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsBitacora"></tr>
                                         <tr mat-row *matRowDef="let row; columns: displayedColumnsBitacora;"></tr>

@@ -22,7 +22,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class FallasListComponent implements OnInit {
 
-  verMensajeCreacionExitosa = false;
+  mostrarMensaje = false;
   displayedColumns: string[] = ['os', 'io', 'tsr', 'area', 'serie', 'usuarioResponsable', 'fechaFalla', 'nivelSoporte', 'estado','acciones'];
   dataSource = [];
   displayedColumnsBitacora: string[] = ['fecha', 'evaluador', 'comentario', 'estado', 'nivelSoporteActual'];
@@ -37,7 +37,7 @@ export class FallasListComponent implements OnInit {
   botonAnterior:boolean=false;
   expandedElement: any;
   //mensaje a mostrar cuando se crea o cierra un caso
-  mensajeExitoso = '-';
+  notificacionDeAccionHecha= '-';
   // formulario busqueda con filtros
   formBusquedaConFiltros: FormGroup;
   flag = false;
@@ -50,36 +50,37 @@ export class FallasListComponent implements OnInit {
   ngOnInit(): void {
     if(localStorage.getItem('success')){
       if(localStorage.getItem('success')=='true'){
-        this.mensajeExitoso = 'Se creó correctamente';
+        this.notificacionDeAccionHecha = 'Se creó correctamente';
       }
       if(localStorage.getItem('success')=='cerrado'){
-        this.mensajeExitoso = 'Se cerró el caso correctamente';
+        this.notificacionDeAccionHecha = 'Se cerró el caso correctamente';
       }
       if(localStorage.getItem('success')=='escalado'){
-        this.mensajeExitoso = 'Se escaló correctamente';
+        this.notificacionDeAccionHecha = 'Se escaló correctamente';
       }
-      this.mostrarMensajeRegistroExitosoDeUnaFalla();
+      if(localStorage.getItem('success')=='observado'){
+        this.notificacionDeAccionHecha = 'Se ha observado correctamente';
+      }
+      this.mostrarMensajeDeAccionHechoEnUnaFalla();
     };
-    this.listarFallas();
     this.cargarFormularioBusqueda();
+    this.listarFallas(false);
   }
 
   registroMasivo():void{
 
   }
+
   registroIndividual():void{
     const dialogSeleccionarTipoDeRegistro = this.matDialog.open(DialogSeleccionarTipoDeRegistroComponent,{
       width:'646px'
     });
   }
 
-  busquedaFallas():void{
-    this.flag = true;
-    console.log(this.formBusquedaConFiltros.value);
-    if(this.formBusquedaConFiltros.value.fechaFin==null){
-      this.formBusquedaConFiltros.value.fechaFin = new Date();
-    }
-    this.fallasService.bandejaBusquedaFallas(this.paginaActual,this.formBusquedaConFiltros.value).subscribe(responseApi=>{
+  listarFallas(filtrar:boolean):void{
+    const filter = this.formBusquedaConFiltros.value;
+    if(filtrar){this.paginaActual=1}
+    this.fallasService.bandejaFallas(this.paginaActual,filter).subscribe(responseApi=>{
       this.totalFallas = responseApi.totalRecords;
       this.totalFilas = responseApi.pageSize;
       this.numeroDePaginas = this.obtenerNumeroDePaginas(responseApi.pageSize,responseApi.totalRecords);
@@ -87,30 +88,20 @@ export class FallasListComponent implements OnInit {
       this.deshabilitarBotonesPaginacion(); 
     });
   }
+
 
   cargarFormularioBusqueda():void{
     this.formBusquedaConFiltros = new FormGroup({
       os : new FormControl(),
       io : new FormControl(),
       tsr : new FormControl(),
-      fechaIni : new FormControl(),
-      fechaFin : new FormControl(),
-      nivelSoporte : new FormControl(),
+      fechaIni : new FormControl(new Date()),
+      fechaFin : new FormControl(new Date()),
+      soporte : new FormControl(),
       area : new FormControl(),
       esn : new FormControl()
     });
   }
-
-  listarFallas():void{
-    this.fallasService.bandejaFallas(this.paginaActual).subscribe(responseApi=>{
-      this.totalFallas = responseApi.totalRecords;
-      this.totalFilas = responseApi.pageSize;
-      this.numeroDePaginas = this.obtenerNumeroDePaginas(responseApi.pageSize,responseApi.totalRecords);
-      this.dataSource = responseApi.data;
-      this.deshabilitarBotonesPaginacion(); 
-    });
-  }
-
 
   obtenerNumeroDePaginas(totalRows:any,totalRecords:any):number{
     let result:any;
@@ -143,29 +134,28 @@ export class FallasListComponent implements OnInit {
   changePage(type:string){
     if(type=='more'){
       this.paginaActual = this.paginaActual + 1 ;
-      this.flag == true ? this.busquedaFallas() : this.listarFallas();
+      this.listarFallas(false);
       this.deshabilitarBotonesPaginacion();
     }
     if(type=='less'){
       this.paginaActual = this.paginaActual - 1 ;
-      this.flag == true ? this.busquedaFallas() : this.listarFallas();
+      this.listarFallas(false);
       this.deshabilitarBotonesPaginacion();
     }
   }
 
-  seeBitacora(element):void{
+  seeBitacora(element:any):void{
     console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.garantiasService.logWarranty(element.id).subscribe(resp=>{
+    this.garantiasService.logWarranty(element.id,2).subscribe(resp=>{
       this.dataSourceBitacora = resp.body;
-      console.table(this.dataSourceBitacora)
     });
   }
 
-  mostrarMensajeRegistroExitosoDeUnaFalla():void{
-    this.verMensajeCreacionExitosa = true;
+  mostrarMensajeDeAccionHechoEnUnaFalla():void{
+    this.mostrarMensaje = true;
     setTimeout(()=>{
-      this.verMensajeCreacionExitosa = false;
+      this.mostrarMensaje = false;
     },5000);
     localStorage.removeItem('success');
   }
@@ -204,29 +194,25 @@ export class FallasListComponent implements OnInit {
   mostrarInputBuscarPorEsn():void{
     this.inputBuscarPorEsn = this.inputBuscarPorEsn == false ? true : false;
   }
-}
 
-export interface PeriodicElement {
-  number: number;
-  serie: string;
-  area: string;
-  type: string;
-  failureDate: string;
-  amount: number;
-  user: string;
-  age: number;
-  inbox: number;
-  state: string;
-}
+  getEstado(numeroEstado:number):string{
+    if(numeroEstado==1){
+      return 'Aprobado';
+    }
+    if(numeroEstado==2){
+      return 'Observado';
+    }
+    if(numeroEstado==3){
+      return 'Cerrado';
+    }
+    if(numeroEstado==0){
+      return 'Activo';
+    }
+  }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {number: 1, serie: '66304283', area: 'Piura Motores', type: 'GFA', failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 0, state: 'servicios'},
-  {number: 2, serie: '66304283', area: 'Piura Motores', type: 'GFA', failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 150, inbox: 1, state: 'rechazado'},
-  {number: 3, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 195, inbox: 2, state: 'observado'},
-  {number: 4, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 368, inbox: 3, state: 'servicios'},
-  {number: 5, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 10, inbox: 4, state: 'rechazado'},
-  {number: 6, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 368, inbox: 5, state: 'observado'},
-  {number: 7, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 361, inbox: 6, state: 'servicios'},
-  {number: 8, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 0, state: 'rechazado'},
-  {number: 9, serie: '66304283', area: 'Piura Motores', type: 'GFA',  failureDate: '12/11/21', amount: 500.50, user: 'José Perez', age: 40, inbox: 1, state: 'observado'}
-];
+  limpiarFiltros():void{
+    this.cargarFormularioBusqueda();
+    this.listarFallas(true);
+  }
+  
+}

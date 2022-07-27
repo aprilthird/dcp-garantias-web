@@ -11,14 +11,16 @@
                         <mat-form-field floatLabel="always">
                             <mat-label>Cliente</mat-label>
                             <input matInput type="text" formControlName="razonSocial" [matAutocomplete]="auto" placeholder="Buscar Cliente">
-                            <button mat-icon-button matSuffix>
+                            <!-- <mat-spinner [diameter]="24" matSuffix *ngIf="!botonBuscarCliente"></mat-spinner> -->
+                            <button type="button" mat-icon-button matSuffix color="primary">
                                 <mat-icon svgIcon="heroicons_outline:search" (click)="buscarCliente()"></mat-icon>
                             </button>
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                <mat-option *ngFor="let client of clients" [value]="client.razonSocial" (click)="guardarIdCliente(client.id)">
+                                <mat-option *ngFor="let client of clients" [value]="client.razonSocial" (click)="seleccionarCliente(client)">
                                     {{client.razonSocial}}
                                 </mat-option>
                             </mat-autocomplete>
+                            <mat-hint *ngIf="spinnerBusqueda"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                         </mat-form-field>
                     </div>
                     <!-- <div class="col-md-4">
@@ -40,7 +42,7 @@
                     <div class="col-md-6">
                         <mat-form-field>
                             <mat-label>Dirección:</mat-label>
-                            <input matInput [disabled]="true" type="text" [value]="clienteSeleccionado?clienteSeleccionado.direccion:'-'">
+                            <input matInput [disabled]="true" type="text" [value]="clienteEncontrado?clienteEncontrado.direccion:'-'">
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,10 +88,10 @@
                         </mat-form-field>     
                     </div>
                     <div class="col-md-4 flex-xy-center">
-                        <mat-checkbox color="primary" formControlName="bis">Tiene BIS</mat-checkbox>
+                        <mat-checkbox color="primary" formControlName="bis" (click)="cambiarBis()">Tiene BIS</mat-checkbox>
                     </div>                                  
                     <div class="col-md-4">
-                        <mat-form-field  floatLabel="always">
+                        <mat-form-field  floatLabel="always" *ngIf="verFechaGarantia">
                             <mat-label>Fecha de inicio de garantía <span class="color-red">*</span></mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="fechaInicioGarantia" placeholder="Seleccionar una fecha">
                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->

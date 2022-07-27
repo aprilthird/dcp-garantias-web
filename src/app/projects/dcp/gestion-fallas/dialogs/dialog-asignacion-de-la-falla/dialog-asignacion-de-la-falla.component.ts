@@ -10,7 +10,7 @@ import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-mes
 export class DialogAsignacionDeLaFallaComponent implements OnInit {
 
   selectedValue:number;
-  usuarios : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
+  niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   usuarioResponsable=1;
   
   constructor(private readonly matDialogRef: MatDialogRef<DialogAsignacionDeLaFallaComponent>,

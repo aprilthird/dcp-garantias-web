@@ -4,7 +4,9 @@ import { ConfigurationAndMaintenanceService } from 'app/shared/services/configur
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { MatDialog } from '@angular/material/dialog';
-import { messages } from 'app/mock-api/apps/chat/data';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-dialog-register-enrollment',
   templateUrl: './dialog-register-enrollment.component.html',
@@ -14,15 +16,17 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
 
   engineModels=[];
   engineApplications=[];
-  clients = []; clienteSeleccionado:any;
+  clients = []; clienteEncontrado:any;
   directionClient:string='';
   formEnrollment:FormGroup;
   tipoDeEquipo:number;
+  verFechaGarantia = true;
+  spinnerBusqueda = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private readonly dialogRef: MatDialogRef<DialogRegisterEnrollmentComponent>,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
-              private readonly matDialog: MatDialog) {
+              private readonly matDialog: MatDialog, private readonly matSnackBar: MatSnackBar) {
    }
 
   ngOnInit(): void {
@@ -47,7 +51,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
         idAplicacion: new FormControl('',[Validators.required]),
         cpl: new FormControl('',[Validators.required]),
         bis: new FormControl(false,[Validators.required]),
-        fechaInicioGarantia: new FormControl([Validators.required]),
+        fechaInicioGarantia: new FormControl(),
         potencia: new FormControl(''),
         lugar: new FormControl(''),
         canal: new FormControl(),
@@ -79,16 +83,21 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   onSaveEnrollment():void{
     if(this.formEnrollment.valid){
       if(this.data.option=='new'){
-        if(this.clienteSeleccionado==null){
+        if(this.clienteEncontrado==null){
           this.errorMessage('Ingrese un cliente válido');
         }else{
-          const request = { id:0 , tipo:this.tipoDeEquipo, activo:true, codigoSap:this.clienteSeleccionado.codigoSap,
-                          direccion:this.clienteSeleccionado.direccion, ...this.formEnrollment.value };
-          this.configurationAndMaintenanceService.maintenanceEnrollment(request).subscribe(resp=>{
+          if(this.verFechaGarantia==false){this.formEnrollment.value.fechaInicioGarantia=null};
+          const enrollment = { id:0 ,
+                            tipo:this.tipoDeEquipo,
+                            activo:true,
+                            codigoSap:this.clienteEncontrado.codigoSap,
+                            direccion:this.clienteEncontrado.direccion,
+                            ...this.formEnrollment.value };
+          this.configurationAndMaintenanceService.maintenanceEnrollment(enrollment).subscribe(resp=>{
             if(resp.success){
               this.dialogRef.close(true);
             }else{
-              this.errorMessage('Error del servicio en la creacion de la matricula');
+              this.mostrarSnackBar('Error del servicio en la creacion de la matricula');
             }
           });
         }
@@ -112,31 +121,51 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     let element = this.clients.find(e => e.id == this.formEnrollment.value.idCliente);
     this.directionClient = element.direccion;
   }
+
   onClose():void{
     this.dialogRef.close(false);
   }
 
-  
   buscarCliente():void{
-    console.log(this.formEnrollment.value.razonSocial);
     if(this.formEnrollment.value.razonSocial.length>2){
+      this.spinnerBusqueda = true;  
       this.configurationAndMaintenanceService.searchClienteByName(this.formEnrollment.value.razonSocial).subscribe(responseApi=>{
-        console.log(responseApi);
+        this.spinnerBusqueda = false;
         this.clients = responseApi.body;
+        if(this.clients.length==0){
+          this.mostrarSnackBar('No se encontraron coincidencias');
+        }
       });
     }else{
       this.clients = [];
-      this.errorMessage('Ingrese mínimo 3 caracteres');
+      this.mostrarSnackBar('Escriba mínimo 3 letras');
     }
   }
 
-  guardarIdCliente(id:any):void{
-    this.clienteSeleccionado = this.clients.find(e => e.id == id);
+  seleccionarCliente(clienteSeleccionado:any):void{
+    this.configurationAndMaintenanceService.searchClienteByCode(clienteSeleccionado.codigoSap).subscribe(responseApi=>{
+      this.clienteEncontrado = responseApi.body;
+    });
+    
   }
 
   errorMessage(message:string):void{
     const dialogError = this.matDialog.open(DialogErrorMessageComponent,{
       disableClose:true, data:{text:message}, width:'350px'
-  });
+    });
+  }
+
+  cambiarBis():void{
+    this.verFechaGarantia=this.verFechaGarantia?false:true;
+  }
+
+  mostrarSnackBar(message:string):void{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
+      duration: 3000,
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
   }
 }

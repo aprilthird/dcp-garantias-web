@@ -17,6 +17,7 @@ export class DialogTransformRecordToOrangeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadForm();
+    console.log(this.data);
   }
 
   onClose(_option):void{
@@ -25,7 +26,7 @@ export class DialogTransformRecordToOrangeComponent implements OnInit {
 
   loadForm():void{
     this.formGroup = new FormGroup({
-      idGarantia: new FormControl(null,[Validators.required]),
+      idUsuarioElavorador: new FormControl(null,[Validators.required]),
       criterio1: new FormControl(false),
       criterio2: new FormControl(false),
       criterio3: new FormControl(false),
@@ -35,7 +36,8 @@ export class DialogTransformRecordToOrangeComponent implements OnInit {
 
   saveEvaluation():void{
     if(this.formGroup.valid){
-      this.garantiasService.checkList(this.formGroup.value).subscribe(resp=>{
+      const requestCheckList = {idGarantia:this.data.idGarantia, ...this.formGroup.value};
+      this.garantiasService.checkList(requestCheckList).subscribe(resp=>{
         if(resp.id){
           this.onClose(true);
         }else{
