@@ -8,134 +8,138 @@
         </div>
         <div class="col-md-12 mb-5">
             <mat-card>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <h6 class="fw-bold">Registro Básico</h6>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">WWID</mat-label>
-                            <input matInput type="text" placeholder="Ingresar">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Estado del WWID</mat-label>
-                            <mat-select placeholder="Seleccionar">
-                                <mat-option [value]="0">Baja</mat-option>
-                                <mat-option [value]="1">Activo</mat-option>
-                                <mat-option [value]="2">Deshabilitado</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">ID Promotion</mat-label>
-                            <input matInput type="text" placeholder="Ingresar">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Estado del ID Promotion</mat-label>
-                            <mat-select placeholder="Seleccionar">
-                                <mat-option [value]="0">Baja</mat-option>
-                                <mat-option [value]="1">Activo</mat-option>
-                                <mat-option [value]="2">Deshabilitado</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-12">
-                        <hr>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Locación</mat-label>
-                            <mat-select placeholder="Seleccionar">
-                                <mat-option [value]="1">Taller</mat-option>
-                                <mat-option [value]="2">Campo</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Código de Cuenta</mat-label>
-                            <input matInput type="text" placeholder="Ingresar">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-12">
-                        <h6 class="fw-bold">Información del usuario</h6>
-                        <hr>
-                    </div>
-                    <div class="col-md-6">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Nombre completo</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Clasificacion del empelado</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">DNI</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-6">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Correo de la empresa</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Fecha de ingreso</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Puesto</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Directorio</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Gerencia</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Area</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Sede</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-6">
-                        <mat-form-field floatLabel="always">
-                            <mat-label class="fw-bold">Jefe directo</mat-label>
-                            <input matInput type="text" placeholder="Ingresar" [disabled]="true">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-12 text-end">
-                        <button mat-raised-button color="primary" (click)="registrarDatosDelUsuario()">Ingresar Datos</button>
-                    </div>       
-                </div>
+                <mat-card-content>
+                    <form *ngIf="formWwid" [formGroup]="formWwid">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <h6 class="fw-bold">Registro Básico</h6>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">WWID</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="wwid">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Estado del WWID</mat-label>
+                                    <mat-select placeholder="Seleccionar" formControlName="estadoWwid">
+                                        <mat-option [value]="0">Baja</mat-option>
+                                        <mat-option [value]="1">Activo</mat-option>
+                                        <mat-option [value]="2">Deshabilitado</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">ID Promotion</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="idPromotion">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Estado del ID Promotion</mat-label>
+                                    <mat-select placeholder="Seleccionar" formControlName="estadoIdPromotion">
+                                        <mat-option [value]="0">Baja</mat-option>
+                                        <mat-option [value]="1">Activo</mat-option>
+                                        <mat-option [value]="2">Deshabilitado</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Locación</mat-label>
+                                    <mat-select placeholder="Seleccionar" formControlName="locacion">
+                                        <mat-option [value]="1">Taller</mat-option>
+                                        <mat-option [value]="2">Campo</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Código de Cuenta</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="codigoCuenta">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="fw-bold">Información del usuario</h6>
+                                <hr>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Nombre completo</mat-label>
+                                    <input matInput type="text" placeholder="Nombres" [value]="user!=null?user.nombres+' '+user.apellidos:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Clasificacion del empelado</mat-label>
+                                    <input matInput type="text" placeholder="Clasificación" [value]="user!=null?user.clasificacion:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">DNI</mat-label>
+                                    <input matInput type="text" placeholder="DNI" [value]="user!=null?user.dni:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Correo de la empresa</mat-label>
+                                    <input matInput type="text" placeholder="Correo" [value]="user!=null?user.correo:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Fecha de ingreso</mat-label>
+                                    <input matInput type="text" placeholder="Fecha de ingreso" [value]="user!=null?user.fechaIngreso:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Puesto</mat-label>
+                                    <input matInput type="text" placeholder="Puesto" [value]="user!=null?user.cargo:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Directorio</mat-label>
+                                    <input matInput type="text" placeholder="Directorio" [value]="user!=null?user.directorio:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Gerencia</mat-label>
+                                    <input matInput type="text" placeholder="Gerencia" [value]="user!=null?user.gerencia:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Area</mat-label>
+                                    <input matInput type="text" placeholder="Area" [value]="user!=null?user.area:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Sede</mat-label>
+                                    <input matInput type="text" placeholder="Sede" [value]="user!=null?user.sede:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Jefe directo</mat-label>
+                                    <input matInput type="text" placeholder="Jefe directo" [value]="user!=null?user.jefe:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </mat-card-content>
+                <mat-card-actions align="end" style="margin-bottom: 20px;">
+                    <button mat-raised-button color="primary" (click)="onRegisterWWID()">Ingresar Datos</button>
+                </mat-card-actions>
             </mat-card>
         </div>
     </div>
