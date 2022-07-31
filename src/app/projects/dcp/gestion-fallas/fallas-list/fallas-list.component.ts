@@ -52,6 +52,9 @@ export class FallasListComponent implements OnInit {
       if(localStorage.getItem('success')=='true'){
         this.notificacionDeAccionHecha = 'Se creó correctamente';
       }
+      if(localStorage.getItem('success')=='editado'){
+        this.notificacionDeAccionHecha = 'Se editó correctamente';
+      }
       if(localStorage.getItem('success')=='cerrado'){
         this.notificacionDeAccionHecha = 'Se cerró el caso correctamente';
       }
@@ -91,12 +94,13 @@ export class FallasListComponent implements OnInit {
 
 
   cargarFormularioBusqueda():void{
+    console.log(new Date);
     this.formBusquedaConFiltros = new FormGroup({
       os : new FormControl(),
       io : new FormControl(),
       tsr : new FormControl(),
-      fechaIni : new FormControl(new Date()),
-      fechaFin : new FormControl(new Date()),
+      fechaIni : new FormControl(),
+      fechaFin : new FormControl(),
       soporte : new FormControl(),
       area : new FormControl(),
       esn : new FormControl()

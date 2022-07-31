@@ -6,6 +6,11 @@
             <h4 *ngIf="accion=='edit'" class="font-w-700 margin-b-15">Interna de registro Nº122344555</h4> -->
             <span class="pointer" (click)="onListfallas()">Fallas</span> > <span class="text-red pointer"> {{this.accion=='new'?'Crear registro':'Registro de garantía'}}</span>
         </div>
+        <div class="col-md-12 mb-5 text-end" *ngIf="this.accion=='edit'?true:false">
+            <button mat-raised-button (click)="modalDescargarDocumentos()">
+                <mat-icon svgIcon="heroicons_outline:download"></mat-icon> Descargar documentos
+            </button>
+        </div>
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
             <mat-accordion>
                 <!-- REGISTRO DE LA FALLA -->
@@ -21,7 +26,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
-                                            <mat-label class="fw-bold">Orden de Servicio</mat-label>
+                                            <mat-label class="fw-bold">Orden de Servicio <span class="text-danger">*</span></mat-label>
                                             <input matInput type="text" placeholder="N° OS" formControlName="os">
                                         </mat-form-field>
                                     </div>
@@ -37,9 +42,9 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
-                                            <mat-label for="">ESN</mat-label>
+                                            <mat-label for="">ESN <span class="text-danger">*</span></mat-label>
                                             <input matInput type="text" placeholder="Buscar ESN" formControlName="esn"> <!-- (ngModelChange)="getEsn()"> -->
-                                            <button type="button" mat-icon-button matSuffix color="primary" (click)="getEsn()">
+                                            <button type="button" mat-icon-button matSuffix color="primary" (click)="getEsn()" [disabled]="this.accion=='edit'?true:false">
                                                 <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                                             </button>
                                             <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
@@ -81,7 +86,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
-                                            <mat-label class="fw-bold">Area de servicio</mat-label>
+                                            <mat-label class="fw-bold">Area de servicio <span class="text-danger">*</span></mat-label>
                                             <mat-select placeholder="Seleccionar" formControlName="idArea">
                                                 <mat-option *ngFor="let areaDeServicio of maestraAreasDeServicio" [value]="areaDeServicio.id" >
                                                     {{areaDeServicio.codigo}}
@@ -119,11 +124,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
-                                            <mat-label class="fw-bold">Fecha de falla</mat-label>
+                                            <mat-label class="fw-bold">Fecha de falla <span class="text-danger">*</span></mat-label>
                                             <input matInput [matDatepicker]="pickerFechaFalla" placeholder="Ingrese una fecha" formControlName="fechaFalla" disabled [max]="fechaHoy">
                                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                             <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
-                                            <mat-datepicker #pickerFechaFalla disabled="false"></mat-datepicker>
+                                            <mat-datepicker #pickerFechaFalla [disabled]="this.accion=='edit'?true:false"></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -389,16 +394,21 @@
         </div>
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12 margin-b-10">
+                <div class="col-md-12 mb-5">
                     <span class="font-w-700">Documentos</span>
                 </div>
-                <div class="col-md-12 margin-b-10">
+                <div class="col-md-12 mb-5">
                     <button mat-raised-button (click)="adjuntarDocumento()">
                         <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
                     </button>
                 </div>
-                <div class="col-md-3" *ngFor="let documento of documentos">
-                    {{documento.name}}
+                <div class="col-md-12 mb-5">
+                    <div class="row">
+                        <div class="col-md-2 d-flex justify-content-start align-items-center" *ngFor="let documento of documentos">
+                            <span>{{documento.name}}</span>
+                            <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
