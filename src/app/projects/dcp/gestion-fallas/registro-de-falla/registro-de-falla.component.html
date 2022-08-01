@@ -7,8 +7,8 @@
             <span class="pointer" (click)="onListfallas()">Fallas</span> > <span class="text-red pointer"> {{this.accion=='new'?'Crear registro':'Registro de garantía'}}</span>
         </div>
         <div class="col-md-12 mb-5 text-end" *ngIf="this.accion=='edit'?true:false">
-            <button mat-raised-button (click)="modalDescargarDocumentos()">
-                <mat-icon svgIcon="heroicons_outline:download"></mat-icon> Descargar documentos
+            <button mat-raised-button (click)="modalDescargarDocumentos()" class="color-button-selected-documents">
+                <mat-icon svgIcon="heroicons_outline:download" class="me-2"></mat-icon>Descargar documentos
             </button>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
@@ -398,18 +398,25 @@
                     <span class="font-w-700">Documentos</span>
                 </div>
                 <div class="col-md-12 mb-5">
-                    <button mat-raised-button (click)="adjuntarDocumento()">
-                        <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
+                    <button mat-raised-button (click)="adjuntarDocumento()" class="color-button-selected-documents">
+                        <mat-icon svgIcon="heroicons_outline:upload" class="me-2"></mat-icon>Adjuntar documentos
                     </button>
                 </div>
                 <div class="col-md-12 mb-5">
+                    <button mat-raised-button *ngFor="let documento of documentos" class="color-button-document mx-1">
+                        {{documento.name}}
+                        <!-- <mat-icon (click)="deleteDocumentDetalleReclamo(documento.name)">close</mat-icon> -->
+                        <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
+                    </button>
+                </div>
+                <!-- <div class="col-md-12 mb-5">
                     <div class="row">
                         <div class="col-md-2 d-flex justify-content-start align-items-center" *ngFor="let documento of documentos">
                             <span>{{documento.name}}</span>
                             <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="col-md-12 text-end mb-5">
@@ -421,8 +428,8 @@
             <button mat-raised-button class="mx-1" *ngIf="botonCerrarCasoDfse" (click)="cerrarCasoDfse()">Cerrar caso</button>
             <button mat-raised-button class="mx-1" *ngIf="botonObservar" (click)="observarFalla()">Observar</button>
             <button mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()">Escalar a DFSE</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()">Escalar a Fabrica</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a DFSE</button>
+            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a Fabrica</button>
             <button mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
         </div>
     </div>

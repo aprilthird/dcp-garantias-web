@@ -18,6 +18,7 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 import { AzureService } from 'app/core/azure/azure.service';
 import { DialogSeeDocumentsComponent } from 'app/shared/dialogs/dialog-see-documents/dialog-see-documents.component';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -30,7 +31,7 @@ export class RegistroDeFallaComponent implements OnInit {
   formFalla: FormGroup; formIngDeSoporte: FormGroup; formDFSE: FormGroup; formFabrica: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
-  maestraAreasDeServicio = []; maestraQuejas:any[]; documentosAjuntos = []; documentosParaDescargar = [];
+  maestraAreasDeServicio = []; maestraQuejas:any[]; documentosParaDescargar = [];
   usuarioDeLaSession:any;
   botonUsuarioRegistrador = false; botonUsuarioEscalador= false; botonObservar = false;
   botonIngenieroDeSoporte = false; botonCerrarCasoIngDeSoporte = false;
@@ -113,6 +114,9 @@ export class RegistroDeFallaComponent implements OnInit {
         this.cargarFormularioDFSE();
         this.cargarFormularioFabrica();
         this.mostrarTrackingNumber();
+      }
+      if(this.fallaParaGestionar.estado==2){
+        this.botonObservar = false;
       }
     }
   }
@@ -327,7 +331,7 @@ export class RegistroDeFallaComponent implements OnInit {
                                 ...this.formFalla.value };
             this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
                 if(responseApi.success){
-                  this.guardarBitacora(responseApi.body.id,1,null,1,0);
+                  this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,0);
                     this.subirArchivosAlServidor(responseApi.body.id);
                     this.registroExitosoDeLaFalla('true');
                 }
@@ -335,7 +339,8 @@ export class RegistroDeFallaComponent implements OnInit {
         }else{
         this.openSnackBarWarn('Llenar campos necesarios para el registro básico');
       }
-    }else{
+    }
+    if(this.accion=='edit'){
         this.fallaParaGestionar.os = this.formFalla.value.os;
         this.fallaParaGestionar.io = this.formFalla.value.io;
         this.fallaParaGestionar.esn = this.formFalla.value.esn;
@@ -352,52 +357,12 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.evento = this.formFalla.value.evento;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
-                this.guardarBitacora(responseApi.body.id,1,null,1,0);
+                this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,0);
                 this.subirArchivosAlServidor(responseApi.body.id);
                 this.registroExitosoDeLaFalla('editado');
             }
         });
     }
-    // if(this.accion=='new'){
-    //   const nuevaFalla = {
-    //       id:0,
-    //       nivelSoporte:0,
-    //       tipo:this.tipo,
-    //       activo:true,
-    //       idEsn: this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
-    //       idUsuario: this.usuarioDeLaSession.id,
-    //       ...this.formFalla.value
-    //     };
-    //   this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
-    //     if(responseApi.success){
-    //       this.subirArchivosAlServidor(responseApi.body.id);
-    //       this.guardarBitacora(responseApi.body.id,1,null,1,0);
-    //       this.registroExitosoDeLaFalla();
-    //     }
-    //   });
-    // }else{
-    //   this.fallaParaGestionar.os = this.formFalla.value.os;
-    //   this.fallaParaGestionar.io = this.formFalla.value.io;
-    //   this.fallaParaGestionar.esn = this.formFalla.value.esn;
-    //   this.fallaParaGestionar.idArea = this.formFalla.value.idArea;
-    //   this.fallaParaGestionar.aplicacion = this.formFalla.value.aplicacion;
-    //   this.fallaParaGestionar.numParte = this.formFalla.value.numParte;
-    //   this.fallaParaGestionar.puntoFalla = this.formFalla.value.puntoFalla;
-    //   this.fallaParaGestionar.tipoFalla = this.formFalla.value.tipoFalla;
-    //   this.fallaParaGestionar.fechaFalla = this.formFalla.value.fechaFalla;
-    //   this.fallaParaGestionar.descripcion = this.formFalla.value.descripcion;
-    //   this.fallaParaGestionar.queja1 = this.formFalla.value.queja1;
-    //   this.fallaParaGestionar.queja2 = this.formFalla.value.queja2;
-    //   this.fallaParaGestionar.queja3 = this.formFalla.value.queja3;
-    //   this.fallaParaGestionar.evento = this.formFalla.value.evento;
-    //   this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
-    //     if(responseApi.success){
-    //       this.guardarBitacora(responseApi.body.id,1,null,1,0);
-    //       this.subirArchivosAlServidor(responseApi.body.id);
-    //       this.registroExitosoDeLaFalla();
-    //     }
-    //   });
-    // }
   }
 
   escalarFalla():void{
@@ -408,14 +373,14 @@ export class RegistroDeFallaComponent implements OnInit {
                 if(this.formFalla.value.queja1!=null){
                     if(this.matriculaEncontrada!=null){
                         const dialogAsignacionDeLaFalla = this.matDialog.open(DialogAsignacionDeLaFallaComponent,{
-                          width:'425px',
-                          disableClose:true
+                          width:'425px', data:{nivel:1},
+                          disableClose:true,
                         });
                         dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
                             if(responseDialog.success){
                                 const nuevaFalla = {
                                     id:0,
-                                    nivelSoporte:responseDialog.nivelSoporte,
+                                    nivelSoporte:2,
                                     activo:true,
                                     asignacionFalla: responseDialog.idUsuario,
                                     idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
@@ -425,7 +390,7 @@ export class RegistroDeFallaComponent implements OnInit {
                                 };
                                 this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
                                     if(responseApi.success){
-                                        this.guardarBitacora(responseApi.body.id,1,null,1,responseDialog.nivelSoporte);
+                                        this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,2);
                                         this.subirArchivosAlServidor(responseApi.body.id);
                                         localStorage.setItem('success','escalado');
                                         this.router.navigate(['/gestion-fallas']);
@@ -448,7 +413,8 @@ export class RegistroDeFallaComponent implements OnInit {
     }else{
       const dialogAsignacionDeLaFalla = this.matDialog.open(DialogAsignacionDeLaFallaComponent,{
         width:'425px',
-        disableClose:true
+        disableClose:true,
+        data:{nivel:1}
       });
       dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
           if(responseDialog.success){
@@ -457,7 +423,7 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(response=>{
               if(response.success){
                 //guardamos en la bitacora
-                this.guardarBitacora(this.fallaParaGestionar.id,1,null,1,responseDialog.nivelSoporte);
+                this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,responseDialog.nivelSoporte);
                 this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                 localStorage.setItem('success','escalado');
                 this.router.navigate(['/gestion-fallas']);            
@@ -479,7 +445,7 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
             //guardamos en la bitacora
-            this.guardarBitacora(this.fallaParaGestionar.id,1,null,1,this.fallaParaGestionar.nivelSoporte)
+            this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte)
             this.subirArchivosAlServidor(this.fallaParaGestionar.id);
             this.registroExitosoDeLaFalla('true');  
           }
@@ -494,17 +460,17 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
       const dialogAsignacionDeLaFalla = this.matDialog.open(DialogAsignacionDeLaFallaComponent,{
         width:'425px',
-        disableClose:true
+        disableClose:true,
+        data:{nivel:2}
       });
       dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
         if(responseDialog.success){
           this.fallaParaGestionar.asignacionFalla1 = responseDialog.idUsuario;
-          this.fallaParaGestionar.nivelSoporte = responseDialog.nivelSoporte;
+          this.fallaParaGestionar.nivelSoporte = 2;
           this.fallaParaGestionar.estado = 1;
           this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  //guardamos en la bitacora
-                  this.guardarBitacora(this.fallaParaGestionar.id,1,null,1,this.fallaParaGestionar.nivelSoporte);
+                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte);
                   this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                   localStorage.setItem('success','escalado');
                   this.router.navigate(['/gestion-fallas']);
@@ -532,7 +498,7 @@ export class RegistroDeFallaComponent implements OnInit {
           this.fallaParaGestionar.estado = 3;
           this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
-                this.guardarBitacora(this.fallaParaGestionar.id,1,null,3,this.fallaParaGestionar.nivelSoporte);
+                this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
                 this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                 localStorage.setItem('success','cerrado');
                 this.router.navigate(['/gestion-fallas']); 
@@ -569,13 +535,9 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-              //guardamos en la bitacora
-              const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1,nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-              this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                if(responseBitacora.success){
-                  this.registroExitosoDeLaFalla('true');
-                }
-              });  
+            this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,2);
+            this.subirArchivosAlServidor(this.fallaParaGestionar.id);
+            this.registroExitosoDeLaFalla('true');
           }
       });
   }
@@ -604,18 +566,13 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-              //guardamos en la bitacora
-              const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-              this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                if(responseBitacora.success){
-                    localStorage.setItem('success','escalado');
-                    this.router.navigate(['/gestion-fallas']);
-                }
-              });  
+              this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,3);
+              this.subirArchivosAlServidor(this.fallaParaGestionar.id);
+              localStorage.setItem('success','escalado');
+              this.router.navigate(['/gestion-fallas']);
           }
       });
       }else{
-        console.log(this.formDFSE.value);
         this.mensajeErrorDeCampos('Llene los campos DFSE');
       }
     }else{
@@ -653,14 +610,10 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.estado = 3;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  //guardamos en la bitacora
-                  const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:3, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                    if(responseBitacora.success){
-                        localStorage.setItem('success','cerrado');
-                        this.router.navigate(['/gestion-fallas']);
-                    }
-                  });  
+                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
+                  this.subirArchivosAlServidor(this.fallaParaGestionar.id);
+                  localStorage.setItem('success','cerrado');
+                  this.router.navigate(['/gestion-fallas']);
               }
             });
           }
@@ -699,13 +652,9 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.estado = 1;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  //guardamos en la bitacora
-                  const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:1, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-                  this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                    if(responseBitacora.success){
-                      this.registroExitosoDeLaFalla('true');
-                    }
-                  });
+                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte);
+                  this.subirArchivosAlServidor(this.fallaParaGestionar.id);
+                  this.registroExitosoDeLaFalla('true');
               }
             });
   }
@@ -718,7 +667,7 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
       if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
-        this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
+        this.fallaParaGestionar.nivelSoporte = 3;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
         this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
         this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;
@@ -743,14 +692,10 @@ export class RegistroDeFallaComponent implements OnInit {
                 this.fallaParaGestionar.estado = 3;
                 this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                   if(responseApi.success){
-                      //guardamos en la bitacora
-                      const requestBitacora = { tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:null, estado:3, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
-                      this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
-                        if(responseBitacora.success){
-                            localStorage.setItem('success','cerrado');
-                            this.router.navigate(['/gestion-fallas']);
-                        }
-                      });
+                      this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
+                      this.subirArchivosAlServidor(this.fallaParaGestionar.id);
+                      localStorage.setItem('success','cerrado');
+                      this.router.navigate(['/gestion-fallas']);
                   }
                 });
               }
@@ -917,5 +862,10 @@ export class RegistroDeFallaComponent implements OnInit {
       disableClose:true,
       width:'700px'
     });
+  }
+
+  deleteDocumentDetalleReclamo(name:any):void{
+    const index = this.documentos.findIndex(e=>e.name==name);
+    this.documentos.splice(index,1);
   }
 }
