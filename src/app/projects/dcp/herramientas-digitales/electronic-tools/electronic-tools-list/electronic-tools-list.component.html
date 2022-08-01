@@ -4,7 +4,7 @@
             <h3 class="fw-bold">Herramientas Electrónicas</h3>
         </div>
         <div class="col-md-3 text-end">
-            <button mat-raised-button color="primary" (click)="crearSolicitudDeHerramienta()">Crear Solicitud de Herramienta</button>
+            <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de Herramienta</button>
         </div>
         <div class="col-md-3 search">
             <mat-form-field floatLabel="always">
@@ -40,7 +40,7 @@
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <ng-container matColumnDef="usuario">
                     <th mat-header-cell *matHeaderCellDef width="15%"> Usuario </th>
-                    <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.nombres}} {{element.apellidos}} </td>
                 </ng-container>
                 <ng-container matColumnDef="area">
                     <th mat-header-cell *matHeaderCellDef width="15%"> Area </th>
@@ -48,7 +48,7 @@
                   </ng-container>
                 <ng-container matColumnDef="jefeAprobador">
                     <th mat-header-cell *matHeaderCellDef width="15%"> Jefe Aprobador </th>
-                    <td mat-cell *matCellDef="let element"> {{element.jefeAprobador}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.jefe}} </td>
                 </ng-container>
                 <ng-container matColumnDef="tipoDeLicencia">
                     <th mat-header-cell *matHeaderCellDef width="10%"> Tipo de Licencia </th>
@@ -60,7 +60,7 @@
                 </ng-container>
                 <ng-container matColumnDef="pcidEquipo">
                     <th mat-header-cell *matHeaderCellDef width="10%"> PCID Equipo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.pcidEquipo}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.pcid}} </td>
                 </ng-container>
                 <ng-container matColumnDef="fechaDeSolicitud">
                     <th mat-header-cell *matHeaderCellDef width="10%"> Fecha de Solicitud </th>
@@ -73,7 +73,7 @@
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef width="5%"> </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button (click)="onRegisterBasic(element)"><mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon></button>
+                        <button mat-icon-button (click)="onEditBasic(element)"><mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon></button>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
