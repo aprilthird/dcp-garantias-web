@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
@@ -22,6 +22,9 @@ export class UsersListComponent implements OnInit {
   totalRows:any;
   numberOfPages:any;
   pageCurrent:number=1;
+  //botones del paginado
+  nextButton:boolean=false;
+  prevButton:boolean=false;
 
   constructor(private readonly router:Router, private readonly digitalToolsService:DigitalToolsService) { }
 
@@ -31,26 +34,47 @@ export class UsersListComponent implements OnInit {
   }
 
   listUsers():void {
-    let tmp = localStorage.getItem("datasrcwwid");
-    if(tmp !== null && tmp !== "") {
-      this.dataSource = JSON.parse(tmp);
-    } else {
-      this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
-        // this.totalUsers = responseApi.totalRecords;
-        // this.totalRows = responseApi.pageSize;
-        // this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
-        // this.dataSource = responseApi.data;
-        
-        localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
-        this.dataSource = responseApi.body;
-      });
-    }
+    this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
+      this.totalUsers = responseApi.body.totalRecords;
+      this.totalRows = responseApi.body.pageSize;
+      this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
+      this.dataSource = responseApi.body.data;
+      // console.log("DATOS DE ENDPOINT");
+      // console.log(responseApi);
+      // localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
+      // this.dataSource = responseApi.body;
+    });
+
+    // let tmp = localStorage.getItem("datasrcwwid");
+    // if(tmp !== null && tmp !== "") {
+    //   this.dataSource = JSON.parse(tmp);
+    // } else {
+      
+    // }
   }
 
   loadFormFilter():void {
     this.formFilter = new FormGroup({
-
+      usr: new FormControl(''),
+      wwid: new FormControl(''),
+      fechaIngresoInicio: new FormControl(''),
+      fechaIngresoFin: new FormControl(''),
+      fechaBajaInicio: new FormControl(''),
+      fechaBajaFin: new FormControl(''),
     });
+  }
+
+  filterData():void {
+    let tmp = localStorage.getItem("datasrcwwid");
+    if(tmp !== null && tmp !== "") {
+      this.dataSource = JSON.parse(tmp);
+    }
+    if(this.formFilter.value.usr !== "") {
+      this.dataSource = this.dataSource.filter(i => i.nombres.includes(this.formFilter.value.usr) || i.apellidos.includes(this.formFilter.value.usr));
+    }
+    if(this.formFilter.value.wwid !== "") {
+      this.dataSource = this.dataSource.filter(i => i.wwid.includes(this.formFilter.value.wwid));
+    }
   }
 
   onRegisterBasic(usuario:any):void{
@@ -60,22 +84,35 @@ export class UsersListComponent implements OnInit {
   }
 
   disablePaginationButtons(){
-    // if(this.paginaActual == this.numeroDePaginas){
-    //   this.botonAnterior = true,
-    //   this.botonSiguiente = true;
-    // }
-    // if( this.paginaActual == 1 && this.paginaActual < this.numeroDePaginas ){
-    //   this.botonAnterior = true;
-    //   this.botonSiguiente = false;
-    // }
-    // if(this.paginaActual > 1 && this.paginaActual < this.numeroDePaginas){
-    //   this.botonAnterior = false;
-    //   this.botonSiguiente = false;
-    // }
-    // if(this.paginaActual > 1 && this.paginaActual == this.numeroDePaginas){
-    //   this.botonAnterior = false;
-    //   this.botonSiguiente = true;
-    // }
+    if(this.pageCurrent == this.numberOfPages){
+      this.prevButton = true,
+      this.nextButton = true;
+    }
+    if( this.pageCurrent == 1 && this.pageCurrent < this.numberOfPages){
+      this.prevButton = true;
+      this.nextButton = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.prevButton = false;
+      this.nextButton = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent == this.numberOfPages){
+      this.prevButton = false;
+      this.nextButton = true;
+    }
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listUsers();
+      this.disablePaginationButtons();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listUsers();
+      this.disablePaginationButtons();
+    }
   }
 
   getPageCount(totalRows:any,totalRecords:any):number{
