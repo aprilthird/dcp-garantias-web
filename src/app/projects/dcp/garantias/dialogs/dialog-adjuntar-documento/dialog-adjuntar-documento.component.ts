@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 
 @Component({
   selector: 'app-dialog-adjuntar-documento',
@@ -22,7 +24,7 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
                     {idSeccion:7, valorSeccion:'Narrativas'}];
 
   constructor(private readonly matDialog:MatDialog, private readonly matDialogRef: MatDialogRef<DialogAdjuntarDocumentoComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) { }
+              @Inject(MAT_DIALOG_DATA) public data, private readonly matSnackBar:MatSnackBar) { }
 
   ngOnInit(): void {
   }
@@ -62,14 +64,14 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
           this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
           // this.matDialogRef.close({accion:true,seccion:this.seccionSeleccionada,documentos:this.documentosCargados});
         }else{
-          this.mensajeDeError('Seleccionar en una sección');
+          this.openSnackBarWarn('Seleccionar en una sección');
         }
       }
       if(this.data.modulo=='fallas'){
         this.matDialogRef.close({accion:true,documentos:this.documentosCargados});
       }
     }else{
-      this.mensajeDeError('Seleccione al menos un documento');
+      this.openSnackBarWarn('Ningún documento adjuntado');
     }
   }
 
@@ -77,10 +79,14 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
     this.matDialogRef.close({accion:false});
   }
 
-  mensajeDeError(mensaje:string):void{
-    const dialogoError = this.matDialog.open(DialogErrorMessageComponent,{
-      data:{text:mensaje},
-      disableClose:true
+  openSnackBarWarn(message:string):void{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
+      duration: 3000,
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
     });
   }
+
 }

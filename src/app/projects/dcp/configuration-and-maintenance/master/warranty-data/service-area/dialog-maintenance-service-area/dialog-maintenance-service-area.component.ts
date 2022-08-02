@@ -3,6 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-dialog-maintenance-service-area',
   templateUrl: './dialog-maintenance-service-area.component.html',
@@ -14,7 +16,8 @@ export class DialogMaintenanceServiceAreaComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<DialogMaintenanceServiceAreaComponent>,
               @Inject(MAT_DIALOG_DATA) public data, private readonly matDialog:MatDialog,
-              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
+              private readonly matSnackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     console.log(this.data);
@@ -56,21 +59,20 @@ export class DialogMaintenanceServiceAreaComponent implements OnInit {
       this.formServiceArea.value.estado==true? this.formServiceArea.value.estado=1:this.formServiceArea.value.estado=0;
       if(this.data.option=='new'){
         const request = { id:0 , activo:true , ...this.formServiceArea.value };
-        this.configurationAndMaintenanceService.maintenanceServiceArea(request).subscribe(resp=>{
-          if(resp.success){
+        this.configurationAndMaintenanceService.maintenanceServiceArea(request).subscribe(responseApi=>{
+          if(responseApi.success){
             this.dialogRef.close(true);
           }else{
-            console.log('error en la creacion de la queja');
+            this.openSnackBarWarn(responseApi.message);
           }
         });
       }else{
         const request = { id:this.data.serviceArea.id , activo:true , ...this.formServiceArea.value };
-        this.configurationAndMaintenanceService.maintenanceServiceArea(request).subscribe(resp=>{
-          console.log(resp);
-          if(resp.success){
+        this.configurationAndMaintenanceService.maintenanceServiceArea(request).subscribe(responseApi=>{
+          if(responseApi.success){
             this.dialogRef.close(true);
           }else{
-            console.log('error en la edicion de la queja')
+            this.openSnackBarWarn(responseApi.message);
           }
         })
       }
@@ -85,4 +87,14 @@ export class DialogMaintenanceServiceAreaComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
+  openSnackBarWarn(message:string):void{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
+      duration: 3000,
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
+  }
+  
 }

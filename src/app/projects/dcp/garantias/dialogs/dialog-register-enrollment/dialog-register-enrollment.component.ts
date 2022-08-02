@@ -84,7 +84,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
     if(this.formEnrollment.valid){
       if(this.data.option=='new'){
         if(this.clienteEncontrado==null){
-          this.errorMessage('Ingrese un cliente válido');
+          this.mostrarSnackBar('Ingrese un cliente válido');
         }else{
           if(this.verFechaGarantia==false){this.formEnrollment.value.fechaInicioGarantia=null};
           const enrollment = { id:0 ,
@@ -95,9 +95,9 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
                             ...this.formEnrollment.value };
           this.configurationAndMaintenanceService.maintenanceEnrollment(enrollment).subscribe(resp=>{
             if(resp.success){
-              this.dialogRef.close(true);
+              this.dialogRef.close({success:true,matricula:resp.body});
             }else{
-              this.mostrarSnackBar('Error del servicio en la creacion de la matricula');
+              this.mostrarSnackBar(resp.message);
             }
           });
         }
@@ -108,12 +108,12 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
           if(resp.success){
             this.dialogRef.close(true);
           }else{
-            this.errorMessage('Error del servicio en la edicion de la matricula');
+            this.mostrarSnackBar('Error del servicio en la edicion de la matricula');
           }
         })
       }
     }else{
-      this.errorMessage('Ingrese todos los campos necesarios');
+      this.mostrarSnackBar('Ingrese todos los campos necesarios');
     }
   }
 
@@ -123,7 +123,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   }
 
   onClose():void{
-    this.dialogRef.close(false);
+    this.dialogRef.close({success:false});
   }
 
   buscarCliente():void{

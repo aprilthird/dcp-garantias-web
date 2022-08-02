@@ -6,15 +6,15 @@
                     <h4 class="font-w-700 pointer" title="Click para limpiar filtros" (click)="limpiarFiltros()">Gestión de fallas</h4>
                 </div>
                 <div class="col-xs-4 col-sm-2 col-md-3">
-                    <div matRipple class="notification-green" *ngIf="mostrarMensaje">
+                    <div matRipple class="notification-green d-flex justify-content-start px-3" *ngIf="mostrarMensaje">
                       <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{notificacionDeAccionHecha}}
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 d-flex justify-content-end px-1">
-                            <button mat-raised-button (click)="registroMasivo()" class="w10">
-                              Crear registro masivo
+                            <button mat-raised-button (click)="registroMasivo()" class="w10" disabled="true">
+                                Crear registro masivo
                             </button>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 d-flex justify-content-end px-1">

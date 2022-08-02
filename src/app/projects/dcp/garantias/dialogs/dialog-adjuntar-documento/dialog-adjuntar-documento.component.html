@@ -26,8 +26,8 @@
             </mat-form-field>
         </div> -->
         <div class="col-md-12 mb-5">
-            <button class="btn-attach" mat-raised-button (click)="fileInputDetallesReclamo.click()">
-                <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documentos
+            <button type="button" class="btn-attach" mat-raised-button (click)="fileInputDetallesReclamo.click()">
+                <mat-icon svgIcon="heroicons_outline:upload" class="me-3"></mat-icon>Adjuntar documentos
             </button>
             <input hidden type="file" (change)="cargarDocumentos($event)" #fileInputDetallesReclamo multiple> 
         </div>
@@ -35,12 +35,12 @@
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-start align-items-center" *ngFor="let documento of documentosCargados">
                     <span>{{documento.name}}</span>
-                    <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
+                    <button type="button" mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
                 </div>
             </div>
         </div>
         <div class="col-md-12 text-center bnt-add">
-            <button mat-raised-button color="primary" (click)="agregarDocumento()" style="width: 40%;">Agregar</button>
+            <button mat-raised-button color="primary" type="button" (click)="agregarDocumento()" style="width: 40%;">Agregar</button>
         </div>
     </div>
 </div>

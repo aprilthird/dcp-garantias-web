@@ -12,6 +12,8 @@ import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AzureAuthService } from 'app/core/azure/azure-auth.service';
+import { UserService } from 'app/core/user/user.service';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -75,6 +77,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     configuracionIcon='icon-menu-gray';
     reportesMenu='color-text-gray';
     reportesIcon='icon-menu-gray';
+    usuarioDeLaSession:any;
 
     constructor(
         private _animationBuilder: AnimationBuilder,
@@ -87,6 +90,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _fuseUtilsService: FuseUtilsService,
         private _authService: AuthService,
         private _azureAuthService: AzureAuthService,
+        private readonly userService:UserService,
+        private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService
     )
     {
         this._handleAsideOverlayClick = (): void => {
@@ -398,6 +403,13 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
+        this.userService.user$.subscribe(response=>{
+            this.usuarioDeLaSession = response;
+            console.log(this.usuarioDeLaSession.roles[0].idRol);
+            this.configurationAndMaintenanceService.obtenerMenuArbol(this.usuarioDeLaSession.roles[0].idRol).subscribe(responseApi=>{
+                console.log(responseApi);                
+            });
+        });
         this.cargarEstiloMenu();
         console.log(this.navigation);
         // Make sure the name input is not an empty string
@@ -431,6 +443,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
                     this.closeAside();
                 }
             });
+    
     }
 
     /**
