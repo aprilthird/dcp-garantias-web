@@ -95,6 +95,16 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
+              <div class="pb-3 text-right">
+                <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
+                <span class="mr-1">Total:</span><span class="font-w-500">{{totalUsers}}</span>
+                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="prevButton" (click)="changePage('less')">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="nextButton" (click)="changePage('more')">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
         </div>
     </div>
 </div>

@@ -22,6 +22,9 @@ export class UsersListComponent implements OnInit {
   totalRows:any;
   numberOfPages:any;
   pageCurrent:number=1;
+  //botones del paginado
+  nextButton:boolean=false;
+  prevButton:boolean=false;
 
   constructor(private readonly router:Router, private readonly digitalToolsService:DigitalToolsService) { }
 
@@ -31,20 +34,23 @@ export class UsersListComponent implements OnInit {
   }
 
   listUsers():void {
-    let tmp = localStorage.getItem("datasrcwwid");
-    if(tmp !== null && tmp !== "") {
-      this.dataSource = JSON.parse(tmp);
-    } else {
-      this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
-        // this.totalUsers = responseApi.totalRecords;
-        // this.totalRows = responseApi.pageSize;
-        // this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
-        // this.dataSource = responseApi.data;
-        
-        localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
-        this.dataSource = responseApi.body;
-      });
-    }
+    this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
+      this.totalUsers = responseApi.body.totalRecords;
+      this.totalRows = responseApi.body.pageSize;
+      this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
+      this.dataSource = responseApi.body.data;
+      // console.log("DATOS DE ENDPOINT");
+      // console.log(responseApi);
+      // localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
+      // this.dataSource = responseApi.body;
+    });
+
+    // let tmp = localStorage.getItem("datasrcwwid");
+    // if(tmp !== null && tmp !== "") {
+    //   this.dataSource = JSON.parse(tmp);
+    // } else {
+      
+    // }
   }
 
   loadFormFilter():void {
@@ -78,22 +84,35 @@ export class UsersListComponent implements OnInit {
   }
 
   disablePaginationButtons(){
-    // if(this.paginaActual == this.numeroDePaginas){
-    //   this.botonAnterior = true,
-    //   this.botonSiguiente = true;
-    // }
-    // if( this.paginaActual == 1 && this.paginaActual < this.numeroDePaginas ){
-    //   this.botonAnterior = true;
-    //   this.botonSiguiente = false;
-    // }
-    // if(this.paginaActual > 1 && this.paginaActual < this.numeroDePaginas){
-    //   this.botonAnterior = false;
-    //   this.botonSiguiente = false;
-    // }
-    // if(this.paginaActual > 1 && this.paginaActual == this.numeroDePaginas){
-    //   this.botonAnterior = false;
-    //   this.botonSiguiente = true;
-    // }
+    if(this.pageCurrent == this.numberOfPages){
+      this.prevButton = true,
+      this.nextButton = true;
+    }
+    if( this.pageCurrent == 1 && this.pageCurrent < this.numberOfPages){
+      this.prevButton = true;
+      this.nextButton = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+      this.prevButton = false;
+      this.nextButton = false;
+    }
+    if(this.pageCurrent > 1 && this.pageCurrent == this.numberOfPages){
+      this.prevButton = false;
+      this.nextButton = true;
+    }
+  }
+
+  changePage(type:string){
+    if(type=='more'){
+      this.pageCurrent = this.pageCurrent + 1 ;
+      this.listUsers();
+      this.disablePaginationButtons();
+    }
+    if(type=='less'){
+      this.pageCurrent = this.pageCurrent - 1 ;
+      this.listUsers();
+      this.disablePaginationButtons();
+    }
   }
 
   getPageCount(totalRows:any,totalRecords:any):number{
