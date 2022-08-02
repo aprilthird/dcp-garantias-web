@@ -12,9 +12,7 @@ import { MasterConstantRequest } from 'app/shared/models/request/master-constant
 export class ConfigurationAndMaintenanceService {
 
 
-  header = new HttpHeaders({
-    'Authorization': this.authService.accessToken
-  });
+  header = new HttpHeaders({ 'Authorization': this.authService.accessToken });
   dateCurrent = new Date();
   dateLast = this.dateCurrent.getFullYear()+'-'+this.dateCurrent.getMonth()+'-'+this.dateCurrent.getDay()+'T11:59:59Z';
 
@@ -31,60 +29,49 @@ export class ConfigurationAndMaintenanceService {
   //partes
   private urlMaintenanceParts = this.baseApiURl + '/Administracion/MantenimientoPartes';
   private urlTrayParts = this.baseApiURl + '/Administracion/BandejaPartes';
-
   //modelo de motor
   private urlMaintenanceEngineModel= this.baseApiURl + '/Administracion/MantenimientoModeloMotor';
   private urlTrayEngineModel = this.baseApiURl + '/Administracion/BandejaModeloMotor';
-
   //aplicacion de motor
   private urlMaintenanceEngineApplication= this.baseApiURl + '/Administracion/MantenimientoAplicacionesMotor';
   private urlTrayEngineApplication = this.baseApiURl + '/Administracion/BandejaAplicacionesMotor';
-
   //marca de motor
   private urlMantenimientoMarcaMotor= this.baseApiURl + '/Administracion/MantenimientoMarcaMotor';
   private urlBandejaMarcaMotor = this.baseApiURl + '/Administracion/BandejaMarcaMotor';
-  
   //fallas
   private urlMantenimientoFallas= this.baseApiURl + '/Administracion/MantenimientoTipoFallas';
   private urlBandejaFallas = this.baseApiURl + '/Administracion/BandejaTipoFallas';
-  
   //clientes
   private urlMaintenanceWarrantyDataClient = this.baseApiURl + '/Administracion/MantenimientoClientes';
   private urlTrayWarrantyDataClient = this.baseApiURl + '/Administracion/BandejaClientes';
   private urlSearchClientByName = this.baseApiURl + '/Administracion/BuscarClientesPorNombre';
   private urlSearchClientByCode= this.baseApiURl + '/Administracion/BuscarClientesPorId';
-
   //matricula
   private urlMaintenanceEnrollment = this.baseApiURl + '/Administracion/MantenimientoMatricula';
   private urlTrayEnrollment = this.baseApiURl + '/Administracion/BandejaMatricula';
-
   //tipo de garantias
   private urlMaintenanceWarrantyTypes = this.baseApiURl + '/Administracion/MantenimientoTipoGarantia';
   private urlTrayWarrantyTypes = this.baseApiURl + '/Administracion/BandejaTipoGarantia';
-
   //quejas
   private urlMaintenanceComplaints = this.baseApiURl + '/Administracion/MantenimientoQuejas';
   private urlTrayComplaints  = this.baseApiURl + '/Administracion/BandejaQuejas';
-
   //otros reclamables
   private urlMantenimientoOtrosReclamables = this.baseApiURl + '/Administracion/MantenimientoOtrosReclamables';
   private urlBandejaOtrosReclamables  = this.baseApiURl + '/Administracion/BandejaOtrosReclamables';
-
   //tipo de viaje
   private urlMantenimientoTipoViajes = this.baseApiURl + '/Administracion/MantenimientoTipoViaje';
   private urlBandejaTipoViajes  = this.baseApiURl + '/Administracion/BandejaTipoViaje';
-  
   //detalle de viaje
   private urlMantenimientoDetalleViajes = this.baseApiURl + '/Administracion/MantenimientoDetalleViaje';
   private urlBandejaDetalleViajes = this.baseApiURl + '/Administracion/BandejaDetalleViaje';
-  
   //unidad de medida
   private urlMantenimientoUnidadMedida = this.baseApiURl + '/Administracion/MantenimientoUnidadMedida';
   private urlBandejaUnidadMedida = this.baseApiURl + '/Administracion/BandejaUnidadMedida';
-  
   //area de servicio
   private urlMaintenanceServiceArea = this.baseApiURl + '/Administracion/MantenimientoAreaServicio';
   private urlTrayServiceArea = this.baseApiURl + '/Administracion/BandejaAreaServicio';
+  //url obtener rol
+  private urlObtenerMenuArbol = this.baseApiURl + '/Seguridad/ObtenerMenuArbol/';
 
   constructor(private readonly httpClient: HttpClient,
               private readonly authService: AuthService) { }
@@ -317,4 +304,9 @@ export class ConfigurationAndMaintenanceService {
     const request = {filter : {ceco:_ceco,codigo:_codAreaServicios}};
     return this.httpClient.post(this.urlTrayServiceArea, request, {headers:this.header});
   }  
+
+  //obtener rol
+  obtenerMenuArbol(idRol:any):Observable<any>{
+    return this.httpClient.get(this.urlObtenerMenuArbol+idRol,{headers:this.header});
+  }
 }

@@ -7,7 +7,7 @@
             <span class="pointer" (click)="onListfallas()">Fallas</span> > <span class="text-red pointer"> {{this.accion=='new'?'Crear registro':'Registro de garantía'}}</span>
         </div>
         <div class="col-md-12 mb-5 text-end" *ngIf="this.accion=='edit'?true:false">
-            <button mat-raised-button (click)="modalDescargarDocumentos()" class="color-button-selected-documents">
+            <button type="button" mat-raised-button (click)="modalDescargarDocumentos()" class="color-button-selected-documents">
                 <mat-icon svgIcon="heroicons_outline:download" class="me-2"></mat-icon>Descargar documentos
             </button>
         </div>
@@ -398,12 +398,12 @@
                     <span class="font-w-700">Documentos</span>
                 </div>
                 <div class="col-md-12 mb-5">
-                    <button mat-raised-button (click)="adjuntarDocumento()" class="color-button-selected-documents">
+                    <button type="button" mat-raised-button (click)="adjuntarDocumento()" class="color-button-selected-documents">
                         <mat-icon svgIcon="heroicons_outline:upload" class="me-2"></mat-icon>Adjuntar documentos
                     </button>
                 </div>
                 <div class="col-md-12 mb-5">
-                    <button mat-raised-button *ngFor="let documento of documentos" class="color-button-document mx-1">
+                    <button type="button" mat-raised-button *ngFor="let documento of documentos" class="color-button-document mx-1">
                         {{documento.name}}
                         <!-- <mat-icon (click)="deleteDocumentDetalleReclamo(documento.name)">close</mat-icon> -->
                         <button mat-icon-button (click)="deleteDocumentDetalleReclamo(documento.name)"><mat-icon>close</mat-icon></button>
@@ -420,17 +420,17 @@
             </div>
         </div>
         <div class="col-md-12 text-end mb-5">
-            <button mat-raised-button class="mx-1" *ngIf="botonUsuarioRegistrador" (click)="registrarFalla()">Guardar registro</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonEscalarDfse" (click)="guardarRegistroIngenieroDeSoporte()">Guardar registro</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonEscalarFabrica" (click)="guardarRegistroDFSE()">Guardar registro</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCaso" (click)="guardarRegistroFabrica()">Guardar registro</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCasoIngDeSoporte" (click)="cerrarCasoIngDeSoporte()">Cerrar caso</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonCerrarCasoDfse" (click)="cerrarCasoDfse()">Cerrar caso</button>
-            <button mat-raised-button class="mx-1" *ngIf="botonObservar" (click)="observarFalla()">Observar</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a DFSE</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a Fabrica</button>
-            <button mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonUsuarioRegistrador" (click)="registrarFalla()">Guardar registro</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonEscalarDfse" (click)="guardarRegistroIngenieroDeSoporte()">Guardar registro</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonEscalarFabrica" (click)="guardarRegistroDFSE()">Guardar registro</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonCerrarCaso" (click)="guardarRegistroFabrica()">Guardar registro</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonCerrarCasoIngDeSoporte" (click)="cerrarCasoIngDeSoporte()">Cerrar caso</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonCerrarCasoDfse" (click)="cerrarCasoDfse()">Cerrar caso</button>
+            <button type="button" mat-raised-button class="mx-1" *ngIf="botonObservar" (click)="observarFalla()">Observar</button>
+            <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonUsuarioEscalador" (click)="escalarFalla()">Escalar falla</button>
+            <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a DFSE</button>
+            <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a Fabrica</button>
+            <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
         </div>
     </div>
 </div>

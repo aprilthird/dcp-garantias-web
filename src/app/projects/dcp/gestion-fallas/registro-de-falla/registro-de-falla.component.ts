@@ -197,6 +197,7 @@ export class RegistroDeFallaComponent implements OnInit {
     });
     this.userService.user$.subscribe(response=>{
       this.usuarioDeLaSession = response;
+      console.log(this.usuarioDeLaSession);
     });
     this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.maestraQuejas = resp.data;
