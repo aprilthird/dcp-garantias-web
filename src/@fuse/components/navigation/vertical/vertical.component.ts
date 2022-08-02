@@ -146,26 +146,34 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         if(ruta=='/home'){
           this.homeMenu='color-text-black';
           this.homeIcon='icon-menu-red';
+          this.seeConfigurationAndMaintenance=false;
+          this.seeDigitalTools=false;
           this._router.navigate([ruta]);
         }
         if(ruta=='/garantias'){
           this.garantiasMenu='color-text-black';
           this.garantiasIcon='icon-menu-red';
+          this.seeConfigurationAndMaintenance=false;
+          this.seeDigitalTools=false;
           this._router.navigate([ruta]);
         }
         if(ruta=='/gestion-fallas'){
           this.fallasMenu='color-text-black';
           this.fallasIcon='icon-menu-red';
+          this.seeConfigurationAndMaintenance=false;
+          this.seeDigitalTools=false;
           this._router.navigate([ruta]);
         }
         if(ruta=='/herramientas'){
           this.herramientasMenu='color-text-black';
           this.herramientasIcon='icon-menu-red';
+          this.seeConfigurationAndMaintenance=false;
           this.showDigitalTools();
         }
         if(ruta=='/configuracion'){
           this.configuracionMenu='color-text-black';
           this.configuracionIcon='icon-menu-red';
+          this.seeDigitalTools=false;
           this.showConfigurationAndMaintenance();
         }
         if(ruta=='/reportes'){
