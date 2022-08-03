@@ -219,8 +219,8 @@
                   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>                  
                 </table>              
                 <div class="pb-3 text-right">
-                  <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{paginaActual}} de {{numeroDePaginas}}</span>
-                  <span class="mr-1">Total:</span><span class="font-w-500">{{totalFallas}}</span>
+                  <span class="mr-1"></span><span class="mr-1">{{paginaActual==1?1:paginaActual*10-10}}-{{totalFallas>(paginaActual*10)?paginaActual*10:totalFallas}}</span>
+                  <span class="mr-1"> de </span><span>{{totalFallas}}</span>
                   <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="botonAnterior" (click)="changePage('less')">
                     <mat-icon>chevron_left</mat-icon>
                   </button>
