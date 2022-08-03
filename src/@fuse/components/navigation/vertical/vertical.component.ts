@@ -78,6 +78,10 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     reportesMenu='color-text-gray';
     reportesIcon='icon-menu-gray';
     usuarioDeLaSession:any;
+    subMenuBorderRed='sub-menu-border-red';
+    subMenuBorderWhite='sub-menu-border-white';
+    styleSubMenuWwid:string=this.subMenuBorderWhite;
+    styleSubMenuLicences:string=this.subMenuBorderWhite;
 
     constructor(
         private _animationBuilder: AnimationBuilder,
@@ -108,98 +112,114 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     showDigitalTools():void{
         this.seeDigitalTools==true?this.seeDigitalTools=false:this.seeDigitalTools=true;
     }
-      
-      cargarEstiloMenu():void{        
-        if(localStorage.getItem('menu')){
-            if(localStorage.getItem('menu')=='/home'){
-                this.homeMenu='color-text-black';
-                this.homeIcon='icon-menu-red';
-              }
-              if(localStorage.getItem('menu')=='/garantias'){
-                this.garantiasMenu='color-text-black';
-                this.garantiasIcon='icon-menu-red';
-              }
-              if(localStorage.getItem('menu')=='/gestion-fallas'){
-                this.fallasMenu='color-text-black';
-                this.fallasIcon='icon-menu-red';
-              }
-              if(localStorage.getItem('menu')=='/herramientas'){
-                this.herramientasMenu='color-text-black';
-                this.herramientasIcon='icon-menu-red';
-              }
-              if(localStorage.getItem('menu')=='/configuracion'){
-                this.configuracionMenu='color-text-black';
-                this.configuracionIcon='icon-menu-red';
-              }
-              if(localStorage.getItem('menu')=='/reportes'){
-                this.reportesMenu='color-text-black';
-                this.reportesIcon='icon-menu-red';
-              }
-        }else{
-            this.homeIcon='icon-menu-red';
-        }
-      }
 
-      navegacion(ruta:string):void{
-        localStorage.setItem('menu',ruta);
-        this.clear();
-        if(ruta=='/home'){
-          this.homeMenu='color-text-black';
+    cargarEstiloMenu():void{        
+      if(localStorage.getItem('menu')){
+          if(localStorage.getItem('menu')=='/home'){
+              this.homeMenu='color-text-black';
+              this.homeIcon='icon-menu-red';
+            }
+            if(localStorage.getItem('menu')=='/garantias'){
+              this.garantiasMenu='color-text-black';
+              this.garantiasIcon='icon-menu-red';
+            }
+            if(localStorage.getItem('menu')=='/gestion-fallas'){
+              this.fallasMenu='color-text-black';
+              this.fallasIcon='icon-menu-red';
+            }
+            if(localStorage.getItem('menu')=='/herramientas'){
+              this.herramientasMenu='color-text-black';
+              this.herramientasIcon='icon-menu-red';
+            }
+            if(localStorage.getItem('menu')=='/configuracion'){
+              this.configuracionMenu='color-text-black';
+              this.configuracionIcon='icon-menu-red';
+            }
+            if(localStorage.getItem('menu')=='/reportes'){
+              this.reportesMenu='color-text-black';
+              this.reportesIcon='icon-menu-red';
+            }
+      }else{
           this.homeIcon='icon-menu-red';
-          this.seeConfigurationAndMaintenance=false;
-          this.seeDigitalTools=false;
-          this._router.navigate([ruta]);
-        }
-        if(ruta=='/garantias'){
-          this.garantiasMenu='color-text-black';
-          this.garantiasIcon='icon-menu-red';
-          this.seeConfigurationAndMaintenance=false;
-          this.seeDigitalTools=false;
-          this._router.navigate([ruta]);
-        }
-        if(ruta=='/gestion-fallas'){
-          this.fallasMenu='color-text-black';
-          this.fallasIcon='icon-menu-red';
-          this.seeConfigurationAndMaintenance=false;
-          this.seeDigitalTools=false;
-          this._router.navigate([ruta]);
-        }
-        if(ruta=='/herramientas'){
-          this.herramientasMenu='color-text-black';
-          this.herramientasIcon='icon-menu-red';
-          this.seeConfigurationAndMaintenance=false;
-          this.showDigitalTools();
-        }
-        if(ruta=='/configuracion'){
-          this.configuracionMenu='color-text-black';
-          this.configuracionIcon='icon-menu-red';
-          this.seeDigitalTools=false;
-          this.showConfigurationAndMaintenance();
-        }
-        if(ruta=='/reportes'){
-          this.reportesMenu='color-text-black';
-          this.reportesIcon='icon-menu-red';
-        }
       }
-    
-      navegacionSubMenu(ruta:string):void{
+    }
+
+    navegacion(ruta:string):void{
+      localStorage.setItem('menu',ruta);
+      this.clear();
+      if(ruta=='/home'){
+        this.homeMenu='color-text-black';
+        this.homeIcon='icon-menu-red';
+        this.seeConfigurationAndMaintenance=false;
+        this.seeDigitalTools=false;
         this._router.navigate([ruta]);
       }
-    
-      clear():void{
-        this.homeMenu='color-text-gray';
-        this.homeIcon='icon-menu-gray';
-        this.garantiasMenu='color-text-gray';
-        this.garantiasIcon='icon-menu-gray';
-        this.fallasMenu='color-text-gray';
-        this.fallasIcon='icon-menu-gray';
-        this.herramientasMenu='color-text-gray';
-        this.herramientasIcon='icon-menu-gray';
-        this.configuracionMenu='color-text-gray';
-        this.configuracionIcon='icon-menu-gray';
-        this.reportesMenu='color-text-gray';
-        this.reportesIcon='icon-menu-gray';
+      if(ruta=='/garantias'){
+        this.garantiasMenu='color-text-black';
+        this.garantiasIcon='icon-menu-red';
+        this.seeConfigurationAndMaintenance=false;
+        this.seeDigitalTools=false;
+        this._router.navigate([ruta]);
       }
+      if(ruta=='/gestion-fallas'){
+        this.fallasMenu='color-text-black';
+        this.fallasIcon='icon-menu-red';
+        this.seeConfigurationAndMaintenance=false;
+        this.seeDigitalTools=false;
+        this._router.navigate([ruta]);
+      }
+      if(ruta=='/herramientas'){
+        this.herramientasMenu='color-text-black';
+        this.herramientasIcon='icon-menu-red';
+        this.seeConfigurationAndMaintenance=false;
+        this.showDigitalTools();
+      }
+      if(ruta=='/configuracion'){
+        this.configuracionMenu='color-text-black';
+        this.configuracionIcon='icon-menu-red';
+        this.seeDigitalTools=false;
+        this.showConfigurationAndMaintenance();
+      }
+      if(ruta=='/reportes'){
+        this.reportesMenu='color-text-black';
+        this.reportesIcon='icon-menu-red';
+      }
+    }
+    
+    navegacionSubMenu(ruta:string):void{
+        this.clearStylesSubMenu();
+        switch (ruta) {
+            case '/digital-tools/users-list':
+                this.styleSubMenuWwid = this.subMenuBorderRed;
+                break;
+            case '/digital-tools/electronic-tools':
+                this.styleSubMenuLicences = this.subMenuBorderRed;
+                break;
+            default:
+                break;
+        }
+        this._router.navigate([ruta]);
+    }
+
+    clearStylesSubMenu():void{
+        this.styleSubMenuLicences = this.subMenuBorderWhite;
+        this.styleSubMenuWwid = this.subMenuBorderWhite;
+    }
+    
+    clear():void{
+      this.homeMenu='color-text-gray';
+      this.homeIcon='icon-menu-gray';
+      this.garantiasMenu='color-text-gray';
+      this.garantiasIcon='icon-menu-gray';
+      this.fallasMenu='color-text-gray';
+      this.fallasIcon='icon-menu-gray';
+      this.herramientasMenu='color-text-gray';
+      this.herramientasIcon='icon-menu-gray';
+      this.configuracionMenu='color-text-gray';
+      this.configuracionIcon='icon-menu-gray';
+      this.reportesMenu='color-text-gray';
+      this.reportesIcon='icon-menu-gray';
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
