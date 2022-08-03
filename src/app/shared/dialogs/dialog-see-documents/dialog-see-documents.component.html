@@ -1,6 +1,6 @@
 <div matDialogTitle> Documentos Adjuntados </div>
 <div matDialogContent class="p-0">
-    <a mat-stroked-button *ngFor="let documento of documentos" [href]="documento.ruta" target="_blank">
+    <a mat-stroked-button *ngFor="let documento of documentos" [href]="documento.ruta" target="_blank" class="mx-1 my-1">
         {{documento.nombre}}
     </a>
 </div>

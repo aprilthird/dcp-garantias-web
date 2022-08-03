@@ -103,7 +103,7 @@ export class GarantiasListComponent implements OnInit {
     const filterData = this.formFilter.value;
     filterData.area = filterData.area == -1 ? null : filterData.area;
     filterData.bandeja = filterData.bandeja == -1 ? null : filterData.bandeja;
-    filterData.antiguedad = filterData.antiguedad;
+    filterData.antiguedad = filterData.antiguedad == 0 ? null : filterData.antiguedad;
     this.garantiasService.listWarranties(filterData, this.pageCurrent).subscribe(resp=>{
       this.totalWarranties = resp.totalRecords;
       this.totalRows = resp.pageSize;
@@ -117,6 +117,7 @@ export class GarantiasListComponent implements OnInit {
     this.loadFormFilter(); //si se desea todo sería lo siguiente this.formFilter.reset();
     this.listWarranties();
   }
+
   getNumberOfPages(totalRows:any,totalRecords:any):number{
     let result:any;
     result = totalRecords / totalRows;
@@ -133,9 +134,9 @@ export class GarantiasListComponent implements OnInit {
       esn: new FormControl(null),
       os: new FormControl(null),
       area: new FormControl(-1),
-      fechaIni: new FormControl(this.prevDate),
+      fechaIni: new FormControl(),
       // fechaIni: new FormControl(dateCurrent),
-      fechaFin: new FormControl(this.currentDate),
+      fechaFin: new FormControl(),
       // fechaFin: new FormControl(dateCurrent),
       bandeja: new FormControl(-1),
       antiguedad: new FormControl(0)
