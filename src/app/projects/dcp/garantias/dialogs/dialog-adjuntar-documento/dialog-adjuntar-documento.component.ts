@@ -30,9 +30,16 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
   }
 
   cargarDocumentos(event:any):void{
+    // this.documentosCargados = event.target.files;
+    // console.log(this.documentosCargados);
+    
+
     for (let i = 0; i < event.target.files.length; i++) {
-      this.documentosCargados.push(event.target.files[i]);  
+      if(!(this.verificarSiYaEstaCargado(event.target.files[i].name))){
+        this.documentosCargados.push(event.target.files[i]);
+      }
     }
+    event.target.value = null;
     // if(this.data.modulo=='garantias'){
     //   if(this.seccionSeleccionada!=null){
     //     for (let i = 0; i < event.target.files.length; i++) {
@@ -55,6 +62,15 @@ export class DialogAdjuntarDocumentoComponent implements OnInit {
   deleteDocumentDetalleReclamo(name:any):void{
     const index = this.documentosCargados.findIndex(e=>e.name==name);
     this.documentosCargados.splice(index,1);
+  }
+
+  verificarSiYaEstaCargado(name:string):boolean{
+    let existe = true;
+    const index = this.documentosCargados.findIndex(e=>e.name==name);
+    if(index==-1){
+      existe = false;
+    }
+    return existe;
   }
 
   agregarDocumento():void{
