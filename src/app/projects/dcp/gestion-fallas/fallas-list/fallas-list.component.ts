@@ -218,5 +218,25 @@ export class FallasListComponent implements OnInit {
     this.cargarFormularioBusqueda();
     this.listarFallas(true);
   }
+
+  obtenerEstilo(index:number):string{
+    let estilo:string;
+    if(index%2==0){
+      estilo = 'color-fila-gray';
+    }else{
+      estilo = 'color-fila-white'
+    }
+    return estilo;
+  }
+
+  obtenerEstiloBitacora(index:number):string{
+    let estilo:string;
+    if(index%2==0){
+      estilo = 'color-fila-bitacora';
+    }else{
+      estilo = 'color-fila-white'
+    }
+    return estilo;
+  }
   
 }
