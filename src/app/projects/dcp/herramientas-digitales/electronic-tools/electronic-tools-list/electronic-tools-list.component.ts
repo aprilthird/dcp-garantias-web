@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
@@ -12,10 +13,15 @@ export class ElectronicToolsListComponent implements OnInit {
   displayedColumns: string[] = ['usuario', 'area', 'jefeAprobador', 'tipoDeLicencia', 'cantidad', 'pcidEquipo', 'fechaDeSolicitud', 'estado', 'action'];
   dataSource = [];
 
+  //filtros
+  formFilter:FormGroup;
+
   //datos del paginado
   totalUsers:any;
   totalRows:any;
   numberOfPages:any;
+  countStart:any;
+  countEnd:any;
   pageCurrent:number=1;
 
   //botones del paginado
@@ -25,14 +31,17 @@ export class ElectronicToolsListComponent implements OnInit {
   constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService) { }
 
   ngOnInit(): void {
+    this.loadFormFilter();
     this.listUsers();
   }
 
   listUsers():void {
     
-    this.digitalToolsService.trayTools(this.pageCurrent).subscribe(responseApi => {
+    this.digitalToolsService.trayTools(this.formFilter.value, this.pageCurrent).subscribe(responseApi => {
       this.totalUsers = responseApi.totalRecords;
       this.totalRows = responseApi.pageSize;
+      this.countStart = this.totalRows*(this.pageCurrent - 1) + 1;
+      this.countEnd = this.totalRows*this.pageCurrent;
       this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
       this.dataSource = responseApi.data;
 
@@ -87,6 +96,15 @@ export class ElectronicToolsListComponent implements OnInit {
     //     this.dataSource = responseApi.body;
     //   });
     // }
+  }
+
+  loadFormFilter():void {
+    this.formFilter = new FormGroup({
+      usr: new FormControl(null),
+      estado: new FormControl(-1),
+      fechaDeSolicitudInicio: new FormControl(),
+      fechaDeSolicitudFin: new FormControl(),
+    });
   }
 
   onEditBasic(usuario:any):void{

@@ -20,6 +20,8 @@ export class UsersListComponent implements OnInit {
   //datos del paginado
   totalUsers:any;
   totalRows:any;
+  countStart:any;
+  countEnd:any;
   numberOfPages:any;
   pageCurrent:number=1;
   //botones del paginado
@@ -29,17 +31,16 @@ export class UsersListComponent implements OnInit {
   constructor(private readonly router:Router, private readonly digitalToolsService:DigitalToolsService) { }
 
   ngOnInit(): void {
-    this.listUsers();
     this.loadFormFilter();
+    this.listUsers();
   }
 
   listUsers():void {
-    // this.digitalToolsService.trayTools(this.pageCurrent).subscribe(responseApi => {
-    //   console.log(responseApi);
-    // });
-    this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
+    this.digitalToolsService.userListManagement(this.formFilter.value, this.pageCurrent).subscribe(responseApi=>{
       this.totalUsers = responseApi.body.totalRecords;
       this.totalRows = responseApi.body.pageSize;
+      this.countStart = this.totalRows*(this.pageCurrent - 1) + 1;
+      this.countEnd = this.totalRows*this.pageCurrent;
       this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
       this.dataSource = responseApi.body.data;
 
@@ -54,37 +55,22 @@ export class UsersListComponent implements OnInit {
         console.log(this.dataSource[i]);
       }
     }); 
-
-    // let tmp = localStorage.getItem("datasrcwwid");
-    // if(tmp !== null && tmp !== "") {
-    //   this.dataSource = JSON.parse(tmp);
-    // } else {
-       
-    // }
   }
 
   loadFormFilter():void {
+    let dateCurrent = new Date;
     this.formFilter = new FormGroup({
-      usr: new FormControl(''),
-      wwid: new FormControl(''),
-      fechaIngresoInicio: new FormControl(''),
-      fechaIngresoFin: new FormControl(''),
-      fechaBajaInicio: new FormControl(''),
-      fechaBajaFin: new FormControl(''),
+      usr: new FormControl(null),
+      wwid: new FormControl(null),
+      fechaIngresoInicio: new FormControl(),
+      fechaIngresoFin: new FormControl(),
+      fechaBajaInicio: new FormControl(),
+      fechaBajaFin: new FormControl(),
     });
   }
 
   filterData():void {
-    let tmp = localStorage.getItem("datasrcwwid");
-    if(tmp !== null && tmp !== "") {
-      this.dataSource = JSON.parse(tmp);
-    }
-    if(this.formFilter.value.usr !== "") {
-      this.dataSource = this.dataSource.filter(i => i.nombres.includes(this.formFilter.value.usr) || i.apellidos.includes(this.formFilter.value.usr));
-    }
-    if(this.formFilter.value.wwid !== "") {
-      this.dataSource = this.dataSource.filter(i => i.wwid.includes(this.formFilter.value.wwid));
-    }
+    
   }
 
   onRegisterBasic(usuario:any):void{

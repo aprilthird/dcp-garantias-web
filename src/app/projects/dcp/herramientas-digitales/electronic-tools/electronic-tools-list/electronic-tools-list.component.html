@@ -1,42 +1,47 @@
 <div class="container">
     <div class="row selectors">
-        <div class="col-md-9">
-            <h3 class="fw-bold">Herramientas Electrónicas</h3>
-        </div>
-        <div class="col-md-3 text-end">
-            <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de
-                Herramienta</button>
-        </div>
-        <div class="col-md-3 search">
-            <mat-form-field floatLabel="always">
-                <input matInput type="text" placeholder="Buscar por Usuario">
-                <button mat-icon-button matSuffix>
-                    <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
-                </button>
-            </mat-form-field>
-        </div>
-        <div class="col-md-3">
-            <mat-form-field floatLabel="always">
-                <mat-label class="fw-bold">Estado</mat-label>
-                <mat-select placeholder="Seleccionar">
-                    <mat-option [value]="0">Baja</mat-option>
-                    <mat-option [value]="1">Activo</mat-option>
-                    <mat-option [value]="2">Deshabilitado</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="col-md-3">
-            <mat-form-field floatLabel="always">
-                <mat-label>Fecha de Solicitud</mat-label>
-                <mat-date-range-input [rangePicker]="pickerA">
-                    <input matStartDate placeholder="Desde">
-                    <input matEndDate placeholder="Hasta">
-                </mat-date-range-input>
-                <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
-                <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
-                <mat-date-range-picker #pickerA></mat-date-range-picker>
-            </mat-form-field>
-        </div>
+        <form *ngIf="formFilter" [formGroup]="formFilter">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3 class="fw-bold">Herramientas Electrónicas</h3>
+                </div>
+                <div class="col-md-3 text-end">
+                    <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de
+                        Herramienta</button>
+                </div>
+                <div class="col-md-3 search">
+                    <mat-form-field floatLabel="always">
+                        <input matInput type="text" placeholder="Buscar por Usuario" formControlName="usr">
+                        <button mat-icon-button matSuffix (click)="listUsers()">
+                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field floatLabel="always">
+                        <mat-label class="fw-bold">Estado</mat-label>
+                        <mat-select placeholder="Seleccionar" formControlName="estado" (selectionChange)="listUsers()">
+                            <mat-option [value]="0">Baja</mat-option>
+                            <mat-option [value]="1">Activo</mat-option>
+                            <mat-option [value]="2">Deshabilitado</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field floatLabel="always">
+                        <mat-label>Fecha de Solicitud</mat-label>
+                        <mat-date-range-input [rangePicker]="pickerA">
+                            <input matStartDate placeholder="Desde" formControlName="fechaDeSolicitudInicio">
+                            <input matEndDate placeholder="Hasta" formControlName="fechaDeSolicitudFin"
+                            (dateChange)="listUsers()">
+                        </mat-date-range-input>
+                        <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
+                        <mat-date-range-picker #pickerA></mat-date-range-picker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
         <div class="col-md-12 mb-5">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
@@ -84,10 +89,9 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <div class="pb-3 text-right">
-                    <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de
-                        {{numberOfPages}}</span>
-                    <span class="mr-1">Total:</span><span class="font-w-500">{{totalUsers}}</span>
+                <div class="pagination flex items-center justify-end">
+                    <span class="mr-1"></span><span class="font-w-500 mr-1">{{countStart}}-{{countEnd}}</span>
+                    <span class="mr-1"> de </span><span class="font-w-500">{{totalUsers}}</span>
                     <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
                         [disabled]="prevButton" (click)="changePage('less')">
                         <mat-icon>chevron_left</mat-icon>

@@ -8,7 +8,7 @@
                 <div class="col-md-3 search">
                     <mat-form-field floatLabel="always">
                         <input matInput type="text" placeholder="Buscar por Usuario" formControlName="usr">
-                        <button mat-icon-button matSuffix (click)="filterData()">
+                        <button mat-icon-button matSuffix (click)="listUsers()">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
@@ -16,7 +16,7 @@
                 <div class="col-md-3 search">
                     <mat-form-field floatLabel="always">
                         <input matInput type="text" placeholder="Buscar por WWID" formControlName="wwid">
-                        <button mat-icon-button matSuffix (click)="filterData()">
+                        <button mat-icon-button matSuffix (click)="listUsers()">
                             <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
                         </button>
                     </mat-form-field>
@@ -27,7 +27,7 @@
                         <mat-date-range-input [rangePicker]="pickerA">
                             <input matStartDate placeholder="Desde" formControlName="fechaIngresoInicio">
                             <input matEndDate placeholder="Hasta" formControlName="fechaIngresoFin"
-                                (dateChange)="filterData()">
+                                (dateChange)="listUsers()">
                         </mat-date-range-input>
                         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
@@ -39,8 +39,8 @@
                         <mat-label>Fecha de baja</mat-label>
                         <mat-date-range-input [rangePicker]="pickerB">
                             <input matStartDate placeholder="Desde" formControlName="fechaBajaInicio">
-                            <input matEndDate placeholder="Hasta" formControlName="fechaBajaInicio"
-                                (dateChange)="filterData()">
+                            <input matEndDate placeholder="Hasta" formControlName="fechaBajaFin"
+                                (dateChange)="listUsers()">
                         </mat-date-range-input>
                         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="pickerB"></mat-datepicker-toggle>
@@ -48,7 +48,6 @@
                     </mat-form-field>
                 </div>
             </div>
-
         </form>
         <div class="col-md-12 mb-5">
             <div class="mat-elevation-z8">
@@ -101,12 +100,11 @@
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row class="even:bg-gray-100" *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <div class="pb-3 text-right">
-                    <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de
-                        {{numberOfPages}}</span>
-                    <span class="mr-1">Total:</span><span class="font-w-500">{{totalUsers}}</span>
+                <div class="pagination flex items-center justify-end">
+                    <span class="mr-1"></span><span class="font-w-500 mr-1">{{countStart}}-{{countEnd}}</span>
+                    <span class="mr-1"> de </span><span class="font-w-500">{{totalUsers}}</span>
                     <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
                         [disabled]="prevButton" (click)="changePage('less')">
                         <mat-icon>chevron_left</mat-icon>
