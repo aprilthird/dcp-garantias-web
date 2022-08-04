@@ -4,7 +4,8 @@
             <h3 class="fw-bold">Herramientas Electrónicas</h3>
         </div>
         <div class="col-md-3 text-end">
-            <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de Herramienta</button>
+            <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de
+                Herramienta</button>
         </div>
         <div class="col-md-3 search">
             <mat-form-field floatLabel="always">
@@ -28,67 +29,75 @@
             <mat-form-field floatLabel="always">
                 <mat-label>Fecha de Solicitud</mat-label>
                 <mat-date-range-input [rangePicker]="pickerA">
-                  <input matStartDate placeholder="Desde">
-                  <input matEndDate placeholder="Hasta">
+                    <input matStartDate placeholder="Desde">
+                    <input matEndDate placeholder="Hasta">
                 </mat-date-range-input>
                 <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                 <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
                 <mat-date-range-picker #pickerA></mat-date-range-picker>
-              </mat-form-field>     
+            </mat-form-field>
         </div>
         <div class="col-md-12 mb-5">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-                <ng-container matColumnDef="usuario">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> Usuario </th>
-                    <td mat-cell *matCellDef="let element"> {{element.nombres}} {{element.apellidos}} </td>
-                </ng-container>
-                <ng-container matColumnDef="area">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> Area </th>
-                    <td mat-cell *matCellDef="let element"> {{element.area}} </td>
-                  </ng-container>
-                <ng-container matColumnDef="jefeAprobador">
-                    <th mat-header-cell *matHeaderCellDef width="15%"> Jefe Aprobador </th>
-                    <td mat-cell *matCellDef="let element"> {{element.jefe}} </td>
-                </ng-container>
-                <ng-container matColumnDef="tipoDeLicencia">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Tipo de Licencia </th>
-                    <td mat-cell *matCellDef="let element"> {{element.tipoDeLicencia}} </td>
-                </ng-container>
-                <ng-container matColumnDef="cantidad">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Cantidad </th>
-                    <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
-                </ng-container>
-                <ng-container matColumnDef="pcidEquipo">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> PCID Equipo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.pcid}} </td>
-                </ng-container>
-                <ng-container matColumnDef="fechaDeSolicitud">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Fecha de Solicitud </th>
-                    <td mat-cell *matCellDef="let element"> {{element.fechaDeSolicitud  | date: 'dd/MM/yyyy'}} </td>
-                </ng-container>
-                <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef width="10%"> Estado</th>
-                    <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
-                </ng-container>
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef width="5%"> </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button (click)="onEditBasic(element)"><mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon></button>
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-            <div class="pb-3 text-right">
-                <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
-                <span class="mr-1">Total:</span><span class="font-w-500">{{totalUsers}}</span>
-                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="prevButton" (click)="changePage('less')">
-                  <mat-icon>chevron_left</mat-icon>
-                </button>
-                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="nextButton" (click)="changePage('more')">
-                  <mat-icon>chevron_right</mat-icon>
-                </button>
-              </div>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+                    <ng-container matColumnDef="usuario">
+                        <th mat-header-cell *matHeaderCellDef width="15%"> Usuario </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nombres}} {{element.apellidos}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="area">
+                        <th mat-header-cell *matHeaderCellDef width="15%"> Area </th>
+                        <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="jefeAprobador">
+                        <th mat-header-cell *matHeaderCellDef width="15%"> Jefe Aprobador </th>
+                        <td mat-cell *matCellDef="let element"> {{element.jefe!=null?element.jefe:'-'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tipoDeLicencia">
+                        <th mat-header-cell *matHeaderCellDef width="10%"> Tipo de Licencia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.tipoDeLicencia}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="cantidad">
+                        <th mat-header-cell *matHeaderCellDef width="10%"> Cantidad </th>
+                        <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="pcidEquipo">
+                        <th mat-header-cell *matHeaderCellDef width="10%"> PCID Equipo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.pcid}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaDeSolicitud">
+                        <th mat-header-cell *matHeaderCellDef width="10%"> Fecha de Solicitud </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fechaDeSolicitud | date: 'dd/MM/yyyy'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef width="10%"> Estado</th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado == 0 ? 'Baja' : element.estado
+                            == 1 ? 'Activo' : element.estado == 2 ? 'Deshabilitado' : element.estado}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef width="5%"> </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button (click)="onEditBasic(element)">
+                                <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div class="pb-3 text-right">
+                    <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de
+                        {{numberOfPages}}</span>
+                    <span class="mr-1">Total:</span><span class="font-w-500">{{totalUsers}}</span>
+                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
+                        [disabled]="prevButton" (click)="changePage('less')">
+                        <mat-icon>chevron_left</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
+                        [disabled]="nextButton" (click)="changePage('more')">
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

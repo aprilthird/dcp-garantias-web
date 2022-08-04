@@ -13,6 +13,7 @@ import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-t
 })
 export class BasicRegistrationComponent implements OnInit {
 
+  action:string;
   localUser:any;
   user:any;
 
@@ -23,9 +24,14 @@ export class BasicRegistrationComponent implements OnInit {
     private readonly digitalToolsService:DigitalToolsService) { }
 
   ngOnInit():void {
+    this.action = localStorage.getItem('action');
     this.localUser = JSON.parse(localStorage.getItem('usuario'));
     this.loadUser();
-    this.loadFormRegisterWWID();
+    if(this.action === 'edit') {
+      this.loadFormRegisterWWID();
+    } else {
+      this.loadEmptyFormRegisterWWID();
+    }
   }
 
   loadUser(): void {
@@ -34,7 +40,7 @@ export class BasicRegistrationComponent implements OnInit {
     });
   }
 
-  loadFormRegisterWWID():void {
+  loadEmptyFormRegisterWWID():void {
     this.formWwid = new FormGroup({
       wwid: new FormControl('', [Validators.required]),
       estadoWwid: new FormControl(null),
@@ -42,6 +48,17 @@ export class BasicRegistrationComponent implements OnInit {
       estadoIdPromotion: new FormControl(null),
       locacion: new FormControl(null),
       codigoCuenta: new FormControl('', [Validators.required]),
+    });
+  }
+
+  loadFormRegisterWWID():void {
+    this.formWwid = new FormGroup({
+      wwid: new FormControl(this.localUser.wwid, [Validators.required]),
+      estadoWwid: new FormControl(parseInt(this.localUser.estadoWwid)),
+      idPromotion: new FormControl(this.localUser.idPromotion, [Validators.required]),
+      estadoIdPromotion: new FormControl(parseInt(this.localUser.estadoIdPromotion)),
+      locacion: new FormControl(parseInt(this.localUser.locacion)),
+      codigoCuenta: new FormControl(this.localUser.codigoCuenta, [Validators.required]),
     });
   }
 
@@ -66,18 +83,20 @@ export class BasicRegistrationComponent implements OnInit {
             ...this.formWwid.value
           };
           this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
-            // localStorage.setItem("wwid_" + this.user.dni, JSON.stringify(this.formWwid.value));
-            
-            let tmp = localStorage.getItem("datasrcwwid");
-            if(tmp !== null && tmp !== "") {
-              let dataSource = JSON.parse(tmp);
-              let findIndex = dataSource.findIndex(i => i.dni == this.user.dni);
-              dataSource[findIndex].wwid = this.formWwid.value.wwid;
-              dataSource[findIndex].idPromotion = this.formWwid.value.idPromotion;
-              dataSource[findIndex].estadoIdPromotion = this.formWwid.value.estadoIdPromotion;
-              dataSource[findIndex].estadoWwid = this.formWwid.value.estadoWwid;
-              localStorage.setItem("datasrcwwid", JSON.stringify(dataSource));
-            }
+            localStorage.setItem("wwid_" + this.user.dni, this.formWwid.value.wwid);
+            localStorage.setItem("cc_" + this.user.dni, this.formWwid.value.codigoCuenta);
+            localStorage.setItem("loc_" + this.user.dni, this.formWwid.value.locacion);
+
+            // let tmp = localStorage.getItem("datasrcwwid");
+            // if(tmp !== null && tmp !== "") {
+            //   let dataSource = JSON.parse(tmp);
+            //   let findIndex = dataSource.findIndex(i => i.dni == this.user.dni);
+            //   dataSource[findIndex].wwid = this.formWwid.value.wwid;
+            //   dataSource[findIndex].idPromotion = this.formWwid.value.idPromotion;
+            //   dataSource[findIndex].estadoIdPromotion = this.formWwid.value.estadoIdPromotion;
+            //   dataSource[findIndex].estadoWwid = this.formWwid.value.estadoWwid;
+            //   localStorage.setItem("datasrcwwid", JSON.stringify(dataSource));
+            // }
 
             console.log(responseApi);
             const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{

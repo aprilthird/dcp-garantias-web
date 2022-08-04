@@ -34,22 +34,32 @@ export class UsersListComponent implements OnInit {
   }
 
   listUsers():void {
+    // this.digitalToolsService.trayTools(this.pageCurrent).subscribe(responseApi => {
+    //   console.log(responseApi);
+    // });
     this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
       this.totalUsers = responseApi.body.totalRecords;
       this.totalRows = responseApi.body.pageSize;
       this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
       this.dataSource = responseApi.body.data;
-      // console.log("DATOS DE ENDPOINT");
-      // console.log(responseApi);
-      // localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
-      // this.dataSource = responseApi.body;
-    });
+
+      for(var i=0; i<this.dataSource.length; ++i) {
+        var wwid = localStorage.getItem("wwid_" + this.dataSource[i].dni);
+        var cc = localStorage.getItem("cc_" + this.dataSource[i].dni);
+        var loc = localStorage.getItem("loc_" + this.dataSource[i].dni);
+
+        this.dataSource[i].wwid = wwid;
+        this.dataSource[i].codigoCuenta = cc;
+        this.dataSource[i].locacion = loc;
+        console.log(this.dataSource[i]);
+      }
+    }); 
 
     // let tmp = localStorage.getItem("datasrcwwid");
     // if(tmp !== null && tmp !== "") {
     //   this.dataSource = JSON.parse(tmp);
     // } else {
-      
+       
     // }
   }
 
@@ -79,7 +89,7 @@ export class UsersListComponent implements OnInit {
 
   onRegisterBasic(usuario:any):void{
     localStorage.setItem('action','edit');
-    localStorage.setItem('usuario',JSON.stringify(usuario));
+    localStorage.setItem('usuario', JSON.stringify(usuario));
     this.router.navigate(['/digital-tools/basic-registration']);
   }
 

@@ -55,7 +55,7 @@ export class ToolRequestComponent implements OnInit {
       marca: new FormControl('', [Validators.required]),
       modelo: new FormControl('', [Validators.required]),
       serie: new FormControl('', [Validators.required]),
-      dni: new FormControl('', [Validators.required]),
+      usr: new FormControl('', [Validators.required]),
     });
   }
 
@@ -66,13 +66,15 @@ export class ToolRequestComponent implements OnInit {
       marca: new FormControl(this.localUser.marca, [Validators.required]),
       modelo: new FormControl(this.localUser.modelo, [Validators.required]),
       serie: new FormControl(this.localUser.serie, [Validators.required]),
-      dni: new FormControl(this.localUser.dni, [Validators.required]),
+      usr: new FormControl(this.localUser.usr, [Validators.required]),
     });
   }
 
   searchUser():void {
-    this.digitalToolsService.userManagement(this.formRequest.value.dni).subscribe(responseApi=>{
-      this.user = responseApi.body;
+    this.digitalToolsService.searchUserByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
+      if(responseApi.body.data.length > 0) {
+        this.user = responseApi.body.data[0];
+      }
     });
   }
 
@@ -96,7 +98,7 @@ export class ToolRequestComponent implements OnInit {
             if(this.formRequest.value.serie==''){
               const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese una Serie válida!'},disableClose:true});
             }else{      
-              if(this.formRequest.value.dni==''){
+              if(this.formRequest.value.usr==''){
                 const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Usuario válido!'},disableClose:true});
               }else{
                 const request = {
@@ -104,24 +106,34 @@ export class ToolRequestComponent implements OnInit {
                   ...this.formRequest.value
                 };
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
-                  
-                  let tmp = localStorage.getItem("datasrcwwid");
-                  if(tmp !== null && tmp !== "") {
-                    let dataSource = JSON.parse(tmp);
-                    let findIndex = dataSource.findIndex(i => i.dni == this.user.dni);
-                    dataSource[findIndex].os = this.formRequest.value.os;
-                    dataSource[findIndex].pcid = this.formRequest.value.pcid;
-                    dataSource[findIndex].marca = this.formRequest.value.marca;
-                    dataSource[findIndex].modelo = this.formRequest.value.modelo;
-                    dataSource[findIndex].serie = this.formRequest.value.serie;
-                    dataSource[findIndex].jefe = this.user.jefe;
-                    dataSource[findIndex].cantidad = 0;
-                    dataSource[findIndex].fechaDeSolicitud = new Date();
-                    localStorage.setItem("datasrcwwid", JSON.stringify(dataSource));
+                  localStorage.setItem("os_" + this.localUser.nombres, this.formRequest.value.os);
+                  localStorage.setItem("pcid_" + this.localUser.nombres, this.formRequest.value.pcid);
+                  localStorage.setItem("marca_" + this.localUser.nombres, this.formRequest.value.marca);
+                  localStorage.setItem("modelo_" + this.localUser.nombres, this.formRequest.value.modelo);
+                  localStorage.setItem("serie_" + this.localUser.nombres, this.formRequest.value.serie);
 
-                    localStorage.setItem("datasrclic" + this.formRequest.value.dni, JSON.stringify(this.dataSource));
-                  }
-                  console.log(responseApi);
+                  localStorage.setItem("area_" + this.localUser.nombres, this.user.area);
+                  // localStorage.setItem("jefe_" + this.localUser.nombres, this.user.jefe);
+                  localStorage.setItem("cantidad_" + this.localUser.nombres, "2");
+                  localStorage.setItem("fechaDeSolicitud_" + this.localUser.nombres, (new Date()).toDateString());
+
+                  // let tmp = localStorage.getItem("datasrcwwid");
+                  // if(tmp !== null && tmp !== "") {
+                  //   let dataSource = JSON.parse(tmp);
+                  //   let findIndex = dataSource.findIndex(i => i.dni == this.user.dni);
+                  //   dataSource[findIndex].os = this.formRequest.value.os;
+                  //   dataSource[findIndex].pcid = this.formRequest.value.pcid;
+                  //   dataSource[findIndex].marca = this.formRequest.value.marca;
+                  //   dataSource[findIndex].modelo = this.formRequest.value.modelo;
+                  //   dataSource[findIndex].serie = this.formRequest.value.serie;
+                  //   dataSource[findIndex].jefe = this.user.jefe;
+                  //   dataSource[findIndex].cantidad = 0;
+                  //   dataSource[findIndex].fechaDeSolicitud = new Date();
+                  //   localStorage.setItem("datasrcwwid", JSON.stringify(dataSource));
+
+                  //   localStorage.setItem("datasrclic" + this.formRequest.value.dni, JSON.stringify(this.dataSource));
+                  // }
+                  // console.log(responseApi);
 
                   const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{
                     data:{text:'Se envió el registro con éxito'},
