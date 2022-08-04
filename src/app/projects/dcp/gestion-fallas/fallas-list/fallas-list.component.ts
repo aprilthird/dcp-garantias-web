@@ -228,5 +228,15 @@ export class FallasListComponent implements OnInit {
     }
     return estilo;
   }
+
+  obtenerEstiloBitacora(index:number):string{
+    let estilo:string;
+    if(index%2==0){
+      estilo = 'color-fila-bitacora';
+    }else{
+      estilo = 'color-fila-white'
+    }
+    return estilo;
+  }
   
 }
