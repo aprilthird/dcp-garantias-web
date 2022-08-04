@@ -42,4 +42,12 @@ export class DigitalToolsService {
     const request = { filter: { fechaFin: this.dateCurrent }, page: (_page - 1), pageSize: 10 };
     return this.httpClient.post(this.urlTrayTools, request, { headers: this.header });
   }
+  allTrayTools(): Observable<any> {
+    const request = { filter: { fechaFin: this.dateCurrent }, page: 0, pageSize: 1000 };
+    return this.httpClient.post(this.urlTrayTools, request, { headers: this.header });
+  }
+  searchUserByUsername(usr:string): Observable<any> {
+    const request = { filter: { usuario: usr }, page: 0, pageSize: 10 };
+    return this.httpClient.post(this.urlUserListManagement, request, { headers: this.header });
+  }
 }

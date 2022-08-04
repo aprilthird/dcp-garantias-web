@@ -29,16 +29,49 @@ export class ElectronicToolsListComponent implements OnInit {
   }
 
   listUsers():void {
-    this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
-      this.totalUsers = responseApi.body.totalRecords;
-      this.totalRows = responseApi.body.pageSize;
-      this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
-      this.dataSource = responseApi.body.data;
-      // console.log("DATOS DE ENDPOINT");
-      // console.log(responseApi);
-      // localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
-      // this.dataSource = responseApi.body;
+    
+    this.digitalToolsService.trayTools(this.pageCurrent).subscribe(responseApi => {
+      this.totalUsers = responseApi.totalRecords;
+      this.totalRows = responseApi.pageSize;
+      this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
+      this.dataSource = responseApi.data;
+
+      for(var i=0; i<this.dataSource.length; ++i) {
+        var os = localStorage.getItem("os_" + this.dataSource[i].nombres);
+        var pcid = localStorage.getItem("pcid_" + this.dataSource[i].nombres);
+        var marca = localStorage.getItem("marca_" + this.dataSource[i].nombres);
+        var modelo = localStorage.getItem("modelo_" + this.dataSource[i].nombres);
+        var serie = localStorage.getItem("serie_" + this.dataSource[i].nombres);
+
+        var area = localStorage.getItem("area_" + this.dataSource[i].nombres);
+        var jefe = localStorage.getItem("jefe_" + this.dataSource[i].nombres);
+        var cantidad = localStorage.getItem("cantidad_" + this.dataSource[i].nombres);
+        var fechaDeSolicitud = localStorage.getItem("fechaDeSolicitud_" + this.dataSource[i].nombres);
+
+        this.dataSource[i].os = os;
+        this.dataSource[i].pcid = pcid;
+        this.dataSource[i].marca = marca;
+        this.dataSource[i].modelo = modelo;
+        this.dataSource[i].serie = serie;
+        
+        this.dataSource[i].area = area;
+        this.dataSource[i].jefe = jefe;
+        this.dataSource[i].cantidad = cantidad;
+        this.dataSource[i].fechaDeSolicitud = fechaDeSolicitud;
+        console.log(this.dataSource[i]);
+      }
     });
+
+    // this.digitalToolsService.userListManagement(this.pageCurrent).subscribe(responseApi=>{
+    //   this.totalUsers = responseApi.body.totalRecords;
+    //   this.totalRows = responseApi.body.pageSize;
+    //   this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
+    //   this.dataSource = responseApi.body.data;
+    //   console.log("DATOS DE ENDPOINT");
+    //   console.log(responseApi);
+    //   localStorage.setItem("datasrcwwid", JSON.stringify(responseApi.body));
+    //   this.dataSource = responseApi.body;
+    // });
 
     // let tmp = localStorage.getItem("datasrcwwid");
     // if(tmp !== null && tmp !== "") {
@@ -63,7 +96,7 @@ export class ElectronicToolsListComponent implements OnInit {
   }
 
   onRegisterBasic():void{
-    localStorage.setItem('action','create');
+    localStorage.setItem('action','new');
     this.router.navigate(['/digital-tools/tool-request']);
   }
 
