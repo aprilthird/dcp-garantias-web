@@ -130,6 +130,7 @@ export class RegistroDeFallaComponent implements OnInit {
       }
     })
   }
+
   cargarFormularioRegistroBasico():void{
     this.formFalla = new FormGroup({
       os: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.os:'', disabled:this.accion=='edit'?true:false},[Validators.required]),
@@ -323,6 +324,8 @@ export class RegistroDeFallaComponent implements OnInit {
   registrarFalla():void{
     if(this.accion=='new'){
         if(!(this.matriculaEncontrada==null) && !(this.formFalla.value.os=='') && !(this.formFalla.value.fechaFalla=='') && !(this.formFalla.value.idArea==null)){
+          if(this.verQueja2==false){this.formFalla.value.queja2=null};
+          if(this.verQueja3==false){this.formFalla.value.queja3=null};
             const nuevaFalla = { id:0,
                                 nivelSoporte:0,
                                 tipo:this.tipo,
@@ -352,6 +355,8 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.tipoFalla = this.formFalla.value.tipoFalla;
         this.fallaParaGestionar.fechaFalla = this.formFalla.value.fechaFalla;
         this.fallaParaGestionar.descripcion = this.formFalla.value.descripcion;
+        if(this.verQueja2==false){this.formFalla.value.queja2=null};
+        if(this.verQueja3==false){this.formFalla.value.queja3=null};
         this.fallaParaGestionar.queja1 = this.formFalla.value.queja1;
         this.fallaParaGestionar.queja2 = this.formFalla.value.queja2;
         this.fallaParaGestionar.queja3 = this.formFalla.value.queja3;
@@ -379,6 +384,8 @@ export class RegistroDeFallaComponent implements OnInit {
                         });
                         dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
                             if(responseDialog.success){
+                                if(this.verQueja2==false){this.formFalla.value.queja2=null};
+                                if(this.verQueja3==false){this.formFalla.value.queja3=null};
                                 const nuevaFalla = {
                                     id:0,
                                     nivelSoporte:2,
@@ -420,7 +427,9 @@ export class RegistroDeFallaComponent implements OnInit {
       dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
           if(responseDialog.success){
             this.fallaParaGestionar.nivelSoporte=1;
-            this.fallaParaGestionar.asignacionFalla= responseDialog.idUsuario
+            this.fallaParaGestionar.asignacionFalla= responseDialog.idUsuario;
+            if(this.verQueja2==false){this.fallaParaGestionar.queja2=null};
+            if(this.verQueja3==false){this.fallaParaGestionar.queja3=null};
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(response=>{
               if(response.success){
                 //guardamos en la bitacora
@@ -821,17 +830,13 @@ export class RegistroDeFallaComponent implements OnInit {
 
   //ocultar queja
 
-  ocultarQueja(numeroDeQueja):void{
+  ocultarQueja(numeroDeQueja:number):void{
       switch (numeroDeQueja) {
         case 2:
-          if(this.verQueja3==true){
-            this.openSnackBarWarn('No puede eliminar esta queja si existe otra siguiente')
-          }else{
-            this.verQueja2 = false;
-          }
+          this.verQueja3==true?this.openSnackBarWarn('No puede eliminar esta queja si existe otra siguiente'):this.verQueja2=false;
           break;
         case 3:
-            this.verQueja3 = false;
+          this.verQueja3 = false;
           break;
         default:
           break;
@@ -839,10 +844,10 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   mostrarQuejasRegistradas():void{
-    if(this.fallaParaGestionar.queja2!=null){
+    if(!(this.fallaParaGestionar.queja2==null)){
       this.verQueja2 = true;
     }
-    if(this.fallaParaGestionar.queja2!=null){
+    if(!(this.fallaParaGestionar.queja3==null)){
       this.verQueja3 = true;
     }
   }

@@ -62,15 +62,20 @@
                     </mat-form-field>                    
               </div>
               <div class="col-xs-12 col-sm-6 col-md-2">
-                  <mat-form-field appearance="fill">
+                  <mat-form-field floatLabel="always">
                       <mat-label>Fecha de Falla</mat-label>
                       <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date" formControlName="fechaIni">
-                        <input matEndDate placeholder="End date" formControlName="fechaFin" (dateChange)="listWarranties()">
+                        <input matStartDate placeholder="Desde" formControlName="fechaIni">
+                        <input matEndDate placeholder="Hasta" formControlName="fechaFin">
                       </mat-date-range-input>
                       <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-date-range-picker #picker></mat-date-range-picker>
+                      <mat-date-range-picker #picker>
+                        <mat-date-range-picker-actions>
+                          <button mat-button matDateRangePickerCancel>Cancelar</button>
+                          <button mat-raised-button color="primary" matDateRangePickerApply (click)="listWarranties()">Aplicar</button>
+                        </mat-date-range-picker-actions>
+                      </mat-date-range-picker>
                   </mat-form-field>                      
               </div>
               <div class="col-xs-12 col-sm-6 col-md-2">
