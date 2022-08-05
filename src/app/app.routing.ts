@@ -47,7 +47,7 @@ export const dcpRoutes: Route[] = [
       //       (m) => m.AuthRedircetingnModule
       //     ),
       // },
-      { path: "**", redirectTo: "pagina-no-encontrada" },
+      { path: "**", redirectTo: "/home" },
     ],
   },
 ];

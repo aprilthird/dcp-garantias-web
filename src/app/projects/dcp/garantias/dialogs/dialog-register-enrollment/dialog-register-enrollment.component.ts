@@ -22,6 +22,7 @@ export class DialogRegisterEnrollmentComponent implements OnInit {
   tipoDeEquipo:number;
   verFechaGarantia = true;
   spinnerBusqueda = false;
+  fechaHoy = new Date;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private readonly dialogRef: MatDialogRef<DialogRegisterEnrollmentComponent>,

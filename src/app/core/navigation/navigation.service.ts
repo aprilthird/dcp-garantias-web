@@ -89,7 +89,7 @@ export class NavigationService {
               title: e.nombre,
               type: e.subMenu && e.subMenu.length > 0 ? "group" : "basic",
               icon: e.nivel === 0 ? e.icon : null,
-              link: e.ruta || "/pagina-no-encontrada",
+              link: e.ruta || "/home",
               ...(subMenu && subMenu.length > 0
                 ? { children: subMenu.map((sub) => getNavigation(sub)) }
                 : {}),

@@ -83,6 +83,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     styleSubMenuWwid:string=this.subMenuBorderWhite;
     styleSubMenuLicences:string=this.subMenuBorderWhite;
 
+    menuArbol:any;
+
     constructor(
         private _animationBuilder: AnimationBuilder,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -435,7 +437,9 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
             this.usuarioDeLaSession = response;
             console.log(this.usuarioDeLaSession.roles[0].idRol);
             this.configurationAndMaintenanceService.obtenerMenuArbol(this.usuarioDeLaSession.roles[0].idRol).subscribe(responseApi=>{
-                console.log(responseApi);                
+                this.menuArbol = responseApi.body.web;
+                console.log(this.menuArbol);
+                // console.log(responseApi.body.web);           
             });
         });
         this.cargarEstiloMenu();
