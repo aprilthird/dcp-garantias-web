@@ -31,19 +31,15 @@ export class DigitalToolsService {
   toolUserManagement(_request: any): Observable<any> {
     return this.httpClient.post(this.urlToolUserManagement, _request, { headers: this.header });
   }
-  userListManagement(_page): Observable<any> {
-    const request = { filter: { fechaFin: this.dateCurrent }, page: (_page - 1), pageSize: 10 };
+  userListManagement(filter, _page): Observable<any> {
+    const request = { filter: filter, page: (_page - 1), pageSize: 10 };
     return this.httpClient.post(this.urlUserListManagement, request, { headers: this.header });
   }
   userManagement(dni:string): Observable<any> {
     return this.httpClient.get(this.urlUserManagement+'/'+dni,{headers:this.header});
   }
-  trayTools(_page): Observable<any> {
-    const request = { filter: { fechaFin: this.dateCurrent }, page: (_page - 1), pageSize: 10 };
-    return this.httpClient.post(this.urlTrayTools, request, { headers: this.header });
-  }
-  allTrayTools(): Observable<any> {
-    const request = { filter: { fechaFin: this.dateCurrent }, page: 0, pageSize: 1000 };
+  trayTools(filter, _page): Observable<any> {
+    const request = { filter: filter, page: (_page - 1), pageSize: 10 };
     return this.httpClient.post(this.urlTrayTools, request, { headers: this.header });
   }
   searchUserByUsername(usr:string): Observable<any> {
