@@ -77,15 +77,16 @@ export class BasicRegistrationComponent implements OnInit {
           const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Código de Cuenta válido!'},disableClose:true});
         }else{
           const request = {
+            id: this.localUser.id,
             usr: this.user.nombres+' '+this.user.apellidos,
             dni: this.user.dni,
             correo: this.user.correo,
             ...this.formWwid.value
           };
           this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
-            localStorage.setItem("wwid_" + this.user.dni, this.formWwid.value.wwid);
-            localStorage.setItem("cc_" + this.user.dni, this.formWwid.value.codigoCuenta);
-            localStorage.setItem("loc_" + this.user.dni, this.formWwid.value.locacion);
+            // localStorage.setItem("wwid_" + this.user.dni, this.formWwid.value.wwid);
+            // localStorage.setItem("cc_" + this.user.dni, this.formWwid.value.codigoCuenta);
+            // localStorage.setItem("loc_" + this.user.dni, this.formWwid.value.locacion);
 
             // let tmp = localStorage.getItem("datasrcwwid");
             // if(tmp !== null && tmp !== "") {

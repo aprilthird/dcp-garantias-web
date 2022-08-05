@@ -43,34 +43,18 @@ export class UsersListComponent implements OnInit {
       this.countEnd = this.totalRows*this.pageCurrent;
       this.numberOfPages = this.getPageCount(responseApi.body.pageSize,responseApi.body.totalRecords);
       this.dataSource = responseApi.body.data;
-
-      for(var i=0; i<this.dataSource.length; ++i) {
-        var wwid = localStorage.getItem("wwid_" + this.dataSource[i].dni);
-        var cc = localStorage.getItem("cc_" + this.dataSource[i].dni);
-        var loc = localStorage.getItem("loc_" + this.dataSource[i].dni);
-
-        this.dataSource[i].wwid = wwid;
-        this.dataSource[i].codigoCuenta = cc;
-        this.dataSource[i].locacion = loc;
-        console.log(this.dataSource[i]);
-      }
     }); 
   }
 
   loadFormFilter():void {
-    let dateCurrent = new Date;
     this.formFilter = new FormGroup({
-      usr: new FormControl(null),
+      usuario: new FormControl(null),
       wwid: new FormControl(null),
       fechaIngresoInicio: new FormControl(),
       fechaIngresoFin: new FormControl(),
       fechaBajaInicio: new FormControl(),
       fechaBajaFin: new FormControl(),
     });
-  }
-
-  filterData():void {
-    
   }
 
   onRegisterBasic(usuario:any):void{
