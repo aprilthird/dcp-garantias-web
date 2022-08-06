@@ -16,7 +16,6 @@ import { GruposComponent } from './formulario/grupos/grupos.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -37,7 +36,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     FuseNavigationModule,
     MatExpansionModule,
     MatDividerModule,
-    NgApexchartsModule,
     SharedModule
   ]
 })

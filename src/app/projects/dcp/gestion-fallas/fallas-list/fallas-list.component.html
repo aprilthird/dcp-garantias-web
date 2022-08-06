@@ -34,7 +34,7 @@
                         <mat-label>OS:</mat-label>
                         <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
                         <button mat-icon-button matSuffix (click)="listarFallas(true)">
-                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                            <mat-icon>search</mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
@@ -43,7 +43,7 @@
                         <mat-label>IO:</mat-label>
                         <input matInput type="text" placeholder="Buscar N° IO" formControlName="io">
                         <button mat-icon-button matSuffix (click)="listarFallas(true)">
-                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                            <mat-icon>search</mat-icon>
                         </button>
                     </mat-form-field>
                 </div>
@@ -52,7 +52,7 @@
                       <mat-label>TSR:</mat-label>
                       <input matInput type="text" placeholder="Buscar TSR" formControlName="tsr">
                       <button mat-icon-button matSuffix (click)="listarFallas(true)">
-                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                          <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
               </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-md-1 d-flex justify-content-start align-items-center">
                   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                      <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
+                      <img src="./../../../../../assets/icons/filter.svg" alt="">
                   </button>
                   <mat-menu #menu="matMenu" xPosition="after">
                     <button mat-menu-item (click)="mostrarInputBuscarPorArea()">
@@ -107,7 +107,7 @@
                   <mat-form-field floatLabel="always">
                       <input matInput type="text" placeholder="Buscar por área" formControlName="area">
                       <button mat-icon-button matSuffix (click)="listarFallas(true)">
-                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                          <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
               </div>
@@ -115,7 +115,7 @@
                 <mat-form-field floatLabel="always">
                     <input matInput type="text" placeholder="Buscar ESN" formControlName="esn">
                     <button mat-icon-button matSuffix (click)="listarFallas(true)">
-                        <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                        <mat-icon>search</mat-icon>
                     </button>
                 </mat-form-field>
             </div>
@@ -248,8 +248,8 @@
                   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>                  
                 </table>              
                 <div class="pb-3 text-right d-flex align-items-center justify-content-end px-3">
-                  <span class="mr-1" style="color: #1E293B"></span><span class="mr-1">{{paginaActual==1?1:paginaActual*10-10}}-{{totalFallas>(paginaActual*10)?paginaActual*10:totalFallas}}</span>
-                  <span class="mr-1" style="color: #1E293B"> de </span><span>{{totalFallas}}</span>
+                  <span class="mr-1 fw-bold">{{paginaActual==1?1:paginaActual*10-9}}-{{totalFallas>(paginaActual*10)?paginaActual*10:totalFallas}}</span>
+                  <span class="mr-1" style="color: #1E293B"> de </span><span class="fw-bold">{{totalFallas}}</span>
                   <button mat-icon-button aria-label="Example icon button with a home icon" [disabled]="botonAnterior" (click)="changePage('less')">
                     <mat-icon style="color:#1E293B">chevron_left</mat-icon>
                   </button>

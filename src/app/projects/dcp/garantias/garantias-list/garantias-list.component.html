@@ -14,9 +14,9 @@
       </div>
       <div class="col-md-7">
         <div class="row">
-            <div class="col-md-4 pointer d-flex align-items-center justify-content-center" (click)="onOpenDialogHistoriaEsn()">
-                <mat-icon svgIcon="heroicons_outline:document-text"></mat-icon>
-                <span>Historial de Series</span>                                
+            <div class="col-md-4 pointer d-flex align-items-center justify-content-center" style="border-right: 2px solid #C4C4C4;" (click)="onOpenDialogHistoriaEsn()">
+                <img src="./../../../../../assets/icons/icon-historial.svg" style="width: 26px;" alt="">
+                <span style="color: #64748B;">Historial de Series</span>                                
             </div>
             <div class="col-md-4 btn-register">
                 <button mat-raised-button (click)="onMassiveRegistrationBasic()">
@@ -38,7 +38,7 @@
                       <mat-label>OS</mat-label>
                       <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
                       <button mat-icon-button matSuffix (click)="listWarranties()">
-                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                          <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
               </div>
@@ -47,7 +47,7 @@
                       <mat-label>ESN</mat-label>
                       <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
                       <button mat-icon-button matSuffix (click)="listWarranties()">
-                          <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                          <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
               </div>
@@ -151,18 +151,20 @@
                 <ng-container matColumnDef="state">
                   <th mat-header-cell *matHeaderCellDef> Estado </th>
                   <td mat-cell *matCellDef="let element" [ngClass]="{'observed':element.estado=='2'}">
-                    <mat-icon *ngIf="element.estado==2" class="observed" svgIcon="heroicons_outline:exclamation"></mat-icon>
-                    <span>{{getEstado(element.estado)}}</span>
+                    <div class="d-flex">
+                      <img style="height:20px; width: 28px;" *ngIf="element.estado==2" src="./../../../../../assets/icons/warning.svg" alt="">
+                      <span>{{getEstado(element.estado)}}</span>
+                    </div>
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef> Accion </th>
                   <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button [disabled]="element.estado=='4'">
-                      <mat-icon svgIcon="heroicons_outline:pencil-alt" (click)="editWarranty(element)"></mat-icon>
+                    <button mat-icon-button [disabled]="element.estado=='4'"(click)="editWarranty(element)">
+                      <img style="width:20px" src="./../../../../../assets/icons/edit.svg" alt="">
                     </button>
                     <button mat-icon-button aria-label="Example icon button with a home icon">
-                      <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>                        
+                      <img style="width:30px" src="./../../../../../assets/icons/arrow-bottom.svg" alt="">                     
                     </button>
 
                   </td>
@@ -176,7 +178,7 @@
                             <div class="row">
                               <div class="col-md-12 mb-3 font-sz-18 font-w-900">Detalles</div>
                               <div class="col-md-12 my-3 font-sz-16 font-w-700">Fechas</div>
-                              <div class="col-md-4 font-sz-12">
+                              <div class="col-md-5 font-sz-12">
                                 <div class="row">
                                   <div class="col-md-12 font-w-700">Dias en servicio</div>
                                   <div class="col-md-12">112 D</div>
@@ -188,17 +190,16 @@
                                   <div class="col-md-12">112 D</div>
                                 </div>
                               </div>
-                              <div class="col-md-4 font-sz-12">
+                              <div class="col-md-3 font-sz-12">
                                 <div class="row">
                                   <div class="col-md-12 font-w-700">Dias de Fabrica</div>
                                   <div class="col-md-12">112 D</div>
                                 </div>
                               </div>
                               <div class="col-md-12 my-3 font-sz-16 font-w-700">Informe</div>
-                              <div class="col-md-4 font-sz-12">
+                              <div class="col-md-5 font-sz-12">
                                 <div class="row">
-                                  <div class="col-md-12 font-w-700">Fecha de aprobacion</div>
-                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
+                                  <div class="col-md-12 font-w-700 d-flex"><img src="./../../../../../assets/icons/icon-calendar-bitacora-garantias.svg" style="width: 14px;" class="me-1">Fecha de aprobacion</div>
                                   <div class="col-md-10 d-flex align-items-center">12/11/21</div>
                                 </div>
                               </div>
@@ -209,11 +210,10 @@
                                 </div>
                               </div>
                               <div class="col-md-12 my-3 font-sz-16 font-w-700">RapidServe</div>
-                              <div class="col-md-4 flex-column font-sz-12">
+                              <div class="col-md-5 flex-column font-sz-12">
                                 <div class="row">
-                                  <div class="col-md-12 font-w-700">Fecha de Ingreso</div>
-                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
-                                  <div class="col-md-10 d-flex align-items-center">12/11/21</div>
+                                  <div class="col-md-12 font-w-700 d-flex"><img src="./../../../../../assets/icons/icon-calendar-bitacora-garantias.svg" style="width: 14px;" class="me-1"> Fecha de Ingreso</div>
+                                  <div class="col-md-10 d-flex align-items-center">12/11/28</div>
                                 </div>
                               </div>
                               <div class="col-md-4 font-sz-12">
@@ -222,17 +222,16 @@
                                   <div class="col-md-12">$3400</div>
                                 </div>
                               </div>
-                              <div class="col-md-4 font-sz-12">
+                              <div class="col-md-3 font-sz-12">
                                 <div class="row">
                                   <div class="col-md-12 font-w-700">Claim#</div>
                                   <div class="col-md-12">12345</div>
                                 </div>
                               </div>
                               <div class="col-md-12 my-3 font-sz-16 font-w-700">Final de Pago</div>
-                              <div class="col-md-4 font-sz-12">
+                              <div class="col-md-5 font-sz-12">
                                 <div class="row">
-                                  <div class="col-md-12 font-w-700">Fecha de Pago</div>
-                                  <div class="col-md-2"><mat-icon svgIcon="heroicons_outline:calendar" class="font-sz-12"></mat-icon></div>
+                                  <div class="col-md-12 font-w-700 d-flex"><img src="./../../../../../assets/icons/icon-calendar-bitacora-garantias.svg" style="width: 14px;" class="me-1">Fecha de Pago</div>
                                   <div class="col-md-10 d-flex align-items-center">12/11/21</div>
                                 </div>
                               </div>
@@ -242,7 +241,7 @@
                                   <div class="col-md-12">$3400</div>
                                 </div>
                               </div>
-                              <div class="col-md-4 flex-column font-sz-12">
+                              <div class="col-md-3 flex-column font-sz-12">
                                 <div class="row">
                                   <div class="col-md-12 font-w-700">Rentabilidad</div>
                                   <div class="col-md-12">14.60</div>

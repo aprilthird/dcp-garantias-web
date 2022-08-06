@@ -129,7 +129,6 @@ export class GarantiasListComponent implements OnInit {
 
 
   loadFormFilter():void{
-    let dateCurrent = new Date; console.log(dateCurrent);
     this.formFilter = new FormGroup({
       esn: new FormControl(null),
       os: new FormControl(null),

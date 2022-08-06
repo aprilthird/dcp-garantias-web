@@ -15,19 +15,19 @@
 
 
         <mat-list role="list">
-            <mat-list-item role="listitem" (click)="navegacion('/home')" class="pointer" style="padding-left: 10px;">
+            <mat-list-item role="listitem" (click)="navegacion('/home')" class="pointer" style="padding-left: 10px;" *ngIf="menuArbol[0].activo">
                 <span [class]="'icon-home '+homeIcon"></span>
                 <span [class]="homeMenu" class="text-menu">Home</span>
             </mat-list-item>
-            <mat-list-item role="listitem" (click)="navegacion('/garantias')" class="pointer" style="padding-left: 10px;">
+            <mat-list-item role="listitem" (click)="navegacion('/garantias')" class="pointer" style="padding-left: 10px;" *ngIf="menuArbol[1].activo">
                 <span [class]="'icon-garantia '+garantiasIcon"></span>
                 <span [class]="garantiasMenu" class="text-menu">Garantías</span>
             </mat-list-item>
-            <mat-list-item role="listitem"  (click)="navegacion('/gestion-fallas')" class="pointer" style="padding-left: 10px;">
+            <mat-list-item role="listitem"  (click)="navegacion('/gestion-fallas')" class="pointer" style="padding-left: 10px;" *ngIf="menuArbol[2].activo">
                 <span [class]="'icon-fallas '+fallasIcon"></span>
                 <span [class]="fallasMenu" class="text-menu">Gestión de fallas</span>
             </mat-list-item>
-            <mat-list-item role="listitem" (click)="navegacion('/herramientas')" class="pointer" style="padding-left: 10px;">
+            <mat-list-item role="listitem" (click)="navegacion('/herramientas')" class="pointer" style="padding-left: 10px;" *ngIf="menuArbol[3].activo">
                 <span [class]="'icon-herramientas '+herramientasIcon"></span>
                 <span [class]="herramientasMenu" class="text-menu">Herramientas digitales</span>
                 <mat-icon class="text-menu">expand_more</mat-icon>
@@ -38,7 +38,7 @@
                     <mat-list-item role="listitem"  class="pointer {{styleSubMenuLicences}}" *ngIf="seeDigitalTools" style="padding-left: 58px;" (click)="navegacionSubMenu('/digital-tools/electronic-tools')">
                         <span [class]="configuracionMenu" class="text-menu">Asignar licencias</span>
                     </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer" (click)="navegacion('/configuracion')" style="padding-left: 10px;">
+            <mat-list-item role="listitem"  class="pointer" (click)="navegacion('/configuracion')" style="padding-left: 10px;" *ngIf="menuArbol[4].activo">
                 <span [class]="'icon-configuracion '+configuracionIcon"></span>
                 <span [class]="configuracionMenu" class="text-menu">Configuración y mantenimiento</span>
                 <mat-icon class="text-menu">expand_more</mat-icon>
@@ -46,7 +46,7 @@
                     <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
                         <span [class]="configuracionMenu" class="text-menu">Matrículas</span>
                     </mat-list-item>
-                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="maestras">
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="menuArbol[5].activo">
                         <span [class]="configuracionMenu" class="text-menu">Maestras</span>
                         <mat-icon>expand_more</mat-icon>
                     </mat-list-item>
@@ -56,10 +56,10 @@
                     <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
                         <span [class]="configuracionMenu" class="text-menu">Distribución de Garantías</span>
                     </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;">
+            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;" *ngIf="true">
                 <span [class]="'icon-stats-bars2 '+reportesIcon"></span>
                 <span [class]="reportesMenu" class="text-menu">Reportes</span>
-                <mat-icon>expand_more</mat-icon>
+                <!-- <mat-icon>expand_more</mat-icon> -->
             </mat-list-item>
           </mat-list>
 

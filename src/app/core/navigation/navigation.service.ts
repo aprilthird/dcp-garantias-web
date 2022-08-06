@@ -108,6 +108,7 @@ export class NavigationService {
           //nextNavigation.default.reverse();
           //nextNavigation.horizontal.reverse();
 
+          localStorage.setItem("menuArbol", JSON.stringify(response));
           localStorage.setItem("navigation", JSON.stringify(nextNavigation));
           localStorage.setItem("permissions", JSON.stringify(permissions));
         })

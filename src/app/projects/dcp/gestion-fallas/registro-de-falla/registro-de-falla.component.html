@@ -8,7 +8,7 @@
         </div>
         <div class="col-md-12 mb-5 text-end" *ngIf="this.accion=='edit'?true:false">
             <button type="button" mat-raised-button (click)="modalDescargarDocumentos()" class="color-button-selected-documents">
-                <mat-icon svgIcon="heroicons_outline:download" class="me-2"></mat-icon>Descargar documentos
+                <img src="./../../../../../assets/icons/fallas-download-document.svg" class="me-1" alt="">Descargar documentos
             </button>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
@@ -45,7 +45,7 @@
                                             <mat-label for="">ESN <span class="text-danger">*</span></mat-label>
                                             <input matInput type="text" placeholder="Buscar ESN" formControlName="esn"> <!-- (ngModelChange)="getEsn()"> -->
                                             <button type="button" mat-icon-button matSuffix color="primary" (click)="getEsn()" [disabled]="this.accion=='edit'?true:false">
-                                                <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                                                <mat-icon>search</mat-icon>
                                             </button>
                                             <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                         </mat-form-field>
@@ -399,7 +399,7 @@
                 </div>
                 <div class="col-md-12 mb-5">
                     <button type="button" mat-raised-button (click)="adjuntarDocumento()" class="color-button-selected-documents">
-                        <mat-icon svgIcon="heroicons_outline:upload" class="me-2"></mat-icon>Adjuntar documentos
+                        <img src="./../../../../../assets/icons/fallas-upload-document.svg" class="me-1" alt=""> Adjuntar documentos
                     </button>
                 </div>
                 <div class="col-md-12 mb-5">

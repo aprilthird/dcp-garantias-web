@@ -82,7 +82,6 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     subMenuBorderWhite='sub-menu-border-white';
     styleSubMenuWwid:string=this.subMenuBorderWhite;
     styleSubMenuLicences:string=this.subMenuBorderWhite;
-
     menuArbol:any;
 
     constructor(
@@ -106,6 +105,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         this._handleOverlayClick = (): void => {
             this.close();
         };
+        this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));        
     }
 
     showConfigurationAndMaintenance():void{
@@ -433,17 +433,21 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
-        this.userService.user$.subscribe(response=>{
-            this.usuarioDeLaSession = response;
-            console.log(this.usuarioDeLaSession.roles[0].idRol);
-            this.configurationAndMaintenanceService.obtenerMenuArbol(this.usuarioDeLaSession.roles[0].idRol).subscribe(responseApi=>{
-                this.menuArbol = responseApi.body.web;
-                console.log(this.menuArbol);
-                // console.log(responseApi.body.web);           
-            });
-        });
+        // this.userService.user$.subscribe(response=>{
+        //     this.usuarioDeLaSession = response;
+        //     console.log(this.usuarioDeLaSession.roles[0].idRol);
+        //     this.configurationAndMaintenanceService.obtenerMenuArbol(this.usuarioDeLaSession.roles[0].idRol).subscribe(responseApi=>{
+        //         this.menuArbol = responseApi.body.web;
+        //         console.log(this.menuArbol);
+        //         this.verHome = this.menuArbol[0].activo;
+        //         this.verGarantias = this.menuArbol[1].activo;
+        //         this.verFallas = this.menuArbol[2].activo;
+        //         this.verHerramientas = this.menuArbol[3].activo;
+        //         this.verConfiguracion = this.menuArbol[4].activo;
+        //         this.verReportes = this.menuArbol[5].activo;
+        //     });
+        // });
         this.cargarEstiloMenu();
-        console.log(this.navigation);
         // Make sure the name input is not an empty string
         if ( this.name === '' )
         {
