@@ -100,7 +100,7 @@ export class ElectronicToolsListComponent implements OnInit {
 
   loadFormFilter():void {
     this.formFilter = new FormGroup({
-      usr: new FormControl(null),
+      usuario: new FormControl(null),
       estado: new FormControl(-1),
       fechaDeSolicitudInicio: new FormControl(),
       fechaDeSolicitudFin: new FormControl(),
