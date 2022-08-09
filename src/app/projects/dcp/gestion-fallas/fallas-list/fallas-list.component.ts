@@ -43,9 +43,19 @@ export class FallasListComponent implements OnInit {
   flag = false;
   inputBuscarPorArea = false;
   inputBuscarPorEsn = false;
+  menuArbol:any;
+  accionesUsuario:any;
+  accesoUsuario=-1;
+  accesoRegistrador:number=0;
+  accesoIngSoporte:number=0;
+  accesoDfse:number=0;
+  admin:boolean=false;
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
-              private readonly garantiasService:GarantiasService, private readonly router:Router) { }
+              private readonly garantiasService:GarantiasService, private readonly router:Router) {
+                this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
+                this.accionesUsuario = this.menuArbol[2].acciones;
+               }
 
   ngOnInit(): void {
     if(localStorage.getItem('success')){
@@ -68,6 +78,35 @@ export class FallasListComponent implements OnInit {
     };
     this.cargarFormularioBusqueda();
     this.listarFallas(false);
+    this.calcularAcceso();
+  }
+
+  calcularAcceso():void{
+    let sum = 0;
+    let nivel = 0;
+    for (let i = 0; i < this.accionesUsuario.length; i++) {
+        if(this.accionesUsuario[i].nombre=='Crear registro individual' && this.accionesUsuario[i].activo==true){
+          nivel = 0;
+          sum=sum+1;
+        }
+    }
+    for (let i = 0; i < this.accionesUsuario.length; i++) {
+        if(this.accionesUsuario[i].nombre=='Llenado Ing Soporte' && this.accionesUsuario[i].activo==true){
+          nivel = 1;
+          sum=sum+1;
+        }
+    }
+    for (let i = 0; i < this.accionesUsuario.length; i++) {
+        if(this.accionesUsuario[i].nombre=='Llenado DFSE' && this.accionesUsuario[i].activo==true){
+          nivel = 2;
+          sum=sum+1;
+        }
+    }
+    if(sum==3){
+      this.admin=true;
+    }else{
+      this.accesoUsuario = nivel;
+    }
   }
 
   registroMasivo():void{
@@ -94,7 +133,6 @@ export class FallasListComponent implements OnInit {
 
 
   cargarFormularioBusqueda():void{
-    console.log(new Date);
     this.formBusquedaConFiltros = new FormGroup({
       os : new FormControl(),
       io : new FormControl(),
@@ -149,7 +187,6 @@ export class FallasListComponent implements OnInit {
   }
 
   seeBitacora(element:any):void{
-    console.log(element.id);
     this.expandedElement = this.expandedElement === element ? null : element;
     this.garantiasService.logWarranty(element.id,2).subscribe(resp=>{
       this.dataSourceBitacora = resp.body;

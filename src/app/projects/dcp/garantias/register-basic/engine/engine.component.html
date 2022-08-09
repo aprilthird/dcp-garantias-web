@@ -17,7 +17,7 @@
                                         <mat-label for="">ESN</mat-label>
                                         <input matInput type="text" formControlName="esn" placeholder="Ingresar ESN"> <!-- (ngModelChange)="getEsn()"> -->
                                         <button mat-icon-button matSuffix (click)="getEsn()" color="primary">
-                                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                                            <mat-icon>search</mat-icon>
                                         </button>
                                         <mat-hint *ngIf="mostrarProgressBarEsn"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                     </mat-form-field>
@@ -96,7 +96,7 @@
                                         <mat-label for="">Orden de servicio</mat-label>
                                         <input matInput type="text" formControlName="os" placeholder="Ingrese el OS"> <!--(ngModelChange)="getOs()" -->
                                         <button mat-icon-button matSuffix (click)="getOs()" color="primary" [disabled]="action=='edit'">
-                                            <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                                            <mat-icon>search</mat-icon>
                                         </button>
                                         <mat-hint *ngIf="mostrarProgressBarOS"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                     </mat-form-field>

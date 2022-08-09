@@ -52,10 +52,9 @@
                   *ngIf="!searchingUser"
                   class="cursor-pointer"
                   matTooltip="Validar y autocompletar usuario"
-                  svgIcon="heroicons_outline:search"
                   (click)="autoCheckUsr()"
                   [color]="'primary'"
-                ></mat-icon>
+                >search</mat-icon>
                 <mat-progress-spinner
                   *ngIf="searchingUser"
                   [diameter]="24"

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -18,7 +18,6 @@ import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-
 import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 import { AzureService } from 'app/core/azure/azure.service';
 import { DialogSeeDocumentsComponent } from 'app/shared/dialogs/dialog-see-documents/dialog-see-documents.component';
-import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-registro-de-falla',
@@ -56,7 +55,9 @@ export class RegistroDeFallaComponent implements OnInit {
               private readonly garantiasService: GarantiasService, private readonly matSnackBar:MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
               private readonly userService:UserService, private readonly fallasService:FallasService,
-              private _azureService: AzureService) { }
+              private _azureService: AzureService)
+              {
+              }
 
   ngOnInit(): void {
     this.cargarInfoLocalStorage();
@@ -198,7 +199,6 @@ export class RegistroDeFallaComponent implements OnInit {
     });
     this.userService.user$.subscribe(response=>{
       this.usuarioDeLaSession = response;
-      console.log(this.usuarioDeLaSession);
     });
     this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.maestraQuejas = resp.data;

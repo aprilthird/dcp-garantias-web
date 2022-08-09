@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-xs-4 col-sm-2 col-md-3">
                     <div matRipple class="notification-green d-flex justify-content-start px-3" *ngIf="mostrarMensaje">
-                      <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon> {{notificacionDeAccionHecha}}
+                      <mat-icon>check_circle</mat-icon> {{notificacionDeAccionHecha}}
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -185,10 +185,12 @@
                   <ng-container matColumnDef="acciones">
                     <th mat-header-cell *matHeaderCellDef width="8%" class="text-center"> Accion </th>
                     <td mat-cell *matCellDef="let element; let i = dataIndex;" [class]="obtenerEstilo(i)" style="padding: 0">
-                      <button mat-icon-button aria-label="Example icon button with a home icon" [disabled]="element.estado==3" (click)="editarFalla(element)">
+                      <button mat-icon-button aria-label="Example icon button with a home icon" [disabled]="element.estado==3" (click)="editarFalla(element)" *ngIf="admin==true?true:(element.nivelSoporte==accesoUsuario)">
                         <!-- <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon> -->
                         <img style="height:20px" src="./../../../../../assets/icons/edit.svg" alt="">
                       </button>
+                      <!-- admin==true?false: -->
+                      <button mat-icon-button *ngIf="admin==true?false:!(element.nivelSoporte==accesoUsuario)"><mat-icon>visibility</mat-icon></button>
                       <button mat-icon-button aria-label="Example icon button with a home icon">
                         <!-- <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon> -->
                         <img style="height:30px" src="./../../../../../assets/icons/arrow-bottom.svg" alt="">

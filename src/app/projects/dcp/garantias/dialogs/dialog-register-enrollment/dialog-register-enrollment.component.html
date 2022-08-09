@@ -13,7 +13,7 @@
                             <input matInput type="text" formControlName="razonSocial" [matAutocomplete]="auto" placeholder="Buscar Cliente">
                             <!-- <mat-spinner [diameter]="24" matSuffix *ngIf="!botonBuscarCliente"></mat-spinner> -->
                             <button type="button" mat-icon-button matSuffix color="primary">
-                                <mat-icon svgIcon="heroicons_outline:search" (click)="buscarCliente()"></mat-icon>
+                                <mat-icon (click)="buscarCliente()">search</mat-icon>
                             </button>
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                                 <mat-option *ngFor="let client of clients" [value]="client.razonSocial" (click)="seleccionarCliente(client)">

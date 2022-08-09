@@ -125,7 +125,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
                                             <mat-label class="fw-bold">Fecha de falla <span class="text-danger">*</span></mat-label>
-                                            <input matInput [matDatepicker]="pickerFechaFalla" placeholder="Ingrese una fecha" formControlName="fechaFalla" disabled [max]="fechaHoy">
+                                            <input matInput [matDatepicker]="pickerFechaFalla" placeholder="Ingrese una fecha" formControlName="fechaFalla" [max]="fechaHoy">
                                             <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                             <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
                                             <mat-datepicker #pickerFechaFalla [disabled]="this.accion=='edit'?true:false"></mat-datepicker>
