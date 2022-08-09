@@ -46,7 +46,7 @@
                     <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
                         <span [class]="configuracionMenu" class="text-menu">Matrículas</span>
                     </mat-list-item>
-                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="menuArbol[5].activo">
+                    <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;" [matMenuTriggerFor]="maestras">
                         <span [class]="configuracionMenu" class="text-menu">Maestras</span>
                         <mat-icon>expand_more</mat-icon>
                     </mat-list-item>
@@ -56,7 +56,7 @@
                     <mat-list-item role="listitem"  class="pointer" *ngIf="seeConfigurationAndMaintenance" style="padding-left: 58px;">
                         <span [class]="configuracionMenu" class="text-menu">Distribución de Garantías</span>
                     </mat-list-item>
-            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;" *ngIf="true">
+            <mat-list-item role="listitem"  class="pointer" style="padding-left: 10px;" *ngIf="menuArbol[5].activo">
                 <span [class]="'icon-stats-bars2 '+reportesIcon"></span>
                 <span [class]="reportesMenu" class="text-menu">Reportes</span>
                 <!-- <mat-icon>expand_more</mat-icon> -->
