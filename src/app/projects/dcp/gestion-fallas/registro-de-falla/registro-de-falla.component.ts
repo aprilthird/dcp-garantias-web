@@ -289,6 +289,7 @@ export class RegistroDeFallaComponent implements OnInit {
 
   // GUARDAR BITACORA
 
+  
   guardarBitacora(_idEntidad:number,_idEvaluador:number,_comentarios:any,_estado:number,_nivelSoporteActual:number):void{
     const request = {
       tipo:2,
