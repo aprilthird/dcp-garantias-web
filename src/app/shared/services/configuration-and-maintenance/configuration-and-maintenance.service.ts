@@ -74,6 +74,9 @@ export class ConfigurationAndMaintenanceService {
   private urlObtenerMenuArbol = this.baseApiURl + '/Seguridad/ObtenerMenuArbol/';
   //url obtener usuarios por rol
   private urlObtenerUsuariosPorRol = this.baseApiURl + '/Seguridad/ObtenerUsuariosPorRol/';
+  //traer usuario registrador
+  private urlObtenerUsuarioPorId = this.baseApiURl + '/Seguridad/ObtenerUsuarioPorId/';
+
 
   constructor(private readonly httpClient: HttpClient,
               private readonly authService: AuthService) { }
@@ -315,5 +318,10 @@ export class ConfigurationAndMaintenanceService {
   //obtener usuarios por rol
   obtenerUsuariosPorRol(id:any):Observable<any>{
     return this.httpClient.get(this.urlObtenerUsuariosPorRol+id,{headers:this.header});
+  }
+
+  //obtener usuarios por id
+  obtenerUsuarioPorId(id:any):Observable<any>{
+    return this.httpClient.get(this.urlObtenerUsuarioPorId+id,{headers:this.header});
   }
 }

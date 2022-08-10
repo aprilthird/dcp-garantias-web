@@ -144,7 +144,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field floatLabel="always">
                                             <mat-label class="fw-bold">Usuario que reporta</mat-label>
-                                            <input matInput type="text" [disabled]="true" [value]="usuarioDeLaSession.nombres">
+                                            <input matInput type="text" [disabled]="true" [value]="accion=='new'?usuarioDeLaSession.nombres:usuarioRegistrador.nombres">
                                         </mat-form-field>
                                     </div>
                                 </div>

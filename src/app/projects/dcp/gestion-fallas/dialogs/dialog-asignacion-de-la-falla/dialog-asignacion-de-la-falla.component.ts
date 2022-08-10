@@ -50,7 +50,7 @@ export class DialogAsignacionDeLaFallaComponent implements OnInit {
 
   agregarAsignacion():void{
     if(!(this.idUsuarioSeleccionado==null)){
-        this.matDialogRef.close({success:true, idUsuario:this.idUsuarioSeleccionado})
+        this.matDialogRef.close({success:true, idUsuario:this.idUsuarioSeleccionado,nivelSeleccionado:this.nivelSeleccionado})
     }else{
       this.openSnackBarWarn('Seleccionar un Usuario');
     }

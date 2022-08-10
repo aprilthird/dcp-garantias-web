@@ -216,7 +216,7 @@
                                         <ng-container matColumnDef="evaluador">
                                           <th mat-header-cell *matHeaderCellDef width="20%"> Usuario Evaluador </th>
                                           <td mat-cell *matCellDef="let item; let i = index;" [class]="obtenerEstiloBitacora(i)">
-                                            {{item.evaluador==null?'-':item.evaluador}}
+                                            {{item.evaluador==0?'-':item.evaluador}}
                                           </td>
                                         </ng-container>                            
                                         <ng-container matColumnDef="comentario">

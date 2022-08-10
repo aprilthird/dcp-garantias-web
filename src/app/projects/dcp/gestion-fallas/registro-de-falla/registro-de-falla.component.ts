@@ -31,7 +31,7 @@ export class RegistroDeFallaComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center'; verticalPosition: MatSnackBarVerticalPosition = 'top';
   matriculaEncontrada: any;
   maestraAreasDeServicio = []; maestraQuejas:any[]; documentosParaDescargar = [];
-  usuarioDeLaSession:any;
+  usuarioDeLaSession:any; usuarioRegistrador:any;
   botonUsuarioRegistrador = false; botonUsuarioEscalador= false; botonObservar = false;
   botonIngenieroDeSoporte = false; botonCerrarCasoIngDeSoporte = false;
   botonEscalarDfse = false; verDFSE = false; botonCerrarCasoDfse = false;
@@ -200,9 +200,15 @@ export class RegistroDeFallaComponent implements OnInit {
     this.userService.user$.subscribe(response=>{
       this.usuarioDeLaSession = response;
     });
+    if(this.accion=='edit'){
+      this.configurationAndMaintenanceService.obtenerUsuarioPorId(this.fallaParaGestionar.idUsuarioReg).subscribe(responseApi=>{
+        this.usuarioRegistrador = responseApi;
+      })
+    }
     this.configurationAndMaintenanceService.listComplaints(1).subscribe(resp=>{
       this.maestraQuejas = resp.data;
     });
+
   }
 
   //TRAER LA MATRICULA INGRESADA
@@ -331,11 +337,12 @@ export class RegistroDeFallaComponent implements OnInit {
                                 tipo:this.tipo,
                                 activo:true,
                                 idEsn: this.matriculaEncontrada.id,
-                                idUsuario: this.usuarioDeLaSession.id,
+                                idUsuarioReg: this.usuarioDeLaSession.id,
+                                responsable:this.usuarioDeLaSession.id,
                                 ...this.formFalla.value };
             this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
                 if(responseApi.success){
-                  this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,0);
+                  this.guardarBitacora(responseApi.body.id,0,null,1,0);
                     this.subirArchivosAlServidor(responseApi.body.id);
                     this.registroExitosoDeLaFalla('true');
                 }
@@ -361,9 +368,11 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.queja2 = this.formFalla.value.queja2;
         this.fallaParaGestionar.queja3 = this.formFalla.value.queja3;
         this.fallaParaGestionar.evento = this.formFalla.value.evento;
+        this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
+        this.fallaParaGestionar.responsable = this.usuarioDeLaSession.id;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
-                this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,0);
+                this.guardarBitacora(responseApi.body.id,0,null,1,0);
                 this.subirArchivosAlServidor(responseApi.body.id);
                 this.registroExitosoDeLaFalla('editado');
             }
@@ -388,17 +397,18 @@ export class RegistroDeFallaComponent implements OnInit {
                                 if(this.verQueja3==false){this.formFalla.value.queja3=null};
                                 const nuevaFalla = {
                                     id:0,
-                                    nivelSoporte:2,
+                                    nivelSoporte:responseDialog.nivelSeleccionado,
                                     activo:true,
                                     asignacionFalla: responseDialog.idUsuario,
                                     idEsn:this.matriculaEncontrada!=null?this.matriculaEncontrada.id:'',
-                                    idUsuario: this.usuarioDeLaSession.id,
+                                    idUsuarioReg: this.usuarioDeLaSession.id,
+                                    responsable:responseDialog.idUsuario,
                                     ...this.formFalla.value,
                                     tipo:this.tipo
                                 };
                                 this.fallasService.mantenimientoFallas(nuevaFalla).subscribe(responseApi=>{
                                     if(responseApi.success){
-                                        this.guardarBitacora(responseApi.body.id,this.usuarioDeLaSession.id,null,1,2);
+                                        this.guardarBitacora(responseApi.body.id,responseDialog.idUsuario,null,1,responseDialog.nivelSeleccionado);
                                         this.subirArchivosAlServidor(responseApi.body.id);
                                         localStorage.setItem('success','escalado');
                                         this.router.navigate(['/gestion-fallas']);
@@ -426,14 +436,16 @@ export class RegistroDeFallaComponent implements OnInit {
       });
       dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
           if(responseDialog.success){
-            this.fallaParaGestionar.nivelSoporte=1;
-            this.fallaParaGestionar.asignacionFalla= responseDialog.idUsuario;
+            this.fallaParaGestionar.nivelSoporte = responseDialog.nivelSeleccionado;
+            this.fallaParaGestionar.asignacionFalla = responseDialog.idUsuario;
+            this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
+            this.fallaParaGestionar.responsable = responseDialog.idUsuario;
             if(this.verQueja2==false){this.fallaParaGestionar.queja2=null};
             if(this.verQueja3==false){this.fallaParaGestionar.queja3=null};
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(response=>{
               if(response.success){
                 //guardamos en la bitacora
-                this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,responseDialog.nivelSoporte);
+                this.guardarBitacora(this.fallaParaGestionar.id,responseDialog.idUsuario,null,1,responseDialog.nivelSeleccionado);
                 this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                 localStorage.setItem('success','escalado');
                 this.router.navigate(['/gestion-fallas']);            
@@ -441,7 +453,7 @@ export class RegistroDeFallaComponent implements OnInit {
             });
           }
       }); 
-    }
+    } 
   }
 
   // INGENIERO DE SOPORTE
@@ -451,11 +463,12 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
+      this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
       this.fallaParaGestionar.estado = 1;
       this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
             //guardamos en la bitacora
-            this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte)
+            this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,1,this.fallaParaGestionar.nivelSoporte);
             this.subirArchivosAlServidor(this.fallaParaGestionar.id);
             this.registroExitosoDeLaFalla('true');  
           }
@@ -476,11 +489,13 @@ export class RegistroDeFallaComponent implements OnInit {
       dialogAsignacionDeLaFalla.afterClosed().subscribe(responseDialog=>{
         if(responseDialog.success){
           this.fallaParaGestionar.asignacionFalla1 = responseDialog.idUsuario;
-          this.fallaParaGestionar.nivelSoporte = 2;
+          this.fallaParaGestionar.nivelSoporte = responseDialog.nivelSeleccionado;
           this.fallaParaGestionar.estado = 1;
+          this.fallaParaGestionar.responsable = responseDialog.idUsuario;
+          this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
           this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte);
+                  this.guardarBitacora(this.fallaParaGestionar.id,responseDialog.idUsuario,null,1,this.fallaParaGestionar.nivelSoporte);
                   this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                   localStorage.setItem('success','escalado');
                   this.router.navigate(['/gestion-fallas']);
@@ -499,6 +514,7 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
+      this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
       const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
         disableClose:true,
         width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
@@ -508,7 +524,7 @@ export class RegistroDeFallaComponent implements OnInit {
           this.fallaParaGestionar.estado = 3;
           this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
-                this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
+                this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,3,this.fallaParaGestionar.nivelSoporte);
                 this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                 localStorage.setItem('success','cerrado');
                 this.router.navigate(['/gestion-fallas']); 
@@ -543,9 +559,10 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
         this.fallaParaGestionar.estado = 1;
+        this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-            this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,2);
+            this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,1,2);
             this.subirArchivosAlServidor(this.fallaParaGestionar.id);
             this.registroExitosoDeLaFalla('true');
           }
@@ -573,10 +590,11 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
+        this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
         this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
           if(responseApi.success){
-              this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,3);
+              this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,1,3);
               this.subirArchivosAlServidor(this.fallaParaGestionar.id);
               localStorage.setItem('success','escalado');
               this.router.navigate(['/gestion-fallas']);
@@ -611,6 +629,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.discucionDfse = this.formDFSE.value.discucionDfse;
         this.fallaParaGestionar.conclusionDfse = this.formDFSE.value.conclusionDfse;
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
+        this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
         const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
           disableClose:true,
           width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
@@ -620,7 +639,7 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.estado = 3;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
+                  this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,3,this.fallaParaGestionar.nivelSoporte);
                   this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                   localStorage.setItem('success','cerrado');
                   this.router.navigate(['/gestion-fallas']);
@@ -659,10 +678,11 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
             this.fallaParaGestionar.conclusionesFabrica = this.formFabrica.value.conclusionesFabrica;
             this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;
+            this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
             this.fallaParaGestionar.estado = 1;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
-                  this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,1,this.fallaParaGestionar.nivelSoporte);
+                  this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,1,this.fallaParaGestionar.nivelSoporte);
                   this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                   this.registroExitosoDeLaFalla('true');
               }
@@ -692,7 +712,8 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.recomendacionesDfse = this.formDFSE.value.recomendacionesDfse;
         if(this.formFabrica.valid){
             this.fallaParaGestionar.conclusionesFabrica = this.formFabrica.value.conclusionesFabrica;
-            this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;         
+            this.fallaParaGestionar.comentariosFabrica = this.formFabrica.value.comentariosFabrica;
+            this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
             const dialogCerrarCaso = this.matDialog.open(DialogCerrarFallaComponent,{
               disableClose:true,
               width:'380px', data:{text:'¿Estás seguro de que deseas cerrar este registro?'}
@@ -702,7 +723,7 @@ export class RegistroDeFallaComponent implements OnInit {
                 this.fallaParaGestionar.estado = 3;
                 this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
                   if(responseApi.success){
-                      this.guardarBitacora(this.fallaParaGestionar.id,this.usuarioDeLaSession.id,null,3,this.fallaParaGestionar.nivelSoporte);
+                      this.guardarBitacora(this.fallaParaGestionar.id,this.fallaParaGestionar.responsable,null,3,this.fallaParaGestionar.nivelSoporte);
                       this.subirArchivosAlServidor(this.fallaParaGestionar.id);
                       localStorage.setItem('success','cerrado');
                       this.router.navigate(['/gestion-fallas']);
@@ -733,6 +754,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
           if(responseBitacora.success){
             this.fallaParaGestionar.estado = 2;
+            this.fallaParaGestionar.nivelSoporte = this.fallaParaGestionar.nivelSoporte - 1;
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
               if(responseApi.success){
                 localStorage.setItem('success','observado');

@@ -7,6 +7,7 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 import { Router } from '@angular/router';
 import { DialogMostrarComentarioComponent } from '../dialogs/dialog-mostrar-comentario/dialog-mostrar-comentario.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 
 @Component({
   selector: 'app-fallas-list',
@@ -52,7 +53,8 @@ export class FallasListComponent implements OnInit {
   admin:boolean=false;
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
-              private readonly garantiasService:GarantiasService, private readonly router:Router) {
+              private readonly garantiasService:GarantiasService, private readonly router:Router,
+              private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,) {
                 this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
                 this.accionesUsuario = this.menuArbol[2].acciones;
                }
@@ -238,7 +240,7 @@ export class FallasListComponent implements OnInit {
 
   getEstado(numeroEstado:number):string{
     if(numeroEstado==1){
-      return 'Aprobado';
+      return 'Activo';
     }
     if(numeroEstado==2){
       return 'Observado';
@@ -274,6 +276,14 @@ export class FallasListComponent implements OnInit {
       estilo = 'color-fila-white'
     }
     return estilo;
+  }
+
+  obtenerNombreUsuarioEvaluador(id:number):string{
+    let nombres = '';
+    this.configurationAndMaintenanceService.obtenerUsuarioPorId(id).subscribe(responseApi=>{
+      nombres = responseApi.nombres;
+    })
+    return nombres;
   }
   
 }
