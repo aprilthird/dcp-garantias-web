@@ -27,7 +27,17 @@ export class DialogAsignacionDeLaFallaComponent implements OnInit {
 
   traerUsuariosDelNivelSeleccionado():void{
     // console.log(this.nivelSeleccionado);
-    this.configurationAndMaintenanceService.obtenerUsuariosPorRol(this.nivelSeleccionado+2).subscribe(responseApi=>{
+    let idRol;
+    if(this.nivelSeleccionado==1){
+      idRol = 3;
+    }
+    if(this.nivelSeleccionado==2){
+      idRol = 4;
+    }
+    if(this.nivelSeleccionado==3){
+      idRol = 5;
+    }
+    this.configurationAndMaintenanceService.obtenerUsuariosPorRol(idRol).subscribe(responseApi=>{
         this.usuarios = responseApi;
     });
   }

@@ -224,9 +224,9 @@ export class FallasListComponent implements OnInit {
     }
   }
 
-  mostrarComentario(_comentario):void{
+  mostrarComentario(itemBitacora):void{
     const dialogMostrarComentario = this.matDialog.open(DialogMostrarComentarioComponent,{
-      data:{comentario:_comentario,text:'La falla ha sido observada'},
+      data:{bitacora:itemBitacora},
       disableClose:true, width:'500px'
     });
   }

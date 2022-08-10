@@ -289,7 +289,7 @@ export class RegistroDeFallaComponent implements OnInit {
 
   // GUARDAR BITACORA
 
-  
+
   guardarBitacora(_idEntidad:number,_idEvaluador:number,_comentarios:any,_estado:number,_nivelSoporteActual:number):void{
     const request = {
       tipo:2,
@@ -371,6 +371,7 @@ export class RegistroDeFallaComponent implements OnInit {
         this.fallaParaGestionar.evento = this.formFalla.value.evento;
         this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
         this.fallaParaGestionar.responsable = this.usuarioDeLaSession.id;
+        this.fallaParaGestionar.estado = 1;
         this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(responseApi=>{
             if(responseApi.success){
                 this.guardarBitacora(responseApi.body.id,0,null,1,0);
@@ -441,6 +442,7 @@ export class RegistroDeFallaComponent implements OnInit {
             this.fallaParaGestionar.asignacionFalla = responseDialog.idUsuario;
             this.fallaParaGestionar.idUsuarioReg = this.usuarioDeLaSession.id;
             this.fallaParaGestionar.responsable = responseDialog.idUsuario;
+            this.fallaParaGestionar.estado = 1;
             if(this.verQueja2==false){this.fallaParaGestionar.queja2=null};
             if(this.verQueja3==false){this.fallaParaGestionar.queja3=null};
             this.fallasService.mantenimientoFallas(this.fallaParaGestionar).subscribe(response=>{
