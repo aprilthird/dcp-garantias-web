@@ -84,21 +84,6 @@ export class BasicRegistrationComponent implements OnInit {
             ...this.formWwid.value
           };
           this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
-            // localStorage.setItem("wwid_" + this.user.dni, this.formWwid.value.wwid);
-            // localStorage.setItem("cc_" + this.user.dni, this.formWwid.value.codigoCuenta);
-            // localStorage.setItem("loc_" + this.user.dni, this.formWwid.value.locacion);
-
-            // let tmp = localStorage.getItem("datasrcwwid");
-            // if(tmp !== null && tmp !== "") {
-            //   let dataSource = JSON.parse(tmp);
-            //   let findIndex = dataSource.findIndex(i => i.dni == this.user.dni);
-            //   dataSource[findIndex].wwid = this.formWwid.value.wwid;
-            //   dataSource[findIndex].idPromotion = this.formWwid.value.idPromotion;
-            //   dataSource[findIndex].estadoIdPromotion = this.formWwid.value.estadoIdPromotion;
-            //   dataSource[findIndex].estadoWwid = this.formWwid.value.estadoWwid;
-            //   localStorage.setItem("datasrcwwid", JSON.stringify(dataSource));
-            // }
-
             console.log(responseApi);
             const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{
               data:{text:'Se ingresaron los datos del usuario'},

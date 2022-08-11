@@ -84,7 +84,7 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 flex-align-center" *ngIf="mostrarBis">
-                                        <mat-checkbox color="primary" [disabled]="true" [value]="matriculaEcontrada!=null?matriculaEcontrada.bis:false">BIS</mat-checkbox>
+                                        <mat-checkbox color="primary" [disableRipple]="true" (click)="$event.preventDefault()" [value]="matriculaEcontrada!=null?matriculaEcontrada.bis:false">BIS</mat-checkbox>
                                     </div>
                                 </div>
                             </mat-card>
