@@ -57,7 +57,15 @@ export class RegistroDeFallaComponent implements OnInit {
   subEstadosPartReturn = [{value:'10', viewValue:'Espera de llegada de partes para exportar'},
                           {value:'20', viewValue:'En proceso de envío de partes a fábrica'},
                           {value:'30', viewValue:'Partes enviadas a fábrica'}];
-  niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
+  nivelesDeEscalamiento : any[] = [{nombre:'Level 1 - Technician', id: 1},
+                      {nombre:'Level 2 - DFSE Counterpart', id: 2},
+                      {nombre:'Level 3 - DFSE Fabrica', id: 3},
+                      {nombre:'EBU TTM', id: 4},
+                      {nombre:'EBU Product Improvement', id: 5},
+                      {nombre:'EBU Infant Care', id: 6},
+                      {nombre:'PSBU TTM', id: 7},
+                      {nombre:'PSBU Service', id: 8},
+                      {nombre:'PSBU Infant Care', id: 9},];
   verQueja2 = false; verQueja3 = false;
   mostrarProgressBarEsn : boolean = false;
   documentos = [];
@@ -219,10 +227,10 @@ export class RegistroDeFallaComponent implements OnInit {
     }
     this.formDFSE = new FormGroup({
       issueCategory: new FormControl({value:this.fallaParaGestionar.issueCategory!=null?this.fallaParaGestionar.issueCategory:null,disabled:bloquearInputs}, [Validators.required]),
-      nivelSoporte: new FormControl({value:this.fallaParaGestionar.nivelSoporte!=null?this.fallaParaGestionar.nivelSoporte:null,disabled:bloquearInputs}, [Validators.required]),
+      nivelEscalamiento: new FormControl({value:this.fallaParaGestionar.nivelEscalamiento!=null?this.fallaParaGestionar.nivelEscalamiento:null,disabled:bloquearInputs}, [Validators.required]),
       subEstado: new FormControl({value:this.fallaParaGestionar.subEstado!=null?this.fallaParaGestionar.subEstado:null,disabled:bloquearInputs}, [Validators.required]),
       tsr: new FormControl({value:this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'',disabled:bloquearInputs}, [Validators.required]),
-      partsReturn: new FormControl({value:this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:null,disabled:bloquearInputs}, [Validators.required]),
+      partsReturn: new FormControl({value:this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:'no',disabled:bloquearInputs}, [Validators.required]),
       trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:this.trackinNumberGenerated, disabled:true}),
       subestadoPartsReturn: new FormControl({value:this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null,disabled:bloquearInputs}),
       fechaIniDesarmeMotor: new FormControl({value:this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null,disabled:bloquearInputs}, [Validators.required]),
@@ -607,7 +615,7 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
-        this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
+        this.fallaParaGestionar.nivelEscalamiento = this.formDFSE.value.nivelEscalamiento;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
         this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
         this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;
@@ -639,6 +647,7 @@ export class RegistroDeFallaComponent implements OnInit {
       if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
         this.fallaParaGestionar.nivelSoporte = 3;
+        this.fallaParaGestionar.nivelEscalamiento = this.formDFSE.value.nivelEscalamiento;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
         this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
         this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;
@@ -674,7 +683,7 @@ export class RegistroDeFallaComponent implements OnInit {
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
       if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
-        this.fallaParaGestionar.nivelSoporte = this.formDFSE.value.nivelSoporte;
+        this.fallaParaGestionar.nivelEscalamiento = this.formDFSE.value.nivelEscalamiento;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
         this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
         this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;

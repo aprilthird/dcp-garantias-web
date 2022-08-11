@@ -246,7 +246,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label>Issue Category</mat-label>
-                                    <mat-select placeholder="Placeholder" formControlName="issueCategory">
+                                    <mat-select placeholder="Seleccionar" formControlName="issueCategory">
                                         <mat-option *ngFor="let issue of issuesCategory" [value]="issue.value">
                                             {{issue.viewValue}}
                                         </mat-option>
@@ -255,9 +255,9 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
-                                    <mat-label>Nivel de Soporte</mat-label>
-                                    <mat-select placeholder="Placeholder" formControlName="nivelSoporte">
-                                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.id">
+                                    <mat-label>Nivel de escalamiento</mat-label>
+                                    <mat-select placeholder="Seleccionar" formControlName="nivelEscalamiento">
+                                        <mat-option *ngFor="let nivel of nivelesDeEscalamiento" [value]="nivel.id">
                                             {{nivel.nombre}}
                                         </mat-option>
                                     </mat-select>
@@ -266,7 +266,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label>Subestado</mat-label>
-                                    <mat-select placeholder="Placeholder" formControlName="subEstado">
+                                    <mat-select placeholder="Seleccionar" formControlName="subEstado">
                                         <mat-option *ngFor="let subEstado of subEstados" [value]="subEstado.value">
                                             {{subEstado.viewValue}}
                                         </mat-option>
@@ -301,14 +301,14 @@
                             <div class="col-md-4">
                                 <mat-form-field floatLabel="always" *ngIf="mostrarTrakingNumber">
                                     <mat-label>Subestado de Parts Return</mat-label>
-                                    <mat-select placeholder="Placeholder" formControlName="subestadoPartsReturn">
+                                    <mat-select placeholder="Seleccionar" formControlName="subestadoPartsReturn">
                                         <mat-option *ngFor="let subEstadoPartReturn of subEstadosPartReturn" [value]="subEstadoPartReturn.value">
                                             {{subEstadoPartReturn.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-md-2"></div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Fecha de inicio de desarmado de  {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>

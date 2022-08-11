@@ -102,6 +102,7 @@ export class FallasListComponent implements OnInit {
     for (let i = 0; i < this.accionesUsuario.length; i++) {
         if(this.accionesUsuario[i].nombre=='Llenado DFSE' && this.accionesUsuario[i].activo==true){
           nivel = 2;
+          this.fabrica = true;
           sum=sum+1;
         }
     }
@@ -110,6 +111,25 @@ export class FallasListComponent implements OnInit {
     }else{
       this.accesoUsuario = nivel;
     }
+  }
+
+  // element.estado==3?false:admin==true?true:(element.nivelSoporte==accesoUsuario)
+
+  mostrarEditar(falla:any):boolean{
+    let ver = false;
+    if(this.admin){
+      ver = true
+    }
+    if(falla.nivelSoporte==this.accesoUsuario){
+      ver = true;
+    }
+    if(falla.nivelSoporte==3&&this.accesoUsuario==2){
+      ver = true;
+    }
+    if(falla.estado==3){
+      ver = false;
+    }
+    return ver;
   }
 
   registroMasivo():void{
