@@ -676,7 +676,6 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cerrarCasoDfse():void{
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
@@ -717,9 +716,6 @@ export class RegistroDeFallaComponent implements OnInit {
       }else{
         this.mensajeErrorDeCampos('Llene los campos DFSE');
       }
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   // FABRICA
@@ -757,6 +753,7 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cerrarCaso():void{
+    if(this.fallaParaGestionar)
     if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
