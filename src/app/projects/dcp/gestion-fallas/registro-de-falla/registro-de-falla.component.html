@@ -312,7 +312,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Fecha de inicio de desarmado de  {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
-                                    <input matInput [matDatepicker]="pickerFechaInicioDesarmado" placeholder="Ingrese una fecha" formControlName="fechaIniDesarmeMotor">
+                                    <input matInput [matDatepicker]="pickerFechaInicioDesarmado" placeholder="Ingrese una fecha" formControlName="fechaIniDesarmeMotor" [max]="fechaHoy">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaInicioDesarmado"></mat-datepicker-toggle>
                                     <mat-datepicker #pickerFechaInicioDesarmado></mat-datepicker>
@@ -321,7 +321,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Fecha de fin de desarmado de {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
-                                    <input matInput [matDatepicker]="pickerFechaFinDesarmado" placeholder="Ingrese una fecha" formControlName="fechaFinDesarmeMotor">
+                                    <input matInput [matDatepicker]="pickerFechaFinDesarmado" placeholder="Ingrese una fecha" formControlName="fechaFinDesarmeMotor" [max]="fechaHoy">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaFinDesarmado"></mat-datepicker-toggle>
                                     <mat-datepicker #pickerFechaFinDesarmado></mat-datepicker>
@@ -330,7 +330,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Fecha de solicitud de partes</mat-label>
-                                    <input matInput [matDatepicker]="pickerFechaSolicitudDePartes" placeholder="Ingrese una fecha" formControlName="fechaSolPartes">
+                                    <input matInput [matDatepicker]="pickerFechaSolicitudDePartes" placeholder="Ingrese una fecha" formControlName="fechaSolPartes" [max]="fechaHoy">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaSolicitudDePartes"></mat-datepicker-toggle>
                                     <mat-datepicker #pickerFechaSolicitudDePartes></mat-datepicker>
@@ -339,7 +339,7 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Fecha de envío</mat-label>
-                                    <input matInput [matDatepicker]="pickerFechaDeEnvio" placeholder="Ingrese una fecha" formControlName="fechaEnvio">
+                                    <input matInput [matDatepicker]="pickerFechaDeEnvio" placeholder="Ingrese una fecha" formControlName="fechaEnvio" [max]="fechaHoy">
                                     <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                     <mat-datepicker-toggle matSuffix [for]="pickerFechaDeEnvio"></mat-datepicker-toggle>
                                     <mat-datepicker #pickerFechaDeEnvio></mat-datepicker>
@@ -419,7 +419,7 @@
                 </div> -->
             </div>
         </div>
-        <div class="col-md-12 text-end mb-5">
+        <div class="col-md-12 text-end mb-5" *ngIf="soloVerRegistroFalla=='false'">
             <button type="button" mat-raised-button class="mx-1" *ngIf="botonUsuarioRegistrador" (click)="registrarFalla()">Guardar registro</button>
             <button type="button" mat-raised-button class="mx-1" *ngIf="botonEscalarDfse" (click)="guardarRegistroIngenieroDeSoporte()">Guardar registro</button>
             <button type="button" mat-raised-button class="mx-1" *ngIf="botonEscalarFabrica" (click)="guardarRegistroDFSE()">Guardar registro</button>
@@ -431,6 +431,9 @@
             <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarDfse" (click)="escalarFallaHaciaDFSE()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a DFSE</button>
             <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonEscalarFabrica" (click)="escalarHaciaFabrica()" [disabled]="this.fallaParaGestionar.estado==2">Escalar a Fabrica</button>
             <button type="button" mat-raised-button color="primary" class="mx-1" *ngIf="botonCerrarCaso" (click)="cerrarCaso()">Cerrar caso</button>
+        </div>
+        <div class="col-md-12 text-end mb-5" *ngIf="soloVerRegistroFalla=='true'">
+            <button type="button" mat-raised-button color="primary" class="mx-1" (click)="onListfallas()">Regresar</button>
         </div>
     </div>
 </div>

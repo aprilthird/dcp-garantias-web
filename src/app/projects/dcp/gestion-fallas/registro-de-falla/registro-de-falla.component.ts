@@ -50,6 +50,7 @@ export class RegistroDeFallaComponent implements OnInit {
   mostrarProgressBarEsn : boolean = false;
   documentos = [];
   documentosSubidos = [];
+  soloVerRegistroFalla:string;
   
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
               private readonly garantiasService: GarantiasService, private readonly matSnackBar:MatSnackBar,
@@ -133,21 +134,36 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cargarFormularioRegistroBasico():void{
+    // debugger;
+    let bloquearInputs:boolean;    
+    if(this.fallaParaGestionar==null){
+      bloquearInputs = false;
+    }else{
+      if(this.fallaParaGestionar.nivelSoporte>=1){
+        bloquearInputs = true;
+      }else{
+        bloquearInputs = false;
+      }
+    }
+    if(this.soloVerRegistroFalla=='true'){
+      bloquearInputs = true;
+    }
+    console.log('bloquear:'+bloquearInputs);
     this.formFalla = new FormGroup({
       os: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.os:'', disabled:this.accion=='edit'?true:false},[Validators.required]),
-      io: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.io:'', [Validators.required]),
+      io: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.io:'',disabled:bloquearInputs}, [Validators.required]),
       esn: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.esn:'', disabled:this.accion=='edit'?true:false }, [Validators.required]),
       idArea: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.idArea:null, disabled:this.accion=='edit'?true:false}),
-      aplicacion: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.aplicacion:'', [Validators.required]),
-      numParte: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.numParte:'',[Validators.required]),
-      puntoFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.puntoFalla:'',[Validators.required]),
-      tipoFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.tipoFalla:'',[Validators.required]),
-      fechaFalla: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.fechaFalla:'',[Validators.required]),
-      descripcion: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.descripcion:'',[Validators.required]),
-      queja1: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja1:null),
-      queja2: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja2:null),
-      queja3: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.queja3:null),
-      evento: new FormControl(this.fallaParaGestionar?this.fallaParaGestionar.evento:'',[Validators.required]),
+      aplicacion: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.aplicacion:'', disabled:bloquearInputs}, [Validators.required]),
+      numParte: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.numParte:'', disabled:bloquearInputs},[Validators.required]),
+      puntoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.puntoFalla:'', disabled:bloquearInputs},[Validators.required]),
+      tipoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.tipoFalla:'', disabled:bloquearInputs},[Validators.required]),
+      fechaFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.fechaFalla:'', disabled:bloquearInputs},[Validators.required]),
+      descripcion: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.descripcion:'', disabled:bloquearInputs},[Validators.required]),
+      queja1: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.queja1:null, disabled:bloquearInputs}),
+      queja2: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.queja2:null, disabled:bloquearInputs}),
+      queja3: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.queja3:null, disabled:bloquearInputs}),
+      evento: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.evento:'', disabled:bloquearInputs},[Validators.required]),
     });
     if(this.fallaParaGestionar!=null){
       this.getEsnRegistroExistente(this.fallaParaGestionar.esn);
@@ -155,42 +171,73 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cargarFormularioIngDeSoporte():void{
+    let bloquearInputs:boolean;
+    if(this.fallaParaGestionar==null){
+      bloquearInputs = false;
+    }else{
+      if(this.fallaParaGestionar.nivelSoporte>=2){
+        bloquearInputs = true;
+      }else{
+        bloquearInputs = false;
+      }
+    }
+    if(this.soloVerRegistroFalla=='true'){
+      bloquearInputs = true;
+    }
     this.formIngDeSoporte = new FormGroup({
-      discucion: new FormControl(this.fallaParaGestionar.discucion!=null?this.fallaParaGestionar.discucion:'', [Validators.required]),
-      conclusion: new FormControl(this.fallaParaGestionar.conclusion!=null?this.fallaParaGestionar.conclusion:'', [Validators.required]),
-      recomendacion: new FormControl(this.fallaParaGestionar.recomendacion!=null?this.fallaParaGestionar.recomendacion:'', [Validators.required])
+      discucion: new FormControl({value:this.fallaParaGestionar.discucion!=null?this.fallaParaGestionar.discucion:'',disabled:bloquearInputs}, [Validators.required]),
+      conclusion: new FormControl({value:this.fallaParaGestionar.conclusion!=null?this.fallaParaGestionar.conclusion:'',disabled:bloquearInputs}, [Validators.required]),
+      recomendacion: new FormControl({value:this.fallaParaGestionar.recomendacion!=null?this.fallaParaGestionar.recomendacion:'',disabled:bloquearInputs}, [Validators.required])
     });
   }
 
   cargarFormularioDFSE():void{
+    let bloquearInputs:boolean;
+    if(this.fallaParaGestionar==null){
+      bloquearInputs = false;
+    }else{
+      if(this.fallaParaGestionar.nivelSoporte>=3){
+        bloquearInputs = true;
+      }else{
+        bloquearInputs = false;
+      }
+    }
+    if(this.soloVerRegistroFalla=='true'){
+      bloquearInputs = true;
+    }
     this.formDFSE = new FormGroup({
-      issueCategory: new FormControl(this.fallaParaGestionar.issueCategory!=null?this.fallaParaGestionar.issueCategory:null, [Validators.required]),
-      nivelSoporte: new FormControl(this.fallaParaGestionar.nivelSoporte!=null?this.fallaParaGestionar.nivelSoporte:null, [Validators.required]),
-      subEstado: new FormControl(this.fallaParaGestionar.subEstado!=null?this.fallaParaGestionar.subEstado:null, [Validators.required]),
-      tsr: new FormControl(this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'', [Validators.required]),
-      partsReturn: new FormControl(this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:null, [Validators.required]),
+      issueCategory: new FormControl({value:this.fallaParaGestionar.issueCategory!=null?this.fallaParaGestionar.issueCategory:null,disabled:bloquearInputs}, [Validators.required]),
+      nivelSoporte: new FormControl({value:this.fallaParaGestionar.nivelSoporte!=null?this.fallaParaGestionar.nivelSoporte:null,disabled:bloquearInputs}, [Validators.required]),
+      subEstado: new FormControl({value:this.fallaParaGestionar.subEstado!=null?this.fallaParaGestionar.subEstado:null,disabled:bloquearInputs}, [Validators.required]),
+      tsr: new FormControl({value:this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'',disabled:bloquearInputs}, [Validators.required]),
+      partsReturn: new FormControl({value:this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:null,disabled:bloquearInputs}, [Validators.required]),
       trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:this.trackinNumberGenerated, disabled:true}),
-      subestadoPartsReturn: new FormControl(this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null),
-      fechaIniDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null, [Validators.required]),
-      fechaFinDesarmeMotor: new FormControl(this.fallaParaGestionar.fechaFinDesarmeMotor!=null?this.fallaParaGestionar.fechaFinDesarmeMotor:null, [Validators.required]),
-      fechaSolPartes: new FormControl(this.fallaParaGestionar.fechaSolPartes!=null?this.fallaParaGestionar.fechaSolPartes:null, [Validators.required]),
-      fechaEnvio: new FormControl(this.fallaParaGestionar.fechaEnvio!=null?this.fallaParaGestionar.fechaEnvio:null, [Validators.required]),
-      discucionDfse: new FormControl(this.fallaParaGestionar.discucionDfse!=null?this.fallaParaGestionar.discucionDfse:'', [Validators.required]),
-      conclusionDfse: new FormControl(this.fallaParaGestionar.conclusionDfse!=null?this.fallaParaGestionar.conclusionDfse:'', [Validators.required]),
-      recomendacionesDfse: new FormControl(this.fallaParaGestionar.recomendacionesDfse!=null?this.fallaParaGestionar.recomendacionesDfse:'', [Validators.required]),
+      subestadoPartsReturn: new FormControl({value:this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null,disabled:bloquearInputs}),
+      fechaIniDesarmeMotor: new FormControl({value:this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null,disabled:bloquearInputs}, [Validators.required]),
+      fechaFinDesarmeMotor: new FormControl({value:this.fallaParaGestionar.fechaFinDesarmeMotor!=null?this.fallaParaGestionar.fechaFinDesarmeMotor:null,disabled:bloquearInputs}, [Validators.required]),
+      fechaSolPartes: new FormControl({value:this.fallaParaGestionar.fechaSolPartes!=null?this.fallaParaGestionar.fechaSolPartes:null,disabled:bloquearInputs}, [Validators.required]),
+      fechaEnvio: new FormControl({value:this.fallaParaGestionar.fechaEnvio!=null?this.fallaParaGestionar.fechaEnvio:null,disabled:bloquearInputs}, [Validators.required]),
+      discucionDfse: new FormControl({value:this.fallaParaGestionar.discucionDfse!=null?this.fallaParaGestionar.discucionDfse:'',disabled:bloquearInputs}, [Validators.required]),
+      conclusionDfse: new FormControl({value:this.fallaParaGestionar.conclusionDfse!=null?this.fallaParaGestionar.conclusionDfse:'',disabled:bloquearInputs}, [Validators.required]),
+      recomendacionesDfse: new FormControl({value:this.fallaParaGestionar.recomendacionesDfse!=null?this.fallaParaGestionar.recomendacionesDfse:'',disabled:bloquearInputs}, [Validators.required]),
     });
   }
 
   cargarFormularioFabrica():void{
+    let bloquearInputs:boolean=false;
+    if(this.soloVerRegistroFalla=='true'){
+      bloquearInputs = true;
+    }
     this.formFabrica = new FormGroup({
-      conclusionesFabrica: new FormControl(this.fallaParaGestionar.conclusionesFabrica!=null?this.fallaParaGestionar.conclusionesFabrica:'', [Validators.required]),
-      comentariosFabrica: new FormControl(this.fallaParaGestionar.comentariosFabrica!=null?this.fallaParaGestionar.comentariosFabrica:'', [Validators.required])
+      conclusionesFabrica: new FormControl({value:this.fallaParaGestionar.conclusionesFabrica!=null?this.fallaParaGestionar.conclusionesFabrica:'', disabled:bloquearInputs}, [Validators.required]),
+      comentariosFabrica: new FormControl({value:this.fallaParaGestionar.comentariosFabrica!=null?this.fallaParaGestionar.comentariosFabrica:'', disabled:bloquearInputs}, [Validators.required])
     });
   }
 
   cargarInfoLocalStorage():void{
     this.accion = localStorage.getItem('action'); //trae de localStorage la acción que se hará (crear e editar falla)
     this.tipoDeEquipo = localStorage.getItem('text'); //trae de localstorge el tipo de equipo (motor o generador)
+    this.soloVerRegistroFalla = localStorage.getItem('verFalla');
   }
 
   cargarMaestras():void{

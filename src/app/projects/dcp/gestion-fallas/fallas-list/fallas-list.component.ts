@@ -51,6 +51,7 @@ export class FallasListComponent implements OnInit {
   accesoIngSoporte:number=0;
   accesoDfse:number=0;
   admin:boolean=false;
+  fabrica:boolean=false;
 
   constructor(private readonly matDialog: MatDialog, private readonly fallasService:FallasService,
               private readonly garantiasService:GarantiasService, private readonly router:Router,
@@ -203,8 +204,9 @@ export class FallasListComponent implements OnInit {
     localStorage.removeItem('success');
   }
 
-  editarFalla(falla):void{
+  editarFalla(falla,ver):void{
     localStorage.setItem('action','edit');
+    localStorage.setItem('verFalla',ver);
     localStorage.setItem('fallaParaGestionar',JSON.stringify(falla));
     this.router.navigate(['gestion-fallas/registro-de-falla']);
   }
