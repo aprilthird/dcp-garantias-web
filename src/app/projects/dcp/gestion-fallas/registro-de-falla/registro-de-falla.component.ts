@@ -43,8 +43,20 @@ export class RegistroDeFallaComponent implements OnInit {
   trackinNumberGenerated = Math.floor(Math.random() * 100000000);
   fechaHoy = new Date;
   // data falsa de DFSE para los select
-  items = [{value:10, viewValue:'Valor 1'},{value:20, viewValue:'Valor 2'},{value:30, viewValue:'Valor 3'}];
-  items2 = [{value:'10', viewValue:'Valor 1'},{value:'20', viewValue:'Valor 2'},{value:'30', viewValue:'Valor 3'}];
+  issuesCategory = [{value:10, viewValue:'Active Proyect Support'},
+                    {value:20, viewValue:'Emerging Issue'},
+                    {value:30, viewValue:'Fix Effectiveness'},
+                    {value:40, viewValue:'Historical'},
+                    {value:50, viewValue:'Major Failure Analysis'},
+                    {value:60, viewValue:'Only Information'}];
+  subEstados = [{value:10, viewValue:'Espera llegada motor al MRC'},
+                    {value:20, viewValue:'Espera de informe del MRC'},
+                    {value:30, viewValue:'En elaboración de AFA'},
+                    {value:40, viewValue:'Espera de resolución'},
+                    {value:50, viewValue:'En progreso'}];
+  subEstadosPartReturn = [{value:'10', viewValue:'Espera de llegada de partes para exportar'},
+                          {value:'20', viewValue:'En proceso de envío de partes a fábrica'},
+                          {value:'30', viewValue:'Partes enviadas a fábrica'}];
   niveles : any[] = [{nombre:'Ing. Soporte', id: 1}, {nombre:'DFSE', id: 2}, {nombre:'Fabrica', id: 3}];
   verQueja2 = false; verQueja3 = false;
   mostrarProgressBarEsn : boolean = false;
@@ -620,7 +632,6 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   escalarHaciaFabrica():void{
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
@@ -653,9 +664,6 @@ export class RegistroDeFallaComponent implements OnInit {
       }else{
         this.mensajeErrorDeCampos('Llene los campos DFSE');
       }
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   cerrarCasoDfse():void{

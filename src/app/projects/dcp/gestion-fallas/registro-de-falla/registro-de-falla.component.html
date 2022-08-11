@@ -247,8 +247,8 @@
                                 <mat-form-field floatLabel="always">
                                     <mat-label>Issue Category</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="issueCategory">
-                                        <mat-option *ngFor="let item of items" [value]="item.value">
-                                            {{item.viewValue}}
+                                        <mat-option *ngFor="let issue of issuesCategory" [value]="issue.value">
+                                            {{issue.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -267,8 +267,8 @@
                                 <mat-form-field floatLabel="always">
                                     <mat-label>Subestado</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="subEstado">
-                                        <mat-option *ngFor="let item of items" [value]="item.value">
-                                            {{item.viewValue}}
+                                        <mat-option *ngFor="let subEstado of subEstados" [value]="subEstado.value">
+                                            {{subEstado.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -298,12 +298,12 @@
                                     <input matInput type="text" formControlName="trakingNumber">
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <mat-form-field floatLabel="always" *ngIf="mostrarTrakingNumber">
                                     <mat-label>Subestado de Parts Return</mat-label>
                                     <mat-select placeholder="Placeholder" formControlName="subestadoPartsReturn">
-                                        <mat-option *ngFor="let item of items2" [value]="item.value">
-                                            {{item.viewValue}}
+                                        <mat-option *ngFor="let subEstadoPartReturn of subEstadosPartReturn" [value]="subEstadoPartReturn.value">
+                                            {{subEstadoPartReturn.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
