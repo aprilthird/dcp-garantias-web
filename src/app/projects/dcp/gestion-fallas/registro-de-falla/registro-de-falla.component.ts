@@ -800,7 +800,7 @@ export class RegistroDeFallaComponent implements OnInit {
     });
     dialogObservedRecord.afterClosed().subscribe(responseDialog=>{
       if(responseDialog.selection){
-        const requestBitacora = {tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:1, comentarios:responseDialog.comentario, estado:2, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
+        const requestBitacora = {tipo:2, idEntidad:this.fallaParaGestionar.id, evaluador:this.usuarioDeLaSession.id, comentarios:responseDialog.comentario, estado:2, nivelSoporteActual:this.fallaParaGestionar.nivelSoporte};
         this.garantiasService.saveBitacora(requestBitacora).subscribe(responseBitacora=>{
           if(responseBitacora.success){
             this.fallaParaGestionar.estado = 2;
