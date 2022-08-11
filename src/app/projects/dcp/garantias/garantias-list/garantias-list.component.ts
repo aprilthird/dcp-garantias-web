@@ -361,7 +361,7 @@ export class GarantiasListComponent implements OnInit {
   mostrarComentario(itemBitacora:any):void{
     this.matDialog.open(DialogMostrarComentarioComponent,{
       data:{bitacora:itemBitacora},
-      disableClose:true, width:'500px'
+      disableClose:false, width:'500px'
     });
   }
   

@@ -103,6 +103,11 @@ export class ToolRequestComponent implements OnInit {
               }else{
                 const request = {
                   dni: this.user.dni,
+                  usr: this.user.usr,
+                  area: this.user.area,
+                  correo: this.user.correo,
+                  jefe: this.user.jefe,
+                  ceco: this.user.centroCosto,
                   ...this.formRequest.value
                 };
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
