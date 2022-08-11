@@ -753,19 +753,16 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cerrarCaso():void{
-    if(this.fallaParaGestionar)
-    if(this.formIngDeSoporte.valid){
       this.fallaParaGestionar.activo = true;
       this.fallaParaGestionar.discucion = this.formIngDeSoporte.value.discucion;
       this.fallaParaGestionar.conclusion = this.formIngDeSoporte.value.conclusion;
       this.fallaParaGestionar.recomendacion = this.formIngDeSoporte.value.recomendacion;
-      if(this.formDFSE.valid){
         this.fallaParaGestionar.issueCategory = this.formDFSE.value.issueCategory;
         this.fallaParaGestionar.nivelSoporte = 3;
         this.fallaParaGestionar.subEstado = this.formDFSE.value.subEstado;
         this.fallaParaGestionar.tsr = this.formDFSE.value.tsr;
         this.fallaParaGestionar.partsReturn = this.formDFSE.value.partsReturn;
-        this.fallaParaGestionar.trakingNumber = this.formDFSE.value.trakingNumber;
+        this.fallaParaGestionar.trakingNumber = ''+this.formDFSE.value.trakingNumber;
         this.fallaParaGestionar.subestadoPartsReturn = this.formDFSE.value.subestadoPartsReturn;
         this.fallaParaGestionar.fechaIniDesarmeMotor = this.formDFSE.value.fechaIniDesarmeMotor;
         this.fallaParaGestionar.fechaFinDesarmeMotor = this.formDFSE.value.fechaFinDesarmeMotor;
@@ -798,12 +795,6 @@ export class RegistroDeFallaComponent implements OnInit {
         }else{
           this.mensajeErrorDeCampos('Llene los campos Fabrica');
         }
-      }else{
-        this.mensajeErrorDeCampos('Llene los campos DFSE');
-      }
-    }else{
-      this.mensajeErrorDeCampos('Llene los campos de ingeniero de soporte');
-    }
   }
 
   // OBSERVAR FALLA
