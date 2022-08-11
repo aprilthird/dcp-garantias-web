@@ -18,6 +18,7 @@ export class DialogSeleccionarTipoDeRegistroComponent implements OnInit {
     localStorage.setItem('text',type);
     localStorage.setItem('action','new');
     this.matDialogRef.close();
+    localStorage.setItem('verFalla','false');
     this.router.navigate(['gestion-fallas/registro-de-falla']);
   }
 }
