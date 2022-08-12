@@ -14,7 +14,7 @@
             <div class="col-md-4">
                 <mat-form-field floatLabel="always">
                     <mat-label class="font-w-700">Usuario evaluador <span class="text-red">*</span></mat-label>
-                    <mat-select placeholder="Seleccione" formControlName="idUsuarioElavorador">
+                    <mat-select placeholder="Seleccione" formControlName="idUsuarioEvaluador">
                         <mat-option *ngFor="let option of userOptions" [value]="option.src">
                             {{option.nombres}} {{option.apellidos}}
                         </mat-option>

@@ -74,6 +74,7 @@ export class ToolRequestComponent implements OnInit {
     this.digitalToolsService.searchUserByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
       if(responseApi.body.data.length > 0) {
         this.user = responseApi.body.data[0];
+        console.log(this.user);
       }
     });
   }
@@ -112,16 +113,16 @@ export class ToolRequestComponent implements OnInit {
                   ...this.formRequest.value
                 };
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
-                  localStorage.setItem("os_" + this.localUser.nombres, this.formRequest.value.os);
-                  localStorage.setItem("pcid_" + this.localUser.nombres, this.formRequest.value.pcid);
-                  localStorage.setItem("marca_" + this.localUser.nombres, this.formRequest.value.marca);
-                  localStorage.setItem("modelo_" + this.localUser.nombres, this.formRequest.value.modelo);
-                  localStorage.setItem("serie_" + this.localUser.nombres, this.formRequest.value.serie);
+                  // localStorage.setItem("os_" + this.user.nombres, this.formRequest.value.os);
+                  // localStorage.setItem("pcid_" + this.user.nombres, this.formRequest.value.pcid);
+                  // localStorage.setItem("marca_" + this.user.nombres, this.formRequest.value.marca);
+                  // localStorage.setItem("modelo_" + this.user.nombres, this.formRequest.value.modelo);
+                  // localStorage.setItem("serie_" + this.user.nombres, this.formRequest.value.serie);
 
-                  localStorage.setItem("area_" + this.localUser.nombres, this.user.area);
+                  // localStorage.setItem("area_" + this.user.nombres, this.user.area);
                   // localStorage.setItem("jefe_" + this.localUser.nombres, this.user.jefe);
-                  localStorage.setItem("cantidad_" + this.localUser.nombres, "2");
-                  localStorage.setItem("fechaDeSolicitud_" + this.localUser.nombres, (new Date()).toDateString());
+                  // localStorage.setItem("cantidad_" + this.user.nombres, "2");
+                  // localStorage.setItem("fechaDeSolicitud_" + this.user.nombres, (new Date()).toDateString());
 
                   // let tmp = localStorage.getItem("datasrcwwid");
                   // if(tmp !== null && tmp !== "") {
