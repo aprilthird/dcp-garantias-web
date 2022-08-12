@@ -154,7 +154,6 @@ export class RegistroDeFallaComponent implements OnInit {
   }
 
   cargarFormularioRegistroBasico():void{
-    // debugger;
     let bloquearInputs:boolean;    
     if(this.fallaParaGestionar==null){
       bloquearInputs = false;
@@ -171,9 +170,9 @@ export class RegistroDeFallaComponent implements OnInit {
     console.log('bloquear:'+bloquearInputs);
     this.formFalla = new FormGroup({
       os: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.os:'', disabled:this.accion=='edit'?true:false},[Validators.required]),
-      io: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.io:'',disabled:bloquearInputs}, [Validators.required]),
+      io: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.io:'',disabled:this.accion=='edit'?true:false}, [Validators.required]),
       esn: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.esn:'', disabled:this.accion=='edit'?true:false }, [Validators.required]),
-      idArea: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.idArea:null, disabled:this.accion=='edit'?true:false}),
+      idArea: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.idArea:null, disabled:bloquearInputs}),
       aplicacion: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.aplicacion:'', disabled:bloquearInputs}, [Validators.required]),
       numParte: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.numParte:'', disabled:bloquearInputs},[Validators.required]),
       puntoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.puntoFalla:'', disabled:bloquearInputs},[Validators.required]),
@@ -231,7 +230,7 @@ export class RegistroDeFallaComponent implements OnInit {
       subEstado: new FormControl({value:this.fallaParaGestionar.subEstado!=null?this.fallaParaGestionar.subEstado:null,disabled:bloquearInputs}, [Validators.required]),
       tsr: new FormControl({value:this.fallaParaGestionar.tsr!=null?this.fallaParaGestionar.tsr:'',disabled:bloquearInputs}, [Validators.required]),
       partsReturn: new FormControl({value:this.fallaParaGestionar.partsReturn!=null?this.fallaParaGestionar.partsReturn:'no',disabled:bloquearInputs}, [Validators.required]),
-      trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:this.trackinNumberGenerated, disabled:true}),
+      trakingNumber: new FormControl({value:this.fallaParaGestionar.trakingNumber!=null?this.fallaParaGestionar.trakingNumber:'', disabled:bloquearInputs}),
       subestadoPartsReturn: new FormControl({value:this.fallaParaGestionar.subestadoPartsReturn!=null?this.fallaParaGestionar.subestadoPartsReturn:null,disabled:bloquearInputs}),
       fechaIniDesarmeMotor: new FormControl({value:this.fallaParaGestionar.fechaIniDesarmeMotor!=null?this.fallaParaGestionar.fechaIniDesarmeMotor:null,disabled:bloquearInputs}, [Validators.required]),
       fechaFinDesarmeMotor: new FormControl({value:this.fallaParaGestionar.fechaFinDesarmeMotor!=null?this.fallaParaGestionar.fechaFinDesarmeMotor:null,disabled:bloquearInputs}, [Validators.required]),
