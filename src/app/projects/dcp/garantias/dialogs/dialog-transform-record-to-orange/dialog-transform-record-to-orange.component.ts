@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dial
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { GarantiasService } from 'app/shared/services/garantias/garantias.service';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 @Component({
   selector: 'app-dialog-transform-record-to-orange',
   templateUrl: './dialog-transform-record-to-orange.component.html',
@@ -11,17 +12,26 @@ import { GarantiasService } from 'app/shared/services/garantias/garantias.servic
 export class DialogTransformRecordToOrangeComponent implements OnInit {
 
   formGroup:FormGroup;
+  userOptions = [];
 
   constructor(private readonly dialogRef: MatDialogRef<DialogTransformRecordToOrangeComponent>, private readonly matDialog:MatDialog,
-             @Inject(MAT_DIALOG_DATA) public data, private readonly garantiasService:GarantiasService) { }
+             @Inject(MAT_DIALOG_DATA) public data, private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,
+              private readonly garantiasService:GarantiasService) { }
 
   ngOnInit(): void {
     this.loadForm();
     console.log(this.data);
+    this.loadUsers();
   }
 
   onClose(_option):void{
       this.dialogRef.close(_option);
+  }
+
+  loadUsers(): void{
+    this.configurationAndMaintenanceService.obtenerUsuariosPorRol(7).subscribe(responseApi=>{
+      this.userOptions = responseApi;
+    });
   }
 
   loadForm():void{

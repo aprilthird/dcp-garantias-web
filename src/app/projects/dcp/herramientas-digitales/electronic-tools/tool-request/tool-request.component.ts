@@ -108,6 +108,7 @@ export class ToolRequestComponent implements OnInit {
                   correo: this.user.correo,
                   jefe: this.user.jefe,
                   ceco: this.user.centroCosto,
+                  licencias: this.dataSource,
                   ...this.formRequest.value
                 };
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{

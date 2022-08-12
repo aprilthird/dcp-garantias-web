@@ -737,7 +737,7 @@ export class EngineComponent implements OnInit {
                       this.garantiaParaGestionar.estado = 1;
                       this.garantiaParaGestionar.bandeja = 2;
                       const dialogTransforRecordToOrange = this.matDialog.open(DialogTransformRecordToOrangeComponent,{
-                        disableClose:true,
+                        disableClose:false,
                         width:'936px',
                         data:{idGarantia:this.garantiaParaGestionar.id}
                       });
