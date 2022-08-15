@@ -73,11 +73,9 @@ export class ToolRequestComponent implements OnInit {
   }
 
   searchUser():void {
-    this.digitalToolsService.searchUserByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
-      if(responseApi.body.data.length > 0) {
-        this.user = responseApi.body.data[0];
-        console.log(this.user);
-      }
+    this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
+      this.user = responseApi.body;
+      console.log(this.user);
     });
   }
 
