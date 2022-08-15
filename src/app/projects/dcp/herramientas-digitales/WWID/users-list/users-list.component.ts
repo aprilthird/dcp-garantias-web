@@ -27,12 +27,17 @@ export class UsersListComponent implements OnInit {
   //botones del paginado
   nextButton:boolean=false;
   prevButton:boolean=false;
+  menuArbol = [];
+  accionesUsuario = [];
 
   constructor(private readonly router:Router, private readonly digitalToolsService:DigitalToolsService) { }
 
   ngOnInit(): void {
     this.loadFormFilter();
     this.listUsers();
+    this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
+    this.accionesUsuario = this.menuArbol[3].acciones;
+    console.log(this.accionesUsuario);
   }
 
   listUsers():void {

@@ -6,7 +6,7 @@
                     <h3 class="fw-bold">Herramientas Electrónicas</h3>
                 </div>
                 <div class="col-md-3 text-end">
-                    <button mat-raised-button color="primary" (click)="onRegisterBasic()">Crear Solicitud de
+                    <button mat-raised-button color="primary" (click)="onRegisterBasic()" *ngIf="acceder('Registro Solicitud')">Crear Solicitud de
                         Herramienta</button>
                 </div>
                 <div class="col-md-3 search">

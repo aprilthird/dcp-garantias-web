@@ -32,12 +32,14 @@
                 <span [class]="herramientasMenu" class="text-menu">Herramientas digitales</span>
                 <mat-icon class="text-menu">expand_more</mat-icon>
             </mat-list-item>
-                    <mat-list-item role="listitem"  class="pointer {{styleSubMenuWwid}}" *ngIf="seeDigitalTools" style="padding-left: 58px;" (click)="navegacionSubMenu('/digital-tools/users-list')">
+                <mat-list *ngIf="seeDigitalTools">
+                    <mat-list-item role="listitem"  class="pointer {{styleSubMenuWwid}}" *ngIf="verSubMenuHerramientasDigitales('Listado WWID')" style="padding-left: 58px;" (click)="navegacionSubMenu('/digital-tools/users-list')" >
                         <span [class]="configuracionMenu" class="text-menu">WWID</span>
                     </mat-list-item>
-                    <mat-list-item role="listitem"  class="pointer {{styleSubMenuLicences}}" *ngIf="seeDigitalTools" style="padding-left: 58px;" (click)="navegacionSubMenu('/digital-tools/electronic-tools')">
+                    <mat-list-item role="listitem"  class="pointer {{styleSubMenuLicences}}" *ngIf="verSubMenuHerramientasDigitales('Listado mis solicitudes HE ')" style="padding-left: 58px;" (click)="navegacionSubMenu('/digital-tools/electronic-tools')">
                         <span [class]="configuracionMenu" class="text-menu">Asignar licencias</span>
                     </mat-list-item>
+                </mat-list>
             <mat-list-item role="listitem"  class="pointer" (click)="navegacion('/configuracion')" style="padding-left: 10px;" *ngIf="menuArbol[4].activo">
                 <span [class]="'icon-configuracion '+configuracionIcon"></span>
                 <span [class]="configuracionMenu" class="text-menu">Configuración y mantenimiento</span>

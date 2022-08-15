@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
-
+import { UserService } from 'app/core/user/user.service';
 @Component({
   selector: 'app-electronic-tools-list',
   templateUrl: './electronic-tools-list.component.html',
@@ -28,15 +28,37 @@ export class ElectronicToolsListComponent implements OnInit {
   nextButton:boolean=false;
   prevButton:boolean=false;
   
-  constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService) { }
+  usuarioDeLaSession:any;
+  menuArbol:any;
+  accionesUsuarioHerramientasDigitales = [];
+
+  constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService, private readonly userService:UserService,) { 
+    this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
+    this.accionesUsuarioHerramientasDigitales = this.menuArbol[3].acciones;
+  }
 
   ngOnInit(): void {
+    this.userService.user$.subscribe(response=>{
+        this.usuarioDeLaSession = response;
+    });
     this.loadFormFilter();
     this.listUsers();
   }
 
+  acceder(nombre:string):boolean{
+    let ver = false;
+    for (let i = 0; i < this.accionesUsuarioHerramientasDigitales.length; i++) {
+      if(this.accionesUsuarioHerramientasDigitales[i].nombre==nombre && this.accionesUsuarioHerramientasDigitales[i].activo==true){
+          ver = true;
+      }
+    }
+    return ver;
+  }
+
   listUsers():void {
-    
+    if(this.acceder('Listado todas solicitudes HE')!=true){
+      this.formFilter.value.idUsuario = this.usuarioDeLaSession.id;
+    }
     this.digitalToolsService.trayTools(this.formFilter.value, this.pageCurrent).subscribe(responseApi => {
       this.totalUsers = responseApi.totalRecords;
       this.totalRows = responseApi.pageSize;
@@ -104,6 +126,7 @@ export class ElectronicToolsListComponent implements OnInit {
       estado: new FormControl(-1),
       fechaDeSolicitudInicio: new FormControl(),
       fechaDeSolicitudFin: new FormControl(),
+      idUsuario: new FormControl(null)
     });
   }
 
@@ -160,27 +183,3 @@ export class ElectronicToolsListComponent implements OnInit {
     return Math.trunc(result);
   }
 }
-
-export interface PeriodicElement {
-  usuario: string;
-  area: string;
-  jefeAprobador: string;
-  tipoDeLicencia: string;
-  cantidad: number;
-  pcidEquipo:string;
-  fechaDeSolicitud: string;
-  estado:string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inpower',      cantidad:6, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inside',       cantidad:2, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inpower',      cantidad:1, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inpower',      cantidad:3, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inside',       cantidad:2, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Calibrations', cantidad:1, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inpower',      cantidad:4, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Calibrations', cantidad:1, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Calibrations', cantidad:7, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-  {usuario: 'Carlos Perez', area: 'Piura Motors', jefeAprobador: 'Carlos Perez', tipoDeLicencia:'Inside',       cantidad:1, pcidEquipo:'5735247524', fechaDeSolicitud:'2022-07-05T19:26:35.326Z', estado:'Pendiente'},
-];
