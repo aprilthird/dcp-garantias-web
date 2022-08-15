@@ -52,16 +52,17 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Locación</mat-label>
-                                    <mat-select placeholder="Seleccionar" formControlName="locacion">
-                                        <mat-option [value]="1">Taller</mat-option>
-                                        <mat-option [value]="2">Campo</mat-option>
+                                    <mat-select placeholder="Seleccionar" formControlName="locacion" (selectionChange)="changeLocation()">
+                                        <mat-option *ngFor="let option of locationOptions" [value]="option.id">
+                                            {{option.nombre}}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Código de Cuenta</mat-label>
-                                    <input matInput type="text" placeholder="Ingresar" formControlName="codigoCuenta">
+                                    <input matInput type="text" [value]="selectedLocation!=null?selectedLocation.descripcion:'-'" [disabled]="true">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-12">

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DialogMassiveRegistrationSuccessfullyComponent } from 'app/projects/dcp/garantias/dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
 @Component({
@@ -16,17 +17,21 @@ export class BasicRegistrationComponent implements OnInit {
   action:string;
   localUser:any;
   user:any;
+  locationOptions = [];
+  selectedLocation:any;
 
   //formulario
   formWwid:FormGroup;
 
   constructor(private readonly router:Router, private readonly matDialog: MatDialog,
-    private readonly digitalToolsService:DigitalToolsService) { }
+    private readonly digitalToolsService:DigitalToolsService,
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit():void {
     this.action = localStorage.getItem('action');
     this.localUser = JSON.parse(localStorage.getItem('usuario'));
     this.loadUser();
+    this.loadLocations();
     if(this.action === 'edit') {
       this.loadFormRegisterWWID();
     } else {
@@ -35,9 +40,20 @@ export class BasicRegistrationComponent implements OnInit {
   }
 
   loadUser(): void {
-    this.digitalToolsService.userManagement(this.localUser.dni).subscribe(responseApi => {
+    this.digitalToolsService.userManagementByDocument(this.localUser.dni).subscribe(responseApi => {
       this.user = responseApi.body;
     });
+  }
+
+  loadLocations(): void {
+    this.configurationAndMaintenanceService.getGenerals(4).subscribe(responseApi => {
+      console.log(responseApi);
+      this.locationOptions = responseApi.body;
+    });
+  }
+
+  changeLocation(): void {
+    this.selectedLocation = this.locationOptions.find(e => e.id == this.formWwid.value.locacion);
   }
 
   loadEmptyFormRegisterWWID():void {
@@ -47,7 +63,6 @@ export class BasicRegistrationComponent implements OnInit {
       idPromotion: new FormControl('', [Validators.required]),
       estadoIdPromotion: new FormControl(null),
       locacion: new FormControl(null),
-      codigoCuenta: new FormControl('', [Validators.required]),
     });
   }
 
@@ -58,7 +73,6 @@ export class BasicRegistrationComponent implements OnInit {
       idPromotion: new FormControl(this.localUser.idPromotion, [Validators.required]),
       estadoIdPromotion: new FormControl(parseInt(this.localUser.estadoIdPromotion)),
       locacion: new FormControl(parseInt(this.localUser.locacion)),
-      codigoCuenta: new FormControl(this.localUser.codigoCuenta, [Validators.required]),
     });
   }
 
@@ -73,28 +87,35 @@ export class BasicRegistrationComponent implements OnInit {
       if(this.formWwid.value.idPromotion==''){
         const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un ID Promotion válido!'},disableClose:true});
       }else{
-        if(this.formWwid.value.codigoCuenta==''){
-          const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Código de Cuenta válido!'},disableClose:true});
-        }else{
-          const request = {
-            id: this.localUser.id,
-            usr: this.user.nombres+' '+this.user.apellidos,
-            dni: this.user.dni,
-            correo: this.user.correo,
-            ...this.formWwid.value
-          };
-          this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
-            console.log(responseApi);
-            const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{
-              data:{text:'Se ingresaron los datos del usuario'},
-              disableClose:true, width: '385px',
-            })
-            dialogRegistrarDatosDelUsuario.afterClosed().subscribe(responseDialog=>{
-              if(responseDialog){
-                this.router.navigate(['/digital-tools/users-list']);
-              }
-            });
-          });     
+        if(this.formWwid.value.estadoWwid==''){
+          const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Estado de WWID válido!'},disableClose:true});
+          if(this.formWwid.value.estadoIdPromotion==''){
+            const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Estado de ID Promotion válido!'},disableClose:true});
+            if(this.formWwid.value.locacion==''){
+              const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese una Locación válida!'},disableClose:true});
+            }else{
+              const request = {
+                id: this.localUser.id,
+                usr: this.user.nombres+' '+this.user.apellidos,
+                dni: this.user.dni,
+                correo: this.user.correo,
+                codigoCuenta: this.selectedLocation.codigoCuenta,
+                ...this.formWwid.value
+              };
+              this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
+                console.log(responseApi);
+                const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{
+                  data:{text:'Se ingresaron los datos del usuario'},
+                  disableClose:true, width: '385px',
+                })
+                dialogRegistrarDatosDelUsuario.afterClosed().subscribe(responseDialog=>{
+                  if(responseDialog){
+                    this.router.navigate(['/digital-tools/users-list']);
+                  }
+                });
+              });     
+            }
+          }
         }
       }
     }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from 'app/core/auth/auth.service';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import internal from 'stream';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,14 @@ export class DigitalToolsService {
     const request = { filter: filter, page: (_page - 1), pageSize: 10 };
     return this.httpClient.post(this.urlUserListManagement, request, { headers: this.header });
   }
-  userManagement(dni:string): Observable<any> {
-    return this.httpClient.get(this.urlUserManagement+'/'+dni,{headers:this.header});
+  userManagementByDocument(dni:string): Observable<any> {
+    return this.userManagement(1, dni);
+  }
+  userManagementByUsername(usr:string): Observable<any> {
+    return this.userManagement(2, usr);
+  }
+  userManagement(code:number, search:string): Observable<any> {
+    return this.httpClient.get(this.urlUserManagement+'/'+code+'/'+search,{headers:this.header});
   }
   trayTools(filter, _page): Observable<any> {
     const request = { filter: filter, page: (_page - 1), pageSize: 10 };

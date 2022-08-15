@@ -20,6 +20,8 @@ export class ConfigurationAndMaintenanceService {
 
   //enums
   private urlEnum = this.baseApiURl + '/Administracion/ObtenerEnum';
+  //generales
+  private urlGenerals = this.baseApiURl + '/Administracion/ObtenerGenerales';
   // constantes
   private urlMaintenanceConstants = this.baseApiURl + '/Administracion/MantenimientoConstantes';
   private urlTrayConstants = this.baseApiURl + '/Administracion/BandejaConstantes';
@@ -85,7 +87,10 @@ export class ConfigurationAndMaintenanceService {
   getEnum(code):Observable<any>{
     return this.httpClient.get(this.urlEnum+'/'+code,{headers:this.header});
   }
-
+  //generales
+  getGenerals(parentId):Observable<any>{
+    return this.httpClient.get(this.urlGenerals+'/'+parentId,{headers:this.header});
+  }
   //constantes
   maintenanceConstants(_request:MasterConstantRequest):Observable<any>{          
     return this.httpClient.post(this.urlMaintenanceConstants,_request,{headers:this.header});
