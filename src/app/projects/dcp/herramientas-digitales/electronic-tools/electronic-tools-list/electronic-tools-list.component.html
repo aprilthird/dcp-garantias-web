@@ -63,7 +63,7 @@
                     </ng-container>
                     <ng-container matColumnDef="cantidad">
                         <th mat-header-cell *matHeaderCellDef width="10%"> Cantidad </th>
-                        <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
                     </ng-container>
                     <ng-container matColumnDef="pcidEquipo">
                         <th mat-header-cell *matHeaderCellDef width="10%"> PCID Equipo </th>
@@ -82,7 +82,7 @@
                         <th mat-header-cell *matHeaderCellDef width="5%"> </th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-icon-button (click)="onEditBasic(element)">
-                                <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                                <mat-icon>chevron_right</mat-icon>
                             </button>
                         </td>
                     </ng-container>
