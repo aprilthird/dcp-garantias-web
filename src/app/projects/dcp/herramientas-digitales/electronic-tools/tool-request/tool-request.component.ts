@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DialogMassiveRegistrationSuccessfullyComponent } from 'app/projects/dcp/garantias/dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 
 @Component({
@@ -27,7 +28,8 @@ export class ToolRequestComponent implements OnInit {
                 {tipo:'Zap - Its', cantidad:0}];
 
   constructor(private readonly router:Router, private readonly matDialog:MatDialog,
-    private readonly digitalToolsService:DigitalToolsService) { }
+    private readonly digitalToolsService:DigitalToolsService, 
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
   ngOnInit(): void {
     this.action = localStorage.getItem('action');

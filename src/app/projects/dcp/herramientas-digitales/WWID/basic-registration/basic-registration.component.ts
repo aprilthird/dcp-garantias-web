@@ -99,7 +99,7 @@ export class BasicRegistrationComponent implements OnInit {
                 usr: this.user.nombres+' '+this.user.apellidos,
                 dni: this.user.dni,
                 correo: this.user.correo,
-                codigoCuenta: this.selectedLocation.codigoCuenta,
+                codigoCuenta: this.selectedLocation!=null?this.selectedLocation.codigoCuenta:'-',
                 ...this.formWwid.value
               };
               this.digitalToolsService.toolUserManagement(request).subscribe(responseApi => {
