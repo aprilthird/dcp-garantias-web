@@ -76,7 +76,7 @@
                                         <div class="col-md-4">
                                             <mat-form-field floatLabel="always">
                                                 <mat-label class="fw-bold">Modelo del {{fallaParaGestionar==null?tipoDeEquipo:fallaParaGestionar.tipo==1?'motor':fallaParaGestionar.tipo==2?'generador':'!error¡'}}</mat-label>
-                                                <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.modelo:'-'" [disabled]="true">
+                                                <input matInput type="text" [value]="matriculaEncontrada!=null?matriculaEncontrada.codigo:'-'" [disabled]="true">
                                             </mat-form-field>
                                         </div>
                                     </div>
