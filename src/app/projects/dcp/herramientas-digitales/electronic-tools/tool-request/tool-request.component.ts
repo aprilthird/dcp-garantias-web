@@ -139,8 +139,8 @@ export class ToolRequestComponent implements OnInit {
                 const request = {
                   dni: this.user.dni,
                   usr: this.user.usr,
-                  area: this.user.area,
-                  correo: this.user.correo,
+                  area: this.user.bu,
+                  correo: this.user.correoJefe,
                   jefe: this.user.jefe,
                   ceco: this.user.centroCosto,
                   licencias: this.dataSource,
