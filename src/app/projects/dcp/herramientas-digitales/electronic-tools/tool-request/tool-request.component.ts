@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DialogMassiveRegistrationSuccessfullyComponent } from 'app/projects/dcp/garantias/dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tool-request',
@@ -31,7 +34,7 @@ export class ToolRequestComponent implements OnInit {
                 {tipo:'Calibrations', cantidad:0},
                 {tipo:'Zap - Its', cantidad:0}];
 
-  constructor(private readonly router:Router, private readonly matDialog:MatDialog,
+  constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 
     private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
 
@@ -52,6 +55,13 @@ export class ToolRequestComponent implements OnInit {
     } else {
       this.loadEmptyFormRequest();
     }
+  }
+
+  ngAfterViewInit():void {
+    const searchInput = document.getElementById("userSearch");
+    fromEvent(searchInput, "keyup").pipe(debounceTime(1000)).subscribe(value => {
+      this.searchUsers();
+    });
   }
 
   loadEmptyFormRequest():void {
@@ -78,13 +88,18 @@ export class ToolRequestComponent implements OnInit {
 
   searchUsers():void {
     this.users = [];
-    if(this.formRequest.value.usr.length>2){
-      this.isSearching = true;
-      this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
-        this.isSearching = false;
-        this.users.push(responseApi.body);
-        console.log(this.users);
-      });
+    if(this.formRequest.value.usr != null) {
+      if(this.formRequest.value.usr.length>2){
+        this.isSearching = true;
+        this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
+          this.isSearching = false;
+          if(responseApi.body) {
+            this.users.push(responseApi.body);
+          } else {
+            this.showSnackBar('No se encontraron coincidencias');
+          }
+        });
+      }
     }
   }
 
@@ -174,4 +189,13 @@ export class ToolRequestComponent implements OnInit {
     
   }
 
+  showSnackBar(message:string):void{
+    this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+      data: message,
+      duration: 3000,
+      horizontalPosition:'center',
+      verticalPosition: 'top',
+      panelClass:['mat-toolbar', 'mat-primary','button-color']
+    });
+  }
 }
