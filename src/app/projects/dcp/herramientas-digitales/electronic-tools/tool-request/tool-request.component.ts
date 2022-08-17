@@ -146,6 +146,9 @@ export class ToolRequestComponent implements OnInit {
                   licencias: this.dataSource,
                   ...this.formRequest.value
                 };
+                if(this.action === 'edit') {
+                  request.id = this.localRequest.id;
+                }
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
                   // localStorage.setItem("os_" + this.user.nombres, this.formRequest.value.os);
                   // localStorage.setItem("pcid_" + this.user.nombres, this.formRequest.value.pcid);

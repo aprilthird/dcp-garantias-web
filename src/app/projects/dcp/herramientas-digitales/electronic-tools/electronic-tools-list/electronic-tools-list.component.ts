@@ -80,22 +80,22 @@ export class ElectronicToolsListComponent implements OnInit {
       this.dataSource = responseApi.data;
 
       for(var i=0; i<this.dataSource.length; ++i) {
-        var os = localStorage.getItem("os_" + this.dataSource[i].nombres);
+        // var os = localStorage.getItem("os_" + this.dataSource[i].nombres);
         // var pcid = localStorage.getItem("pcid_" + this.dataSource[i].nombres);
-        var marca = localStorage.getItem("marca_" + this.dataSource[i].nombres);
-        var modelo = localStorage.getItem("modelo_" + this.dataSource[i].nombres);
-        var serie = localStorage.getItem("serie_" + this.dataSource[i].nombres);
+        // var marca = localStorage.getItem("marca_" + this.dataSource[i].nombres);
+        // var modelo = localStorage.getItem("modelo_" + this.dataSource[i].nombres);
+        // var serie = localStorage.getItem("serie_" + this.dataSource[i].nombres);
 
         // var area = localStorage.getItem("area_" + this.dataSource[i].nombres);
         // var jefe = localStorage.getItem("jefe_" + this.dataSource[i].nombres);
         var cantidad = localStorage.getItem("cantidad_" + this.dataSource[i].nombres);
         // var fechaDeSolicitud = localStorage.getItem("fechaDeSolicitud_" + this.dataSource[i].nombres);
 
-        this.dataSource[i].os = os;
+        // this.dataSource[i].os = os;
         // this.dataSource[i].pcid = pcid;
-        this.dataSource[i].marca = marca;
-        this.dataSource[i].modelo = modelo;
-        this.dataSource[i].serie = serie;
+        // this.dataSource[i].marca = marca;
+        // this.dataSource[i].modelo = modelo;
+        // this.dataSource[i].serie = serie;
         
         // this.dataSource[i].area = area;
         // this.dataSource[i].jefe = jefe;
@@ -135,7 +135,7 @@ export class ElectronicToolsListComponent implements OnInit {
   loadFormFilter():void {
     this.formFilter = new FormGroup({
       usuario: new FormControl(null),
-      estado: new FormControl(-1),
+      estado: new FormControl(null),
       fechaDeSolicitudInicio: new FormControl(),
       fechaDeSolicitudFin: new FormControl(),
       idUsuario: new FormControl(null)

@@ -64,8 +64,7 @@ export class BasicRegistrationComponent implements OnInit {
   }
 
   loadStatus(): void {
-    this.configurationAndMaintenanceService.getGenerals(15).subscribe(responseApi => {
-      console.log(responseApi);
+    this.configurationAndMaintenanceService.getGenerals(11).subscribe(responseApi => {
       this.statusOptions = responseApi.body;
     });
   }

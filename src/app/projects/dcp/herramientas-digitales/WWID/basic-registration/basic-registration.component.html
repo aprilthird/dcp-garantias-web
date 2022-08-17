@@ -24,9 +24,9 @@
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Estado del WWID</mat-label>
                                     <mat-select placeholder="Seleccionar" formControlName="estadoWwid">
-                                        <mat-option [value]="0">Baja</mat-option>
-                                        <mat-option [value]="1">Activo</mat-option>
-                                        <mat-option [value]="2">Deshabilitado</mat-option>
+                                        <mat-option *ngFor="let option of statusOptions" [value]="option.id">
+                                            {{option.nombre}}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -40,9 +40,9 @@
                                 <mat-form-field floatLabel="always">
                                     <mat-label class="fw-bold">Estado del ID Promotion</mat-label>
                                     <mat-select placeholder="Seleccionar" formControlName="estadoIdPromotion">
-                                        <mat-option [value]="0">Baja</mat-option>
-                                        <mat-option [value]="1">Activo</mat-option>
-                                        <mat-option [value]="2">Deshabilitado</mat-option>
+                                        <mat-option *ngFor="let option of statusOptions" [value]="option.id">
+                                            {{option.nombre}}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
