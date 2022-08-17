@@ -61,6 +61,7 @@ export class ElectronicToolsListComponent implements OnInit {
 
   loadStatus():void {
     this.configurationAndMaintenanceService.getGenerals(15).subscribe(responseApi=>{
+      console.log(responseApi);
       this.statusOptions = responseApi.body;
       this.listUsers();
     });

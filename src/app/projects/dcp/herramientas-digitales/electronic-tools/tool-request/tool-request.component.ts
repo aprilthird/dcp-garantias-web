@@ -94,7 +94,13 @@ export class ToolRequestComponent implements OnInit {
         this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
           this.isSearching = false;
           if(responseApi.body) {
-            this.users.push(responseApi.body);
+            if(responseApi.body.length > 0) {
+              for(var i=0; i<responseApi.body.length; ++i) {
+                this.users.push(responseApi.body[i]);
+              }
+            } else {
+              this.showSnackBar('No se encontraron coincidencias');
+            }
           } else {
             this.showSnackBar('No se encontraron coincidencias');
           }
