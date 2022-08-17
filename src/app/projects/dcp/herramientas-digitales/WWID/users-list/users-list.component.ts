@@ -53,8 +53,8 @@ export class UsersListComponent implements OnInit {
 
   loadFormFilter():void {
     this.formFilter = new FormGroup({
-      usuario: new FormControl(null),
-      wwid: new FormControl(null),
+      usuario: new FormControl(),
+      wwid: new FormControl(),
       fechaIngresoInicio: new FormControl(),
       fechaIngresoFin: new FormControl(),
       fechaBajaInicio: new FormControl(),
