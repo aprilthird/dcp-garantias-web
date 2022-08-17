@@ -17,8 +17,13 @@ export class BasicRegistrationComponent implements OnInit {
   action: string;
   localUser: any;
   user: any;
+  
   locationOptions = [];
   selectedLocation: any;
+  
+  statusOptions = [];
+
+  isSearching = false;
 
   //formulario
   formWwid: FormGroup;
@@ -32,23 +37,36 @@ export class BasicRegistrationComponent implements OnInit {
     this.localUser = JSON.parse(localStorage.getItem('usuario'));
     this.loadUser();
     this.loadLocations();
+    this.loadStatus();
     if (this.action === 'edit') {
       this.loadFormRegisterWWID();
+      this.changeLocation();
     } else {
       this.loadEmptyFormRegisterWWID();
     }
   }
 
   loadUser(): void {
+    this.isSearching = true;
     this.digitalToolsService.userManagementByDocument(this.localUser.dni).subscribe(responseApi => {
+      this.isSearching = false;
       this.user = responseApi.body;
     });
   }
 
   loadLocations(): void {
     this.configurationAndMaintenanceService.getGenerals(4).subscribe(responseApi => {
-      console.log(responseApi);
       this.locationOptions = responseApi.body;
+      if(this.action === 'edit') {
+        this.changeLocation();
+      }
+    });
+  }
+
+  loadStatus(): void {
+    this.configurationAndMaintenanceService.getGenerals(15).subscribe(responseApi => {
+      console.log(responseApi);
+      this.statusOptions = responseApi.body;
     });
   }
 

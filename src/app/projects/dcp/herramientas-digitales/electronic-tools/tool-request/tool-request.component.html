@@ -56,10 +56,16 @@
                             <div class="col-md-3">
                                 <mat-form-field floatLabel="always">
                                     <mat-label>Usuario de la Licencia</mat-label>
-                                    <input matInput type="text" placeholder="Ingresar Usuario" formControlName="usr">
-                                    <button mat-icon-button matSuffix (click)="searchUser()">
+                                    <input matInput type="text" placeholder="Ingresar Usuario" formControlName="usr" [matAutocomplete]="auto" (input)="searchUsers()">
+                                    <button mat-icon-button matSuffix (click)="searchUsers()">
                                         <mat-icon>search</mat-icon>
                                     </button>
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                        <mat-option *ngFor="let licUser of users" [value]="licUser.usuario" (click)="selectUser(licUser)">
+                                            {{licUser.nombres}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-hint *ngIf="isSearching"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-9"></div>

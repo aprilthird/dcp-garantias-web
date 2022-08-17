@@ -14,6 +14,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolRequestComponent } from './electronic-tools/tool-request/tool-request.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { ToolRequestComponent } from './electronic-tools/tool-request/tool-reque
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
   ]
 })
 export class HerramientasDigitalesModule { }

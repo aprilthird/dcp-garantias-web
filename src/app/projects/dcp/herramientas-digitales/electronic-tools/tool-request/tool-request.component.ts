@@ -6,6 +6,7 @@ import { DialogMassiveRegistrationSuccessfullyComponent } from 'app/projects/dcp
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-tool-request',
@@ -18,9 +19,12 @@ export class ToolRequestComponent implements OnInit {
 
   displayedColumns: string[] = ['tipo', 'cantidad'];
 
-  localUser:any;
+  localRequest:any;
   user:any;
   action:string;
+
+  users = [];
+  isSearching = false;
 
   dataSource = [{tipo:'Inside', cantidad:1},
                 {tipo:'Inpower', cantidad:1},
@@ -34,14 +38,14 @@ export class ToolRequestComponent implements OnInit {
   ngOnInit(): void {
     this.action = localStorage.getItem('action');
     if(this.action === 'edit') {
-      let localUserStr = localStorage.getItem('usuario');
-      if(localUserStr !== null && localUserStr !== "") {
-        this.localUser = JSON.parse(localUserStr);
+      let localRequestStr = localStorage.getItem('usuario');
+      if(localRequestStr !== null && localRequestStr !== "") {
+        this.localRequest = JSON.parse(localRequestStr);
       }
       this.loadFormRequest();
-      this.searchUser();
+      this.searchUsers();
 
-      let localLic = localStorage.getItem("datasrclic" + this.localUser.dni);
+      let localLic = localStorage.getItem("datasrclic" + this.localRequest.dni);
       if(localLic !== null && localLic !== "") {
         this.dataSource = JSON.parse(localLic);
       }
@@ -63,20 +67,29 @@ export class ToolRequestComponent implements OnInit {
 
   loadFormRequest():void {
     this.formRequest = new FormGroup({
-      os: new FormControl(this.localUser.os, [Validators.required]),
-      pcid: new FormControl(this.localUser.pcid, [Validators.required]),
-      marca: new FormControl(this.localUser.marca, [Validators.required]),
-      modelo: new FormControl(this.localUser.modelo, [Validators.required]),
-      serie: new FormControl(this.localUser.serie, [Validators.required]),
-      usr: new FormControl(this.localUser.usr, [Validators.required]),
+      os: new FormControl(this.localRequest.os, [Validators.required]),
+      pcid: new FormControl(this.localRequest.pcid, [Validators.required]),
+      marca: new FormControl(this.localRequest.marca, [Validators.required]),
+      modelo: new FormControl(this.localRequest.modelo, [Validators.required]),
+      serie: new FormControl(this.localRequest.serie, [Validators.required]),
+      usr: new FormControl(this.localRequest.usr, [Validators.required]),
     });
   }
 
-  searchUser():void {
-    this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
-      this.user = responseApi.body;
-      console.log(this.user);
-    });
+  searchUsers():void {
+    this.users = [];
+    if(this.formRequest.value.usr.length>2){
+      this.isSearching = true;
+      this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
+        this.isSearching = false;
+        this.users.push(responseApi.body);
+        console.log(this.users);
+      });
+    }
+  }
+
+  selectUser(user:any):void {
+    this.user = user;
   }
 
   onListElectronicTools():void{

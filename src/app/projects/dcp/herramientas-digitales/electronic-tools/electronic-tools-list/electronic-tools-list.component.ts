@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
 import { UserService } from 'app/core/user/user.service';
+import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 @Component({
   selector: 'app-electronic-tools-list',
   templateUrl: './electronic-tools-list.component.html',
@@ -28,11 +29,14 @@ export class ElectronicToolsListComponent implements OnInit {
   nextButton:boolean=false;
   prevButton:boolean=false;
   
+  statusOptions = [];
+  
   usuarioDeLaSession:any;
   menuArbol:any;
   accionesUsuarioHerramientasDigitales = [];
 
-  constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService, private readonly userService:UserService,) { 
+  constructor(private readonly router: Router, private readonly digitalToolsService:DigitalToolsService, 
+    private readonly userService:UserService, private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { 
     this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
     this.accionesUsuarioHerramientasDigitales = this.menuArbol[3].acciones;
   }
@@ -42,7 +46,7 @@ export class ElectronicToolsListComponent implements OnInit {
         this.usuarioDeLaSession = response;
     });
     this.loadFormFilter();
-    this.listUsers();
+    this.loadStatus();
   }
 
   acceder(nombre:string):boolean{
@@ -53,6 +57,13 @@ export class ElectronicToolsListComponent implements OnInit {
       }
     }
     return ver;
+  }
+
+  loadStatus():void {
+    this.configurationAndMaintenanceService.getGenerals(15).subscribe(responseApi=>{
+      this.statusOptions = responseApi.body;
+      this.listUsers();
+    });
   }
 
   listUsers():void {
