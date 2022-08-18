@@ -114,29 +114,9 @@ export class UsersListComponent implements OnInit {
     }
     return Math.trunc(result);
   }
-}
 
-export interface PeriodicElement {
-  nombre: string;
-  dni: string;
-  area: string;
-  fechaIngresoInicio: string;
-  fechaBajaInicio: string;
-  idPromotion: string;
-  estadoIdPromotion:string;
-  wwid:string;
-  estadoWWID:string;
+  limpiarFilters():void{
+    this.formFilter.reset();
+    this.listUsers();
+  }
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {nombre: 'ABAD TRELLES', dni: '25136313', area: 'CFK - CAPACITACION EXTERNA', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z', idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z', idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z', idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z', idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z', idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z',  idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z',  idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z',  idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z',  idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-  {nombre: 'Carlos Perez', dni: '12345678', area: 'Piura Motors', fechaIngresoInicio:'2022-07-05T19:26:35.326Z', fechaBajaInicio:'2022-07-05T19:26:35.326Z',  idPromotion: '-', estadoIdPromotion:'baja', wwid:'-', estadoWWID:'Baja'},
-];
