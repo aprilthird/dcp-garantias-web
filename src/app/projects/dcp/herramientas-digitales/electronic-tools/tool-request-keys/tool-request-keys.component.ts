@@ -20,7 +20,7 @@ export class ToolRequestKeysComponent implements OnInit {
 
   formRequest:FormGroup;
 
-  displayedColumns: string[] = ['tipo', 'cantidad', 'keyFuncional', 'keyBasico', 'keyDeActivacion'];
+  displayedColumns: string[] = ['tipo', 'cantidad', 'keyFuncional', 'keyBasico', 'keyActivacion'];
 
   localRequest:any;
   user:any;
@@ -29,10 +29,10 @@ export class ToolRequestKeysComponent implements OnInit {
   users = [];
   isSearching = false;
 
-  dataSource = [{tipo:'Inside', cantidad:1, keyFuncional:null, keyBasico:null, keyDeActivacion:null },
-                {tipo:'Inpower', cantidad:1, keyFuncional:null, keyBasico:null, keyDeActivacion:null},
-                {tipo:'Calibrations', cantidad:0, keyFuncional:null, keyBasico:null, keyDeActivacion:null},
-                {tipo:'Zap - Its', cantidad:0, keyFuncional:null, keyBasico:null, keyDeActivacion:null}];
+  dataSource = [{tipo:'Inside', cantidad:1, keyFuncional:null, keyBasico:null, keyActivacion:null },
+                {tipo:'Inpower', cantidad:1, keyFuncional:null, keyBasico:null, keyActivacion:null},
+                {tipo:'Calibrations', cantidad:0, keyFuncional:null, keyBasico:null, keyActivacion:null},
+                {tipo:'Zap - Its', cantidad:0, keyFuncional:null, keyBasico:null, keyActivacion:null}];
 
   constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 

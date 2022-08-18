@@ -130,11 +130,11 @@
                                             </mat-form-field>
                                         </td>
                                     </ng-container>
-                                    <ng-container matColumnDef="keyDeActivacion">
+                                    <ng-container matColumnDef="keyActivacion">
                                         <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Key de Activación </th>
                                         <td mat-cell *matCellDef="let element">
                                             <mat-form-field *ngIf="element.tipo!='Inside'" class="pt-4 px-4">
-                                                <input matInput [(ngModel)]="element.keyDeActivacion" [ngModelOptions]="{standalone: true}">
+                                                <input matInput [(ngModel)]="element.keyActivacion" [ngModelOptions]="{standalone: true}">
                                             </mat-form-field>
                                         </td>
                                     </ng-container>
