@@ -115,7 +115,7 @@ export class ToolRequestKeysComponent implements OnInit {
 
     loadFormRequest(): void {
         this.formRequest = new FormGroup({
-            os: new FormControl(this.localRequest.os, [Validators.required]),
+            os: new FormControl({value:this.localRequest.os, disabled:true}, [Validators.required]),
             pcid: new FormControl({value: this.localRequest.pcid, disabled: true}, [Validators.required]),
             marca: new FormControl({value: this.localRequest.marca, disabled: true}, [Validators.required]),
             modelo: new FormControl({value: this.localRequest.modelo, disabled: true}, [Validators.required]),
@@ -207,7 +207,8 @@ export class ToolRequestKeysComponent implements OnInit {
                                     jefe: this.user.jefe,
                                     ceco: this.user.centroCosto,
                                     licencias: this.dataSource,
-                                    ...this.formRequest.value
+                                    //...this.formRequest.value
+                                    ...this.formRequest.getRawValue()
                                 };
                                 if (this.action === 'edit') {
                                     request.id = this.localRequest.id;
