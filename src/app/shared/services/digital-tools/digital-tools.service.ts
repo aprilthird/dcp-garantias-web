@@ -22,6 +22,7 @@ export class DigitalToolsService {
   private urlUserListManagement = this.baseApiURl + '/Mantenimiento/ObtenerListadoUsuarios';
   private urlUserManagement = this.baseApiURl + '/Mantenimiento/ObtenerUsuario';
   private urlTrayTools = this.baseApiURl + '/Mantenimiento/BandejaHerramientas';
+  private urlObtainLicenses = this.baseApiURl + '/Mantenimiento/ObtenerLicencias';
 
   constructor(private readonly httpClient: HttpClient,
     private readonly authService: AuthService) { }
@@ -52,5 +53,8 @@ export class DigitalToolsService {
   searchUserByUsername(usr:string): Observable<any> {
     const request = { filter: { usuario: usr }, page: 0, pageSize: 10 };
     return this.httpClient.post(this.urlUserListManagement, request, { headers: this.header });
+  }
+  obtainLicenses(toolId:string): Observable<any> {
+    return this.httpClient.get(this.urlObtainLicenses+'/'+toolId, { headers: this.header });
   }
 }

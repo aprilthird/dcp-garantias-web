@@ -29,10 +29,10 @@ export class ToolRequestComponent implements OnInit {
   users = [];
   isSearching = false;
 
-  dataSource = [{tipo:'Inside', cantidad:1},
-                {tipo:'Inpower', cantidad:1},
-                {tipo:'Calibrations', cantidad:0},
-                {tipo:'Zap - Its', cantidad:0}];
+  dataSource = [{id: 0, idHerramienta:0, tipo:'Inside', cantidad:1},
+                {id: 0, idHerramienta:0, tipo:'Inpower', cantidad:1},
+                {id: 0, idHerramienta:0, tipo:'Calibrations', cantidad:0},
+                {id: 0, idHerramienta:0, tipo:'Zap - Its', cantidad:0}];
 
   constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 
@@ -46,12 +46,13 @@ export class ToolRequestComponent implements OnInit {
         this.localRequest = JSON.parse(localRequestStr);
       }
       this.loadFormRequest();
-      this.searchUsers();
-
-      let localLic = localStorage.getItem("datasrclic" + this.localRequest.dni);
-      if(localLic !== null && localLic !== "") {
-        this.dataSource = JSON.parse(localLic);
-      }
+      this.obtainLicenses();
+      this.user = {
+        bu: this.localRequest.area,
+        centroCosto: this.localRequest.ceco,
+        jefe: this.localRequest.jefe,
+        correoJefe: this.localRequest.correoJefe
+      };
     } else {
       this.loadEmptyFormRequest();
     }
@@ -71,7 +72,7 @@ export class ToolRequestComponent implements OnInit {
       marca: new FormControl('', [Validators.required]),
       modelo: new FormControl('', [Validators.required]),
       serie: new FormControl('', [Validators.required]),
-      usr: new FormControl('', [Validators.required]),
+      usuario: new FormControl('', [Validators.required]),
     });
   }
 
@@ -82,16 +83,24 @@ export class ToolRequestComponent implements OnInit {
       marca: new FormControl(this.localRequest.marca, [Validators.required]),
       modelo: new FormControl(this.localRequest.modelo, [Validators.required]),
       serie: new FormControl(this.localRequest.serie, [Validators.required]),
-      usr: new FormControl(this.localRequest.usr, [Validators.required]),
+      usuario: new FormControl(this.localRequest.usuario, [Validators.required]),
+    });
+  }
+
+  obtainLicenses():void {
+    this.digitalToolsService.obtainLicenses(this.localRequest.id).subscribe(responseApi=>{
+      if(responseApi.body) {
+        this.dataSource = responseApi.body;
+      }
     });
   }
 
   searchUsers():void {
     this.users = [];
-    if(this.formRequest.value.usr != null) {
-      if(this.formRequest.value.usr.length>2){
+    if(this.formRequest.value.usuario != null) {
+      if(this.formRequest.value.usuario.length>2){
         this.isSearching = true;
-        this.digitalToolsService.userManagementByUsername(this.formRequest.value.usr).subscribe(responseApi=>{
+        this.digitalToolsService.userManagementByUsername(this.formRequest.value.usuario).subscribe(responseApi=>{
           this.isSearching = false;
           if(responseApi.body) {
             if(responseApi.body.length > 0) {
@@ -133,14 +142,13 @@ export class ToolRequestComponent implements OnInit {
             if(this.formRequest.value.serie==''){
               const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese una Serie válida!'},disableClose:true});
             }else{      
-              if(this.formRequest.value.usr==''){
+              if(this.formRequest.value.usuario==''){
                 const dialogError = this.matDialog.open(DialogErrorMessageComponent,{data:{text:'¡Ingrese un Usuario válido!'},disableClose:true});
               }else{
                 const request = {
                   dni: this.user.dni,
-                  usr: this.user.usr,
-                  area: this.user.bu,
-                  correo: this.user.correoJefe,
+                  bu: this.user.bu,
+                  correoJefe: this.user.correoJefe,
                   jefe: this.user.jefe,
                   ceco: this.user.centroCosto,
                   licencias: this.dataSource,
@@ -148,6 +156,12 @@ export class ToolRequestComponent implements OnInit {
                 };
                 if(this.action === 'edit') {
                   request.id = this.localRequest.id;
+                  request.estado = this.localRequest.estado;
+                }
+                if(!this.user.dni) {
+                  request.dni = this.localRequest.dni;
+                } else {
+                  request.dni = this.user.dni;
                 }
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
                   const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{

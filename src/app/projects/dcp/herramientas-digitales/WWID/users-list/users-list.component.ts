@@ -41,6 +41,12 @@ export class UsersListComponent implements OnInit {
   }
 
   listUsers():void {
+    if(this.formFilter.value.wwid=='') {
+      this.formFilter.value.wwid = null;
+    }
+    if(this.formFilter.value.usr=='') {
+      this.formFilter.value.usr = null;
+    }
     this.digitalToolsService.userListManagement(this.formFilter.value, this.pageCurrent).subscribe(responseApi=>{
       this.totalUsers = responseApi.body.totalRecords;
       this.totalRows = responseApi.body.pageSize;
