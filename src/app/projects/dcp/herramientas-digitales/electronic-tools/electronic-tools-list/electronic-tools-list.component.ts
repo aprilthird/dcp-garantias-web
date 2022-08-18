@@ -101,8 +101,11 @@ export class ElectronicToolsListComponent implements OnInit {
   onEditBasic(usuario:any):void{
     localStorage.setItem('action','edit');
     localStorage.setItem('usuario',JSON.stringify(usuario));
-    console.log(usuario);
-    this.router.navigate(['/digital-tools/tool-request']);
+    if(usuario.nombreEstado == "Aprobado") {
+      this.router.navigate(['/digital-tools/tool-request-keys']);
+    } else {
+      this.router.navigate(['/digital-tools/tool-request']);
+    }
   }
 
   onRegisterBasic():void{
