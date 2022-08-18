@@ -14,18 +14,21 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolRequestComponent } from './electronic-tools/tool-request/tool-request.component';
+import { ToolRequestKeysComponent } from './electronic-tools/tool-request-keys/tool-request-keys.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
     UsersListComponent,
     ElectronicToolsListComponent,
     BasicRegistrationComponent,
-    ToolRequestComponent
+    ToolRequestComponent,
+    ToolRequestKeysComponent
   ],
   imports: [
     CommonModule,
@@ -46,6 +49,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatSnackBarModule,
-  ]
+  ],
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class HerramientasDigitalesModule { }

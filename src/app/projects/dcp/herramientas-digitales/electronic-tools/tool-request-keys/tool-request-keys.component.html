@@ -1,0 +1,154 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Crear solicitud de herramientas</h4>
+        </div>
+        <div class="col-md-12 mb-3">
+            <span class="pointer" (click)="onListElectronicTools()">Herramientas digitales</span> > <span class="text-red pointer"> Crear solicitud</span>
+        </div>
+        <div class="col-md-12 mb-5">
+            <mat-card>
+                <mat-card-content>
+                    <form *ngIf="formRequest" [formGroup]="formRequest">
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <h6 class="fw-bold">Registro Básico</h6>
+                            </div>
+                            <div class="col-md-3 mb-5">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">OS</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="os">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="fw-bold">Información del Equipo</h6>
+                                <hr>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">PCID de Equipo</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="pcid">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Marca </mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="marca">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Modelo</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="modelo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Serie</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" formControlName="serie">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="fw-bold">Información del Usuario</h6>
+                                <hr>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>Usuario de la Licencia</mat-label>
+                                    <input id="userSearch" matInput type="text" placeholder="Ingresar Usuario" formControlName="usr" [matAutocomplete]="auto" [disabled]="true" >
+                                    <button mat-icon-button matSuffix (click)="searchUsers()" [disabled]="true">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                        <mat-option *ngFor="let licUser of users" [value]="licUser.usuario" (click)="selectUser(licUser)">
+                                            {{licUser.nombres}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-hint *ngIf="isSearching"><mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar></mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-9"></div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Área de Servicios o BU</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" [value]="user!=null?user.bu:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Centro de costo </mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" [value]="user!=null? user.centroCosto!=null? user.centroCosto:'-':'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Jefe Aprobador</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" [value]="user!=null? user.jefe!=null? user.jefe:'-':'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label class="fw-bold">Correo de Aprobador</mat-label>
+                                    <input matInput type="text" placeholder="Ingresar" [value]="user!=null?user.correoJefe:'-'" [disabled]="true">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="fw-bold">Información de la Licencia</h6>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <mat-card class="card-table">
+                                    <span class="fw-bold">Licencias</span>
+                                </mat-card>
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="tipo">
+                                        <th mat-header-cell *matHeaderCellDef width="20%"> Tipo </th>
+                                        <td mat-cell *matCellDef="let element">{{element.tipo}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="cantidad">
+                                        <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Cantidad </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="pt-4 px-4">
+                                                <input matInput type="number" [(ngModel)]="element.cantidad" [ngModelOptions]="{standalone: true}" [disabled]="true">
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="keyFuncional">
+                                        <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Key Funcional </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field *ngIf="element.tipo=='Inside'" class="pt-4 px-4">
+                                                <input matInput [(ngModel)]="element.keyFuncional" [ngModelOptions]="{standalone: true}">
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="keyBasico">
+                                        <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Key Básico </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field *ngIf="element.tipo=='Inside'" class="pt-4 px-4">
+                                                <input matInput [(ngModel)]="element.keyBasico" [ngModelOptions]="{standalone: true}">
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="keyDeActivacion">
+                                        <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Key de Activación </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field *ngIf="element.tipo!='Inside'" class="pt-4 px-4">
+                                                <input matInput [(ngModel)]="element.keyDeActivacion" [ngModelOptions]="{standalone: true}">
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                            </div>         
+                        </div>
+                    </form>
+                </mat-card-content>
+                <mat-card-actions align="end" style="margin-bottom: 20px;">
+                    <button mat-raised-button color="primary" (click)="onRegisterRequest()">Enviar Registro</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

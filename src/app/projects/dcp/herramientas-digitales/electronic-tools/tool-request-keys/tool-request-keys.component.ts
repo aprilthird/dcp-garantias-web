@@ -12,15 +12,15 @@ import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-tool-request',
-  templateUrl: './tool-request.component.html',
-  styleUrls: ['./tool-request.component.scss']
+  selector: 'app-tool-request-keys',
+  templateUrl: './tool-request-keys.component.html',
+  styleUrls: ['./tool-request-keys.component.scss']
 })
-export class ToolRequestComponent implements OnInit {
+export class ToolRequestKeysComponent implements OnInit {
 
   formRequest:FormGroup;
 
-  displayedColumns: string[] = ['tipo', 'cantidad'];
+  displayedColumns: string[] = ['tipo', 'cantidad', 'keyFuncional', 'keyBasico', 'keyDeActivacion'];
 
   localRequest:any;
   user:any;
@@ -29,10 +29,10 @@ export class ToolRequestComponent implements OnInit {
   users = [];
   isSearching = false;
 
-  dataSource = [{tipo:'Inside', cantidad:1},
-                {tipo:'Inpower', cantidad:1},
-                {tipo:'Calibrations', cantidad:0},
-                {tipo:'Zap - Its', cantidad:0}];
+  dataSource = [{tipo:'Inside', cantidad:1, keyFuncional:null, keyBasico:null, keyDeActivacion:null },
+                {tipo:'Inpower', cantidad:1, keyFuncional:null, keyBasico:null, keyDeActivacion:null},
+                {tipo:'Calibrations', cantidad:0, keyFuncional:null, keyBasico:null, keyDeActivacion:null},
+                {tipo:'Zap - Its', cantidad:0, keyFuncional:null, keyBasico:null, keyDeActivacion:null}];
 
   constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 
@@ -78,11 +78,11 @@ export class ToolRequestComponent implements OnInit {
   loadFormRequest():void {
     this.formRequest = new FormGroup({
       os: new FormControl(this.localRequest.os, [Validators.required]),
-      pcid: new FormControl(this.localRequest.pcid, [Validators.required]),
-      marca: new FormControl(this.localRequest.marca, [Validators.required]),
-      modelo: new FormControl(this.localRequest.modelo, [Validators.required]),
-      serie: new FormControl(this.localRequest.serie, [Validators.required]),
-      usr: new FormControl(this.localRequest.usr, [Validators.required]),
+      pcid: new FormControl({value: this.localRequest.pcid, disabled: true}, [Validators.required]),
+      marca: new FormControl({value: this.localRequest.marca, disabled: true}, [Validators.required]),
+      modelo: new FormControl({value: this.localRequest.modelo, disabled: true}, [Validators.required]),
+      serie: new FormControl({value: this.localRequest.serie, disabled: true}, [Validators.required]),
+      usr: new FormControl({value: this.localRequest.usr, disabled: true}, [Validators.required]),
     });
   }
 
