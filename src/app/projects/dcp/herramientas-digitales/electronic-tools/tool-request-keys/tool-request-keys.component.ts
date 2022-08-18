@@ -230,6 +230,7 @@ export class ToolRequestKeysComponent implements OnInit {
                                         });
                                     },
                                     error => {
+                                        console.log('garantias')
                                         console.log(error)
                                     })
                             }
