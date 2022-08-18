@@ -28,6 +28,7 @@ export class DigitalToolsService {
     private readonly authService: AuthService) { }
 
   toolManagement(_request: any): Observable<any> {
+    debugger
     return this.httpClient.post(this.urlToolManagement, _request, { headers: this.header });
   }
   toolUserManagement(_request: any): Observable<any> {
