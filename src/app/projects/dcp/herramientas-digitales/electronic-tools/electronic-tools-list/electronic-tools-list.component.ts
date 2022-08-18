@@ -102,7 +102,7 @@ export class ElectronicToolsListComponent implements OnInit {
     localStorage.setItem('action','edit');
     localStorage.setItem('usuario',JSON.stringify(usuario));
     console.log(usuario);
-    this.router.navigate(['/digital-tools/tool-request-keys']);
+    this.router.navigate(['/digital-tools/tool-request']);
   }
 
   onRegisterBasic():void{
