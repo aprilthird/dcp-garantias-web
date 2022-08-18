@@ -2,12 +2,13 @@
     <div class="row selectors">
         <form *ngIf="formFilter" [formGroup]="formFilter">
             <div class="row">
-                <div class="col-md-9">
-                    <h3 class="fw-bold">Herramientas Electrónicas</h3>
+                <div class="col-md-9 mb-3">
+                    <h4 class="fw-bold">
+                        <span class="pointer" (click)="limpiarFiltros()">Herramientas Electrónicas</span>
+                    </h4>
                 </div>
-                <div class="col-md-3 text-end">
-                    <button mat-raised-button color="primary" (click)="onRegisterBasic()" *ngIf="acceder('Registro Solicitud')">Crear Solicitud de
-                        Herramienta</button>
+                <div class="col-md-3 text-end mb-2">
+                    <button mat-raised-button color="primary" (click)="onRegisterBasic()" *ngIf="acceder('Registro Solicitud')">Crear Solicitud de Herramienta</button>
                 </div>
                 <div class="col-md-3 search">
                     <mat-form-field floatLabel="always">
@@ -31,13 +32,16 @@
                     <mat-form-field floatLabel="always">
                         <mat-label>Fecha de Solicitud</mat-label>
                         <mat-date-range-input [rangePicker]="pickerA">
-                            <input matStartDate placeholder="Desde" formControlName="fechaDeSolicitudInicio">
-                            <input matEndDate placeholder="Hasta" formControlName="fechaDeSolicitudFin"
-                            (dateChange)="listUsers()">
+                            <input matStartDate placeholder="Desde" formControlName="fechaIni">
+                            <input matEndDate placeholder="Hasta" formControlName="fechaFin">
                         </mat-date-range-input>
-                        <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
-                        <mat-date-range-picker #pickerA></mat-date-range-picker>
+                        <mat-date-range-picker #pickerA>
+                            <mat-date-range-picker-actions>
+                                <button mat-button matDateRangePickerCancel>Cancelar</button>
+                                <button mat-raised-button color="primary" matDateRangePickerApply (click)="listUsers()">Aplicar</button>
+                            </mat-date-range-picker-actions>
+                        </mat-date-range-picker>
                     </mat-form-field>
                 </div>
             </div>

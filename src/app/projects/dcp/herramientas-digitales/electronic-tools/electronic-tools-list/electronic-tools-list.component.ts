@@ -92,8 +92,8 @@ export class ElectronicToolsListComponent implements OnInit {
     this.formFilter = new FormGroup({
       usuario: new FormControl(null),
       estado: new FormControl(null),
-      fechaDeSolicitudInicio: new FormControl(),
-      fechaDeSolicitudFin: new FormControl(),
+      fechaIni: new FormControl(),
+      fechaFin: new FormControl(),
       idUsuario: new FormControl(null)
     });
   }
@@ -152,5 +152,10 @@ export class ElectronicToolsListComponent implements OnInit {
       result = (result + 1 );
     }
     return Math.trunc(result);
+  }
+
+  limpiarFiltros():void{
+    this.formFilter.reset();
+    this.listUsers();
   }
 }
