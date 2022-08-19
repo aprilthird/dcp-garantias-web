@@ -110,7 +110,7 @@
                                         <th mat-header-cell *matHeaderCellDef width="20%" class="text-center"> Cantidad </th>
                                         <td mat-cell *matCellDef="let element">
                                             <mat-form-field class="pt-4">
-                                                <input matInput type="number" [(ngModel)]="element.cantidad" [ngModelOptions]="{standalone: true}">
+                                                <input matInput type="number" [(ngModel)]="element.cantidad" [ngModelOptions]="{standalone: true}" [disabled]="soloVer=='true'">
                                             </mat-form-field>
                                         </td>
                                     </ng-container>
@@ -122,7 +122,8 @@
                     </form>
                 </mat-card-content>
                 <mat-card-actions align="end" style="margin-bottom: 20px;">
-                    <button mat-raised-button color="primary" (click)="onRegisterRequest()">Enviar Registro</button>
+                    <button mat-raised-button color="primary" (click)="onRegisterRequest()" *ngIf="soloVer=='true'?false:true">Enviar Registro</button>
+                    <button mat-raised-button color="primary" (click)="onListElectronicTools()" *ngIf="soloVer=='true'">Regresar</button>
                 </mat-card-actions>
             </mat-card>
         </div>

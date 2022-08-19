@@ -98,13 +98,18 @@ export class ElectronicToolsListComponent implements OnInit {
     });
   }
 
-  onEditBasic(usuario:any):void{
+  onEditBasic(usuario:any,soloVer:string):void{
     localStorage.setItem('action','edit');
     localStorage.setItem('usuario',JSON.stringify(usuario));
+    localStorage.setItem('soloVer',soloVer);
     if(usuario.nombreEstado == "Aprobado") {
       this.router.navigate(['/digital-tools/tool-request-keys']);
     } else {
-      this.router.navigate(['/digital-tools/tool-request']);
+      if(usuario.nombreEstado == "Terminado"){
+        this.router.navigate(['/digital-tools/tool-request-keys']);
+      }else{
+        this.router.navigate(['/digital-tools/tool-request']);
+      }
     }
   }
 

@@ -84,8 +84,11 @@
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef width="5%"> </th>
                         <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button (click)="onEditBasic(element)" *ngIf="element.estado==17||element.estado==19"> <!-- [disabled]="element.estado!=2?false:acceder('Editar Solicitud Observada')"> -->
+                            <button mat-icon-button (click)="onEditBasic(element,'false')" *ngIf="element.estado==17?true:element.estado==19?true:false"> <!-- [disabled]="element.estado!=2?false:acceder('Editar Solicitud Observada')"> -->
                                 <img style="height:30px" src="./../../../../../../assets/icons/arrow-rigth.svg" alt="">
+                            </button>
+                            <button mat-icon-button *ngIf="!(element.estado==17?true:element.estado==19?true:false)" (click)="onEditBasic(element,'true')">
+                                <mat-icon>visibility</mat-icon>
                             </button>
                         </td>
                     </ng-container>

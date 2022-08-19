@@ -34,12 +34,23 @@ export class ToolRequestComponent implements OnInit {
                 {id: 0, idHerramienta:0, tipo:'Calibrations', cantidad:0},
                 {id: 0, idHerramienta:0, tipo:'Zap - Its', cantidad:0}];
 
+  menuArbol:any;
+  accionesUsuarioHerramientasDigitales = [];
+  bloquearInputs:boolean=false;
+  soloVer:string;
+
   constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 
-    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { }
+    private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService) { 
+      this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
+      this.accionesUsuarioHerramientasDigitales = this.menuArbol[3].acciones;
+    }
 
   ngOnInit(): void {
     this.action = localStorage.getItem('action');
+    this.soloVer = localStorage.getItem('soloVer');
+    // localStorage.removeItem('soloVer');
+    console.log(this.soloVer);
     if(this.action === 'edit') {
       let localRequestStr = localStorage.getItem('usuario');
       if(localRequestStr !== null && localRequestStr !== "") {
@@ -56,6 +67,7 @@ export class ToolRequestComponent implements OnInit {
     } else {
       this.loadEmptyFormRequest();
     }
+    this.bloquearInputs = !(this.acceder('Editar Solicitud Observada'));
   }
 
   ngAfterViewInit():void {
@@ -63,6 +75,16 @@ export class ToolRequestComponent implements OnInit {
     fromEvent(searchInput, "keyup").pipe(debounceTime(1000)).subscribe(value => {
       this.searchUsers();
     });
+  }
+
+  acceder(nombre:string):boolean{
+    let ver = false;
+    for (let i = 0; i < this.accionesUsuarioHerramientasDigitales.length; i++) {
+      if(this.accionesUsuarioHerramientasDigitales[i].nombre==nombre && this.accionesUsuarioHerramientasDigitales[i].activo==true){
+          ver = true;
+      }
+    }
+    return ver;
   }
 
   loadEmptyFormRequest():void {
@@ -78,12 +100,12 @@ export class ToolRequestComponent implements OnInit {
 
   loadFormRequest():void {
     this.formRequest = new FormGroup({
-      os: new FormControl(this.localRequest.os, [Validators.required]),
-      pcid: new FormControl(this.localRequest.pcid, [Validators.required]),
-      marca: new FormControl(this.localRequest.marca, [Validators.required]),
-      modelo: new FormControl(this.localRequest.modelo, [Validators.required]),
-      serie: new FormControl(this.localRequest.serie, [Validators.required]),
-      usuario: new FormControl(this.localRequest.usuario, [Validators.required]),
+      os: new FormControl({value:this.localRequest.os, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
+      pcid: new FormControl({value:this.localRequest.pcid, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
+      marca: new FormControl({value:this.localRequest.marca, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
+      modelo: new FormControl({value:this.localRequest.modelo, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
+      serie: new FormControl({value:this.localRequest.serie, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
+      usuario: new FormControl({value:this.localRequest.usuario, disabled:this.soloVer=='true'?true:this.bloquearInputs}, [Validators.required]),
     });
   }
 
@@ -156,7 +178,7 @@ export class ToolRequestComponent implements OnInit {
                 };
                 if(this.action === 'edit') {
                   request.id = this.localRequest.id;
-                  request.estado = this.localRequest.estado;
+                  request.estado = 16;
                 }
                 if(!this.user.dni) {
                   request.dni = this.localRequest.dni;

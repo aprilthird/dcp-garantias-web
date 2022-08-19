@@ -70,13 +70,21 @@ export class ToolRequestKeysComponent implements OnInit {
             keyActivacion: null
         }];
 
+    menuArbol:any;
+    accionesUsuarioHerramientasDigitales = [];
+    soloVer:string;
+
     constructor(private readonly router: Router, private readonly matDialog: MatDialog, private readonly matSnackBar: MatSnackBar,
                 private readonly digitalToolsService: DigitalToolsService,
                 private readonly configurationAndMaintenanceService: ConfigurationAndMaintenanceService) {
+                    this.menuArbol = JSON.parse(localStorage.getItem('menuArbol'));
+                    this.accionesUsuarioHerramientasDigitales = this.menuArbol[3].acciones;
     }
 
     ngOnInit(): void {
         this.action = localStorage.getItem('action');
+        this.soloVer = localStorage.getItem('soloVer');
+        console.log(this.soloVer);
         if (this.action === 'edit') {
             let localRequestStr = localStorage.getItem('usuario');
             if (localRequestStr !== null && localRequestStr !== "") {
@@ -101,6 +109,16 @@ export class ToolRequestKeysComponent implements OnInit {
             this.searchUsers();
         });
     }
+
+    acceder(nombre:string):boolean{
+        let ver = false;
+        for (let i = 0; i < this.accionesUsuarioHerramientasDigitales.length; i++) {
+          if(this.accionesUsuarioHerramientasDigitales[i].nombre==nombre && this.accionesUsuarioHerramientasDigitales[i].activo==true){
+              ver = true;
+          }
+        }
+        return ver;
+      }
 
     loadEmptyFormRequest(): void {
         this.formRequest = new FormGroup({
@@ -208,11 +226,11 @@ export class ToolRequestKeysComponent implements OnInit {
                                     ceco: this.user.centroCosto,
                                     licencias: this.dataSource,
                                     //...this.formRequest.value
-                                    ...this.formRequest.getRawValue()
+                                    ...this.formRequest.getRawValue(),
                                 };
                                 if (this.action === 'edit') {
                                     request.id = this.localRequest.id;
-                                    request.estado = this.localRequest.estado;
+                                    request.estado = 20;//this.localRequest.estado;
                                 }
                                 if (!this.user.dni) {
                                     request.dni = this.localRequest.dni;
