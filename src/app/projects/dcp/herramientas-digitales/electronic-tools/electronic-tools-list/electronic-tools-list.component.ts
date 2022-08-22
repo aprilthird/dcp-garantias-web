@@ -115,6 +115,7 @@ export class ElectronicToolsListComponent implements OnInit {
 
   onRegisterBasic():void{
     localStorage.setItem('action','new');
+    localStorage.setItem('soloVer','false');
     this.router.navigate(['/digital-tools/tool-request']);
   }
 

@@ -29,10 +29,10 @@ export class ToolRequestComponent implements OnInit {
   users = [];
   isSearching = false;
 
-  dataSource = [{id: 0, idHerramienta:0, tipo:'Inside', cantidad:1},
+  dataSource = [{id: 0, idHerramienta:0, tipo:'INSITE', cantidad:1},
                 {id: 0, idHerramienta:0, tipo:'Inpower', cantidad:1},
-                {id: 0, idHerramienta:0, tipo:'Calibrations', cantidad:0},
-                {id: 0, idHerramienta:0, tipo:'Zap - Its', cantidad:0}];
+                {id: 0, idHerramienta:0, tipo:'Conteos de Calibración', cantidad:0},
+                {id: 0, idHerramienta:0, tipo:'Zapit', cantidad:0}];
 
   menuArbol:any;
   accionesUsuarioHerramientasDigitales = [];
