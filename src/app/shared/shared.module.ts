@@ -21,6 +21,7 @@ import { DialogObservationComponent } from './dialogs/dialog-observation/dialog-
 import { MenuDcpComponent } from './components/menu-dcp/menu-dcp.component';
 import { SnackBarMessageComponent } from './dialogs/snack-bar-message/snack-bar-message.component';
 import { DialogSeeDocumentsComponent } from './dialogs/dialog-see-documents/dialog-see-documents.component';
+import { DialogLoadingComponent } from './dialogs/dialog-loading/dialog-loading.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { DialogSeeDocumentsComponent } from './dialogs/dialog-see-documents/dial
     MenuDcpComponent,
     SnackBarMessageComponent,
     DialogSeeDocumentsComponent,
+    DialogLoadingComponent,
   ],
   providers: [ExportExcelService],
 })

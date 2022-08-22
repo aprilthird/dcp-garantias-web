@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DialogMassiveRegistrationSuccessfullyComponent } from 'app/projects/dcp/garantias/dialogs/dialog-massive-registration-successfully/dialog-massive-registration-successfully.component';
 import { DialogErrorMessageComponent } from 'app/shared/dialogs/dialog-error-message/dialog-error-message.component';
+import { DialogLoadingComponent } from 'app/shared/dialogs/dialog-loading/dialog-loading.component';
 import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
 import { ConfigurationAndMaintenanceService } from 'app/shared/services/configuration-and-maintenance/configuration-and-maintenance.service';
 import { DigitalToolsService } from 'app/shared/services/digital-tools/digital-tools.service';
@@ -38,6 +39,7 @@ export class ToolRequestComponent implements OnInit {
   accionesUsuarioHerramientasDigitales = [];
   bloquearInputs:boolean=false;
   soloVer:string;
+  dialogLoading:any;
 
   constructor(private readonly router:Router, private readonly matDialog:MatDialog, private readonly matSnackBar: MatSnackBar,
     private readonly digitalToolsService:DigitalToolsService, 
@@ -185,7 +187,9 @@ export class ToolRequestComponent implements OnInit {
                 } else {
                   request.dni = this.user.dni;
                 }
+                this.showModalLoading();
                 this.digitalToolsService.toolManagement(request).subscribe(responseApi=>{
+                  this.closeModalLoading();
                   const dialogRegistrarDatosDelUsuario = this.matDialog.open(DialogMassiveRegistrationSuccessfullyComponent,{
                     data:{text:'Se envió el registro con éxito'},
                     disableClose:true, width: '385px',
@@ -213,5 +217,16 @@ export class ToolRequestComponent implements OnInit {
       verticalPosition: 'top',
       panelClass:['mat-toolbar', 'mat-primary','button-color']
     });
+  }
+
+  showModalLoading():void{
+    this.dialogLoading = this.matDialog.open(DialogLoadingComponent,{
+      disableClose:true,
+
+    });
+  }
+
+  closeModalLoading():void{
+    this.dialogLoading.close();
   }
 }
