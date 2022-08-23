@@ -308,4 +308,8 @@ export class FallasListComponent implements OnInit {
     return nombres;
   }
   
+  sendit(data){
+    console.log("Value",data)
+ }
+ 
 }

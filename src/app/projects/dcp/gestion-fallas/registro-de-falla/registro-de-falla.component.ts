@@ -167,7 +167,6 @@ export class RegistroDeFallaComponent implements OnInit {
     if(this.soloVerRegistroFalla=='true'){
       bloquearInputs = true;
     }
-    console.log('bloquear:'+bloquearInputs);
     this.formFalla = new FormGroup({
       os: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.os:'', disabled:this.accion=='edit'?true:false},[Validators.required]),
       io: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.io:'',disabled:this.accion=='edit'?true:false}, [Validators.required]),
@@ -176,7 +175,7 @@ export class RegistroDeFallaComponent implements OnInit {
       aplicacion: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.aplicacion:'', disabled:bloquearInputs}, [Validators.required]),
       numParte: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.numParte:'', disabled:bloquearInputs},[Validators.required]),
       puntoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.puntoFalla:'', disabled:bloquearInputs},[Validators.required]),
-      tipoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.tipoFalla:'', disabled:bloquearInputs},[Validators.required]),
+      tipoFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.tipoFalla:'km', disabled:bloquearInputs},[Validators.required]),
       fechaFalla: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.fechaFalla:'', disabled:bloquearInputs},[Validators.required]),
       descripcion: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.descripcion:'', disabled:bloquearInputs},[Validators.required]),
       queja1: new FormControl({value:this.fallaParaGestionar?this.fallaParaGestionar.queja1:null, disabled:bloquearInputs}),
