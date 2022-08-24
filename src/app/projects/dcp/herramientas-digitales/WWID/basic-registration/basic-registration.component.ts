@@ -68,7 +68,7 @@ export class BasicRegistrationComponent implements OnInit {
   loadFormRegisterWwid(userSelected:any){
     this.formWwid = new FormGroup({
       wwid: new FormControl(userSelected.wwid==null?'':userSelected.wwid),
-      estadoWwid: new FormControl(userSelected.estadoWwid==0?null:userSelected.idWwid),
+      estadoWwid: new FormControl(userSelected.idWwid==0?null:userSelected.idWwid),
       idPromotion: new FormControl(userSelected.idPromotion==null?'':userSelected.idPromotion),
       estadoIdPromotion: new FormControl(userSelected.estadoIdPromotion==null?null:parseInt(userSelected.estadoIdPromotion)),
       locacion: new FormControl(userSelected.locacion==null?null:parseInt(userSelected.locacion)),
