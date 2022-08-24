@@ -19,10 +19,8 @@ export class ElectronicToolsListComponent implements OnInit {
 
   //datos del paginado
   totalUsers:any;
-  totalRows:any;
-  numberOfPages:any;
-  countStart:any;
-  countEnd:any;
+  totalFilas:any;
+  numeroDePaginas:any;
   pageCurrent:number=1;
 
   //botones del paginado
@@ -73,18 +71,10 @@ export class ElectronicToolsListComponent implements OnInit {
     }
     this.digitalToolsService.trayTools(this.formFilter.value, this.pageCurrent).subscribe(responseApi => {
       this.totalUsers = responseApi.totalRecords;
-      this.totalRows = responseApi.pageSize;
-      this.countStart = this.totalRows*(this.pageCurrent - 1) + 1;
-      this.countEnd = this.totalRows*this.pageCurrent;
-      this.numberOfPages = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
+      this.totalFilas = responseApi.pageSize;
+      this.numeroDePaginas = this.getPageCount(responseApi.pageSize,responseApi.totalRecords);
       this.dataSource = responseApi.data;
-
-      for(var i=0; i<this.dataSource.length; ++i) {
-        var cantidad = localStorage.getItem("cantidad_" + this.dataSource[i].nombres);
-        
-        this.dataSource[i].cantidad = cantidad;
-        console.log(this.dataSource[i]);
-      }
+      this.disablePaginationButtons(); 
     });
   }
 
@@ -120,19 +110,19 @@ export class ElectronicToolsListComponent implements OnInit {
   }
 
   disablePaginationButtons(){
-    if(this.pageCurrent == this.numberOfPages){
+    if(this.pageCurrent == this.numeroDePaginas){
       this.prevButton = true,
       this.nextButton = true;
     }
-    if( this.pageCurrent == 1 && this.pageCurrent < this.numberOfPages){
+    if( this.pageCurrent == 1 && this.pageCurrent < this.numeroDePaginas){
       this.prevButton = true;
       this.nextButton = false;
     }
-    if(this.pageCurrent > 1 && this.pageCurrent < this.numberOfPages){
+    if(this.pageCurrent > 1 && this.pageCurrent < this.numeroDePaginas){
       this.prevButton = false;
       this.nextButton = false;
     }
-    if(this.pageCurrent > 1 && this.pageCurrent == this.numberOfPages){
+    if(this.pageCurrent > 1 && this.pageCurrent == this.numeroDePaginas){
       this.prevButton = false;
       this.nextButton = true;
     }

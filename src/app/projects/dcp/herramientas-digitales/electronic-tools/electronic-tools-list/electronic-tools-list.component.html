@@ -1,51 +1,54 @@
 <div class="container">
-    <div class="row selectors">
-        <form *ngIf="formFilter" [formGroup]="formFilter">
-            <div class="row">
-                <div class="col-md-9 mb-3">
-                    <h4 class="fw-bold">
-                        <span class="pointer" (click)="limpiarFiltros()">Herramientas Electrónicas</span>
-                    </h4>
+    <div class="row">
+        <div class="col-md-12">
+            <form *ngIf="formFilter" [formGroup]="formFilter">
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        <h4 class="fw-bold">
+                            <span class="pointer" (click)="limpiarFiltros()">Herramientas Electrónicas</span>
+                        </h4>
+                    </div>
+                    <div class="col-md-3 text-end mb-2">
+                        <button mat-raised-button color="primary" (click)="onRegisterBasic()" *ngIf="acceder('Registro Solicitud')">Crear Solicitud de Herramienta</button>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field floatLabel="always">
+                            <mat-label>Buscar por Usuario</mat-label>
+                            <input matInput type="text" placeholder="Ingresar usuario" formControlName="usuario">
+                            <button mat-icon-button matSuffix (click)="listUsers()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field floatLabel="always">
+                            <mat-label class="fw-bold">Estado</mat-label>
+                            <mat-select placeholder="Seleccionar" formControlName="estado" (selectionChange)="listUsers()">
+                                <mat-option *ngFor="let option of statusOptions" [value]="option.id">
+                                    {{option.nombre}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>   
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field floatLabel="always">
+                            <mat-label>Fecha de Solicitud</mat-label>
+                            <mat-date-range-input [rangePicker]="pickerA">
+                                <input matStartDate placeholder="Desde" formControlName="fechaIni">
+                                <input matEndDate placeholder="Hasta" formControlName="fechaFin">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
+                            <mat-date-range-picker #pickerA>
+                                <mat-date-range-picker-actions>
+                                    <button mat-button matDateRangePickerCancel>Cancelar</button>
+                                    <button mat-raised-button color="primary" matDateRangePickerApply (click)="listUsers()">Aplicar</button>
+                                </mat-date-range-picker-actions>
+                            </mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div class="col-md-3 text-end mb-2">
-                    <button mat-raised-button color="primary" (click)="onRegisterBasic()" *ngIf="acceder('Registro Solicitud')">Crear Solicitud de Herramienta</button>
-                </div>
-                <div class="col-md-3 search">
-                    <mat-form-field floatLabel="always">
-                        <input matInput type="text" placeholder="Buscar por Usuario" formControlName="usuario">
-                        <button mat-icon-button matSuffix (click)="listUsers()">
-                            <mat-icon>search</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-3">
-                    <mat-form-field floatLabel="always">
-                        <mat-label class="fw-bold">Estado</mat-label>
-                        <mat-select placeholder="Seleccionar" formControlName="estado" (selectionChange)="listUsers()">
-                            <mat-option *ngFor="let option of statusOptions" [value]="option.id">
-                                {{option.nombre}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>   
-                </div>
-                <div class="col-md-3">
-                    <mat-form-field floatLabel="always">
-                        <mat-label>Fecha de Solicitud</mat-label>
-                        <mat-date-range-input [rangePicker]="pickerA">
-                            <input matStartDate placeholder="Desde" formControlName="fechaIni">
-                            <input matEndDate placeholder="Hasta" formControlName="fechaFin">
-                        </mat-date-range-input>
-                        <mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>
-                        <mat-date-range-picker #pickerA>
-                            <mat-date-range-picker-actions>
-                                <button mat-button matDateRangePickerCancel>Cancelar</button>
-                                <button mat-raised-button color="primary" matDateRangePickerApply (click)="listUsers()">Aplicar</button>
-                            </mat-date-range-picker-actions>
-                        </mat-date-range-picker>
-                    </mat-form-field>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
         <div class="col-md-12 mb-5">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
@@ -95,18 +98,16 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <div class="pagination flex items-center justify-end">
-                    <span class="mr-1"></span><span class="font-w-500 mr-1">{{countStart}}-{{countEnd}}</span>
-                    <span class="mr-1"> de </span><span class="font-w-500">{{totalUsers}}</span>
-                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
-                        [disabled]="prevButton" (click)="changePage('less')">
-                        <mat-icon>chevron_left</mat-icon>
+                <div class="pb-3 text-right d-flex align-items-center justify-content-end px-3">
+                    <span class="mr-1 fw-bold">{{pageCurrent==1?1:pageCurrent*10-9}}-{{totalUsers>(pageCurrent*10)?pageCurrent*10:totalUsers}}</span>
+                    <span class="mr-1" style="color: #1E293B"> de </span><span class="fw-bold">{{totalUsers}}</span>
+                    <button type="button" mat-icon-button aria-label="Example icon button with a home icon" [disabled]="prevButton" (click)="changePage('less')">
+                      <mat-icon style="color:#1E293B">chevron_left</mat-icon>
                     </button>
-                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon"
-                        [disabled]="nextButton" (click)="changePage('more')">
-                        <mat-icon>chevron_right</mat-icon>
+                    <button type="button" mat-icon-button aria-label="Example icon button with a home icon" [disabled]="nextButton" (click)="changePage('more')">
+                      <mat-icon style="color:#1E293B">chevron_right</mat-icon>
                     </button>
-                </div>
+                  </div>
             </div>
         </div>
     </div>
