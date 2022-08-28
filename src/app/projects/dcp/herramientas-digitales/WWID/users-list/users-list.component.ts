@@ -109,7 +109,7 @@ export class UsersListComponent implements OnInit {
   getPageCount(totalRows:any,totalRecords:any):number{
     let result:any;
     result = totalRecords / totalRows;
-    if((totalRecords % totalRows)>0){
+    if((totalRecords % totalRows)>0) {
       result = (result + 1 );
     }
     return Math.trunc(result);

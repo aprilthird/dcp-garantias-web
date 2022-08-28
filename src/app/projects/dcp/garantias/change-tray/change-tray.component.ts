@@ -188,6 +188,7 @@ export class ChangeTrayComponent implements OnInit {
   getOs():void{
     const os = this.formGroupChangeTray.value.os;
     this.garantiasService.findOs(os).subscribe(resp=>{
+      console.log(resp);
       if(resp.body){
         this.os = resp.body;
         this.getAreaService();
@@ -822,6 +823,7 @@ export class ChangeTrayComponent implements OnInit {
     const data = {
       idMatricula:this.esn.id,
       codAreaServicios:this.os.codAreaServicios,
+      codCeco:this.os.ceco,
       ...this.formGroupChangeTray.value
     }
     switch(action){

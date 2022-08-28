@@ -36,7 +36,7 @@ export class DialogTransformRecordToOrangeComponent implements OnInit {
 
   loadForm():void{
     this.formGroup = new FormGroup({
-      idUsuarioElavorador: new FormControl(null,[Validators.required]),
+      idUsuarioEvaluador: new FormControl(null,[Validators.required]),
       criterio1: new FormControl(false),
       criterio2: new FormControl(false),
       criterio3: new FormControl(false),
