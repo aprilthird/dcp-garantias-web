@@ -3,7 +3,11 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-5">
-              <h4 class="font-w-700 pointer" (click)="limpiarFiltros()">Garantías</h4>
+              <h4 class="font-w-700">
+                <span (click)="limpiarFiltros()" class="pointer" title="Click para limpiar los filtros">
+                  Garantías
+                </span>
+              </h4>
           </div>
           <div class="col-md-7">
               <div matRipple class="notification-green" *ngIf="seeNotificationCreateWarrantySuccessfully">

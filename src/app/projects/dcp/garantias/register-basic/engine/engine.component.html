@@ -186,7 +186,7 @@
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.c">
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Fecha de falla {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaFalla" formControlName="fechaFalla" placeholder="Seleccione una fecha">
+                                        <input matInput [matDatepicker]="pickerFechaFalla" formControlName="fechaFalla" placeholder="Seleccione una fecha" [max]="fechaHoy">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaFalla"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaFalla></mat-datepicker>
@@ -201,7 +201,7 @@
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.d">
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Fecha inicio de la garantía {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaGarantia" formControlName="fechaInicioGarantia" placeholder="Seleccione una fecha">
+                                        <input matInput [matDatepicker]="pickerFechaGarantia" formControlName="fechaInicioGarantia" placeholder="Seleccione una fecha" [max]="fechaHoy">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaGarantia"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaGarantia></mat-datepicker>
@@ -210,7 +210,7 @@
                                 <div class="col-md-3" *ngIf="viewsTypesWarranty.h">
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Fecha de ejecucion {{textoSegunTipoDeGarantia(formRegisterEngine.value.tipoGarantia)}}</mat-label>
-                                        <input matInput [matDatepicker]="pickerFechaEjecucion" formControlName="fechaAdicional" placeholder="Seleccione una fecha">
+                                        <input matInput [matDatepicker]="pickerFechaEjecucion" formControlName="fechaAdicional" placeholder="Seleccione una fecha" [max]="fechaHoy">
                                         <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                                         <mat-datepicker-toggle matSuffix [for]="pickerFechaEjecucion"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerFechaEjecucion></mat-datepicker>

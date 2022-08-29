@@ -29,7 +29,7 @@ export class EngineComponent implements OnInit {
   action:any;
   //
   garantiaParaGestionar:any;
-
+  fechaHoy = new Date;
   matriculaEcontrada:any;
   ordenDeServicioEncontrado:any;
   
