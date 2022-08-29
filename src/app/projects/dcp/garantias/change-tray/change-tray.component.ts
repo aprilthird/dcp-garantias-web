@@ -13,6 +13,10 @@ import { DialogTransformRecordToGreenComponent } from '../dialogs/dialog-transfo
 import { DialogOperationSuccessfullyComponent } from 'app/shared/dialogs/dialog-operation-successfully/dialog-operation-successfully.component';
 import { DialogTransformRecordToGrayComponent } from '../dialogs/dialog-transform-record-to-gray/dialog-transform-record-to-gray.component';
 import { AzureService } from 'app/core/azure/azure.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarMessageComponent } from 'app/shared/dialogs/snack-bar-message/snack-bar-message.component';
+import { DialogSeeDocumentsComponent } from 'app/shared/dialogs/dialog-see-documents/dialog-see-documents.component';
+import { DialogDraftSavedSuccessfullyComponent } from '../dialogs/dialog-draft-saved-successfully/dialog-draft-saved-successfully.component';
 
 @Component({
   selector: 'app-change-tray',
@@ -29,6 +33,7 @@ export class ChangeTrayComponent implements OnInit {
   //marcas y modelos de los equipos
   marcas=[];   modelos=[];
   documentosDetallesReclamo=[]; auxiliarTable = [];
+  responsables=[];
   //FALLAS
   dataSourceFallas = []; tiposDeFalla = []; fallaSeleccionada:any; checkBoxEliminarTodoFallas=false;
   displayedColumnsFallas: string[] = ['codigo', 'sistema', 'parteFalladaDelSistema', 'modoDeFalla','descripcionCodigoDefalla','accion'];
@@ -106,9 +111,13 @@ export class ChangeTrayComponent implements OnInit {
   //nuevo SRT
   formSrt: FormGroup;
   mostrarFechaGarantia = true; mostrarBis = true; mostrarPTO = true;
-  mostrarProgressBarEsn : boolean = false; 
+  mostrarProgressBarEsn : boolean = false;
+  //documentos 
+  documents=[];
+  uploadedDocuments=[];
 
-  constructor(private readonly matDialog: MatDialog, private readonly router: Router, private readonly garantiasService:GarantiasService,
+  constructor(private readonly matDialog: MatDialog, private readonly router: Router, 
+              private readonly garantiasService:GarantiasService, private readonly matSnackBar:MatSnackBar,
               private readonly configurationAndMaintenanceService:ConfigurationAndMaintenanceService,  private _azureService: AzureService) { }
 
   ngOnInit(): void {
@@ -119,6 +128,7 @@ export class ChangeTrayComponent implements OnInit {
     this.loadFormGroupChangeTray();
     this.loadFormGroupSrt();
     this.cargarDatosDeMaestras();
+    this.loadUploadedFiles(this.warranty.id);
   }
 
   cargarDatosDeMaestras():void{
@@ -131,6 +141,9 @@ export class ChangeTrayComponent implements OnInit {
     });
     this.configurationAndMaintenanceService.listaModelosSinPaginar().subscribe(resp=>{
       this.modelos = resp.data;
+    });
+    this.configurationAndMaintenanceService.obtenerUsuariosPorRol(6).subscribe(resp=>{
+      this.responsables = resp;
     });
     this.configurationAndMaintenanceService.listaFallasSinPaginar().subscribe(response=>{
       this.tiposDeFalla = response.data;
@@ -767,30 +780,30 @@ export class ChangeTrayComponent implements OnInit {
     console.log(document);
   }
   //modal adjuntar documento
-  adjuntarDocumento():void{
-    const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
-      width: '425px',
-      disableClose:true,
-      data: {modulo:'garantias'}
-    });
-    dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialog=>{
-      console.log(responseDialog);
-      // if(responseDialog.accion){
-      //   this.onChargeFile(responseDialog.documento);
-      // }
-    });
-  }
+  // adjuntarDocumento():void{
+  //   const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
+  //     width: '425px',
+  //     disableClose:true,
+  //     data: {modulo:'garantias'}
+  //   });
+  //   dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialog=>{
+  //     console.log(responseDialog);
+  //     // if(responseDialog.accion){
+  //     //   this.onChargeFile(responseDialog.documento);
+  //     // }
+  //   });
+  // }
 
-  async onChargeFile(event: any) {
-    if (event) {
-      const { target } = event;
-      const file = target.files[0];
-      const blob = new Blob([file], { type: file.type });
-      const response = await this._azureService.uploadFile(blob, file.name);
-      console.log(response);
+  // async onChargeFile(event: any) {
+  //   if (event) {
+  //     const { target } = event;
+  //     const file = target.files[0];
+  //     const blob = new Blob([file], { type: file.type });
+  //     const response = await this._azureService.uploadFile(blob, file.name);
+  //     console.log(response);
       
-    }
-  }
+  //   }
+  // }
 
   // async onChageFile(event: any, control: string) {
   //   if (event) {
@@ -807,6 +820,87 @@ export class ChangeTrayComponent implements OnInit {
   //     this.formGroup.get(control).setValue("");
   //   }
   // }
+
+  //Documentos
+  loadUploadedFiles(id:number):void{
+    this.garantiasService.listAdjuntos(id,'garantias').subscribe(responseApi=>{
+      if(responseApi.success){
+        this.uploadedDocuments = responseApi.body      
+      }else{
+        this.openSnackBarWarn('Error en la consulta de los documentos cargados');
+      }
+    })
+  }
+// abrir modal para adjuntar documentos
+
+attachDocument():void{
+  const dialogoAdjuntarDocumentos = this.matDialog.open(DialogAdjuntarDocumentoComponent,{
+    width: '425px',
+    disableClose:true,
+    data:{modulo:'garantias'}
+  });
+  dialogoAdjuntarDocumentos.afterClosed().subscribe(responseDialogAjuntarDocumento=>{
+    console.log(responseDialogAjuntarDocumento.documentos);
+    this.documents = [...this.documents, ...responseDialogAjuntarDocumento.documentos];
+  });
+}
+
+// SUBIR ARCHIVOS A AZURE
+
+async uploadFilesToServer(_entidad:number){
+  for (let i = 0; i < this.documents.length; i++) {
+      const file = this.documents[i];
+      const blob = new Blob([file], { type: file.type });
+      const response = await this._azureService.uploadFile(blob, file.name);
+      const urlFile = this._azureService.getResourceUrl(response.uuidFileName);
+      const request = {
+          entidad:_entidad,
+          nombre:file.name,
+          ruta:urlFile,
+          tabla:'garantias'
+      };
+      this.garantiasService.saveAdjuntos(request).subscribe(responseApi=>{
+          if(responseApi.success==false){
+            this.openSnackBarWarn('Error al subir el documento');
+          }
+      })
+  }
+} 
+
+openUploadedDocumentsModal():void{
+  this.matDialog.open(DialogSeeDocumentsComponent,{
+    data:{documentos:this.uploadedDocuments},
+    disableClose:true,
+    width:'700px'
+  });
+}
+
+deleteDocumentDetail(name:any):void{
+  const index = this.documents.findIndex(e=>e.name==name);
+  this.documents.splice(index,1);
+}
+
+// abrir snack bar para los mensajes
+
+openSnackBarWarn(message:string):void{
+  this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+    data: message,
+    duration: 3000,
+    horizontalPosition:'center',
+    verticalPosition: 'top',
+    panelClass:['mat-toolbar', 'mat-primary','button-color']
+  });
+}
+
+openSnackBarSuccess(message:string):void{
+  this.matSnackBar.openFromComponent(SnackBarMessageComponent, {
+    data: message,
+    duration: 3000,
+    horizontalPosition:'center',
+    verticalPosition: 'top',
+    panelClass:['mat-toolbar', 'mat-success','button-color']
+  });
+}
   //VERIFICAION DETALLES
   calcularTotal():void {
     this.montoTotal = 
@@ -819,6 +913,7 @@ export class ChangeTrayComponent implements OnInit {
 
     this.montoTotalConIGV = this.montoTotal + this.montoIGV;
   }
+
   onSendRegister(action):void{
     const data = {
       idMatricula:this.esn.id,
@@ -881,7 +976,7 @@ export class ChangeTrayComponent implements OnInit {
 
     this.garantiasService.saveWarranty(request).subscribe(resp=>{
       if(resp.success){
-
+        this.uploadFilesToServer(resp.body.id);
         localStorage.setItem('success','true');
         this.router.navigate(['/garantias']);
       }
@@ -890,19 +985,20 @@ export class ChangeTrayComponent implements OnInit {
 
   onEditRegister(data):void{
   // const requestEdit = {...data,bandeja:2,id:this.warranty.id,activo:true};
-  const requestEdit = {...data,esn:"999",id:this.warranty.id,activo:true};
+  const requestEdit = {...data,esn:"999",bandeja:this.warranty.bandeja,id:this.warranty.id,activo:true};
 
   this.garantiasService.saveWarranty(requestEdit).subscribe(resp=>{
     if(resp.success){
-        // const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
-        //   disableClose:true,
-        //   data:{text:'Se guardó con éxito'}
-        // });
-        // dialogSaveRegister.afterClosed().subscribe(resp=>{
-        //   if(resp){
-        //     this.router.navigate(['/garantias']);
-        //   }
-        // });
+        this.uploadFilesToServer(resp.body.id);
+        const dialogSaveRegister = this.matDialog.open(DialogDraftSavedSuccessfullyComponent, {
+          disableClose:true,
+          data:{text:'Se guardó con éxito'}
+        });
+        dialogSaveRegister.afterClosed().subscribe(resp=>{
+          if(resp){
+            this.router.navigate(['/garantias']);
+          }
+        });
       }
     });
   }
@@ -940,6 +1036,7 @@ export class ChangeTrayComponent implements OnInit {
             const requestGarantiaObservada = {...data,id:this.warranty.id,estado:2,activo:true} 
             this.garantiasService.saveWarranty(requestGarantiaObservada).subscribe(responseGarantia=>{
               if(responseGarantia.success){
+                this.uploadFilesToServer(responseGarantia.body.id);
                 this.router.navigate(['/garantias']);
               }
             });
@@ -960,6 +1057,7 @@ export class ChangeTrayComponent implements OnInit {
         const requestAmarillo = {...data,bandeja:6,id:this.warranty.id,activo:true};
         this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
             if(resp.success){
+              this.uploadFilesToServer(resp.body.id);
               const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
                 data:{text: 'Tu solicitud de reclamo fue enviado a PSG con el siguiente #2636474.'}
               });
@@ -987,6 +1085,7 @@ export class ChangeTrayComponent implements OnInit {
         const requestAmarillo = {...data,bandeja:3,id:this.warranty.id,activo:true};
         this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
           if(resp.success){
+            this.uploadFilesToServer(resp.body.id);
             const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
               data:{text: 'Tu solicitud de reclamo generó un PreRapidServer con éxito y fue enviado a bandeja verde.'}
             });
@@ -1014,6 +1113,7 @@ export class ChangeTrayComponent implements OnInit {
         const requestAmarillo = {...data,bandeja:4,id:this.warranty.id,activo:true};
         this.garantiasService.saveWarranty(requestAmarillo).subscribe(resp=>{
           if(resp.success){
+            this.uploadFilesToServer(resp.body.id);
             const dialogOperationSuccessfully = this.matDialog.open(DialogOperationSuccessfullyComponent,{
               data:{text: 'Tu informe de pago fue procesado con exito y se envio a bandeja gris.'}
             });

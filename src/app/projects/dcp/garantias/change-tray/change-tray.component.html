@@ -244,8 +244,10 @@
                                             <div class="col-md-3">
                                                 <mat-form-field>
                                                     <mat-label>Tecnico responsable</mat-label>
-                                                    <mat-select>
-                                                        <mat-option> 1 </mat-option>
+                                                    <mat-select placeholder="Seleccione">
+                                                        <mat-option *ngFor="let responsable of responsables" [value]="responsable.usr">
+                                                            {{responsable.nombres}} {{responsable.apellidos}}
+                                                        </mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -1270,7 +1272,7 @@
                                     <h5>Vereficacion detalle</h5>
                                 </div>
                                 <div class="col-md-3 text--end margin-b-15">
-                                    <button mat-raised-button>
+                                    <button mat-raised-button (click)="openUploadedDocumentsModal()">
                                         <mat-icon svgIcon="heroicons_solid:folder-open"></mat-icon>
                                         Ver documentos
                                     </button>
@@ -1854,11 +1856,17 @@
                                     <span class="font-w-700">Documentos</span>
                                 </div>
                                 <div class="col-md-12 margin-b-10">
-                                    <button mat-raised-button (click)="adjuntarDocumento()">
+                                    <button mat-raised-button (click)="attachDocument()">
                                         <mat-icon svgIcon="heroicons_outline:upload"></mat-icon>Adjuntar documento
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-12 mb-5">
+                            <button type="button" mat-raised-button *ngFor="let document of documents" class="color-button-document mx-1 my-1">
+                                {{document.name}}
+                                <button mat-icon-button (click)="deleteDocumentDetail(document.name)"><mat-icon>close</mat-icon></button>
+                            </button>
                         </div>
                     </div>
                 </mat-card-content>
