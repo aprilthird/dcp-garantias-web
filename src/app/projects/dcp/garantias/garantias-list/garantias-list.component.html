@@ -19,12 +19,12 @@
                 <span style="color: #64748B;">Historial de Series</span>                                
             </div>
             <div class="col-md-4 btn-register">
-                <button mat-raised-button (click)="onMassiveRegistrationBasic()">
+                <button type="button" mat-raised-button (click)="onMassiveRegistrationBasic()">
                     Registro básico masivo
                 </button>
             </div>
             <div class="col-md-4 btn-register">
-                <button mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
+                <button type="button" mat-raised-button color="primary" (click)="onOpenDialogQuestionNewRecord()">
                     Registro básico individual
                 </button>
             </div>
@@ -37,7 +37,7 @@
                   <mat-form-field floatLabel="always">
                       <mat-label>OS</mat-label>
                       <input matInput type="text" placeholder="Buscar N° OS" formControlName="os">
-                      <button mat-icon-button matSuffix (click)="listWarranties()">
+                      <button type="button" mat-icon-button matSuffix (click)="listWarranties()">
                           <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
@@ -46,7 +46,7 @@
                   <mat-form-field floatLabel="always">
                       <mat-label>ESN</mat-label>
                       <input matInput type="text" placeholder="Buscar N° ESN" formControlName="esn">
-                      <button mat-icon-button matSuffix (click)="listWarranties()">
+                      <button type="button" mat-icon-button matSuffix (click)="listWarranties()">
                           <mat-icon>search</mat-icon>
                       </button>
                   </mat-form-field>
@@ -72,8 +72,8 @@
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-date-range-picker #picker>
                         <mat-date-range-picker-actions>
-                          <button mat-button matDateRangePickerCancel>Cancelar</button>
-                          <button mat-raised-button color="primary" matDateRangePickerApply (click)="listWarranties()">Aplicar</button>
+                          <button type="button" mat-button matDateRangePickerCancel>Cancelar</button>
+                          <button type="button" mat-raised-button color="primary" matDateRangePickerApply (click)="listWarranties()">Aplicar</button>
                         </mat-date-range-picker-actions>
                       </mat-date-range-picker>
                   </mat-form-field>                      
@@ -143,7 +143,7 @@
                 <ng-container matColumnDef="inbox">
                   <th mat-header-cell *matHeaderCellDef> Bandeja </th>
                   <td mat-cell *matCellDef="let element">
-                    <button [class]="colorDeLaBandeja(element)" mat-stroked-button>
+                    <button type="button" [class]="colorDeLaBandeja(element)" mat-stroked-button>
                       {{bandejaGarantia(element)}}
                     </button>
                   </td>
@@ -160,10 +160,10 @@
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef> Accion </th>
                   <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button [disabled]="element.estado=='4'"(click)="editWarranty(element)">
+                    <button type="button" mat-icon-button [disabled]="element.estado=='4'"(click)="editWarranty(element)">
                       <img style="width:20px" src="./../../../../../assets/icons/edit.svg" alt="">
                     </button>
-                    <button mat-icon-button aria-label="Example icon button with a home icon">
+                    <button type="button" mat-icon-button aria-label="Example icon button with a home icon">
                       <img style="width:30px" src="./../../../../../assets/icons/arrow-bottom.svg" alt="">                     
                     </button>
 
@@ -264,7 +264,7 @@
                                 <ng-container matColumnDef="comentario">
                                   <th mat-header-cell *matHeaderCellDef width="12%" class="text-center"> Comentario </th>
                                   <td mat-cell *matCellDef="let item" class="text-center">
-                                    <button mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item)"><mat-icon>sms</mat-icon></button>
+                                    <button type="button" mat-icon-button *ngIf="item.comentarios!=null" (click)="mostrarComentario(item)"><mat-icon>sms</mat-icon></button>
                                     <span *ngIf="item.comentarios==null">-</span>
                                   </td>
                                 </ng-container>
@@ -279,7 +279,7 @@
                                 <ng-container matColumnDef="bandejaActual" width="15%">
                                   <th mat-header-cell *matHeaderCellDef> Bandeja Actual</th>
                                   <td mat-cell *matCellDef="let item">
-                                      <button [class]="colorDeLaBandejaBitacora(item)" mat-stroked-button>
+                                      <button type="button" [class]="colorDeLaBandejaBitacora(item)" mat-stroked-button>
                                         {{bandejaBitacora(item)}}
                                       </button>
                                   </td>
@@ -311,10 +311,10 @@
               <div class="pb-3 text-right">
                 <span class="mr-1">Pag.:</span><span class="font-w-500 mr-1">{{pageCurrent}} de {{numberOfPages}}</span>
                 <span class="mr-1">Total:</span><span class="font-w-500">{{totalWarranties}}</span>
-                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
+                <button type="button" mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonLess" (click)="changePage('less')">
                   <mat-icon>chevron_left</mat-icon>
                 </button>
-                <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
+                <button type="button" mat-icon-button color="primary" aria-label="Example icon button with a home icon" [disabled]="disabledButtonMore" (click)="changePage('more')">
                   <mat-icon>chevron_right</mat-icon>
                 </button>
               </div>
