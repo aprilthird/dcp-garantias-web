@@ -18,6 +18,8 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule} from "@angular/material/card";
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+
 //FUSE
 import { FuseDateRangeModule } from "@fuse/components/date-range";
 
@@ -44,5 +46,6 @@ import { FuseDateRangeModule } from "@fuse/components/date-range";
     MatTabsModule,
     MatCardModule
   ],
+  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class KmmpModule {}

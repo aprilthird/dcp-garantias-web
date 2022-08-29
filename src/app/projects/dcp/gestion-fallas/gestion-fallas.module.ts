@@ -56,6 +56,5 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatMenuModule,
     MatProgressBarModule
   ],
-  providers:[{provide: MAT_DATE_LOCALE, useValue: 'es-ES'}]
 })
 export class GestionFallasModule { }
