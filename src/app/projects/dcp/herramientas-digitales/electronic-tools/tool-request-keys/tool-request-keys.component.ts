@@ -33,15 +33,16 @@ export class ToolRequestKeysComponent implements OnInit {
     users = [];
     isSearching = false;
 
-    dataSource = [{
-        id: 0,
-        idHerramienta: 0,
-        tipo: 'Inside',
-        cantidad: 1,
-        keyFuncional: null,
-        keyBasico: null,
-        keyActivacion: null
-    },
+    dataSource = [
+        {
+            id: 0,
+            idHerramienta: 0,
+            tipo: 'Inside',
+            cantidad: 1,
+            keyFuncional: null,
+            keyBasico: null,
+            keyActivacion: null
+        },
         {
             id: 0,
             idHerramienta: 0,

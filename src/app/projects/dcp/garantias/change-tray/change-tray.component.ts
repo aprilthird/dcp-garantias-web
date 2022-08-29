@@ -97,7 +97,7 @@ export class ChangeTrayComponent implements OnInit {
   //datos de area de servicio
   areaService = {codigo:'-', descripcion:'-', codigoServicioSap:'-', codigoConstante:'-'};
   //datos de constante
-  constante = {codigo:'-', laborRate:'-', kmRate:'-', bfcMarkup:'-', siteLabor:'-'};
+  constante = {codigo:'-', laborRate:'-', kmRate:'-', bfcMarkup:'-', siteLabor:'-', bfc: '-', markup: '-',};
   //tipo de garantia juntos a sus campos  
   warrantyTypes = [ {value: 1, name: "Producto Nuevo"},{value: 2, name: "Motor Recon"},{value: 3, name: "Repuesto Nuevo"},
                   {value: 4, name: "Repuesto Defectuoso"},{value: 5, name: "Cap"},{value: 6, name: "Extendida Mayor"},
@@ -592,13 +592,15 @@ export class ChangeTrayComponent implements OnInit {
     }
   }
 
-  formularParte(precio, markup):number{
-    return precio + precio * markup + precio * Number(this.constante.bfcMarkup);
+  formularParte(precio, markup, bfc):number{
+    return precio + (precio * markup) + (precio * bfc);
   }
 
   calcularSubTotalPartes(index):void{
     //this.dataSourcePartes[index].precioFob
-    this.dataSourcePartes[index].subTotalParte = this.formularParte(Number(this.dataSourcePartes[index].precioUnitarioParte), Number(this.constante.bfcMarkup));
+    const cantidadPrecio = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte;
+
+    this.dataSourcePartes[index].subTotalParte = this.formularParte(Number(cantidadPrecio), Number(this.constante.markup), Number(this.constante.bfc));
     this.dataSourcePartes[index].subTotal = this.dataSourcePartes[index].cantidadParte * this.dataSourcePartes[index].precioUnitarioParte;
     this.calcularTotalPartes();
   }
@@ -614,10 +616,13 @@ export class ChangeTrayComponent implements OnInit {
       sumaTotalPartesEnSAP += Number(this.dataSourcePartes[j].precioFob);
     }
     this.montoTotalPartes = sumaTotalPartes;
-    this.montoTotalPartesConPenalizacion = this.formularParte(sumaTotalPartesConPenalizacion, 
-      this.warranty.antiguedad >= "180 Dias" 
-      ? 0 : this.warranty.antiguedad >= "119 Dias" 
-      ? 0.1 : Number(this.constante.bfcMarkup));
+    this.montoTotalPartesConPenalizacion = this.formularParte(
+      sumaTotalPartesConPenalizacion,
+      this.warranty.antiguedad >= "180 Dias" ? 0
+        : this.warranty.antiguedad >= "119 Dias" ? 0.1
+          : Number(this.constante.markup),
+      Number(this.constante.bfc)
+    );
     this.montoTotalPartesEnSAP = sumaTotalPartesEnSAP;
     this.calcularTotal();
   }
